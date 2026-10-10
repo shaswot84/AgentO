@@ -80,7 +80,8 @@ CWE outside the MVP set.
 
 This is an architecture demonstration, **not a production scanning entry point**.
 `allowedOrigins` declares intended scope but does not enforce it. No real adapters
-or CWE detection rules are implemented. Discovery, endpoint merging, capability
+or CWE detection rules are implemented. Repository discovery and mode selection
+are available in [the discovery package](../discovery/README.md). Endpoint merging, capability
 selection across multiple tools, target policy enforcement, runtime evidence
 immutability/storage/redaction, and substantive verification remain later phases.
 The skeleton requires evidence for a confirmed finding, but the injected evaluator
