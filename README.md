@@ -1,0 +1,67 @@
+![AgentO Security Scanning Pipeline](assets/Neon%20AI%20Security%20Scanning%20Pipeline.png)
+
+# AgentO
+
+> **Autonomous, code-aware application security testing and verification platform.**
+
+Traditional application security tools typically operate in isolation:
+- **Static analysis (SAST)** flags potential issues in source code but generates high volumes of false positives because it lacks runtime context.
+- **Dynamic scanning (DAST)** tests running applications from the outside but lacks code visibility and struggles with authenticated workflows, stateful business logic, and multi-user access control.
+
+**AgentO** bridges this gap. It acts as an agentic security orchestrator that pairs static code understanding with multi-identity runtime verification to hypothesize, execute, and confirm real vulnerabilities with verifiable evidence.
+
+---
+
+## What AgentO Solves
+
+1. **Context-Aware Vulnerability Discovery**  
+   Extracts application routes, authentication handlers, database queries, and authorization models from source code to target security tests precisely rather than blindly fuzzing.
+
+2. **Multi-User Access Control Verification**  
+   Automates multi-persona tests (e.g., comparing user identities and permissions) to reliably detect and reproduce complex flaws like **IDOR** and **Missing Authorization** that traditional scanners miss.
+
+3. **Evidence-Backed Verification**  
+   Every reported finding must trace directly to concrete proof: dynamic HTTP exchanges, browser interactions, or verified scanner outputs. No hallucinated vulnerabilities.
+
+4. **Tool-Agnostic Core Architecture**  
+   The core engine relies on pure contracts and adapters, allowing static analyzers, dynamic scanners, browser automation drivers, and reasoning models to be swapped or upgraded without changing core orchestration logic.
+5. **Language- & Framework-Agnostic Design**  
+   The core reasoning and orchestration engine is completely decoupled from specific stacks. While Node.js and Express.js serve as the initial pilot integration, AgentO's adapter contract system is designed to support any programming language, web framework, or REST/GraphQL API ecosystem.
+
+---
+
+## Core Vulnerability Scope
+
+AgentO focuses on high-impact OWASP Top 10 categories:
+
+- **Broken Access Control (A01)**
+  - Authorization Bypass Through User-Controlled Key / IDOR (`CWE-639`)
+  - Missing Authorization on Protected Endpoints (`CWE-862`)
+- **Security Misconfiguration (A02)**
+  - Permissive Cross-Domain Policy / CORS (`CWE-942`)
+  - Sensitive Cookies Without `HttpOnly` (`CWE-1004`)
+  - Sensitive Cookies Without `Secure` (`CWE-614`)
+- **Injection (A05)**
+  - Cross-Site Scripting / XSS (`CWE-79`)
+  - SQL Injection / SQLi (`CWE-89`)
+
+---
+
+## Repository Structure
+
+```text
+AgentO/
+├── packages/
+│   └── core/          # Tool-independent contracts, domain types, and orchestrator
+├── demo-app/          # Controlled e-commerce target app (dual-mode: vulnerable / fixed)
+└── LICENSE            # Apache 2.0 License
+```
+
+- **`packages/core`**: Contains the decoupled domain model (`Project`, `Endpoint`, `Identity`, `Evidence`, `Finding`), provider interfaces, and the core pipeline orchestrator.
+- **`demo-app`**: A fully functional Node.js + TypeScript + Express + SQLite e-commerce application equipped with both vulnerable and patched implementations of each target CWE for reproducible validation.
+
+---
+
+## License
+
+AgentO is open-source software licensed under the [Apache License 2.0](LICENSE).
