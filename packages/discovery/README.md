@@ -56,7 +56,7 @@ identify `better-sqlite3`, `express-session`, `cookie-parser`, and `cors`. Synta
 inspection also records the custom `Access-Control-Allow-Origin` header writes in
 `src/middleware/cors.ts`, with file and line references.
 
-The real Express adapter belongs to **Phase 4** and is not yet installed. Detecting
+The real Express adapter belongs to **Phase 5** and is not yet installed. Detecting
 Express alone does not make an extraction adapter available. The CLI therefore
 selects black-box mode; the tests separately demonstrate code-aware selection with
 an injected fake adapter.

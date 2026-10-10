@@ -51,6 +51,8 @@ AgentO focuses on high-impact OWASP Top 10 categories:
 
 ```text
 AgentO/
+├── apps/
+│   └── frontend/      # Project setup, discovery summaries, and evidence previews
 ├── packages/
 │   ├── core/          # Tool-independent contracts, domain types, and orchestrator
 │   └── discovery/     # Repository metadata, stack detection, and mode selection
@@ -58,9 +60,28 @@ AgentO/
 └── LICENSE            # Apache 2.0 License
 ```
 
+- **`apps/frontend`**: React + TypeScript workspace for project setup, saved discovery imports, scan progress, and finding evidence. Scan and finding views currently use clearly labelled demo fixtures. See [frontend setup and boundaries](apps/frontend/README.md).
 - **`packages/core`**: Contains the decoupled domain model (`Project`, `Endpoint`, `Identity`, `Evidence`, `Finding`), provider interfaces, and the core pipeline orchestrator.
 - **`packages/discovery`**: Reads manifests and source syntax to identify languages, frameworks, dependencies, probable databases/authentication/middleware, and repository structure. It selects black-box mode when the stack is unsupported or a compatible Express adapter is unavailable. See [discovery usage and verification](packages/discovery/README.md).
 - **`demo-app`**: A fully functional Node.js + TypeScript + Express + SQLite e-commerce application equipped with both vulnerable and patched implementations of each target CWE for reproducible validation.
+
+---
+
+## Run the Frontend
+
+Use Node.js 22.12 or later. From the repository root:
+
+```sh
+cd apps/frontend
+npm ci
+npm run dev
+```
+
+The interface runs independently of a target application or security tools. Projects
+and imported discovery results stay in memory for the current session. Real scan
+execution, backend persistence, and credentials will be integrated separately.
+
+Run `npm run check` in `apps/frontend` to typecheck, build, and test the client.
 
 ---
 
