@@ -1,0 +1,54 @@
+rules:
+  - id: agento.express.request-to-html
+    languages: [javascript, typescript]
+    mode: taint
+    severity: WARNING
+    message: Request input may reach an HTML response; runtime verification is required.
+    metadata:
+      cwe: CWE-79
+    pattern-sources:
+      - pattern-either:
+          - pattern: $REQ.query
+          - pattern: $REQ.body
+          - pattern: $REQ.params
+          - pattern: $REQ.headers
+          - pattern: $REQ.cookies
+          - pattern: req.get(...)
+          - pattern: request.get(...)
+        exact: true
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - pattern: $RES.send($HTML)
+              - pattern: $RES.write($HTML)
+              - pattern: $RES.end($HTML)
+          - focus-metavariable: $HTML
+    pattern-sanitizers:
+      - pattern: DOMPurify.sanitize(...)
+      - pattern: sanitizeHtml(...)
+      - pattern: escapeHtml(...)
+  - id: agento.express.request-to-sql
+    languages: [javascript, typescript]
+    mode: taint
+    severity: WARNING
+    message: Request input may reach SQL statement text; runtime verification is required.
+    metadata:
+      cwe: CWE-89
+    pattern-sources:
+      - pattern-either:
+          - pattern: $REQ.query
+          - pattern: $REQ.body
+          - pattern: $REQ.params
+          - pattern: $REQ.headers
+          - pattern: $REQ.cookies
+          - pattern: req.get(...)
+          - pattern: request.get(...)
+        exact: true
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - pattern: $DB.prepare($SQL, ...)
+              - pattern: $DB.query($SQL, ...)
+              - pattern: $DB.execute($SQL, ...)
+              - pattern: $DB.exec($SQL, ...)
+          - focus-metavariable: $SQL

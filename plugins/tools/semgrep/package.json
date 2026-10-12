@@ -1,0 +1,28 @@
+{
+  "name": "@agento/tool-semgrep",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Read-only Semgrep integration producing normalized AgentO static signals",
+  "type": "module",
+  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } },
+  "files": ["dist", "rules"],
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "build": "node node_modules/typescript/bin/tsc -p tsconfig.build.json",
+    "typecheck": "node node_modules/typescript/bin/tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:integration": "AGENTO_SEMGREP_INTEGRATION=1 vitest run test/integration.test.ts",
+    "check": "npm run typecheck && npm run build && npm test",
+    "analyze": "node dist/cli.js"
+  },
+  "dependencies": {
+    "@agento/core": "file:../../../packages/core",
+    "typescript-parser": "npm:typescript@5.9.3"
+  },
+  "devDependencies": {
+    "@agento/framework-express": "file:../../frameworks/express",
+    "@types/node": "^26.6.5",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.3"
+  }
+}

@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Static Analysis Integration (`plugins/tools/semgrep`)**: Added a read-only Semgrep adapter, focused JS/TS XSS and SQL injection candidate rules, normalized source/sink evidence with AST and framework context, and a standalone JSON CLI. Static signals remain candidates requiring runtime verification.
+- **Static Analysis Verification and Documentation**: Added pinned Semgrep installation instructions, core registration examples, execution limits and diagnostics, candidate-only limitations, unit/process tests, and real-tool demo plus unsafe/fixed JS/TS integration tests.
 - **Discovery Automation CLI Script (`scripts/discover.mjs`)**: Added a dedicated CLI script allowing selective discovery execution against any selected demo project (e.g. `node scripts/discover.mjs demo-app-02`) or custom repository path, writing project-local `discovery.json` snapshots directly inside target directories.
 - **Frontend Local Discovery Dev Bridge (`apps/frontend`)**: Added Vite dev server middleware (`/api/discover` and `/api/demo-apps`) and interactive UI controls in the New Project and Import Discovery dialogs to run discovery directly against local repository paths and quick-load demo projects with a single click.
 - **Demo Application 02 (`demo-apps/demo-app-02`)**: Added a Fastify + JWT + PostgreSQL + Redis + Drizzle ORM microservice demonstrating multi-language (TypeScript, JavaScript, Python), multi-manifest (`package.json`, `contracts/package.json`), type-only import filtering, remote URL version masking, and custom CORS headers. Verifies the robustness of Project Discovery stack detection and graceful black-box mode fallback.
