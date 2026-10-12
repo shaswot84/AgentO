@@ -224,12 +224,12 @@ export const demoDiscovery: DiscoveryResult = {
     ],
     "sourceFileCount": 16
   },
-  "expressAdapterAvailable": false,
-  "availableAdapterIds": [],
-  "supportedCodeAwareMode": false,
-  "mode": "black-box",
-  "fallbackReasons": [
-    "No Express framework adapter is registered."
+  "expressAdapterAvailable": true,
+  "availableAdapterIds": [
+    "express-framework-adapter"
   ],
+  "supportedCodeAwareMode": true,
+  "mode": "code-aware",
+  "fallbackReasons": [],
   "diagnostics": []
 };

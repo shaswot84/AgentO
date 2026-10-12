@@ -176,14 +176,14 @@
     ],
     "sourceFileCount": 14
   },
-  "expressAdapterAvailable": false,
+  "expressAdapterAvailable": true,
   "availableAdapterIds": [],
   "supportedCodeAwareMode": false,
   "mode": "black-box",
   "fallbackReasons": [
     "No Express application was detected; V1 source support requires Express.",
     "An unsupported framework was detected; V1 source support covers Express only.",
-    "No Express framework adapter is registered."
+    "No registered Express adapter advertises compatibility with the detected languages."
   ],
   "diagnostics": []
 }

@@ -3,6 +3,7 @@ import { readdir, writeFile } from 'node:fs/promises';
 import { basename, resolve, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { discoverProject } from '../packages/discovery/dist/index.js';
+import { ExpressFrameworkAdapter } from '../plugins/frameworks/express/dist/index.js';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const rootDir = resolve(__dirname, '..');
@@ -41,7 +42,16 @@ async function main() {
   }
 
   console.log(`Running Project Discovery on: ${targetPath}`);
-  const result = await discoverProject(targetPath);
+  const expressAdapter = new ExpressFrameworkAdapter();
+  const result = await discoverProject(targetPath, {
+    adapters: [
+      {
+        framework: 'express',
+        languages: ['javascript', 'typescript'],
+        adapter: expressAdapter,
+      },
+    ],
+  });
 
   // Determine output file: place directly inside the project directory
   let outputFile = process.argv[3];
@@ -57,6 +67,7 @@ async function main() {
   console.log(`  - Languages:       ${result.languages.join(', ')}`);
   console.log(`  - Frameworks:      ${result.frameworks.join(', ') || 'none'}`);
   console.log(`  - Mode:            ${result.mode}`);
+  console.log(`  - Adapters:        ${result.availableAdapterIds.join(', ') || 'none'}`);
   console.log(`  - Output File:     ${outputFile}`);
   console.log(`\nYou can now attach ${basename(outputFile)} in the web GUI (http://localhost:5173).\n`);
 }
