@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs';
 import { readdir } from 'node:fs/promises';
 import { resolve, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -47,16 +48,37 @@ function agentoDiscoveryDevPlugin(): Plugin {
                 res.end(JSON.stringify({ ok: false, error: 'repositoryPath is required' }));
                 return;
               }
-              const target = repositoryPath.startsWith('/')
+              let target = repositoryPath.startsWith('/')
                 ? repositoryPath
                 : resolve(rootDir, repositoryPath);
+              if (!existsSync(target)) {
+                if (repositoryPath === 'demo-app' && existsSync(join(demoAppsDir, 'demo-app-01'))) {
+                  target = join(demoAppsDir, 'demo-app-01');
+                } else if (existsSync(join(demoAppsDir, repositoryPath))) {
+                  target = join(demoAppsDir, repositoryPath);
+                }
+              }
 
-              // Dynamically import discovery engine built from packages/discovery
+              // Dynamically import discovery engine built from packages/discovery and express framework adapter
               const { discoverProject } = await import('../../packages/discovery/dist/index.js');
-              const result = await discoverProject(target);
+              let adapters: any[] = [];
+              try {
+                const { ExpressFrameworkAdapter } = await import('../../plugins/frameworks/express/dist/index.js');
+                adapters = [
+                  {
+                    framework: 'express',
+                    languages: ['javascript', 'typescript'],
+                    adapter: new ExpressFrameworkAdapter(),
+                  },
+                ];
+              } catch {
+                // If express plugin is not available, proceed without it
+              }
+              const result = await discoverProject(target, { adapters });
+              const output = { ...result, repositoryPath };
 
               res.setHeader('Content-Type', 'application/json');
-              res.end(JSON.stringify({ ok: true, data: result }));
+              res.end(JSON.stringify({ ok: true, data: output }));
             } catch (err: unknown) {
               const message = err instanceof Error ? err.message : 'Discovery execution failed';
               res.statusCode = 500;

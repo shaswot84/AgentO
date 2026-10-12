@@ -78,6 +78,7 @@ export function App({ client }: { client: AgentOClient }) {
   const [selectedId, setSelectedId] = useState('demo-shop');
   const [newProjectOpen, setNewProjectOpen] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
+  const [rescanning, setRescanning] = useState(false);
   const [notification, setNotification] = useState('');
   const projectsState = useRequest(() => client.listProjects(), [client, revision]);
   const projects = projectsState.data ?? [];
@@ -94,6 +95,28 @@ export function App({ client }: { client: AgentOClient }) {
     setSelectedId(project.id); setRevision(value => value + 1); setNewProjectOpen(false); setImportOpen(false);
     navigate('discovery'); setNotification('Project saved for this session. Reloading resets the workspace.');
   }
+
+  async function rescanSelected() {
+    if (!selected) return;
+    setRescanning(true);
+    try {
+      const res = await fetch('/api/discover', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ repositoryPath: selected.repositoryPath }),
+      });
+      const body = (await res.json()) as { ok?: boolean; data?: unknown; error?: string };
+      if (!body.ok) throw new Error(body.error || 'Discovery failed');
+      const updated = await client.importDiscovery(selected.id, body.data as DiscoveryResult);
+      setRevision(value => value + 1);
+      setNotification(`Repository re-scanned successfully: ${updated.name} (${updated.mode} mode)`);
+    } catch (err: unknown) {
+      setNotification(`Re-scan failed: ${err instanceof Error ? err.message : 'Discovery service unavailable'}. Use Import discovery to load saved JSON.`);
+    } finally {
+      setRescanning(false);
+    }
+  }
+
   const heading = {
     projects: { eyebrow: 'YOUR WORKSPACE', title: 'Security starts with context.', subtitle: 'A clear view of your applications, their stack, and the evidence that matters.' },
     discovery: { eyebrow: 'PROJECT INTELLIGENCE', title: 'Know your application.', subtitle: 'Repository facts, probable middleware, and the capabilities available to this project.' },
@@ -111,10 +134,10 @@ export function App({ client }: { client: AgentOClient }) {
     <div className="workspace">
       <header className="topbar"><div className="breadcrumb"><span>Workspace</span><span aria-hidden="true">/</span><strong>{views.find(item => item.id === view)?.label}</strong></div><div className="topbar-status">{view !== 'projects' && projects.length > 0 && <><label className="screen-reader-only" htmlFor="project-picker">Selected project</label><select id="project-picker" className="project-picker" value={selected?.id ?? ''} onChange={event => { setSelectedId(event.target.value); setNotification(''); }}>{projects.map(project => <option key={project.id} value={project.id}>{project.name}</option>)}</select></>}<span>Local workspace</span><div className="avatar" aria-hidden="true">AO</div></div></header>
       <main id="main-content" className="main-content" tabIndex={-1}>
-        <div className="page-heading"><div><div className="eyebrow">{heading.eyebrow}</div><h1>{heading.title}</h1><p>{heading.subtitle}</p></div><div className="heading-actions">{view === 'discovery' && selected && <button className="button secondary" onClick={() => setImportOpen(true)}><Icon name="file" />Import discovery</button>}<button className="button primary" onClick={() => setNewProjectOpen(true)}><Icon name="plus" />New project</button></div></div>
+        <div className="page-heading"><div><div className="eyebrow">{heading.eyebrow}</div><h1>{heading.title}</h1><p>{heading.subtitle}</p></div><div className="heading-actions">{view === 'discovery' && selected && <><button type="button" className="button secondary" onClick={() => void rescanSelected()} disabled={rescanning}><Icon name="compass" />{rescanning ? 'Re-scanning…' : 'Re-scan repository'}</button><button className="button secondary" onClick={() => setImportOpen(true)}><Icon name="file" />Import discovery</button></>}<button className="button primary" onClick={() => setNewProjectOpen(true)}><Icon name="plus" />New project</button></div></div>
         {notification && <div className="notice success" role="status"><Icon name="check" /><p>{notification}</p></div>}
         {projectsState.loading ? <Loading /> : projectsState.error ? <ErrorState retry={projectsState.retry} /> : view === 'projects' ? <ProjectsView projects={projects} onSelect={openProject} onCreate={() => setNewProjectOpen(true)} /> : selected ? <>
-          {view === 'discovery' && <DiscoveryView client={client} project={selected} revision={revision} onImport={() => setImportOpen(true)} />}
+          {view === 'discovery' && <DiscoveryView client={client} project={selected} revision={revision} onImport={() => setImportOpen(true)} onRescan={() => void rescanSelected()} rescanning={rescanning} />}
           {view === 'scan' && <ScanView key={selected.id} client={client} project={selected} onDemo={() => setSelectedId('demo-shop')} />}
           {view === 'findings' && <FindingsView key={selected.id} client={client} project={selected} onDemo={() => setSelectedId('demo-shop')} />}
         </> : <Panel title="Project workspace"><Empty title="Choose your first project" action={<button className="button primary" onClick={() => setNewProjectOpen(true)}>New project</button>}>Configure a repository and target to begin organizing its discovery results.</Empty></Panel>}
@@ -142,10 +165,10 @@ function ProjectsView({ projects, onSelect, onCreate }: { projects: readonly Pro
 function Technology({ label, values }: { label: string; values: readonly string[] }) {
   return <div className="technology-list"><span className="technology-label">{label}</span><div className="technology-value tag-list">{values.length ? values.map(value => <span key={value} className="tag">{value}</span>) : <span className="muted">Not detected</span>}</div></div>;
 }
-function DiscoveryView({ client, project, revision, onImport }: { client: AgentOClient; project: ProjectSummary; revision: number; onImport: () => void }) {
+function DiscoveryView({ client, project, revision, onImport, onRescan, rescanning }: { client: AgentOClient; project: ProjectSummary; revision: number; onImport: () => void; onRescan?: () => void; rescanning?: boolean }) {
   const result = useRequest(() => client.getDiscovery(project.id), [client, project.id, revision]);
   if (result.loading) return <Loading />;
-  if (result.error instanceof AgentOClientError && result.error.code === 'DISCOVERY_UNAVAILABLE') return <Panel title={project.name}><Empty title="Add your repository context" action={<button className="button primary" onClick={onImport}><Icon name="file" />Import discovery JSON</button>}>This project has no saved discovery result. Import the JSON created by AgentO's repository discovery CLI.</Empty></Panel>;
+  if (result.error instanceof AgentOClientError && result.error.code === 'DISCOVERY_UNAVAILABLE') return <Panel title={project.name}><Empty title="Add your repository context" action={<div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>{onRescan && <button className="button primary" onClick={onRescan} disabled={rescanning}><Icon name="compass" />{rescanning ? 'Scanning…' : 'Run discovery'}</button>}<button className="button secondary" onClick={onImport}><Icon name="file" />Import discovery JSON</button></div>}>This project has no saved discovery result. Run discovery or import the JSON created by AgentO's repository discovery CLI.</Empty></Panel>;
   if (result.error || !result.data) return <ErrorState retry={result.retry} />;
   const data = result.data;
   return <>
@@ -154,7 +177,7 @@ function DiscoveryView({ client, project, revision, onImport }: { client: AgentO
     {!data.supportedCodeAwareMode && <div className="notice warning"><Icon name="info" /><div><h3>Black-box mode selected</h3><ul>{data.fallbackReasons.map(reason => <li key={reason}>{reason}</li>)}</ul></div></div>}
     {data.diagnostics.length > 0 && <div className="notice error" role="status"><Icon name="info" /><div><h3>Discovery needs attention</h3><ul>{data.diagnostics.map((item, index) => <li key={index}><span className="mono">{item.file}</span>: {item.message}</li>)}</ul></div></div>}
     <div className="discovery-grid"><Panel title="Application fingerprint" description={project.name}><div className="surface-body"><Technology label="Languages" values={data.languages} /><Technology label="Frameworks" values={data.frameworks} /><Technology label="Database hints" values={data.databases} /><Technology label="ORM hints" values={data.orms} /><Technology label="Authentication" values={data.authentication} /><Technology label="Auth packages" values={data.authenticationPackages} /><Technology label="Available adapters" values={data.availableAdapterIds} /></div></Panel>
-    <Panel title="Project & scope" description="Declared project metadata, not testing authorization."><div className="surface-body"><dl className="definition-grid"><div className="definition"><dt>Repository</dt><dd className="mono">{project.repositoryPath}</dd></div><div className="definition"><dt>Target URL</dt><dd className="mono">{project.baseUrl}</dd></div><div className="definition"><dt>Allowed origins</dt><dd>{project.allowedOrigins.map(origin => <div className="mono" key={origin}>{origin}</div>)}</dd></div><div className="definition"><dt>Snapshot name</dt><dd>{data.name}</dd></div></dl><div className="adapter-callout"><Icon name="shield" /><div><h3>{data.expressAdapterAvailable ? 'Adapter registered' : 'Express adapter unavailable'}</h3><p>Discovery describes source support. Backend policy checks will govern actual execution.</p></div></div></div></Panel></div>
+    <Panel title="Project & scope" description="Declared project metadata, not testing authorization."><div className="surface-body"><dl className="definition-grid"><div className="definition"><dt>Repository</dt><dd className="mono">{project.repositoryPath}</dd></div><div className="definition"><dt>Target URL</dt><dd className="mono">{project.baseUrl}</dd></div><div className="definition"><dt>Allowed origins</dt><dd>{project.allowedOrigins.map(origin => <div className="mono" key={origin}>{origin}</div>)}</dd></div><div className="definition"><dt>Snapshot name</dt><dd>{data.name}</dd></div></dl><div className="adapter-callout"><Icon name="shield" /><div><h3>{data.expressAdapterAvailable ? 'Adapter registered' : 'Express adapter unavailable'}</h3><p>Discovery describes source support. Backend policy checks will govern actual execution.</p></div></div>{onRescan && <div style={{ marginTop: 14 }}><button type="button" className="button secondary" onClick={onRescan} disabled={rescanning}><Icon name="compass" />{rescanning ? 'Re-scanning repository…' : 'Re-scan this repository'}</button></div>}</div></Panel></div>
     <div className="stack" style={{ marginTop: 22 }}><Panel title="Middleware observations" description="Probable packages and literal header writes. These observations are not vulnerabilities.">{data.middleware.length === 0 ? <Empty title="No middleware hints">No recognized middleware was present in this saved result.</Empty> : <div className="table-wrap"><table className="data-table"><thead><tr><th scope="col">Middleware</th><th scope="col">Kind</th><th scope="col">Basis</th><th scope="col">Source</th></tr></thead><tbody>{data.middleware.map((item, index) => <tr key={index}><td className="mono">{item.name}</td><td><span className="tag">{item.kind}</span></td><td>{item.basis}</td><td className="mono">{item.file}{item.line ? `:${item.line}` : ''}</td></tr>)}</tbody></table></div>}</Panel>
     <Panel title="Repository structure" description="Visited directories and manifests from the saved inventory."><div className="surface-body"><dl className="definition-grid">{[['Source directories', data.structure.sourceDirectories], ['Test directories', data.structure.testDirectories], ['Static directories', data.structure.staticDirectories], ['All visited directories', data.structure.directories]].map(([label, values]) => <div key={label as string} className="definition"><dt>{label as string}</dt><dd className="mono">{(values as readonly string[]).join(', ') || 'None recorded'}</dd></div>)}</dl><div className="section-label" style={{ marginTop: 24 }}>MANIFEST FILES</div>{data.structure.manifests.map(manifest => <div className="file-list" key={manifest.file}><Icon name="file" /><div><span className="mono">{manifest.file}</span><p className="muted">{manifest.name ?? 'Unnamed manifest'} · Root: {manifest.directory}{manifest.workspacePatterns.length ? ` · Workspaces: ${manifest.workspacePatterns.join(', ')}` : ''}</p></div></div>)}{!data.structure.manifests.length && <p className="muted">No manifests recorded.</p>}</div></Panel>
     <Dependencies data={data} /></div>

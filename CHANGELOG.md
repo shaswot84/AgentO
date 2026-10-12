@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Project Re-Scan Options (`scripts/discover.mjs`, `apps/frontend`)**: Added `--rescan` (or `-r`) and `--all` (or `-a`) CLI flags to `scripts/discover.mjs` to automatically detect and re-scan all projects that have already been scanned with `discovery.json`. Integrated live "Re-scan repository" buttons and dev-bridge adapter execution into the frontend (`apps/frontend`), allowing instant re-discovery of loaded projects from the web interface.
 - **Static Analysis Integration (`plugins/tools/semgrep`)**: Added a read-only Semgrep adapter, focused JS/TS XSS and SQL injection candidate rules, normalized source/sink evidence with AST and framework context, and a standalone JSON CLI. Static signals remain candidates requiring runtime verification.
 - **Static Analysis Verification and Documentation**: Added pinned Semgrep installation instructions, core registration examples, execution limits and diagnostics, candidate-only limitations, unit/process tests, and real-tool demo plus unsafe/fixed JS/TS integration tests.
 - **Discovery Automation CLI Script (`scripts/discover.mjs`)**: Added a dedicated CLI script allowing selective discovery execution against any selected demo project (e.g. `node scripts/discover.mjs demo-app-02`) or custom repository path, writing project-local `discovery.json` snapshots directly inside target directories.
