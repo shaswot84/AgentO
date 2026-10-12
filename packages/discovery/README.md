@@ -2,7 +2,7 @@
 
 Read-only repository discovery for the initial JavaScript/TypeScript + Express
 stack. It runs independently of browsers, security scanners, a running target,
-and the future Express extraction adapter.
+and the Express source extraction adapter.
 
 ## Run
 
@@ -15,13 +15,13 @@ npm run build
 cd ../discovery
 npm ci
 npm run check
-npm run discover -- ../../demo-app
+npm run discover -- ../../demo-apps/demo-app-01
 ```
 
 From the repository root, after building, print plain JSON without npm's banner:
 
 ```sh
-node packages/discovery/dist/cli.js demo-app
+node packages/discovery/dist/cli.js demo-apps/demo-app-01
 ```
 
 The CLI exits successfully for recognized, unsupported, and empty repositories.
@@ -32,7 +32,7 @@ or run security tests.
 
 ## Demo result
 
-Selected fields from discovery of `demo-app/`:
+Selected fields from discovery of `demo-apps/demo-app-01/`:
 
 ```json
 {
@@ -56,18 +56,21 @@ identify `better-sqlite3`, `express-session`, `cookie-parser`, and `cors`. Synta
 inspection also records the custom `Access-Control-Allow-Origin` header writes in
 `src/middleware/cors.ts`, with file and line references.
 
-The real Express adapter belongs to **Phase 5** and is not yet installed. Detecting
-Express alone does not make an extraction adapter available. The CLI therefore
-selects black-box mode; the tests separately demonstrate code-aware selection with
-an injected fake adapter.
+The real adapter is implemented in
+[`plugins/frameworks/express`](../../plugins/frameworks/express/README.md).
+Detecting Express alone does not register an extraction adapter. This metadata-only
+CLI therefore selects black-box mode. Register `ExpressFrameworkAdapter` through
+the API to enable code-aware selection; the adapter's integration tests exercise
+this registration with the real demo and core orchestrator.
 
 ## API and core integration
 
 ```ts
 import { discoverProject, toProject } from '@agento/discovery';
-import type { FrameworkAdapter } from '@agento/core';
+import { ExpressFrameworkAdapter } from '@agento/framework-express';
 
-async function prepareProject(repositoryPath: string, expressAdapter: FrameworkAdapter) {
+async function prepareProject(repositoryPath: string) {
+  const expressAdapter = new ExpressFrameworkAdapter();
   const discovery = await discoverProject(repositoryPath, {
     adapters: [{
       framework: 'express',
@@ -138,7 +141,8 @@ selection, not target authorization or a policy-engine decision.
 
 The public result is deterministic and JSON-safe. No raw manifest or source text,
 cookie/session values, route extraction, scanner findings, or configuration
-judgments are returned. These belong to later phases.
+judgments are returned. Register and invoke a framework adapter separately to
+extract source topology and configuration observations.
 
 ## Verification
 

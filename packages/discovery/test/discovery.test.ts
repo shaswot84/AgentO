@@ -26,7 +26,8 @@ const expressAdapter: FrameworkAdapter = {
   async extract() { return { components: [], endpoints: [], resources: [], signals: [], evidence: [] }; },
 };
 const adapters: DiscoveryOptions = { adapters: [{ framework: 'express', languages: ['typescript', 'javascript'], adapter: expressAdapter }] };
-const demoPath = fileURLToPath(new URL('../../../demo-app/', import.meta.url));
+const demoPath = fileURLToPath(new URL('../../../demo-apps/demo-app-01/', import.meta.url));
+const demo02Path = fileURLToPath(new URL('../../../demo-apps/demo-app-02/', import.meta.url));
 
 describe('Phase 3 project discovery', () => {
   it('identifies the real demo, including custom CORS, without claiming an absent adapter', async () => {

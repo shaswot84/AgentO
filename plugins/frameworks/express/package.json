@@ -1,0 +1,27 @@
+{
+  "name": "@agento/framework-express",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Read-only Express source extraction into AgentO framework contracts",
+  "type": "module",
+  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } },
+  "files": ["dist"],
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "build": "node node_modules/typescript/bin/tsc -p tsconfig.build.json",
+    "typecheck": "node node_modules/typescript/bin/tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "check": "npm run typecheck && npm run build && npm test",
+    "extract": "node dist/cli.js"
+  },
+  "dependencies": {
+    "@agento/core": "file:../../../packages/core",
+    "typescript-parser": "npm:typescript@5.9.3"
+  },
+  "devDependencies": {
+    "@agento/discovery": "file:../../../packages/discovery",
+    "@types/node": "^26.6.5",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.3"
+  }
+}

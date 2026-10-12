@@ -56,14 +56,19 @@ AgentO/
 ├── packages/
 │   ├── core/          # Tool-independent contracts, domain types, and orchestrator
 │   └── discovery/     # Repository metadata, stack detection, and mode selection
-├── demo-app/          # Controlled e-commerce target app (dual-mode: vulnerable / fixed)
+├── plugins/
+│   └── frameworks/
+│       └── express/   # Express routes, middleware, configuration, and source evidence
+├── demo-apps/
+│   └── demo-app-01/   # Controlled e-commerce target app (dual-mode: vulnerable / fixed)
 └── LICENSE            # Apache 2.0 License
 ```
 
 - **`apps/frontend`**: React + TypeScript workspace for project setup, saved discovery imports, scan progress, and finding evidence. Scan and finding views currently use clearly labelled demo fixtures. See [frontend setup and boundaries](apps/frontend/README.md).
 - **`packages/core`**: Contains the decoupled domain model (`Project`, `Endpoint`, `Identity`, `Evidence`, `Finding`), provider interfaces, and the core pipeline orchestrator.
 - **`packages/discovery`**: Reads manifests and source syntax to identify languages, frameworks, dependencies, probable databases/authentication/middleware, and repository structure. It selects black-box mode when the stack is unsupported or a compatible Express adapter is unavailable. See [discovery usage and verification](packages/discovery/README.md).
-- **`demo-app`**: A fully functional Node.js + TypeScript + Express + SQLite e-commerce application equipped with both vulnerable and patched implementations of each target CWE for reproducible validation.
+- **`plugins/frameworks/express`**: Implements the core framework adapter for read-only JS/TS route extraction, mounted middleware, request inputs, session/cookie/CORS configuration, and database observations. Recognizes all 19 declared demo routes and integrates with discovery through explicit adapter registration. See [adapter setup, verification, and boundaries](plugins/frameworks/express/README.md).
+- **`demo-apps/demo-app-01`**: A fully functional Node.js + TypeScript + Express + SQLite e-commerce application equipped with both vulnerable and patched implementations of each target CWE for reproducible validation.
 
 ---
 
