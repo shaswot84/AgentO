@@ -1,0 +1,189 @@
+{
+  "repositoryPath": "/home/momo/Documents/ChatGPT/AgentO/demo-apps/demo-app-02",
+  "name": "demo-app-02",
+  "languages": [
+    "javascript",
+    "python",
+    "typescript"
+  ],
+  "frameworks": [
+    "fastify"
+  ],
+  "dependencies": [
+    {
+      "name": "@fastify/cookie",
+      "version": "^11.0.2",
+      "kind": "dependencies",
+      "manifest": "package.json"
+    },
+    {
+      "name": "@fastify/cors",
+      "version": "^10.0.2",
+      "kind": "dependencies",
+      "manifest": "package.json"
+    },
+    {
+      "name": "@fastify/jwt",
+      "version": "^9.0.4",
+      "kind": "dependencies",
+      "manifest": "package.json"
+    },
+    {
+      "name": "drizzle-orm",
+      "version": "^0.38.4",
+      "kind": "dependencies",
+      "manifest": "package.json"
+    },
+    {
+      "name": "fastify",
+      "version": "^5.2.1",
+      "kind": "dependencies",
+      "manifest": "package.json"
+    },
+    {
+      "name": "ioredis",
+      "version": "^5.5.0",
+      "kind": "dependencies",
+      "manifest": "package.json"
+    },
+    {
+      "name": "pg",
+      "version": "^8.13.1",
+      "kind": "dependencies",
+      "manifest": "package.json"
+    },
+    {
+      "name": "safe-remote-reference",
+      "version": "[remote reference]",
+      "kind": "dependencies",
+      "manifest": "package.json"
+    },
+    {
+      "name": "@types/node",
+      "version": "^22.13.1",
+      "kind": "devDependencies",
+      "manifest": "package.json"
+    },
+    {
+      "name": "@types/pg",
+      "version": "^8.11.11",
+      "kind": "devDependencies",
+      "manifest": "package.json"
+    },
+    {
+      "name": "tsx",
+      "version": "^4.23.15",
+      "kind": "devDependencies",
+      "manifest": "package.json"
+    },
+    {
+      "name": "typescript",
+      "version": "^5.7.3",
+      "kind": "devDependencies",
+      "manifest": "package.json"
+    },
+    {
+      "name": "vitest",
+      "version": "^3.0.5",
+      "kind": "devDependencies",
+      "manifest": "package.json"
+    }
+  ],
+  "databases": [
+    "postgresql",
+    "redis"
+  ],
+  "orms": [
+    "drizzle-orm"
+  ],
+  "authentication": [
+    "jwt"
+  ],
+  "authenticationPackages": [
+    "@fastify/jwt"
+  ],
+  "middleware": [
+    {
+      "kind": "cookie",
+      "name": "@fastify/cookie",
+      "file": "package.json",
+      "basis": "dependency"
+    },
+    {
+      "kind": "cors",
+      "name": "@fastify/cors",
+      "file": "package.json",
+      "basis": "dependency"
+    },
+    {
+      "kind": "cors",
+      "name": "@fastify/cors",
+      "file": "src/app.ts",
+      "basis": "import",
+      "line": 2
+    },
+    {
+      "kind": "cookie",
+      "name": "@fastify/cookie",
+      "file": "src/app.ts",
+      "basis": "import",
+      "line": 4
+    },
+    {
+      "kind": "cors",
+      "name": "custom-cors",
+      "file": "src/routes/payment.ts",
+      "basis": "header",
+      "line": 12
+    }
+  ],
+  "structure": {
+    "manifests": [
+      {
+        "file": "contracts/package.json",
+        "directory": "contracts",
+        "name": "@demo-app-02/contracts",
+        "workspacePatterns": []
+      },
+      {
+        "file": "package.json",
+        "directory": ".",
+        "name": "demo-app-02",
+        "workspacePatterns": []
+      }
+    ],
+    "directories": [
+      "contracts",
+      "public",
+      "public/css",
+      "public/js",
+      "scripts",
+      "src",
+      "src/cache",
+      "src/db",
+      "src/routes",
+      "src/types",
+      "test"
+    ],
+    "sourceDirectories": [
+      "src"
+    ],
+    "testDirectories": [
+      "test"
+    ],
+    "staticDirectories": [
+      "public"
+    ],
+    "sourceFileCount": 14
+  },
+  "expressAdapterAvailable": false,
+  "availableAdapterIds": [],
+  "supportedCodeAwareMode": false,
+  "mode": "black-box",
+  "fallbackReasons": [
+    "No Express application was detected; V1 source support requires Express.",
+    "An unsupported framework was detected; V1 source support covers Express only.",
+    "No Express framework adapter is registered."
+  ],
+  "diagnostics": []
+}

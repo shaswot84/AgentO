@@ -256,7 +256,12 @@ function useSavedFile() {
     } catch { if (token === sequence.current) setError('This file is not a valid saved AgentO discovery result.'); return undefined; }
     finally { if (token === sequence.current) setReading(false); }
   }
-  return { data, error, fileName, reading, read };
+  function setDirect(discoveryData: unknown, label = 'Local Discovery Result') {
+    const parsed = parseSavedDiscovery(discoveryData);
+    if (!parsed.ok) { setError(parsed.error); return undefined; }
+    setData(parsed.value); setFileName(label); setError(''); return parsed.value;
+  }
+  return { data, error, fileName, reading, setReading, setError, read, setDirect };
 }
 function FileField({ saved, onRead }: { saved: ReturnType<typeof useSavedFile>; onRead: (file: File | undefined) => void }) {
   return <div className="form-field full-width"><label htmlFor="discovery-file">Saved discovery JSON</label><input id="discovery-file" className="file-input" type="file" accept="application/json,.json" aria-describedby="discovery-file-help discovery-file-error" aria-invalid={Boolean(saved.error)} onChange={event => onRead(event.target.files?.[0])} /><p id="discovery-file-help" className="help-text">Optional during setup. Import the discovery CLI's JSON output, up to 2 MiB.</p>{saved.reading && <p role="status" className="help-text">Checking discovery file…</p>}{saved.fileName && <p role="status" className="help-text">Attached: {saved.fileName} · {saved.data?.structure.sourceFileCount} source files</p>}<p id="discovery-file-error" className="field-error" role={saved.error ? 'alert' : undefined}>{saved.error}</p></div>;
@@ -269,7 +274,50 @@ function ProjectDialog({ client, onClose, onSaved }: { client: AgentOClient; onC
   const [errors, setErrors] = useState<ProjectInputErrors>({});
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
+  const [discovering, setDiscovering] = useState(false);
+  const [demoApps, setDemoApps] = useState<{ id: string; name: string; path: string }[]>([]);
   const saved = useSavedFile();
+
+  useEffect(() => {
+    fetch('/api/demo-apps')
+      .then(res => res.json())
+      .then((res: { ok?: boolean; data?: { id: string; name: string; path: string }[] }) => {
+        if (res.ok && Array.isArray(res.data)) setDemoApps(res.data);
+      })
+      .catch(() => undefined);
+  }, []);
+
+  async function runLocalDiscovery(targetPath?: string) {
+    const pathToRun = targetPath || fields.repositoryPath;
+    if (!pathToRun.trim()) {
+      setError('Enter a repository path to discover.');
+      return;
+    }
+    setDiscovering(true);
+    setError('');
+    try {
+      const res = await fetch('/api/discover', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ repositoryPath: pathToRun.trim() }),
+      });
+      const body = (await res.json()) as { ok?: boolean; data?: unknown; error?: string };
+      if (!body.ok) throw new Error(body.error || 'Discovery failed');
+      const discovery = saved.setDirect(body.data, `Auto-Discovered (${(body.data as { name?: string }).name || 'project'})`);
+      if (discovery) {
+        setFields(previous => ({
+          ...previous,
+          name: previous.name || discovery.name,
+          repositoryPath: discovery.repositoryPath,
+        }));
+      }
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Local discovery failed.');
+    } finally {
+      setDiscovering(false);
+    }
+  }
+
   function change(field: keyof typeof fields, value: string) { setFields(previous => ({ ...previous, [field]: value })); setError(''); }
   async function submit(event: FormEvent) {
     event.preventDefault();
@@ -277,24 +325,101 @@ function ProjectDialog({ client, onClose, onSaved }: { client: AgentOClient; onC
     const nextErrors = validateProjectInput(input);
     setErrors(nextErrors); setError('');
     if (Object.keys(nextErrors).length > 0) { document.getElementById(`project-${Object.keys(nextErrors)[0]}`)?.focus(); return; }
-    if (saved.error || saved.reading) return;
+    if (saved.error || saved.reading || discovering) return;
     setSaving(true);
     try { onSaved(await client.createProject(input, saved.data)); }
     catch (failure) { setError(clientErrorMessage(failure)); }
     finally { setSaving(false); }
   }
-  return <Dialog title="New project" description="Give your application a place in the workspace." onClose={onClose} busy={saving}><form noValidate onSubmit={submit}><div className="dialog-body"><div className="form-grid">
-    <div className="form-field full-width"><label htmlFor="project-name">Project name</label><input id="project-name" placeholder="e.g. Storefront API" value={fields.name} onChange={event => change('name', event.target.value)} aria-invalid={Boolean(errors.name)} aria-describedby="name-error" autoFocus maxLength={120} /><p id="name-error" className="field-error">{errors.name}</p></div>
-    <div className="form-field full-width"><label htmlFor="project-repositoryPath">Repository path</label><input id="project-repositoryPath" placeholder="/path/to/your/repository" value={fields.repositoryPath} onChange={event => change('repositoryPath', event.target.value)} aria-invalid={Boolean(errors.repositoryPath)} aria-describedby="repository-help repository-error" /><p id="repository-help" className="help-text">Use the same path recorded in the saved discovery result.</p><p id="repository-error" className="field-error">{errors.repositoryPath}</p></div>
-    <div className="form-field full-width"><label htmlFor="project-baseUrl">Target URL</label><input id="project-baseUrl" type="url" value={fields.baseUrl} onChange={event => change('baseUrl', event.target.value)} aria-invalid={Boolean(errors.baseUrl)} aria-describedby="target-error" /><p id="target-error" className="field-error">{errors.baseUrl}</p></div>
-    <div className="form-field full-width"><label htmlFor="project-allowedOrigins">Allowed origins</label><textarea id="project-allowedOrigins" value={fields.origins} onChange={event => change('origins', event.target.value)} aria-invalid={Boolean(errors.allowedOrigins)} aria-describedby="origins-help origins-error" rows={2} /><p id="origins-help" className="help-text">One explicit origin per line. Include the target's origin.</p><p id="origins-error" className="field-error">{errors.allowedOrigins}</p></div>
-    <FileField saved={saved} onRead={file => { void saved.read(file).then(discovery => { if (discovery) setFields(previous => ({ ...previous, name: previous.name || discovery.name, repositoryPath: previous.repositoryPath || discovery.repositoryPath })); }); }} />
-    </div>{error && <div className="notice error" role="alert" style={{ marginTop: 15, marginBottom: 0 }}>{error}</div>}<p className="help-text" style={{ marginTop: 12 }}>Saving records setup only. It does not read your repository or start tests.</p></div><div className="dialog-footer"><button type="button" className="button secondary" onClick={onClose} disabled={saving}>Cancel</button><button className="button primary" disabled={saving || saved.reading || Boolean(saved.error)}>{saving ? 'Saving…' : 'Create project'}</button></div></form></Dialog>;
+
+  return <Dialog title="New project" description="Give your application a place in the workspace." onClose={onClose} busy={saving || discovering}><form noValidate onSubmit={submit}><div className="dialog-body">
+    {demoApps.length > 0 && (
+      <div className="notice info" style={{ marginBottom: 16 }}>
+        <Icon name="compass" />
+        <div style={{ width: '100%' }}>
+          <p style={{ fontWeight: 600, marginBottom: 6 }}>Quick Load Demo Project:</p>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            {demoApps.map(demo => (
+              <button
+                key={demo.id}
+                type="button"
+                className="button secondary"
+                style={{ padding: '4px 10px', fontSize: 13 }}
+                onClick={() => {
+                  const isDemo2 = demo.name === 'demo-app-02';
+                  setFields(prev => ({
+                    ...prev,
+                    name: demo.name,
+                    repositoryPath: demo.path,
+                    baseUrl: isDemo2 ? 'http://localhost:4000' : 'http://localhost:3000',
+                    origins: isDemo2 ? 'http://localhost:4000' : 'http://localhost:3000',
+                  }));
+                  void runLocalDiscovery(demo.path);
+                }}
+              >
+                {demo.name}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    )}
+    <div className="form-grid">
+      <div className="form-field full-width"><label htmlFor="project-name">Project name</label><input id="project-name" placeholder="e.g. Storefront API" value={fields.name} onChange={event => change('name', event.target.value)} aria-invalid={Boolean(errors.name)} aria-describedby="name-error" autoFocus maxLength={120} /><p id="name-error" className="field-error">{errors.name}</p></div>
+      <div className="form-field full-width">
+        <label htmlFor="project-repositoryPath">Repository path</label>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <input id="project-repositoryPath" placeholder="/path/to/your/repository or demo-apps/demo-app-02" value={fields.repositoryPath} onChange={event => change('repositoryPath', event.target.value)} aria-invalid={Boolean(errors.repositoryPath)} aria-describedby="repository-help repository-error" style={{ flex: 1 }} />
+          <button type="button" className="button secondary" onClick={() => void runLocalDiscovery()} disabled={discovering || !fields.repositoryPath}>
+            {discovering ? 'Discovering…' : 'Run Discovery'}
+          </button>
+        </div>
+        <p id="repository-help" className="help-text">Local path on host. Click 'Run Discovery' to scan directly, or attach a JSON below.</p>
+        <p id="repository-error" className="field-error">{errors.repositoryPath}</p>
+      </div>
+      <div className="form-field full-width"><label htmlFor="project-baseUrl">Target URL</label><input id="project-baseUrl" type="url" value={fields.baseUrl} onChange={event => change('baseUrl', event.target.value)} aria-invalid={Boolean(errors.baseUrl)} aria-describedby="target-error" /><p id="target-error" className="field-error">{errors.baseUrl}</p></div>
+      <div className="form-field full-width"><label htmlFor="project-allowedOrigins">Allowed origins</label><textarea id="project-allowedOrigins" value={fields.origins} onChange={event => change('origins', event.target.value)} aria-invalid={Boolean(errors.allowedOrigins)} aria-describedby="origins-help origins-error" rows={2} /><p id="origins-help" className="help-text">One explicit origin per line. Include the target's origin.</p><p id="origins-error" className="field-error">{errors.allowedOrigins}</p></div>
+      <FileField saved={saved} onRead={file => { void saved.read(file).then(discovery => { if (discovery) setFields(previous => ({ ...previous, name: previous.name || discovery.name, repositoryPath: previous.repositoryPath || discovery.repositoryPath })); }); }} />
+    </div>
+    {error && <div className="notice error" role="alert" style={{ marginTop: 15, marginBottom: 0 }}>{error}</div>}
+    <p className="help-text" style={{ marginTop: 12 }}>Saving records setup only. It does not start live security testing.</p>
+  </div>
+  <div className="dialog-footer">
+    <button type="button" className="button secondary" onClick={onClose} disabled={saving || discovering}>Cancel</button>
+    <button className="button primary" disabled={saving || discovering || saved.reading || Boolean(saved.error)}>{saving ? 'Saving…' : 'Create project'}</button>
+  </div>
+  </form></Dialog>;
 }
 function ImportDialog({ client, project, onClose, onSaved }: { client: AgentOClient; project: ProjectSummary; onClose: () => void; onSaved: (project: ProjectSummary) => void }) {
   const saved = useSavedFile();
   const [saving, setSaving] = useState(false);
+  const [discovering, setDiscovering] = useState(false);
   const [error, setError] = useState('');
+
+  async function runLocalDiscovery() {
+    setDiscovering(true);
+    setError('');
+    try {
+      const res = await fetch('/api/discover', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ repositoryPath: project.repositoryPath }),
+      });
+      const body = (await res.json()) as { ok?: boolean; data?: unknown; error?: string };
+      if (!body.ok) throw new Error(body.error || 'Discovery failed');
+      const discovery = saved.setDirect(body.data, `Auto-Discovered (${(body.data as { name?: string }).name || 'project'})`);
+      if (discovery) {
+        setSaving(true);
+        onSaved(await client.importDiscovery(project.id, discovery));
+      }
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Local discovery failed.');
+    } finally {
+      setDiscovering(false);
+      setSaving(false);
+    }
+  }
+
   async function submit(event: FormEvent) {
     event.preventDefault(); if (!saved.data || saved.reading || saved.error) return;
     setSaving(true); setError('');
@@ -302,5 +427,13 @@ function ImportDialog({ client, project, onClose, onSaved }: { client: AgentOCli
     catch (failure) { setError(clientErrorMessage(failure)); }
     finally { setSaving(false); }
   }
-  return <Dialog title="Import discovery" description={`Attach repository facts to ${project.name}.`} onClose={onClose} busy={saving}><form onSubmit={submit}><div className="dialog-body"><div className="notice info"><Icon name="info" /><div><p>Required repository path</p><strong className="mono">{project.repositoryPath}</strong></div></div><FileField saved={saved} onRead={file => { setError(''); void saved.read(file); }} />{error && <div className="notice error" role="alert">{error}</div>}<p className="help-text">This replaces the saved discovery snapshot. It does not create scan results or evidence.</p></div><div className="dialog-footer"><button type="button" className="button secondary" onClick={onClose} disabled={saving}>Cancel</button><button className="button primary" disabled={saving || saved.reading || !saved.data || Boolean(saved.error)}>{saving ? 'Importing…' : 'Import snapshot'}</button></div></form></Dialog>;
+  return <Dialog title="Import discovery" description={`Attach repository facts to ${project.name}.`} onClose={onClose} busy={saving || discovering}><form onSubmit={submit}><div className="dialog-body"><div className="notice info"><Icon name="info" /><div><p>Required repository path</p><strong className="mono">{project.repositoryPath}</strong></div></div>
+  <div style={{ marginBottom: 14 }}>
+    <button type="button" className="button secondary" onClick={() => void runLocalDiscovery()} disabled={discovering || saving}>
+      <Icon name="compass" />
+      {discovering ? 'Scanning repository…' : 'Run Discovery Directly on this Path'}
+    </button>
+  </div>
+  <FileField saved={saved} onRead={file => { setError(''); void saved.read(file); }} />{error && <div className="notice error" role="alert">{error}</div>}<p className="help-text">This replaces the saved discovery snapshot. It does not create scan results or evidence.</p></div><div className="dialog-footer"><button type="button" className="button secondary" onClick={onClose} disabled={saving || discovering}>Cancel</button><button className="button primary" disabled={saving || discovering || saved.reading || !saved.data || Boolean(saved.error)}>{saving ? 'Importing…' : 'Import snapshot'}</button></div></form></Dialog>;
 }
+
