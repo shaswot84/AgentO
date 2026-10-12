@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — AgentO Security Store</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <div class="container">
+    <header class="navbar">
+      <div class="brand">
+        <a href="/">🛡️ <strong>AgentO Security Store</strong></a>
+      </div>
+      <nav class="nav-links">
+        <a href="/">Catalog</a>
+        <a href="/orders.html">Orders</a>
+        <a href="/profile.html">Profile</a>
+        <a href="/admin.html">Admin</a>
+      </nav>
+      <div id="user-status-container"></div>
+    </header>
+
+    <div id="security-banner-container"></div>
+
+    <div style="max-width: 500px; margin: 40px auto;" class="content-box">
+      <h2>Sign In</h2>
+      <p style="color: var(--text-secondary); margin-bottom: 20px;">
+        Use standard credentials or click a preconfigured test persona below:
+      </p>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" class="form-input" required placeholder="alice, bob, or admin">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" class="form-input" required placeholder="alice123, bob123, admin123">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Sign In</button>
+      </form>
+
+      <div class="test-panel" style="margin-top: 24px;">
+        <h4>⚡ 1-Click Test Personas:</h4>
+        <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+          <button class="btn btn-sm" onclick="loginAs('alice')">👤 Alice (Customer — owns Order #101, #102)</button>
+          <button class="btn btn-sm" onclick="loginAs('bob')">👤 Bob (Customer — owns Order #201)</button>
+          <button class="btn btn-sm" onclick="loginAs('admin')">👑 Admin (Privileged Administrator)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/app.js"></script>
+  <script>
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          alert('Login successful!');
+          window.location.href = '/';
+        } else {
+          alert(`Error: ${data.error}`);
+        }
+      } catch (err) {
+        alert('Login request failed');
+      }
+    });
+  </script>
+</body>
+</html>

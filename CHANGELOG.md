@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Demo Application 02 (`demo-apps/demo-app-02`)**: Added a Fastify + JWT + PostgreSQL + Redis + Drizzle ORM microservice demonstrating multi-language (TypeScript, JavaScript, Python), multi-manifest (`package.json`, `contracts/package.json`), type-only import filtering, remote URL version masking, and custom CORS headers. Verifies the robustness of Project Discovery stack detection and graceful black-box mode fallback.
 - **Express Framework Adapter (`plugins/frameworks/express`)**: Added read-only JS/TS extraction of mounted routes, request inputs, authentication/authorization guards, session/cookie/CORS configuration, and SQL operation metadata with normalized source evidence, redaction, bounded traversal, and incomplete-extraction diagnostics. Includes a standalone JSON CLI, real discovery/core integration, and 31 tests covering all 19 declared demo routes.
 - **Express Adapter Documentation**: Added setup, API registration, evidence format, verification, and extraction limitations; updated root and discovery READMEs to link the implemented adapter.
 - **AgentO Frontend (`apps/frontend`)**: Added a React + TypeScript workspace for project setup, validated saved discovery imports, stack and adapter summaries, and clearly labelled scan, finding, evidence, and remediation fixtures. Includes responsive layouts, keyboard-accessible forms, loading/error/empty states, a replaceable asynchronous client, and 41 client tests.
@@ -17,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- **Project Discovery Verification (`packages/discovery`)**: Added automated integration test validating end-to-end repository discovery and black-box mode fallback against `demo-apps/demo-app-02`.
 - **Demo Application Reorganization (`demo-apps/demo-app-01`)**: Relocated the target e-commerce demo application from `demo-app/` into `demo-apps/demo-app-01/` to support multiple structured demonstration targets. Updated discovery integration tests, root `.gitignore`, and documentation paths accordingly.
 - **AgentO Frontend UI Presentation (`apps/frontend`)**: Elevated the interface to a high-end cybersecurity workspace aesthetic featuring deep obsidian surfaces, glassmorphic frosted cards, radiant AgentO orange accents, glowing semantic badges for finding states and severities, Inter and JetBrains Mono typography, animated scan replay timeline shimmers, and refined responsive dialogs while preserving all existing component logic, routing, schemas, and test contracts.
 

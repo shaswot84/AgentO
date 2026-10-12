@@ -1,0 +1,7 @@
+{
+  "name": "@demo-app-02/contracts",
+  "version": "1.0.0",
+  "description": "Shared API contracts and schemas for demo-app-02",
+  "main": "index.js",
+  "type": "module"
+}

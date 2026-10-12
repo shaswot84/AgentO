@@ -1,0 +1,41 @@
+{
+  "name": "demo-app-02",
+  "version": "1.0.0",
+  "description": "AgentO Demo Application 02 — Payment & Token Service (Fastify + JWT + PostgreSQL + Redis + Drizzle ORM)",
+  "main": "dist/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/server.ts",
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "keywords": [
+    "fastify",
+    "jwt",
+    "postgres",
+    "redis",
+    "drizzle",
+    "security-demo"
+  ],
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@fastify/cookie": "^11.0.2",
+    "@fastify/cors": "^10.0.2",
+    "@fastify/jwt": "^9.0.4",
+    "drizzle-orm": "^0.38.4",
+    "fastify": "^5.2.1",
+    "ioredis": "^5.5.0",
+    "pg": "^8.13.1",
+    "safe-remote-reference": "https://registry.npmjs.org/is-number/-/is-number-7.0.0.tgz"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.1",
+    "@types/pg": "^8.11.11",
+    "tsx": "^4.23.15",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.5"
+  }
+}

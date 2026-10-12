@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orders & IDOR Verification — AgentO</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <div class="container">
+    <header class="navbar">
+      <div class="brand">
+        <a href="/">🛡️ <strong>AgentO Security Store</strong></a>
+      </div>
+      <nav class="nav-links">
+        <a href="/">Catalog</a>
+        <a href="/orders.html" class="active">Orders</a>
+        <a href="/profile.html">Profile</a>
+        <a href="/admin.html">Admin</a>
+      </nav>
+      <div id="user-status-container"></div>
+    </header>
+
+    <div id="security-banner-container"></div>
+
+    <div class="content-box">
+      <h2>My Order History (/api/orders)</h2>
+      <p style="color: var(--text-secondary); margin-bottom: 16px;">
+        View your authenticated orders or test Insecure Direct Object Reference (IDOR) below.
+      </p>
+
+      <div id="unauth-orders-warning" class="alert alert-danger" style="display: none;">
+        You are not logged in! Please <a href="/login.html" style="color: inherit; text-decoration: underline;">log in</a> (as Alice or Bob) to see your orders.
+      </div>
+
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Product</th>
+              <th>Qty</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="orders-table-body">
+            <!-- Loaded via JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- CWE-639 IDOR Interactive Test Section -->
+      <div class="test-panel" style="margin-top: 30px;">
+        <h4>🔍 CWE-639 Verification: Direct Object Reference (/api/orders/:id)</h4>
+        <p style="color: var(--text-secondary); margin-bottom: 12px;">
+          Known seeded orders: <code>Order #101</code> (Alice), <code>Order #102</code> (Alice), <code>Order #201</code> (Bob), <code>Order #301</code> (Admin).
+        </p>
+        <div style="display: flex; gap: 10px; max-width: 500px; margin-bottom: 14px;">
+          <input type="number" id="test-order-id" class="form-input" placeholder="Enter Order ID to fetch (e.g. 101, 201, 301)" value="101">
+          <button class="btn btn-primary" onclick="inspectOrder()">Fetch Order</button>
+        </div>
+
+        <div id="idor-result-container" style="display: none;">
+          <h5>Result from <code>GET /api/orders/<span id="result-order-id"></span></code>:</h5>
+          <pre id="idor-json-display"></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/app.js"></script>
+  <script>
+    async function loadOrders() {
+      try {
+        const res = await fetch('/api/orders');
+        if (res.status === 401) {
+          document.getElementById('unauth-orders-warning').style.display = 'block';
+          return;
+        }
+        const orders = await res.json();
+        const tbody = document.getElementById('orders-table-body');
+        if (orders.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No orders found for this account.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = orders.map(o => `
+          <tr>
+            <td><strong>#${o.id}</strong></td>
+            <td>${o.product_name}</td>
+            <td>${o.quantity}</td>
+            <td>$${o.total_price.toFixed(2)}</td>
+            <td><span class="badge" style="background: var(--bg-tertiary);">${o.status}</span></td>
+            <td><button class="btn btn-sm" onclick="setAndInspect(${o.id})">Inspect</button></td>
+          </tr>
+        `).join('');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function setAndInspect(id) {
+      document.getElementById('test-order-id').value = id;
+      inspectOrder();
+    }
+
+    async function inspectOrder() {
+      const id = document.getElementById('test-order-id').value;
+      if (!id) return;
+
+      try {
+        const res = await fetch(`/api/orders/${id}`);
+        const data = await res.json();
+
+        document.getElementById('idor-result-container').style.display = 'block';
+        document.getElementById('result-order-id').innerText = id;
+        document.getElementById('idor-json-display').innerText = JSON.stringify(data, null, 2);
+      } catch (err) {
+        alert('Fetch order failed');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadOrders);
+  </script>
+</body>
+</html>

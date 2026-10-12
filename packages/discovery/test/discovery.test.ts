@@ -75,6 +75,38 @@ describe('Phase 3 project discovery', () => {
     expect(adapter.extract).toHaveBeenCalledWith(project);
   });
 
+  it('identifies demo-app-02 (Fastify + JWT + PostgreSQL + Redis + Drizzle) and gracefully enforces black-box mode', async () => {
+    const result = await discoverProject(demo02Path, adapters);
+    expect(result.name).toBe('demo-app-02');
+    expect(result.languages).toEqual(['javascript', 'python', 'typescript']);
+    expect(result.frameworks).toEqual(['fastify']);
+    expect(result.databases).toEqual(['postgresql', 'redis']);
+    expect(result.orms).toEqual(['drizzle-orm']);
+    expect(result.authentication).toEqual(['jwt']);
+    expect(result.authenticationPackages).toEqual(['@fastify/jwt']);
+    expect(result.middleware).toEqual(expect.arrayContaining([
+      expect.objectContaining({ name: '@fastify/cors', kind: 'cors', basis: 'dependency' }),
+      expect.objectContaining({ name: '@fastify/cookie', kind: 'cookie', basis: 'dependency' }),
+      expect.objectContaining({ name: '@fastify/cors', kind: 'cors', basis: 'import', file: 'src/app.ts' }),
+      expect.objectContaining({ name: '@fastify/cookie', kind: 'cookie', basis: 'import', file: 'src/app.ts' }),
+      expect.objectContaining({ name: 'custom-cors', kind: 'cors', basis: 'header', file: 'src/routes/payment.ts' }),
+    ]));
+    const header = result.middleware.find(item => item.basis === 'header');
+    const source = await readFile(join(demo02Path, header!.file), 'utf8');
+    expect(source.split('\n')[header!.line! - 1]).toContain('Access-Control-Allow-Origin');
+    expect(result.structure.sourceDirectories).toContain('src');
+    expect(result.structure.testDirectories).toContain('test');
+    expect(result.structure.staticDirectories).toContain('public');
+    expect(result.structure.manifests.length).toBeGreaterThanOrEqual(2);
+    expect(result.dependencies.find(item => item.name === 'safe-remote-reference')?.version).toBe('[remote reference]');
+    expect(result.orms).not.toContain('@prisma/client');
+    expect(result.diagnostics).toEqual([]);
+    expect(result.expressAdapterAvailable).toBe(true);
+    expect(result.supportedCodeAwareMode).toBe(false);
+    expect(result.mode).toBe('black-box');
+    expect(result.fallbackReasons).toContain('No Express application was detected; V1 source support requires Express.');
+  });
+
   it('passes the fallback to core so unsupported projects never call source providers', async () => {
     const root = await repository({ 'package.json': { dependencies: { fastify: '^5' } }, 'src/main.js': 'import Fastify from "fastify";' });
     const discovery = await discoverProject(root, adapters);
