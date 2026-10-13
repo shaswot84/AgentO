@@ -79,10 +79,12 @@ CWE outside the MVP set.
 ## Boundaries
 
 This is an architecture demonstration, **not a production scanning entry point**.
-`allowedOrigins` declares intended scope but does not enforce it. No real adapters
-or CWE detection rules are implemented. Repository discovery and mode selection
+The core itself treats `allowedOrigins` as declared scope. The implemented
+[browser adapter](../../plugins/tools/e2e-browser/README.md) enforces exact origins
+for its browser workflows and returns normalized evidence through these contracts.
+CWE detection rules are not implemented in core. Repository discovery and mode selection
 are available in [the discovery package](../discovery/README.md). Endpoint merging, capability
-selection across multiple tools, target policy enforcement, runtime evidence
+selection across multiple tools, cross-tool policy enforcement, runtime evidence
 immutability/storage/redaction, and substantive verification remain later phases.
 The skeleton requires evidence for a confirmed finding, but the injected evaluator
 is responsible for the verdict; this phase does not prove vulnerability validity.

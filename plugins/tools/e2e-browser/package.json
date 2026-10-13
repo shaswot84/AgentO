@@ -1,0 +1,29 @@
+{
+  "name": "@agento/tool-e2e-browser",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Scoped multi-identity browser workflows and normalized runtime evidence",
+  "type": "module",
+  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } },
+  "files": ["dist"],
+  "engines": { "node": "^22.22.3 || >=24.8.0" },
+  "scripts": {
+    "build": "node node_modules/typescript/bin/tsc -p tsconfig.build.json",
+    "typecheck": "node node_modules/typescript/bin/tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:integration": "AGENTO_BROWSER_INTEGRATION=1 vitest run test/integration.test.ts",
+    "check": "npm run typecheck && npm run build && npm test",
+    "observe": "node dist/cli.js"
+  },
+  "dependencies": {
+    "@agento/core": "file:../../../packages/core",
+    "@e2e-dev/web": "0.14.0",
+    "e2e": "0.20.0",
+    "playwright-core": "1.63.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.3"
+  }
+}
