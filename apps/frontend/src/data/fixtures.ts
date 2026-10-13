@@ -26,7 +26,7 @@ export const demoScan: ScanSnapshot = {
   summary: 'Illustrative scan fixture with five evidence states. Only discovery metadata comes from a saved repository discovery run; no security scan runs in this frontend.',
   stages: [
     { id: 'discovery', label: 'Saved discovery snapshot', status: 'complete', details: 'Saved output of repository discovery for demo-app. Express, SQLite, and session middleware detected.' },
-    { id: 'adapter', label: 'Framework adapter availability', status: 'unavailable', details: 'No Express framework adapter is registered. Saved discovery selects black-box mode.' },
+    { id: 'adapter', label: 'Live framework analysis', status: 'unavailable', details: 'Saved discovery describes adapter support. Live framework analysis is not connected in this preview.' },
     { id: 'static', label: 'Static analysis fixture', status: 'complete', details: 'Illustrative source observations with repository-relative locations; no analyzer executes here.' },
     { id: 'browser', label: 'Browser observations fixture', status: 'complete', details: 'Illustrative browser evidence only; no target browser workflow executes here.' },
     { id: 'scanner', label: 'Scanner results fixture', status: 'complete', details: 'Illustrative test outcomes only; no scanner or network request executes here.' },

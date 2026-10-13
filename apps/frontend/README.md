@@ -29,9 +29,11 @@ the production build created by `check` or `npm run build`.
 ## Configure a project and import discovery
 
 Create a project from the Projects view, supplying a name, repository path, target
-URL, and explicitly allowed origins, one per line. A saved discovery JSON file can
-be attached during setup; its repository path populates an empty path field. The
-form validates these inputs before creating a project:
+URL, and explicitly allowed origins, one per line. The target's normalized origin
+is included automatically until you customize **Allowed origins**. The form opens
+that section and focuses the invalid field when scope validation fails.
+**Attach saved discovery** is optional; its repository path populates an empty path
+field. The form validates these inputs before creating a project:
 
 - A name is required and limited to 120 characters.
 - A repository path is required, limited to 4,096 characters, and cannot contain
@@ -62,9 +64,14 @@ node packages/discovery/dist/cli.js /absolute/repository > /tmp/discovery.json
 
 Replace `/absolute/repository` with the repository to inspect. Attach
 `/tmp/discovery.json` in the New project form, or select an existing project and
-use **Import discovery** on its Discovery view.
+use **Import JSON** on its Discovery view.
 
-The browser reads only the JSON file you select; the CLI performs repository reads.
+The browser reads the JSON file you select; the CLI performs repository reads.
+During Vite development, **Discover**, the local demo shortcuts, and **Refresh**
+on the Discovery view also call the existing local development bridge to inspect
+a repository on the host. These controls require the discovery package (and Express adapter for
+code-aware Express analysis) to be built. They do not run security tests. When the
+bridge is unavailable, import a saved JSON file instead.
 Discovery reports diagnostics for unreadable or malformed input and falls back to
 black-box mode when a compatible adapter is unavailable.
 
@@ -80,7 +87,9 @@ The seeded demo's snapshot and findings belong only to the seeded demo project.
 
 ## Views and demonstration data
 
-- **Projects**: select the seeded demo or configure a new project.
+- **Projects**: search by name, target, repository, or stack; filter by data source;
+  open a project or configure a new one. Project rows adapt to cards on narrow
+  screens. Clear filters to recover from an empty search.
 - **Discovery**: inspect languages, frameworks, dependencies, database and ORM
   hints, authentication packages, middleware observations, and repository
   structure. The mode, adapter availability, fallback reasons, and diagnostics
@@ -88,7 +97,10 @@ The seeded demo's snapshot and findings belong only to the seeded demo project.
 - **Scan progress**: explore labelled fixture progress for the demo. It represents
   a demonstration, not a real run.
 - **Findings**: explore the demo's fixture findings, source and runtime evidence,
-  and remediation. `HYPOTHESIS`, `LIKELY`, `CONFIRMED`, `NOT_REPRODUCED`, and
+  and remediation in **Overview**, **Evidence**, and **Remediation** tabs. Use
+  Left/Right arrows, Home, and End to navigate the tabs. Structured evidence facts
+  and provenance expand on demand. On narrow screens, choosing a finding scrolls
+  its details into view. `HYPOTHESIS`, `LIKELY`, `CONFIRMED`, `NOT_REPRODUCED`, and
   `REJECTED` states are shown explicitly; fixture confirmation is not a result
   from testing your target.
 

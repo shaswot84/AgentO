@@ -25,6 +25,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- **Frontend UI/UX (`apps/frontend`)**: Improved workspace hierarchy, responsive project browsing and source filters, guided project setup, finding evidence navigation, readable status feedback, and keyboard/mobile accessibility; corrected outdated framework preview wording and documented the updated flows and local discovery controls.
+
 - **Discovery Adapter Registration and Demo Snapshots (`scripts/discover.mjs`, `apps/frontend`)**: Registered `ExpressFrameworkAdapter` within the discovery automation script (`scripts/discover.mjs`) to enable code-aware discovery mode for Express targets. Refreshed demo project discovery snapshots (`demo-apps/demo-app-01/discovery.json`, `demo-apps/demo-app-02/discovery.json`) and the frontend demo discovery fixture (`apps/frontend/src/data/demo-discovery.ts`) so Express applications display adapter availability and code-aware analysis mode.
 - **Project Discovery Verification (`packages/discovery`)**: Added automated integration test validating end-to-end repository discovery and black-box mode fallback against `demo-apps/demo-app-02`.
 - **Demo Application Reorganization (`demo-apps/demo-app-01`)**: Relocated the target e-commerce demo application from `demo-app/` into `demo-apps/demo-app-01/` to support multiple structured demonstration targets. Updated discovery integration tests, root `.gitignore`, and documentation paths accordingly.

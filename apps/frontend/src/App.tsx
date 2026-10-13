@@ -51,7 +51,7 @@ function ErrorState({ retry }: { retry: () => void }) {
   return <div className="error-state" role="alert"><Icon name="info" /><h2>This view could not be loaded</h2><p>Try again to reconnect to the workspace client.</p><button className="button secondary" onClick={retry}>Try again</button></div>;
 }
 function FixtureNotice({ mixed = false }: { mixed?: boolean }) {
-  return <div className="fixture-banner"><Icon name="info" /><p><strong>Demo data, clearly marked.</strong> {mixed ? 'Demo entries use fixture data and synthetic evidence. No tests were run to create those entries.' : 'Scan progress, findings, and evidence are fixtures. No security tests have run.'}</p></div>;
+  return <div className="fixture-banner"><Icon name="info" /><p><strong>Demo workspace.</strong> {mixed ? 'Demo entries contain synthetic evidence. No tests were run for those entries.' : 'Scan progress and findings are examples. No live security tests have run.'}</p></div>;
 }
 function useRequest<T>(load: () => Promise<T>, dependencies: DependencyList) {
   const loadRef = useRef(load);
@@ -79,7 +79,7 @@ export function App({ client }: { client: AgentOClient }) {
   const [newProjectOpen, setNewProjectOpen] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
   const [rescanning, setRescanning] = useState(false);
-  const [notification, setNotification] = useState('');
+  const [notification, setNotification] = useState<{ message: string; kind: 'success' | 'warning' | 'error' } | null>(null);
   const projectsState = useRequest(() => client.listProjects(), [client, revision]);
   const projects = projectsState.data ?? [];
   const selected = projects.find(project => project.id === selectedId) ?? projects[0];
@@ -89,11 +89,11 @@ export function App({ client }: { client: AgentOClient }) {
     window.addEventListener('hashchange', changed);
     return () => window.removeEventListener('hashchange', changed);
   }, []);
-  function navigate(next: View) { setView(next); window.location.hash = next; setNotification(''); }
+  function navigate(next: View) { setView(next); window.location.hash = next; setNotification(null); window.scrollTo({ top: 0 }); }
   function openProject(project: ProjectSummary) { setSelectedId(project.id); navigate('discovery'); }
   function saved(project: ProjectSummary) {
     setSelectedId(project.id); setRevision(value => value + 1); setNewProjectOpen(false); setImportOpen(false);
-    navigate('discovery'); setNotification('Project saved for this session. Reloading resets the workspace.');
+    navigate('discovery'); setNotification({ message: 'Project saved for this session. Reloading resets the workspace.', kind: 'success' });
   }
 
   async function rescanSelected() {
@@ -107,36 +107,39 @@ export function App({ client }: { client: AgentOClient }) {
       });
       const body = (await res.json()) as { ok?: boolean; data?: unknown; error?: string };
       if (!body.ok) throw new Error(body.error || 'Discovery failed');
-      const updated = await client.importDiscovery(selected.id, body.data as DiscoveryResult);
+      const discovery = body.data as DiscoveryResult;
+      const updated = await client.importDiscovery(selected.id, discovery);
       setRevision(value => value + 1);
-      setNotification(`Repository re-scanned successfully: ${updated.name} (${updated.mode} mode)`);
+      setNotification(discovery.diagnostics.length
+        ? { message: `Discovery saved with diagnostics for ${updated.name}. Review the issues below.`, kind: 'warning' }
+        : { message: `Discovery updated for ${updated.name}. Analysis mode: ${updated.mode}.`, kind: 'success' });
     } catch (err: unknown) {
-      setNotification(`Re-scan failed: ${err instanceof Error ? err.message : 'Discovery service unavailable'}. Use Import discovery to load saved JSON.`);
+      setNotification({ message: `Re-scan failed: ${err instanceof Error ? err.message : 'Discovery service unavailable'}. Import a saved discovery JSON to continue.`, kind: 'error' });
     } finally {
       setRescanning(false);
     }
   }
 
   const heading = {
-    projects: { eyebrow: 'YOUR WORKSPACE', title: 'Security starts with context.', subtitle: 'A clear view of your applications, their stack, and the evidence that matters.' },
-    discovery: { eyebrow: 'PROJECT INTELLIGENCE', title: 'Know your application.', subtitle: 'Repository facts, probable middleware, and the capabilities available to this project.' },
-    scan: { eyebrow: 'FROM SIGNAL TO PROOF', title: 'Follow the investigation.', subtitle: 'Explore how a security signal moves through a test plan, evidence, and a verdict.' },
-    findings: { eyebrow: 'EVIDENCE, NOT ASSUMPTIONS', title: 'Every finding has a story.', subtitle: 'Inspect the hypothesis, the verdict, and the evidence that connects them.' },
+    projects: { eyebrow: 'APPLICATION SECURITY', title: 'Projects', subtitle: 'Your applications, their context, and the next step toward proof.' },
+    discovery: { eyebrow: selected?.name ?? 'PROJECT INTELLIGENCE', title: 'Discovery', subtitle: 'Understand your stack, repository, and available analysis capabilities.' },
+    scan: { eyebrow: selected?.name ?? 'INVESTIGATION', title: 'Scan progress', subtitle: 'Follow each stage from repository context to an evidence-backed verdict.' },
+    findings: { eyebrow: selected?.name ?? 'INVESTIGATION', title: 'Findings', subtitle: 'Review signals, inspect the evidence, and decide what needs attention.' },
   }[view];
 
   return <div className="app-shell">
     <a className="skip-link" href="#main-content" onClick={event => { event.preventDefault(); document.getElementById('main-content')?.focus(); }}>Skip to content</a>
     <aside className="sidebar">
       <div className="brand"><div className="brand-mark"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="m4 20 8-16 8 16M8 14h8" /></svg></div><div><div className="brand-name">AgentO<span style={{ color: '#ef805d' }}>.</span></div><div className="brand-caption">Find the proof.</div></div></div>
-      <nav className="nav" aria-label="Main navigation">{views.map(item => <a key={item.id} href={`#${item.id}`} className={`nav-item ${view === item.id ? 'active' : ''}`} aria-current={view === item.id ? 'page' : undefined} onClick={() => navigate(item.id)}><span className="nav-icon"><Icon name={item.icon} /></span><span className="nav-label">{item.label}</span>{item.id === 'projects' && <span className="nav-count">{projects.length}</span>}</a>)}</nav>
-      <div className="sidebar-footer"><div className="section-label">WORKSPACE STATUS</div><strong>Local preview</strong><p>Projects stay in this session.<br />Execution APIs are not connected.</p></div>
+      <div className="nav-heading section-label">WORKSPACE</div><nav className="nav" aria-label="Main navigation">{views.map(item => <a key={item.id} href={`#${item.id}`} className={`nav-item ${view === item.id ? 'active' : ''}`} aria-current={view === item.id ? 'page' : undefined} onClick={() => navigate(item.id)}><span className="nav-icon"><Icon name={item.icon} /></span><span className="nav-label">{item.label}</span>{item.id === 'projects' && <span className="nav-count">{projects.length}</span>}</a>)}</nav>
+      <div className="sidebar-footer"><div className="session-heading"><Icon name="info" /><strong>Session workspace</strong></div><p>Projects reset on reload.<br />Live security scans are not connected.</p><span className="session-label">LOCAL PREVIEW</span></div>
     </aside>
     <div className="workspace">
-      <header className="topbar"><div className="breadcrumb"><span>Workspace</span><span aria-hidden="true">/</span><strong>{views.find(item => item.id === view)?.label}</strong></div><div className="topbar-status">{view !== 'projects' && projects.length > 0 && <><label className="screen-reader-only" htmlFor="project-picker">Selected project</label><select id="project-picker" className="project-picker" value={selected?.id ?? ''} onChange={event => { setSelectedId(event.target.value); setNotification(''); }}>{projects.map(project => <option key={project.id} value={project.id}>{project.name}</option>)}</select></>}<span>Local workspace</span><div className="avatar" aria-hidden="true">AO</div></div></header>
+      <header className="topbar"><div className="breadcrumb"><span>Workspace</span><span aria-hidden="true">/</span><strong>{views.find(item => item.id === view)?.label}</strong></div><div className="topbar-status">{view !== 'projects' && projects.length > 0 && <><label className="screen-reader-only" htmlFor="project-picker">Selected project</label><select id="project-picker" className="project-picker" value={selected?.id ?? ''} onChange={event => { setSelectedId(event.target.value); setNotification(null); }}>{projects.map(project => <option key={project.id} value={project.id}>{project.name}</option>)}</select></>}<span className="local-status">Local preview</span></div></header>
       <main id="main-content" className="main-content" tabIndex={-1}>
-        <div className="page-heading"><div><div className="eyebrow">{heading.eyebrow}</div><h1>{heading.title}</h1><p>{heading.subtitle}</p></div><div className="heading-actions">{view === 'discovery' && selected && <><button type="button" className="button secondary" onClick={() => void rescanSelected()} disabled={rescanning}><Icon name="compass" />{rescanning ? 'Re-scanning…' : 'Re-scan repository'}</button><button className="button secondary" onClick={() => setImportOpen(true)}><Icon name="file" />Import discovery</button></>}<button className="button primary" onClick={() => setNewProjectOpen(true)}><Icon name="plus" />New project</button></div></div>
-        {notification && <div className="notice success" role="status"><Icon name="check" /><p>{notification}</p></div>}
-        {projectsState.loading ? <Loading /> : projectsState.error ? <ErrorState retry={projectsState.retry} /> : view === 'projects' ? <ProjectsView projects={projects} onSelect={openProject} onCreate={() => setNewProjectOpen(true)} /> : selected ? <>
+        <div className="page-heading"><div><div className="eyebrow">{heading.eyebrow}</div><h1>{heading.title}</h1><p>{heading.subtitle}</p></div><div className="heading-actions">{view === 'discovery' && selected && <><button type="button" className="button primary" aria-label="Refresh discovery" onClick={() => void rescanSelected()} disabled={rescanning}><Icon name="compass" />{rescanning ? 'Discovering…' : 'Refresh'}</button><button className="button secondary" onClick={() => setImportOpen(true)}><Icon name="file" />Import JSON</button></>}{view === 'projects' && <button className="button primary" onClick={() => setNewProjectOpen(true)}><Icon name="plus" />New project</button>}</div></div>
+        {notification && <div className={`notice ${notification.kind}`} role={notification.kind === 'error' ? 'alert' : 'status'}><Icon name={notification.kind === 'success' ? 'check' : 'info'} /><p>{notification.message}</p><button className="icon-button" aria-label="Dismiss notification" onClick={() => setNotification(null)}><Icon name="close" /></button></div>}
+        {projectsState.loading ? <Loading /> : projectsState.error ? <ErrorState retry={projectsState.retry} /> : view === 'projects' ? <ProjectsView projects={projects} onSelect={openProject} onCreate={() => setNewProjectOpen(true)} onExplore={() => { setSelectedId('demo-shop'); navigate('findings'); }} /> : selected ? <>
           {view === 'discovery' && <DiscoveryView client={client} project={selected} revision={revision} onImport={() => setImportOpen(true)} onRescan={() => void rescanSelected()} rescanning={rescanning} />}
           {view === 'scan' && <ScanView key={selected.id} client={client} project={selected} onDemo={() => setSelectedId('demo-shop')} />}
           {view === 'findings' && <FindingsView key={selected.id} client={client} project={selected} onDemo={() => setSelectedId('demo-shop')} />}
@@ -148,22 +151,43 @@ export function App({ client }: { client: AgentOClient }) {
   </div>;
 }
 
-function ProjectsView({ projects, onSelect, onCreate }: { projects: readonly ProjectSummary[]; onSelect: (project: ProjectSummary) => void; onCreate: () => void }) {
+function ProjectsView({ projects, onSelect, onCreate, onExplore }: { projects: readonly ProjectSummary[]; onSelect: (project: ProjectSummary) => void; onCreate: () => void; onExplore: () => void }) {
   const [query, setQuery] = useState('');
-  const filtered = projects.filter(project => `${project.name} ${project.baseUrl} ${project.repositoryPath}`.toLowerCase().includes(query.toLowerCase()));
-  return <><div className="metric-grid">
-    <Metric label="Projects" value={projects.length.toString().padStart(2, '0')} detail="In this workspace session" icon="folder" />
-    <Metric label="Discovery attached" value={projects.filter(project => project.dataSource !== 'project-input').length.toString().padStart(2, '0')} detail="Saved repository snapshots" icon="compass" />
-    <Metric label="Code-aware ready" value={projects.filter(project => project.mode === 'code-aware').length.toString().padStart(2, '0')} detail="Requires a compatible adapter" icon="shield" />
-    <Metric label="Live scans" value="00" detail="Execution APIs are not connected" icon="activity" />
-  </div><Panel title="Your projects" description="Select an application to explore its context." extra={<span className="badge neutral">{projects.length} project{projects.length === 1 ? '' : 's'}</span>}>
-    <div className="toolbar"><div className="search-field"><Icon name="search" /><label className="screen-reader-only" htmlFor="project-search">Search projects</label><input id="project-search" placeholder="Search projects or targets…" value={query} onChange={event => setQuery(event.target.value)} /></div><span className="muted">Saved in memory · resets on reload</span></div>
-    {filtered.length === 0 ? <Empty title={projects.length ? 'No matching projects' : 'Your workspace is ready'} action={!projects.length && <button className="button primary" onClick={onCreate}>New project</button>}>{projects.length ? 'Try a different project name or target.' : 'Add a project to keep its discovery facts in one place.'}</Empty> : <div className="table-wrap"><table className="data-table"><caption className="screen-reader-only">Configured projects</caption><thead><tr><th scope="col">Application</th><th scope="col">Stack</th><th scope="col">Mode</th><th scope="col">Data source</th><th scope="col"><span className="screen-reader-only">Actions</span></th></tr></thead><tbody>{filtered.map(project => <tr key={project.id}><td><button className="row-link project-name" onClick={() => onSelect(project)}>{project.name}</button><p className="project-target mono">{project.baseUrl}</p></td><td><div className="tag-list">{project.languages.length ? project.languages.map(language => <span className="tag" key={language}>{language}</span>) : <span className="muted">Discovery pending</span>}</div></td><td><ModeBadge mode={project.mode} /></td><td><span className={`badge ${project.dataSource === 'demo-fixture' ? 'status-hypothesis' : 'neutral'}`}>{project.dataSource === 'demo-fixture' ? 'Demo fixture' : project.dataSource === 'saved-discovery' ? 'Saved discovery' : 'Setup only'}</span></td><td><button className="row-link" aria-label={`Open ${project.name}`} onClick={() => onSelect(project)}><Icon name="arrow" /></button></td></tr>)}</tbody></table></div>}
-  </Panel><div className="split-grid" style={{ marginTop: 24 }}><Panel title="Context before testing" description="Start with what the repository can tell you."><div className="surface-body"><p className="muted">Import a saved discovery result to see your application's stack, probable middleware, and available source-analysis capabilities.</p><button className="button ghost" onClick={onCreate} style={{ marginTop: 14 }}>Configure a project <Icon name="arrow" /></button></div></Panel><Panel title="Explore the evidence workflow" description="A preview of the investigation ahead."><div className="surface-body"><p className="muted">The demo project includes all five finding states and synthetic evidence so you can explore the workflow before execution APIs arrive.</p><span className="badge status-hypothesis" style={{ marginTop: 20 }}>Demo fixtures · no tests executed</span></div></Panel></div></>;
+  const [source, setSource] = useState('');
+  const filtered = projects.filter(project => (!source || project.dataSource === source) && `${project.name} ${project.baseUrl} ${project.repositoryPath} ${project.languages.join(' ')}`.toLowerCase().includes(query.trim().toLowerCase()));
+  function resetFilters() { setQuery(''); setSource(''); }
+  return <>
+    <div className="metric-grid">
+      <Metric label="Total projects" value={projects.length.toString().padStart(2, '0')} detail="In your current session" icon="folder" />
+      <Metric label="Discovery attached" value={projects.filter(project => project.dataSource !== 'project-input').length.toString().padStart(2, '0')} detail="Repository context available" icon="compass" />
+      <Metric label="Code-aware ready" value={projects.filter(project => project.mode === 'code-aware').length.toString().padStart(2, '0')} detail="Projects with compatible adapters" icon="shield" />
+      <Metric label="Live scans" value="00" detail="Execution not yet connected" icon="activity" />
+    </div>
+    <Panel title="Applications" description="Open a project to review its discovery." extra={<span className="badge neutral">{projects.length} total</span>}>
+      <div className="toolbar">
+        <div className="search-field"><Icon name="search" /><label className="screen-reader-only" htmlFor="project-search">Search projects</label><input id="project-search" placeholder="Search name, target, or stack…" value={query} onChange={event => setQuery(event.target.value)} /></div>
+        <label className="screen-reader-only" htmlFor="source-filter">Filter project source</label><select id="source-filter" className="filter-select" value={source} onChange={event => setSource(event.target.value)}><option value="">All sources</option><option value="saved-discovery">Saved discovery</option><option value="project-input">Setup only</option><option value="demo-fixture">Demo fixtures</option></select>
+        {(query || source) && <button className="text-button" onClick={resetFilters}>Clear filters</button>}
+        <span className="muted" role="status">{filtered.length} of {projects.length} projects</span>
+      </div>
+      {filtered.length === 0 ? <Empty title={projects.length ? 'No matching projects' : 'Add your first application'} action={<button className="button secondary" onClick={projects.length ? resetFilters : onCreate}>{projects.length ? 'Clear filters' : 'New project'}</button>}>{projects.length ? 'Try another name, target, stack, or data source.' : 'Connect your repository context and organize your security work.'}</Empty> : <div className="project-list">{filtered.map(project => <article className="project-card" key={project.id}>
+        <div className="project-identity"><div className="project-icon"><Icon name="folder" /></div><div className="project-identity-text"><button className="row-link project-name" onClick={() => onSelect(project)}>{project.name}</button><p className="project-target mono">{project.baseUrl}</p></div></div>
+        <div className="project-stack"><span className="card-label">STACK</span><div className="tag-list">{project.languages.length ? project.languages.map(language => <span className="tag" key={language}>{language}</span>) : <span className="muted">Discovery pending</span>}</div></div>
+        <div className="project-mode"><span className="card-label">ANALYSIS MODE</span><ModeBadge mode={project.mode} /></div>
+        <div className="project-source"><span className="card-label">DATA SOURCE</span><span className={`badge ${project.dataSource === 'demo-fixture' ? 'status-hypothesis' : 'neutral'}`}>{project.dataSource === 'demo-fixture' ? 'Demo fixture' : project.dataSource === 'saved-discovery' ? 'Saved discovery' : 'Setup only'}</span></div>
+        <button className="project-open icon-button" aria-label={`Open ${project.name}`} onClick={() => onSelect(project)}><Icon name="arrow" /></button>
+      </article>)}</div>}
+      <div className="panel-footnote"><Icon name="info" /><span>Session only. Projects and imports reset when you reload.</span></div>
+    </Panel>
+    <div className="next-steps">
+      <section className="next-step"><div className="step-icon"><Icon name="compass" /></div><div><div className="section-label">START WITH CONTEXT</div><h2>Bring your application into focus</h2><p>Add a repository and target, then run discovery or import a saved snapshot.</p><button className="text-button" onClick={onCreate}>Set up a project <Icon name="arrow" /></button></div></section>
+      <section className="next-step"><div className="step-icon"><Icon name="shield" /></div><div><div className="section-label">EXPLORE THE WORKFLOW</div><h2>See what evidence looks like</h2><p>Review five example findings, their evidence, and suggested fixes.</p><button className="text-button" onClick={onExplore}>Explore demo findings <Icon name="arrow" /></button><span className="demo-caption">Synthetic evidence · no live tests</span></div></section>
+    </div>
+  </>;
 }
 
 function Technology({ label, values }: { label: string; values: readonly string[] }) {
-  return <div className="technology-list"><span className="technology-label">{label}</span><div className="technology-value tag-list">{values.length ? values.map(value => <span key={value} className="tag">{value}</span>) : <span className="muted">Not detected</span>}</div></div>;
+  return <div className="technology-row"><span className="technology-label">{label}</span><div className="technology-value tag-list">{values.length ? values.map(value => <span key={value} className="tag">{value}</span>) : <span className="muted">Not detected</span>}</div></div>;
 }
 function DiscoveryView({ client, project, revision, onImport, onRescan, rescanning }: { client: AgentOClient; project: ProjectSummary; revision: number; onImport: () => void; onRescan?: () => void; rescanning?: boolean }) {
   const result = useRequest(() => client.getDiscovery(project.id), [client, project.id, revision]);
@@ -229,6 +253,12 @@ function FindingsView({ client, project, onDemo }: { client: AgentOClient; proje
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState('');
   const [selectedFinding, setSelectedFinding] = useState('');
+  const [focusRequest, setFocusRequest] = useState(0);
+  function clearFilters() { setQuery(''); setStatus(''); }
+  function selectFinding(id: string) {
+    setSelectedFinding(id);
+    setFocusRequest(value => value + 1);
+  }
   if (result.loading) return <Loading />;
   if (result.error || !result.data) return <ErrorState retry={result.retry} />;
   const all = result.data;
@@ -238,24 +268,66 @@ function FindingsView({ client, project, onDemo }: { client: AgentOClient; proje
   const fixtureOnly = all.every(finding => finding.sourceType === 'demo-fixture');
   const hasFixtures = all.some(finding => finding.sourceType === 'demo-fixture');
   return <>{hasFixtures && <FixtureNotice mixed={!fixtureOnly} />}<div className="metric-grid"><Metric label={fixtureOnly ? 'Fixture findings' : 'Findings'} value={all.length.toString().padStart(2, '0')} detail={fixtureOnly ? 'Synthetic investigation results' : 'Investigation results'} icon="shield" /><Metric label={fixtureOnly ? 'Confirmed fixtures' : 'Confirmed findings'} value={all.filter(finding => finding.status === 'CONFIRMED').length.toString().padStart(2, '0')} detail={fixtureOnly ? 'Demonstrates an evidence-backed verdict' : 'Evidence-backed verdicts'} icon="check" /><Metric label="Need investigation" value={all.filter(finding => ['HYPOTHESIS', 'LIKELY'].includes(finding.status)).length.toString().padStart(2, '0')} detail="Hypotheses and likely candidates" icon="search" /><Metric label={fixtureOnly ? 'Closed fixtures' : 'Closed findings'} value={all.filter(finding => ['NOT_REPRODUCED', 'REJECTED'].includes(finding.status)).length.toString().padStart(2, '0')} detail="Not reproduced or rejected" icon="file" /></div>
-    <div className="surface" style={{ marginBottom: 20 }}><div className="toolbar"><div className="search-field"><Icon name="search" /><label className="screen-reader-only" htmlFor="finding-search">Search findings</label><input id="finding-search" placeholder="Search findings, CWE, or route…" value={query} onChange={event => setQuery(event.target.value)} /></div><label className="screen-reader-only" htmlFor="status-filter">Filter finding status</label><select className="filter-select" id="status-filter" value={status} onChange={event => setStatus(event.target.value)}><option value="">All statuses</option>{Object.entries(statusLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select><span className="muted">{filtered.length} {filtered.length === 1 ? 'finding' : 'findings'}</span></div></div>
-    {selected ? <div className="finding-layout"><Panel title="Investigation queue"><div className="finding-list">{filtered.map(finding => <button key={finding.id} className={`finding-item ${selected.id === finding.id ? 'selected' : ''}`} onClick={() => setSelectedFinding(finding.id)} aria-pressed={selected.id === finding.id}><span className={`badge severity-${finding.severity}`}>{finding.severity}</span><FindingBadge status={finding.status} /><h3>{finding.title}</h3><div className="mono">{finding.cweId} · {finding.endpoint?.method} {finding.endpoint?.path ?? 'Source candidate'}</div></button>)}</div></Panel><FindingDetails client={client} projectId={project.id} findingId={selected.id} /></div> : <Panel title="Investigation queue"><Empty title="No matching findings">Try a different search or select another finding status.</Empty></Panel>}
+    <div className="surface" style={{ marginBottom: 20 }}><div className="toolbar"><div className="search-field"><Icon name="search" /><label className="screen-reader-only" htmlFor="finding-search">Search findings</label><input id="finding-search" placeholder="Search findings, CWE, or route…" value={query} onChange={event => setQuery(event.target.value)} /></div><label className="screen-reader-only" htmlFor="status-filter">Filter finding status</label><select className="filter-select" id="status-filter" value={status} onChange={event => setStatus(event.target.value)}><option value="">All statuses</option>{Object.entries(statusLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select>{(query || status) && <button className="text-button" onClick={clearFilters}>Clear filters</button>}<span className="muted" role="status">{filtered.length} of {all.length} findings</span></div></div>
+    {selected ? <div className="finding-layout"><Panel title="Investigation queue" description="Select a signal to review its evidence."><div className="finding-list">{filtered.map(finding => <button key={finding.id} className={`finding-item ${selected.id === finding.id ? 'selected' : ''}`} onClick={() => selectFinding(finding.id)} aria-pressed={selected.id === finding.id}><span className={`badge severity-${finding.severity}`}>{finding.severity}</span><FindingBadge status={finding.status} /><h3>{finding.title}</h3><div className="mono">{finding.cweId} · {finding.endpoint?.method} {finding.endpoint?.path ?? 'Source candidate'}</div></button>)}</div></Panel><FindingDetails client={client} projectId={project.id} findingId={selected.id} focusRequest={focusRequest} /></div> : <Panel title="Investigation queue"><Empty title="No matching findings" action={<button className="button secondary" onClick={clearFilters}>Clear filters</button>}>Try a different search or select another finding status.</Empty></Panel>}
   </>;
 }
-function FindingDetails({ client, projectId, findingId }: { client: AgentOClient; projectId: string; findingId: string }) {
+function FindingDetails({ client, projectId, findingId, focusRequest }: { client: AgentOClient; projectId: string; findingId: string; focusRequest: number }) {
   const result = useRequest(() => client.getFinding(projectId, findingId), [client, projectId, findingId]);
-  if (result.loading) return <Panel title="Finding details"><Loading /></Panel>;
-  if (result.error || !result.data) return <Panel title="Finding details"><ErrorState retry={result.retry} /></Panel>;
-  return <FindingDetailPanel finding={result.data} />;
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (result.data?.id === findingId && focusRequest > 0 && window.matchMedia('(max-width: 1000px)').matches) {
+      ref.current?.scrollIntoView({ block: 'start' });
+      ref.current?.focus({ preventScroll: true });
+    }
+  }, [result.data, findingId, focusRequest]);
+  return <div className="finding-detail-anchor" ref={ref} tabIndex={-1}>
+    {result.loading ? <Panel title="Finding details"><Loading /></Panel> : result.error || !result.data ? <Panel title="Finding details"><ErrorState retry={result.retry} /></Panel> : <FindingDetailPanel key={findingId} finding={result.data} />}
+  </div>;
 }
 function FindingDetailPanel({ finding }: { finding: FindingDetail }) {
   const fixture = finding.sourceType === 'demo-fixture';
-  return <section className="surface finding-detail" aria-label="Selected finding"><div className="surface-heading"><div><div className="eyebrow">{finding.cweId} · {finding.owaspCategory}</div><h2>{finding.title}</h2><div className="tag-list"><FindingBadge status={finding.status} /><span className={`badge severity-${finding.severity}`}>{finding.severity} severity</span><span className="badge neutral">{finding.confidence} confidence</span></div></div></div><div className="surface-body"><div className="section-label">ROOT CAUSE{fixture ? ' · FIXTURE' : ''}</div><p>{finding.rootCause}</p><dl className="definition-grid" style={{ marginBottom: 26 }}><div className="definition"><dt>Affected endpoint</dt><dd className="mono">{finding.endpoint ? `${finding.endpoint.method} ${finding.endpoint.path}` : 'No endpoint recorded'}</dd></div><div className="definition"><dt>Source location</dt><dd className="mono">{finding.source ? `${finding.source.file}:${finding.source.startLine}` : 'No source recorded'}</dd></div></dl><div className="section-label">EVIDENCE TRAIL{fixture ? ' · SYNTHETIC' : ''}</div>{finding.evidence.map(evidence => <article className="evidence-card" key={evidence.id}><div className="evidence-header"><h3>{evidence.kind.replaceAll('-', ' ')}</h3><span className="badge neutral">{fixture ? 'Fixture evidence' : 'Recorded evidence'}</span></div><p>{evidence.summary}</p>{evidence.source && <p className="evidence-source mono">{evidence.source.file}:{evidence.source.startLine}</p>}<dl className="evidence-facts">{Object.entries(evidence.facts).map(([key, value]) => <div key={key}><dt>{key}</dt><dd>{typeof value === 'string' ? value : JSON.stringify(value)}</dd></div>)}</dl><p className="evidence-source mono">{evidence.id} · {evidence.producerId}</p></article>)}{!finding.evidence.length && <p className="muted">No evidence recorded for this finding.</p>}<div className="remediation"><div className="section-label">SUGGESTED REMEDIATION{fixture ? ' · FIXTURE' : ''}</div><p>{finding.remediation.explanation}</p>{finding.remediation.patch && <pre style={{ marginTop: 12 }}>{finding.remediation.patch}</pre>}{finding.remediation.regressionTest && <p className="muted" style={{ marginTop: 12 }}>{finding.remediation.regressionTest}</p>}</div></div></section>;
+  const tabs = [
+    { id: 'overview', label: 'Overview' },
+    { id: 'evidence', label: `Evidence (${finding.evidence.length})` },
+    { id: 'remediation', label: 'Remediation' },
+  ] as const;
+  const [tab, setTab] = useState<(typeof tabs)[number]['id']>('overview');
+  return <section className="surface finding-detail" aria-label="Selected finding">
+    <div className="surface-heading"><div><div className="eyebrow">{finding.cweId} · {finding.owaspCategory}</div><h2>{finding.title}</h2><div className="tag-list"><FindingBadge status={finding.status} /><span className={`badge severity-${finding.severity}`}>{finding.severity} severity</span><span className="badge neutral">{finding.confidence} confidence</span></div></div></div>
+    <div className="detail-tabs" role="tablist" aria-label="Finding information">{tabs.map((item, index) => <button key={item.id} role="tab" id={`finding-tab-${item.id}`} aria-selected={tab === item.id} aria-controls={`finding-panel-${item.id}`} tabIndex={tab === item.id ? 0 : -1} onClick={() => setTab(item.id)} onKeyDown={event => {
+      if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+      event.preventDefault();
+      const next = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 : (index + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+      const nextTab = tabs[next];
+      if (nextTab) { setTab(nextTab.id); document.getElementById(`finding-tab-${nextTab.id}`)?.focus(); }
+    }}>{item.label}</button>)}</div>
+    {tabs.map(item => <div key={item.id} role="tabpanel" id={`finding-panel-${item.id}`} aria-labelledby={`finding-tab-${item.id}`} hidden={tab !== item.id} tabIndex={0} className="surface-body detail-panel">
+      {item.id === 'overview' && <>
+        <div className="section-label">ROOT CAUSE{fixture ? ' · FIXTURE' : ''}</div><p className="finding-summary">{finding.rootCause}</p>
+        <dl className="definition-grid endpoint-summary"><div className="definition"><dt>Affected endpoint</dt><dd className="mono">{finding.endpoint ? `${finding.endpoint.method} ${finding.endpoint.path}` : 'No endpoint recorded'}</dd></div><div className="definition"><dt>Source location</dt><dd className="mono">{finding.source ? `${finding.source.file}:${finding.source.startLine}` : 'No source recorded'}</dd></div></dl>
+        <div className="evidence-preview"><Icon name="file" /><div><h3>{finding.evidence.length} evidence {finding.evidence.length === 1 ? 'item' : 'items'} attached</h3><p>{fixture ? 'Synthetic examples illustrate how a verdict connects to its evidence.' : 'Review the observations that support this finding.'}</p><button className="text-button" onClick={() => { setTab('evidence'); document.getElementById('finding-tab-evidence')?.focus(); }}>Review evidence <Icon name="arrow" /></button></div></div>
+      </>}
+      {item.id === 'evidence' && <>
+        <div className="section-label">EVIDENCE TRAIL{fixture ? ' · SYNTHETIC' : ''}</div>
+        {finding.evidence.map((evidence, index) => <article className="evidence-card" key={evidence.id}><div className="evidence-header"><h3><span className="evidence-number">{index + 1}</span>{evidence.kind.replaceAll('-', ' ')}</h3><span className="badge neutral">{fixture ? 'Fixture evidence' : 'Recorded evidence'}</span></div><p>{evidence.summary}</p>{evidence.source && <p className="evidence-source mono">{evidence.source.file}:{evidence.source.startLine}</p>}<details className="evidence-metadata"><summary>Structured facts & provenance</summary><dl className="evidence-facts">{Object.entries(evidence.facts).map(([key, value]) => <div key={key}><dt>{key.replace(/([a-z])([A-Z])/g, '$1 $2')}</dt><dd>{typeof value === 'string' ? value : JSON.stringify(value)}</dd></div>)}</dl><p className="evidence-source mono">{evidence.id} · {evidence.producerId}</p></details></article>)}
+        {!finding.evidence.length && <p className="muted">No evidence recorded for this finding.</p>}
+      </>}
+      {item.id === 'remediation' && <div className="remediation"><div className="section-label">SUGGESTED FIX{fixture ? ' · FIXTURE' : ''}</div><p>{finding.remediation.explanation}</p>{finding.remediation.patch && <pre>{finding.remediation.patch}</pre>}{finding.remediation.regressionTest && <div className="regression-guidance"><h3>Verify the fix</h3><p>{finding.remediation.regressionTest}</p></div>}</div>}
+    </div>)}
+  </section>;
 }
 
 function Dialog({ title, description, onClose, children, busy = false }: { title: string; description: string; onClose: () => void; children: ReactNode; busy?: boolean }) {
   const ref = useRef<HTMLDialogElement>(null);
-  useEffect(() => { const dialog = ref.current; dialog?.showModal(); return () => { dialog?.close(); }; }, []);
+  useEffect(() => {
+    const dialog = ref.current;
+    const overflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    dialog?.showModal();
+    dialog?.querySelector<HTMLInputElement>('input:not([type="file"])')?.focus({ preventScroll: true });
+    return () => { dialog?.close(); document.body.style.overflow = overflow; };
+  }, []);
   return <dialog className="dialog" ref={ref} aria-labelledby="dialog-title" aria-describedby="dialog-description" onCancel={event => { if (busy) event.preventDefault(); else onClose(); }}><div className="dialog-header"><div><h2 id="dialog-title">{title}</h2><p id="dialog-description">{description}</p></div><button className="icon-button" aria-label="Close dialog" onClick={onClose} disabled={busy}><Icon name="close" /></button></div>{children}</dialog>;
 }
 function useSavedFile() {
@@ -280,14 +352,16 @@ function useSavedFile() {
     finally { if (token === sequence.current) setReading(false); }
   }
   function setDirect(discoveryData: unknown, label = 'Local Discovery Result') {
+    sequence.current += 1;
+    setReading(false); setData(undefined); setFileName('');
     const parsed = parseSavedDiscovery(discoveryData);
     if (!parsed.ok) { setError(parsed.error); return undefined; }
     setData(parsed.value); setFileName(label); setError(''); return parsed.value;
   }
   return { data, error, fileName, reading, setReading, setError, read, setDirect };
 }
-function FileField({ saved, onRead }: { saved: ReturnType<typeof useSavedFile>; onRead: (file: File | undefined) => void }) {
-  return <div className="form-field full-width"><label htmlFor="discovery-file">Saved discovery JSON</label><input id="discovery-file" className="file-input" type="file" accept="application/json,.json" aria-describedby="discovery-file-help discovery-file-error" aria-invalid={Boolean(saved.error)} onChange={event => onRead(event.target.files?.[0])} /><p id="discovery-file-help" className="help-text">Optional during setup. Import the discovery CLI's JSON output, up to 2 MiB.</p>{saved.reading && <p role="status" className="help-text">Checking discovery file…</p>}{saved.fileName && <p role="status" className="help-text">Attached: {saved.fileName} · {saved.data?.structure.sourceFileCount} source files</p>}<p id="discovery-file-error" className="field-error" role={saved.error ? 'alert' : undefined}>{saved.error}</p></div>;
+function FileField({ saved, onRead, required = false }: { saved: ReturnType<typeof useSavedFile>; onRead: (file: File | undefined) => void; required?: boolean }) {
+  return <div className="form-field full-width"><label htmlFor="discovery-file">Saved discovery JSON</label><input id="discovery-file" className="file-input" type="file" accept="application/json,.json" aria-describedby="discovery-file-help discovery-file-error" aria-invalid={Boolean(saved.error)} onChange={event => onRead(event.target.files?.[0])} /><p id="discovery-file-help" className="help-text">{required ? 'Choose' : 'Optionally attach'} the discovery CLI's JSON output, up to 2 MiB.</p>{saved.reading && <p role="status" className="help-text">Checking discovery file…</p>}{saved.fileName && <p role="status" className="help-text">Attached: {saved.fileName} · {saved.data?.structure.sourceFileCount} source files</p>}<p id="discovery-file-error" className="field-error" role={saved.error ? 'alert' : undefined}>{saved.error}</p></div>;
 }
 function clientErrorMessage(error: unknown): string {
   return error instanceof AgentOClientError ? error.message : 'This operation could not be completed. Try again.';
@@ -298,6 +372,8 @@ function ProjectDialog({ client, onClose, onSaved }: { client: AgentOClient; onC
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
   const [discovering, setDiscovering] = useState(false);
+  const [scopeOpen, setScopeOpen] = useState(false);
+  const [originsEdited, setOriginsEdited] = useState(false);
   const [demoApps, setDemoApps] = useState<{ id: string; name: string; path: string }[]>([]);
   const saved = useSavedFile();
 
@@ -341,13 +417,29 @@ function ProjectDialog({ client, onClose, onSaved }: { client: AgentOClient; onC
     }
   }
 
-  function change(field: keyof typeof fields, value: string) { setFields(previous => ({ ...previous, [field]: value })); setError(''); }
+  function change(field: keyof typeof fields, value: string) {
+    setFields(previous => {
+      let origins = previous.origins;
+      if (field === 'baseUrl' && !originsEdited) {
+        try { origins = new URL(value).origin; } catch { /* Keep the last valid origin while typing. */ }
+      }
+      return { ...previous, origins, [field]: value };
+    });
+    const errorField = field === 'origins' ? 'allowedOrigins' : field;
+    if (field === 'origins') setOriginsEdited(true);
+    setErrors(previous => { const next = { ...previous }; delete next[errorField]; return next; });
+    setError('');
+  }
   async function submit(event: FormEvent) {
     event.preventDefault();
     const input: ProjectInput = { name: fields.name, repositoryPath: fields.repositoryPath, baseUrl: fields.baseUrl, allowedOrigins: fields.origins.split('\n').map(origin => origin.trim()).filter(Boolean) };
     const nextErrors = validateProjectInput(input);
     setErrors(nextErrors); setError('');
-    if (Object.keys(nextErrors).length > 0) { document.getElementById(`project-${Object.keys(nextErrors)[0]}`)?.focus(); return; }
+    if (Object.keys(nextErrors).length > 0) {
+      if (nextErrors.allowedOrigins) setScopeOpen(true);
+      window.requestAnimationFrame(() => document.getElementById(`project-${Object.keys(nextErrors)[0]}`)?.focus());
+      return;
+    }
     if (saved.error || saved.reading || discovering) return;
     setSaving(true);
     try { onSaved(await client.createProject(input, saved.data)); }
@@ -355,64 +447,29 @@ function ProjectDialog({ client, onClose, onSaved }: { client: AgentOClient; onC
     finally { setSaving(false); }
   }
 
-  return <Dialog title="New project" description="Give your application a place in the workspace." onClose={onClose} busy={saving || discovering}><form noValidate onSubmit={submit}><div className="dialog-body">
-    {demoApps.length > 0 && (
-      <div className="notice info" style={{ marginBottom: 16 }}>
-        <Icon name="compass" />
-        <div style={{ width: '100%' }}>
-          <p style={{ fontWeight: 600, marginBottom: 6 }}>Quick Load Demo Project:</p>
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            {demoApps.map(demo => (
-              <button
-                key={demo.id}
-                type="button"
-                className="button secondary"
-                style={{ padding: '4px 10px', fontSize: 13 }}
-                onClick={() => {
-                  const isDemo2 = demo.name === 'demo-app-02';
-                  setFields(prev => ({
-                    ...prev,
-                    name: demo.name,
-                    repositoryPath: demo.path,
-                    baseUrl: isDemo2 ? 'http://localhost:4000' : 'http://localhost:3000',
-                    origins: isDemo2 ? 'http://localhost:4000' : 'http://localhost:3000',
-                  }));
-                  void runLocalDiscovery(demo.path);
-                }}
-              >
-                {demo.name}
-              </button>
-            ))}
-          </div>
-        </div>
+  return <Dialog title="New project" description="Add your application. Attach repository context when you're ready." onClose={onClose} busy={saving || discovering}><form noValidate onSubmit={submit}><div className="dialog-body">
+    {demoApps.length > 0 && <div className="demo-quickstart"><div className="quickstart-heading"><Icon name="compass" /><div><h3>Try a local demo</h3><p>Fill in the project and discover its repository.</p></div></div><div className="tag-list">{demoApps.map(demo => <button key={demo.id} type="button" className="button secondary small" disabled={saving || discovering || saved.reading} onClick={() => {
+      const isDemo2 = demo.name === 'demo-app-02';
+      setOriginsEdited(false); setErrors({});
+      setFields({ name: demo.name, repositoryPath: demo.path, baseUrl: isDemo2 ? 'http://localhost:4000' : 'http://localhost:3000', origins: isDemo2 ? 'http://localhost:4000' : 'http://localhost:3000' });
+      void runLocalDiscovery(demo.path);
+    }}>{demo.name}<Icon name="arrow" /></button>)}</div></div>}
+    <fieldset className="form-section" disabled={saving || discovering}>
+      <legend>Application details</legend>
+      <div className="form-grid">
+        <div className="form-field full-width"><label htmlFor="project-name">Project name</label><input id="project-name" placeholder="e.g. Storefront API" value={fields.name} onChange={event => change('name', event.target.value)} aria-invalid={Boolean(errors.name)} aria-describedby="name-error" autoFocus maxLength={120} /><p id="name-error" className="field-error">{errors.name}</p></div>
+        <div className="form-field full-width"><label htmlFor="project-repositoryPath">Repository path</label><div className="repository-input"><input id="project-repositoryPath" placeholder="/path/to/your/repository" value={fields.repositoryPath} onChange={event => change('repositoryPath', event.target.value)} aria-invalid={Boolean(errors.repositoryPath)} aria-describedby="repository-help repository-error" /><button type="button" className="button secondary" onClick={() => void runLocalDiscovery()} disabled={discovering || saved.reading || !fields.repositoryPath.trim()}><Icon name="compass" />{discovering ? 'Discovering…' : 'Discover'}</button></div><p id="repository-help" className="help-text">A local path on this computer. Discovery is optional during setup.</p><p id="repository-error" className="field-error">{errors.repositoryPath}</p></div>
+        <div className="form-field full-width"><label htmlFor="project-baseUrl">Target URL</label><input id="project-baseUrl" type="url" value={fields.baseUrl} onChange={event => change('baseUrl', event.target.value)} aria-invalid={Boolean(errors.baseUrl)} aria-describedby="target-help target-error" /><p id="target-help" className="help-text">The running application you intend to test.</p><p id="target-error" className="field-error">{errors.baseUrl}</p></div>
       </div>
-    )}
-    <div className="form-grid">
-      <div className="form-field full-width"><label htmlFor="project-name">Project name</label><input id="project-name" placeholder="e.g. Storefront API" value={fields.name} onChange={event => change('name', event.target.value)} aria-invalid={Boolean(errors.name)} aria-describedby="name-error" autoFocus maxLength={120} /><p id="name-error" className="field-error">{errors.name}</p></div>
-      <div className="form-field full-width">
-        <label htmlFor="project-repositoryPath">Repository path</label>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <input id="project-repositoryPath" placeholder="/path/to/your/repository or demo-apps/demo-app-02" value={fields.repositoryPath} onChange={event => change('repositoryPath', event.target.value)} aria-invalid={Boolean(errors.repositoryPath)} aria-describedby="repository-help repository-error" style={{ flex: 1 }} />
-          <button type="button" className="button secondary" onClick={() => void runLocalDiscovery()} disabled={discovering || !fields.repositoryPath}>
-            {discovering ? 'Discovering…' : 'Run Discovery'}
-          </button>
-        </div>
-        <p id="repository-help" className="help-text">Local path on host. Click 'Run Discovery' to scan directly, or attach a JSON below.</p>
-        <p id="repository-error" className="field-error">{errors.repositoryPath}</p>
-      </div>
-      <div className="form-field full-width"><label htmlFor="project-baseUrl">Target URL</label><input id="project-baseUrl" type="url" value={fields.baseUrl} onChange={event => change('baseUrl', event.target.value)} aria-invalid={Boolean(errors.baseUrl)} aria-describedby="target-error" /><p id="target-error" className="field-error">{errors.baseUrl}</p></div>
-      <div className="form-field full-width"><label htmlFor="project-allowedOrigins">Allowed origins</label><textarea id="project-allowedOrigins" value={fields.origins} onChange={event => change('origins', event.target.value)} aria-invalid={Boolean(errors.allowedOrigins)} aria-describedby="origins-help origins-error" rows={2} /><p id="origins-help" className="help-text">One explicit origin per line. Include the target's origin.</p><p id="origins-error" className="field-error">{errors.allowedOrigins}</p></div>
-      <FileField saved={saved} onRead={file => { void saved.read(file).then(discovery => { if (discovery) setFields(previous => ({ ...previous, name: previous.name || discovery.name, repositoryPath: previous.repositoryPath || discovery.repositoryPath })); }); }} />
-    </div>
-    {error && <div className="notice error" role="alert" style={{ marginTop: 15, marginBottom: 0 }}>{error}</div>}
-    <p className="help-text" style={{ marginTop: 12 }}>Saving records setup only. It does not start live security testing.</p>
-  </div>
-  <div className="dialog-footer">
-    <button type="button" className="button secondary" onClick={onClose} disabled={saving || discovering}>Cancel</button>
-    <button className="button primary" disabled={saving || discovering || saved.reading || Boolean(saved.error)}>{saving ? 'Saving…' : 'Create project'}</button>
-  </div>
-  </form></Dialog>;
+    </fieldset>
+    <details className="form-options" open={scopeOpen} onToggle={event => setScopeOpen(event.currentTarget.open)}><summary><span>Allowed origins</span><span className="option-hint">Customize scope</span></summary><fieldset className="form-section" disabled={saving || discovering}><div className="form-field"><label htmlFor="project-allowedOrigins">Allowed origins</label><textarea id="project-allowedOrigins" value={fields.origins} onChange={event => change('origins', event.target.value)} aria-invalid={Boolean(errors.allowedOrigins)} aria-describedby="origins-help origins-error" rows={2} /><p id="origins-help" className="help-text">One explicit origin per line. Your target's origin is included automatically until you customize this list.</p><p id="origins-error" className="field-error">{errors.allowedOrigins}</p></div></fieldset></details>
+    <details className="form-options"><summary><span>Attach saved discovery</span><span className="option-hint">Optional</span></summary><fieldset className="form-section" disabled={saving || discovering}><FileField saved={saved} onRead={file => { void saved.read(file).then(discovery => { if (discovery) setFields(previous => ({ ...previous, name: previous.name || discovery.name, repositoryPath: previous.repositoryPath || discovery.repositoryPath })); }); }} /></fieldset></details>
+    {saved.data && <div className="notice success attachment-status" role="status"><Icon name="check" /><p><strong>Discovery attached</strong><br />{saved.data.structure.sourceFileCount} source files · {saved.data.mode} analysis</p></div>}
+    {error && <div className="notice error form-error" role="alert">{error}</div>}
+    <p className="help-text form-boundary"><Icon name="info" />Session only. Creating a project does not start a security scan.</p>
+  </div><div className="dialog-footer"><button type="button" className="button secondary" onClick={onClose} disabled={saving || discovering}>Cancel</button><button className="button primary" disabled={saving || discovering || saved.reading || Boolean(saved.error)}>{saving ? 'Creating…' : 'Create project'}<Icon name="arrow" /></button></div></form></Dialog>;
 }
+
 function ImportDialog({ client, project, onClose, onSaved }: { client: AgentOClient; project: ProjectSummary; onClose: () => void; onSaved: (project: ProjectSummary) => void }) {
   const saved = useSavedFile();
   const [saving, setSaving] = useState(false);
@@ -454,9 +511,9 @@ function ImportDialog({ client, project, onClose, onSaved }: { client: AgentOCli
   <div style={{ marginBottom: 14 }}>
     <button type="button" className="button secondary" onClick={() => void runLocalDiscovery()} disabled={discovering || saving}>
       <Icon name="compass" />
-      {discovering ? 'Scanning repository…' : 'Run Discovery Directly on this Path'}
+      {discovering ? 'Scanning repository…' : 'Discover this repository'}
     </button>
   </div>
-  <FileField saved={saved} onRead={file => { setError(''); void saved.read(file); }} />{error && <div className="notice error" role="alert">{error}</div>}<p className="help-text">This replaces the saved discovery snapshot. It does not create scan results or evidence.</p></div><div className="dialog-footer"><button type="button" className="button secondary" onClick={onClose} disabled={saving || discovering}>Cancel</button><button className="button primary" disabled={saving || discovering || saved.reading || !saved.data || Boolean(saved.error)}>{saving ? 'Importing…' : 'Import snapshot'}</button></div></form></Dialog>;
+  <FileField required saved={saved} onRead={file => { setError(''); void saved.read(file); }} />{error && <div className="notice error" role="alert">{error}</div>}<p className="help-text">This replaces the saved discovery snapshot. It does not create scan results or evidence.</p></div><div className="dialog-footer"><button type="button" className="button secondary" onClick={onClose} disabled={saving || discovering}>Cancel</button><button className="button primary" disabled={saving || discovering || saved.reading || !saved.data || Boolean(saved.error)}>{saving ? 'Importing…' : 'Import snapshot'}</button></div></form></Dialog>;
 }
 
