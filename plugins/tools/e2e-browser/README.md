@@ -77,6 +77,9 @@ package ignores that directory; custom storage locations should be outside the
 repository. Saved state contains real session credentials. The directory must
 have mode `0700`, and files have mode `0600`. Remove it to discard saved sessions.
 
+Pass `--output <file.json>` to write the formatted observation record directly to
+a file in addition to stdout.
+
 ## Core registration
 
 ```ts

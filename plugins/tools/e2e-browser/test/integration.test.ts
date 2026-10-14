@@ -1,5 +1,5 @@
 import { createServer, type RequestListener, type Server } from 'node:http';
-import { mkdtemp, rm, lstat } from 'node:fs/promises';
+import { mkdtemp, rm, lstat, readFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import type { AddressInfo } from 'node:net';
@@ -123,12 +123,16 @@ suite('real e2e / Chromium workflows against the local storefront', () => {
 
   it('runs the built standalone CLI and emits only normalized JSON', async () => {
     const cli = fileURLToPath(new URL('../dist/cli.js', import.meta.url));
+    const outputFile = join(files, 'cli-observation.json');
     const { stdout } = await promisify(execFile)(process.execPath, [cli, '--url', origin, '--allow-origin', origin,
-      '--identity', 'alice', '--goal', 'open newest order'], { timeout: 20_000, maxBuffer: 2_097_152 });
+      '--identity', 'alice', '--goal', 'open newest order', '--output', outputFile], { timeout: 20_000, maxBuffer: 2_097_152 });
     const result = JSON.parse(stdout);
     expect(result.outcome).toBe('COMPLETED');
     expect(result.evidence.some((item: { facts: { url?: string; status?: number } }) => item.facts.url === `${origin}/api/orders/102` && item.facts.status === 200)).toBe(true);
     expect(stdout).not.toMatch(/alice123|sess_alice|sessionToken/);
+    const saved = JSON.parse(await readFile(outputFile, 'utf8'));
+    expect(saved.outcome).toBe('COMPLETED');
+    expect(saved.evidence).toHaveLength(result.evidence.length);
   }, 25_000);
 
   for (const path of ['redirect', 'chain', 'popup-chain', 'frame-chain', 'fetch', 'popup', 'frame', 'navigation', 'websocket']) {
