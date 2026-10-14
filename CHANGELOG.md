@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Optional Semantic Browser Planning (`packages/workflow`, `packages/core`)**: Added provider-independent model/page/action/history contracts, recipe-first workflow orchestration, constrained LLM proposals, deterministic scope and credential validation, bounded recovery and model budgets, and explicit completion provenance.
+- **OpenAI Model Provider (`plugins/models/openai`)**: Added an optional bounded Structured Outputs provider with caller-selected model and backend credentials, cancellation, sanitized failures, token accounting, and mocked transport tests.
+- **Semantic Workflow Safety and Verification**: Added fake-model unit and Chromium coverage for unfamiliar UI planning, prompt injection, private credential references, stale state, provider failures, recipe recovery, query-link navigation, nested storage redaction, and runtime scope narrowing. Browser capabilities remain deterministic and existing workflows remain supported.
 - **Portability Demo Applications (`demo-apps/demo-app-03`, `demo-apps/demo-app-04`)**: Added standalone SSR Multi-Page Portal (`demo-app-03`) with HTML form 302/303 redirects, CSRF validation, and server-rendered DOM verification, and Modern Edge-Case SPA (`demo-app-04`) featuring multi-step login, `sessionStorage` token storage, and background WebSocket/Worker/CDN escape endpoints.
 - **Portability Target Profiles & Edge-Case Verification (`plugins/tools/e2e-browser`)**: Added `portal` and `edge-spa` target profiles and workflow planners, expanded CLI `--target` options to include `portal` and `edge-spa`, and verified portability boundaries across unit and real-browser integration tests covering 302 redirects, multi-step authentication failures vs custom declarative strategy success, `sessionStorage` context isolation limits, and strict scope blocking of WebSockets and unapproved origins.
 - **Cross-Project Browser Portability**: Added tool-independent target profiles, personas, authentication strategies, bounded page inspection and iterative workflow planning. Moved storefront assumptions into target configuration; retained recipes, structured plans, JSON export, and strict origin enforcement with isolated target/persona sessions.
@@ -30,6 +33,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- **Browser Workflow Design Documentation**: Defined optional LLM-assisted semantic planning with provider boundaries, normalized untrusted page models, validated actions, credential references, bounded failure recovery, and portability/prompt-injection test requirements.
 - **Frontend UI/UX (`apps/frontend`)**: Improved workspace hierarchy, responsive project browsing and source filters, guided project setup, finding evidence navigation, readable status feedback, and keyboard/mobile accessibility; corrected outdated framework preview wording and documented the updated flows and local discovery controls.
 
 - **Discovery Adapter Registration and Demo Snapshots (`scripts/discover.mjs`, `apps/frontend`)**: Registered `ExpressFrameworkAdapter` within the discovery automation script (`scripts/discover.mjs`) to enable code-aware discovery mode for Express targets. Refreshed demo project discovery snapshots (`demo-apps/demo-app-01/discovery.json`, `demo-apps/demo-app-02/discovery.json`) and the frontend demo discovery fixture (`apps/frontend/src/data/demo-discovery.ts`) so Express applications display adapter availability and code-aware analysis mode.

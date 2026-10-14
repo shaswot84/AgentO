@@ -30,6 +30,10 @@ Import types and `AgentOOrchestrator` from `@agento/core`. `src/index.ts` export
 | `TargetApplicationProfile` / `Persona` | Declare target origins, personas, authentication, and workflow hints |
 | `AuthenticationStrategy` | Supply persona verification and optional bounded login actions |
 | `WorkflowPlanner` | Choose actions iteratively from normalized page inspections |
+| `ModelProvider` | Generate bounded structured data through a provider-independent API |
+| `PageModel` / `PlannedAction` / `WorkflowHistoryEntry` | Exchange untrusted page data, opaque action references, and bounded progress |
+| `BrowserWorkflowRuntimeDriver` | Expose a guarded backend capability session for workflow orchestration |
+| `CredentialPolicy` | Authorize persona, destination, and field references before private resolution |
 | `SecurityScanner` | Execute a structured plan and return normalized results |
 | `CWEPlugin` | Detect candidates, generate tests, and evaluate supplied evidence |
 | `ReasoningModel` | Review hypotheses with structured, evidence-referenced output |
@@ -38,6 +42,13 @@ Import types and `AgentOOrchestrator` from `@agento/core`. `src/index.ts` export
 Domain types include `Project`, `Component`, `Endpoint`, `Identity`, `Resource`,
 `SecuritySignal`, `SecurityHypothesis`, `SecurityTestPlan`, `SecurityTestResult`,
 `Evidence`, and `Finding`. Supporting exchange types are also exported.
+
+`WorkflowPlanner` supports separate typed inputs for trusted deterministic recipes
+and semantic planning. Semantic planners receive `PageModel`, never native selectors
+or browser objects. [The workflow package](../workflow/README.md) implements planner
+selection and action validation above [the browser driver](../../plugins/tools/e2e-browser/README.md).
+The [optional model adapter](../../plugins/models/openai/README.md) contains API-specific
+request/response handling; core imports no model SDK.
 
 Evidence carries producer, timestamp, normalized facts, and optional source,
 endpoint, identity, and artifact references. Evidence and domain fields are

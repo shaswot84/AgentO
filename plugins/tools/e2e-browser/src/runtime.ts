@@ -1,4 +1,4 @@
-import { randomUUID } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import { mkdir, chmod } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
@@ -6,7 +6,8 @@ import { web, surfaceOf } from '@e2e-dev/web';
 import type { OperationContext } from 'e2e/engine';
 import type { BrowserContext, Page, Request, Response } from 'playwright-core';
 import type { BrowserPageInspection } from '@agento/core';
-import { BrowserError } from './policy.js';
+import { BrowserError, redactUrl } from './policy.js';
+import { privateStorageValues } from './private-values.js';
 import type { BrowserAction, BrowserRuntime, BrowserRuntimeRequest, BrowserSession, BrowserState, ResponseExpectation } from './types.js';
 
 /** e2e owns Chromium and context isolation; AgentO owns execution and evidence above its live surface. */
@@ -146,6 +147,7 @@ export class E2EWebRuntime implements BrowserRuntime {
 }
 
 class LiveSession implements BrowserSession {
+  private readonly inspectionNonce = randomUUID();
   constructor(private readonly context: BrowserContext,
     private readonly page: Page, private readonly request: BrowserRuntimeRequest,
     readonly close: () => Promise<void>) {}
@@ -159,7 +161,12 @@ class LiveSession implements BrowserSession {
     switch (action.action) {
       case 'navigate': await this.page.goto(this.request.assertUrl(action.url), { waitUntil: 'domcontentloaded' }); break;
       case 'wait-url': await this.page.waitForURL(this.request.assertUrl(action.url), { waitUntil: 'domcontentloaded' }); break;
-      case 'fill': await this.page.locator(action.selector).fill(action.value); break;
+      case 'fill': {
+        const element = await this.page.locator(action.selector).elementHandle();
+        if (!element) throw new BrowserError('browser-failed');
+        try { await element.fill(action.value); } finally { await element.dispose(); }
+        break;
+      }
       case 'click': await this.page.locator(action.selector).click(); break;
       case 'submit': await this.page.locator(action.selector).evaluate((element: HTMLFormElement) => element.requestSubmit()); break;
       case 'wait-visible': await this.page.locator(action.selector).waitFor({ state: 'visible' }); break;
@@ -204,13 +211,28 @@ class LiveSession implements BrowserSession {
   async inspect(): Promise<BrowserPageInspection> {
     const url = this.page.url();
     if (url !== 'about:blank') this.request.assertUrl(url);
-    const controls = await this.page.locator('a, button, input, form, [role="button"]').evaluateAll(elements => {
+    const storageValues = await this.page.evaluate(() => {
+      const values: string[] = [];
+      for (const kind of ['localStorage', 'sessionStorage'] as const) {
+        try {
+          const storage = window[kind];
+          for (let index = 0; index < Math.min(storage.length, 100); index++) {
+            const key = storage.key(index), value = key ? storage.getItem(key) : null;
+            if (value) values.push(value.slice(0, 16_384));
+          }
+        } catch { /* Storage may be unavailable on blank or restricted pages. */ }
+      }
+      return values;
+    });
+    const privateValues = storageValues.flatMap(privateStorageValues).slice(0, 512);
+    const raw = await this.page.locator('a, button, input, form, [role="button"]').evaluateAll(elements => {
       const kinds = { A: 'link', BUTTON: 'button', INPUT: 'input', FORM: 'form' } as const;
-      return elements.slice(0, 1000).filter(element => {
-        const rect = element.getBoundingClientRect();
-        return rect.width > 0 && rect.height > 0 && getComputedStyle(element).visibility !== 'hidden';
-      }).slice(0, 100).map(element => {
-        // Absolute CSS paths work without injecting IDs or changing the application DOM.
+      const visible = (element: Element) => {
+        const rect = element.getBoundingClientRect(), style = getComputedStyle(element);
+        return rect.width > 0 && rect.height > 0 && style.visibility !== 'hidden'
+          && style.display !== 'none' && !element.closest('[aria-hidden="true"]');
+      };
+      const selector = (element: Element) => {
         const parts: string[] = [];
         let node: Element | null = element;
         while (node && parts.length < 30) {
@@ -220,15 +242,43 @@ class LiveSession implements BrowserSession {
           parts.unshift(`${tag}:nth-of-type(${parent ? siblings.indexOf(node) + 1 : 1})`);
           node = parent;
         }
+        return parts.join(' > ');
+      };
+      const controls = elements.slice(0, 1000).filter(visible).slice(0, 100).map(element => {
         const kind = kinds[element.tagName as keyof typeof kinds] ?? 'button';
-        // Never read input values, hidden content, HTML, scripts, or form contents.
         const label = element.getAttribute('aria-label') ?? (kind === 'input' ? element.getAttribute('placeholder')
           : kind === 'form' ? '' : (element as HTMLElement).innerText);
-        return { selector: parts.join(' > '), kind, label: (label ?? '').trim().slice(0, 256),
+        const form = 'form' in element ? (element as HTMLInputElement | HTMLButtonElement).form : null;
+        return { selector: selector(element), kind, label: (label ?? '').trim().slice(0, 4096),
+          enabled: !element.matches(':disabled') && element.getAttribute('aria-disabled') !== 'true',
+          ...(element instanceof HTMLInputElement ? { inputType: element.type } : {}),
+          ...(form ? { formSelector: selector(form) } : {}),
           ...(element instanceof HTMLAnchorElement ? { href: element.href } : {}) };
       });
+      const headings = [...document.querySelectorAll('h1,h2,h3,h4,h5,h6')].filter(visible).slice(0, 20)
+        .map(element => (element as HTMLElement).innerText.trim().slice(0, 4096));
+      const fragments: string[] = [];
+      const walker = document.createTreeWalker(document.body ?? document.documentElement, NodeFilter.SHOW_TEXT);
+      let length = 0;
+      for (let index = 0; index < 500 && length < 4096; index++) {
+        const node = walker.nextNode(), parent = node?.parentElement;
+        if (!node) break;
+        if (!parent || !visible(parent) || parent.closest('input,textarea,script,style,noscript,[aria-hidden="true"]')) continue;
+        const text = (node.textContent ?? '').trim().slice(0, 4096 - length);
+        if (text) { fragments.push(text); length += text.length; }
+      }
+      return { controls, title: document.title.slice(0, 4096), headings, visibleTextSummary: fragments.join(' ').slice(0, 4096) };
     });
-    return { url, controls };
+    const redact = (value: string, maximum: number) => {
+      for (const secret of privateValues.filter(Boolean)) value = value.split(secret).join('[REDACTED]');
+      return value.replace(/\beyJ[A-Za-z0-9_.-]+/g, '[REDACTED]')
+        .replace(/[A-Za-z0-9_.~%+=-]{40,}/g, '[REDACTED]').slice(0, maximum);
+    };
+    const stateId = createHash('sha256').update(JSON.stringify([this.inspectionNonce, url, raw])).digest('hex');
+    return { stateId, url: url === 'about:blank' ? url : redactUrl(url, privateValues), title: redact(raw.title, 256),
+      headings: raw.headings.map(value => redact(value, 256)), visibleTextSummary: redact(raw.visibleTextSummary, 4096),
+      controls: raw.controls.map(control => ({ ...control, label: redact(control.label, 256),
+        ...(control.href ? { href: redactUrl(control.href, privateValues) } : {}) })) };
   }
 
   async captureState(): Promise<BrowserState> {

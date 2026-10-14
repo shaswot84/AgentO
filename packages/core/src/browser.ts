@@ -61,12 +61,20 @@ export interface TargetApplicationProfile {
 
 export interface BrowserPageInspection {
   readonly url: string;
+  /** Opaque native state guard; kept out of model input and public PageModel. */
+  readonly stateId?: string;
+  readonly title?: string;
+  readonly headings?: readonly string[];
+  readonly visibleTextSummary?: string;
   /** Visible controls only; field values and complete HTML are excluded. */
   readonly controls: readonly {
     readonly selector: string;
     readonly kind: 'link' | 'button' | 'input' | 'form';
     readonly label: string;
     readonly href?: string;
+    readonly enabled?: boolean;
+    readonly inputType?: string;
+    readonly formSelector?: string;
   }[];
 }
 export interface WorkflowPlannerInput {
@@ -80,6 +88,6 @@ export type WorkflowDecision =
   | { readonly outcome: 'action'; readonly action: BrowserAction }
   | { readonly outcome: 'complete' | 'unsupported' };
 /** Inspect, choose one bounded action, execute, then inspect again. */
-export interface WorkflowPlanner {
-  next(input: WorkflowPlannerInput): Promise<WorkflowDecision>;
+export interface WorkflowPlanner<Input = WorkflowPlannerInput, Decision = WorkflowDecision> {
+  next(input: Input): Promise<Decision>;
 }

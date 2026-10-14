@@ -1,11 +1,14 @@
-import { randomUUID } from 'node:crypto';
-import type { AnalysisContext, BrowserPageInspection, BrowserWorkflow, BrowserWorkflowDriver, Endpoint, Evidence, Identity, JsonValue,
-  Persona, Project, SecurityTestPlan, SecurityTestResult } from '@agento/core';
+import { createHash, randomUUID } from 'node:crypto';
+import { BrowserWorkflowFailure, type AnalysisContext, type BrowserPageInspection, type BrowserWorkflow,
+  type BrowserWorkflowRuntimeDriver, type BrowserWorkflowSession, type Endpoint, type Evidence, type Identity, type JsonValue,
+  type Persona, type Project, type SecurityTestPlan, type SecurityTestResult, type TargetApplicationProfile } from '@agento/core';
 import { BrowserError, BrowserScope, redactUrl } from './policy.js';
 import { E2EWebRuntime } from './runtime.js';
 import { isStoredSession, MemorySessionStore } from './sessions.js';
 import { FormLoginStrategy } from './authentication.js';
 import { authenticationActions, targetPersona, targetScope, validateVerification } from './target.js';
+import { legacyWorkflowExecutor } from './legacy-workflow.js';
+import { privateStorageValues } from './private-values.js';
 import type { BrowserAction, BrowserDiagnostic, BrowserSession, BrowserSnapshot, NetworkRecord,
   SessionStore, TesterArmyE2EOptions, WorkflowObservation } from './types.js';
 
@@ -17,9 +20,11 @@ const messages: Record<BrowserDiagnostic['code'], string> = {
   'timeout': 'The browser workflow exceeded its execution budget.',
   'network-limit': 'Network evidence reached its record limit; observations are incomplete.',
   'session-store-failed': 'The private authentication store could not be read or written.',
+  'unable-to-proceed': 'The workflow planner could not safely advance the requested goal.',
+  'model-budget': 'The optional semantic planner exhausted its configured execution budget.',
 };
 
-export class TesterArmyE2EAdapter implements BrowserWorkflowDriver {
+export class TesterArmyE2EAdapter implements BrowserWorkflowRuntimeDriver {
   readonly id = 'tester-army-e2e-adapter';
   readonly capabilities = ['browser-workflow', 'authenticated-browser', 'multi-identity', 'session-reuse',
     'network-observation', 'browser-evidence', 'origin-scope'] as const;
@@ -50,8 +55,16 @@ export class TesterArmyE2EAdapter implements BrowserWorkflowDriver {
       let actions: readonly BrowserAction[] | undefined;
       try { actions = this.options.resolveGoal?.(context, workflow); }
       catch { /* Resolver messages may include goal text or secrets. */ }
-      return this.run(context, workflow.identityId, actions, workflow);
+      const execute = !actions && this.options.workflowPlanner && this.options.target
+        ? legacyWorkflowExecutor(this.options.workflowPlanner, this.options.target, workflow) : undefined;
+      return this.run(context, workflow.identityId, actions, execute);
     });
+  }
+
+  /** Trusted workflow orchestration uses a guarded capability port, never raw browser objects. */
+  runWorkflow(context: AnalysisContext, workflow: BrowserWorkflow,
+    execute: (session: BrowserWorkflowSession) => Promise<void>, target?: TargetApplicationProfile): Promise<WorkflowObservation> {
+    return this.serial(() => this.run(context, workflow.identityId, undefined, execute, target));
   }
 
   execute(context: AnalysisContext, plan: SecurityTestPlan): Promise<SecurityTestResult> {
@@ -91,15 +104,16 @@ export class TesterArmyE2EAdapter implements BrowserWorkflowDriver {
   }
 
   /** Explicit invalidation also removes an opt-in persistent snapshot. */
-  forgetSession(project: Project, identity: Identity): Promise<void> {
+  forgetSession(project: Project, identity: Identity, target = this.options.target): Promise<void> {
     return this.serial(() => {
-      const persona = targetPersona(identity, identity.id, this.options.target);
-      return this.store.delete(this.binding(targetScope(project, this.options.target), project, persona));
+      const persona = targetPersona(identity, identity.id, target);
+      const configured = targetScope(project, this.options.target);
+      const scope = targetScope({ ...project, allowedOrigins: configured.origins }, target);
+      return this.store.delete(this.binding(scope, project, persona, target));
     });
   }
 
-  private binding(scope: BrowserScope, project: Project, persona: Persona): string {
-    const target = this.options.target;
+  private binding(scope: BrowserScope, project: Project, persona: Persona, target = this.options.target): string {
     return scope.binding(project, persona, target ? [target.id, persona.credentialsRef,
       persona.authenticationStrategyId ?? target.defaultAuthenticationStrategyId
         ?? (target.authentication?.length === 1 ? target.authentication[0]!.id : undefined), persona.expectedRole] : undefined);
@@ -112,12 +126,13 @@ export class TesterArmyE2EAdapter implements BrowserWorkflowDriver {
   }
 
   private async run(context: AnalysisContext, identityId: string, actions: readonly BrowserAction[] | undefined,
-    workflow?: BrowserWorkflow): Promise<WorkflowObservation> {
+    execute?: (session: BrowserWorkflowSession) => Promise<void>, requestedTarget?: TargetApplicationProfile): Promise<WorkflowObservation> {
+    const target = requestedTarget ?? this.options.target;
     const runId = randomUUID(), capturedAt = new Date().toISOString();
     const diagnostics: BrowserDiagnostic[] = [], records: NetworkRecord[] = [], secrets: string[] = [];
     const controller = new AbortController();
     let session: BrowserSession | undefined, scope: BrowserScope | undefined, snapshot: BrowserSnapshot | undefined;
-    let outcome: WorkflowObservation['outcome'] = 'COMPLETED', started = false, reused = false, authenticated = false;
+    let outcome: WorkflowObservation['outcome'] = 'COMPLETED', started = false, reused = false, authenticated = false, portActive = true;
     let sessionRef: string | undefined, blockedCount = 0, droppedCount = 0, executedActions = 0;
     const diagnose = (code: BrowserDiagnostic['code']) => {
       if (!diagnostics.some(item => item.code === code)) diagnostics.push({ code, message: messages[code] });
@@ -126,13 +141,12 @@ export class TesterArmyE2EAdapter implements BrowserWorkflowDriver {
     const aborted = new Promise<never>((_, reject) => controller.signal.addEventListener('abort', () => reject(new BrowserError('timeout')), { once: true }));
     const bounded = <T>(work: Promise<T>) => Promise.race([work, aborted]);
     try {
-      scope = targetScope(context.project, this.options.target);
-      const identity = targetPersona(context.identities.find(item => item.id === identityId), identityId, this.options.target);
-      const planner = !actions && workflow ? this.options.workflowPlanner : undefined;
-      if (!actions && (!planner || !this.options.target)) throw new BrowserError('invalid-workflow');
+      const configuredScope = targetScope(context.project, this.options.target);
+      scope = targetScope({ ...context.project, allowedOrigins: configuredScope.origins }, target);
+      const identity = targetPersona(context.identities.find(item => item.id === identityId), identityId, target);
+      if (!actions && !execute) throw new BrowserError('invalid-workflow');
       // Clone trusted recipes so a caller cannot mutate them after preflight.
       if (actions) { actions = structuredClone(actions); scope.validateActions(actions); }
-      const target = this.options.target;
       const strategies = target?.authentication;
       const strategyId = identity.authenticationStrategyId ?? target?.defaultAuthenticationStrategyId;
       if (strategies && new Set(strategies.map(item => item.id)).size !== strategies.length) throw new BrowserError('authentication-failed');
@@ -150,7 +164,7 @@ export class TesterArmyE2EAdapter implements BrowserWorkflowDriver {
         if (loginActions) scope.validateActions(authenticationActions(loginActions));
       }
       timeout = setTimeout(() => controller.abort(), this.timeoutMs);
-      const binding = this.binding(scope, context.project, identity);
+      const binding = this.binding(scope, context.project, identity, target);
       let cached = needsAuth ? await bounded(this.store.load(binding)) : undefined;
       if (cached) {
         if (!isStoredSession(cached) || cached.binding !== binding || cached.expiresAt <= Date.now()) {
@@ -192,7 +206,7 @@ export class TesterArmyE2EAdapter implements BrowserWorkflowDriver {
           const credentials = needsCredentials ? await bounded(this.options.credentials!(identity, context.project)) : undefined;
           if (credentials && (typeof credentials.username !== 'string' || typeof credentials.password !== 'string'
             || !credentials.username || !credentials.password)) throw new BrowserError('authentication-failed');
-          if (credentials) secrets.push(credentials.password);
+          if (credentials) secrets.push(credentials.username, credentials.password);
           const login = authenticationActions(loginActions, credentials);
           scope.validateActions(login);
           for (const action of login) await bounded(session!.perform(action));
@@ -203,22 +217,51 @@ export class TesterArmyE2EAdapter implements BrowserWorkflowDriver {
         }
         authenticated = true; sessionRef = `browser-session:${randomUUID()}`;
       }
-      if (planner) {
-        // Refresh private secrets before passing a bounded page view to a planner.
-        for (;;) {
+      if (execute) {
+        const assertActive = () => {
+          if (!portActive || controller.signal.aborted) throw new BrowserError('timeout');
+          if (blockedCount) throw new BrowserError('scope-denied');
+          if (droppedCount) throw new BrowserError('network-limit');
+        };
+        const perform = async (action: BrowserAction) => {
+          assertActive();
+          if (executedActions >= this.maxWorkflowActions) throw new BrowserError('invalid-workflow');
+          const checked = structuredClone(action);
+          scope!.validateActions([checked]);
+          if (checked.action === 'fill') secrets.push(checked.value);
+          try { await bounded(session!.perform(checked)); }
+          catch (error) { throw error instanceof BrowserWorkflowFailure ? error : new BrowserError('browser-failed'); }
+          executedActions++; assertActive();
+        };
+        const inspect = async () => {
+          assertActive();
           collectStateSecrets((await bounded(session!.captureState())).data, secrets);
-          const page = sanitizeInspection(await bounded(session!.inspect()), secrets);
-          const decision = await bounded(planner.next(freeze({
-            target: { id: target!.id, baseOrigins: [...target!.baseOrigins],
-              ...(target!.workflowHints ? { workflowHints: structuredClone(target!.workflowHints) } : {}) },
-            persona: structuredClone(identity), workflow: structuredClone(workflow!), page, executedActions,
-          })));
-          if (decision.outcome === 'complete') break;
-          if (decision.outcome !== 'action' || executedActions >= this.maxWorkflowActions) throw new BrowserError('invalid-workflow');
-          const action = structuredClone(decision.action);
-          scope.validateActions([action]);
-          await bounded(session!.perform(action)); executedActions++;
-        }
+          const raw = await bounded(session!.inspect()), page = sanitizeInspection(raw, secrets);
+          const stateId = createHash('sha256').update(JSON.stringify([runId, raw.stateId, page])).digest('hex');
+          assertActive(); return freeze({ ...page, stateId });
+        };
+        const port: BrowserWorkflowSession = Object.freeze({ signal: controller.signal,
+          persona: freeze(structuredClone(identity)), inspect, perform,
+          fillCredential: async (selector: string, field: 'username' | 'password', guard?: { readonly stateId: string }) => {
+            assertActive();
+            if (!['username', 'password'].includes(field) || !this.options.credentials) throw new BrowserError('authentication-failed');
+            scope!.validateActions([{ action: 'fill', selector, value: '' }]);
+            const before = await inspect();
+            if (guard && guard.stateId !== before.stateId) throw new BrowserError('authentication-failed');
+            const credentials = await bounded(this.options.credentials(identity, context.project));
+            if (!credentials || typeof credentials[field] !== 'string' || !credentials[field]) throw new BrowserError('authentication-failed');
+            const after = await inspect();
+            if (after.stateId !== before.stateId) throw new BrowserError('authentication-failed');
+            secrets.push(credentials[field]);
+            await perform({ action: 'fill', selector, value: credentials[field] });
+          },
+          assertUrl: (url: string) => { assertActive(); return scope!.assert(url); },
+          network: () => {
+            assertActive(); return freeze(records.map(record => ({ url: redactUrl(record.url, secrets),
+              method: record.method, status: record.status, blocked: record.blocked })));
+          },
+        });
+        try { await bounded(execute(port)); } finally { portActive = false; }
       } else for (const action of actions!) {
         await bounded(session!.perform(action)); executedActions++;
       }
@@ -235,9 +278,10 @@ export class TesterArmyE2EAdapter implements BrowserWorkflowDriver {
       }
       if (blockedCount) throw new BrowserError('scope-denied');
     } catch (error) {
-      const code = controller.signal.aborted ? 'timeout' : error instanceof BrowserError ? error.code : 'browser-failed';
+      const code = controller.signal.aborted ? 'timeout' : error instanceof BrowserWorkflowFailure ? error.code : 'browser-failed';
       diagnose(code); outcome = started ? 'FAILED' : 'SKIPPED';
     } finally {
+      portActive = false;
       if (session && !controller.signal.aborted) await bounded(session.captureState()).then(state => collectStateSecrets(state.data, secrets)).catch(() => undefined);
       if (controller.signal.aborted) { diagnose('timeout'); outcome = started ? 'FAILED' : 'SKIPPED'; }
       if (timeout) clearTimeout(timeout);
@@ -270,7 +314,7 @@ export class TesterArmyE2EAdapter implements BrowserWorkflowDriver {
       const common = { url, origin: parsed?.origin ?? null, personaId: identityId,
         timestamp: record.timestamp ?? capturedAt,
         ...(sessionRef ? { sessionRef } : {}),
-        ...(this.options.target ? { targetId: this.options.target.id } : {}),
+        ...(target ? { targetId: target.id } : {}),
         ...(record.initiatingPage ? { initiatingPage: redactUrl(record.initiatingPage, secrets) } : {}) };
       const requestEvidence = makeEvidence('http-request', record.blocked ? 'Browser request refused by scope policy.' : 'Observed browser request.',
         { ...common, method: record.method, resourceType: record.resourceType, blocked: record.blocked,
@@ -284,7 +328,7 @@ export class TesterArmyE2EAdapter implements BrowserWorkflowDriver {
     }
     if (authenticated) makeEvidence('identity-session', 'Verified isolated browser identity session.',
       { authenticated: true, reused, sessionRef: sessionRef!, rawStateIncluded: false,
-        ...(this.options.target ? { targetId: this.options.target.id } : {}) });
+        ...(target ? { targetId: target.id } : {}) });
     if (snapshot?.screenshotPath) makeEvidence('screenshot', 'Opt-in masked browser screenshot.',
       { url: redactUrl(snapshot.url, secrets), inputsMasked: true }, undefined, snapshot.screenshotPath);
     makeEvidence('browser-observation', `Browser workflow ${outcome.toLowerCase()}; observations carry no vulnerability verdict.`,
@@ -332,10 +376,10 @@ function parseAction(action: string, parameters: Readonly<Record<string, JsonVal
 function collectStateSecrets(data: unknown, secrets: string[]): void {
   if (!data || typeof data !== 'object') return;
   const cookies = (data as { cookies?: unknown }).cookies;
-  if (Array.isArray(cookies)) for (const cookie of cookies) if (typeof cookie?.value === 'string') secrets.push(cookie.value);
+  if (Array.isArray(cookies)) for (const cookie of cookies) if (typeof cookie?.value === 'string') secrets.push(...privateStorageValues(cookie.value));
   const origins = (data as { origins?: unknown }).origins;
   if (Array.isArray(origins)) for (const origin of origins) if (Array.isArray(origin?.localStorage)) {
-    for (const entry of origin.localStorage) if (typeof entry?.value === 'string') secrets.push(entry.value);
+    for (const entry of origin.localStorage) if (typeof entry?.value === 'string') secrets.push(...privateStorageValues(entry.value));
   }
 }
 function safeHeaders(headers: Readonly<Record<string, string>> | undefined, secrets: readonly string[]): Record<string, JsonValue> {
@@ -349,11 +393,18 @@ function safeHeaders(headers: Readonly<Record<string, string>> | undefined, secr
 function sanitizeInspection(page: BrowserPageInspection, secrets: readonly string[]): BrowserPageInspection {
   const text = (value: string, maximum: number) => {
     for (const secret of secrets.filter(Boolean)) value = value.split(secret).join('[REDACTED]');
-    return value.slice(0, maximum);
+    return value.replace(/\beyJ[A-Za-z0-9_.-]+/g, '[REDACTED]')
+      .replace(/[A-Za-z0-9_.~%+=-]{40,}/g, '[REDACTED]').slice(0, maximum);
   };
   return { url: page.url === 'about:blank' ? page.url : redactUrl(page.url, secrets),
+    ...(page.title !== undefined ? { title: text(page.title, 256) } : {}),
+    ...(page.headings ? { headings: page.headings.slice(0, 20).map(value => text(value, 256)) } : {}),
+    ...(page.visibleTextSummary !== undefined ? { visibleTextSummary: text(page.visibleTextSummary, 4096) } : {}),
     controls: page.controls.slice(0, 100).map(control => ({ kind: control.kind,
       selector: text(control.selector, 2048), label: text(control.label, 256),
+      ...(control.enabled !== undefined ? { enabled: control.enabled } : {}),
+      ...(control.inputType ? { inputType: text(control.inputType, 32) } : {}),
+      ...(control.formSelector ? { formSelector: text(control.formSelector, 2048) } : {}),
       ...(control.href ? { href: redactUrl(control.href, secrets) } : {}) })) };
 }
 function freeze<T>(value: T): T {

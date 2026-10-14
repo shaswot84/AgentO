@@ -58,7 +58,7 @@ export interface BrowserRuntimeRequest {
 export interface BrowserRuntime { start(request: BrowserRuntimeRequest): Promise<BrowserSession> }
 export type GoalResolver = (context: AnalysisContext, workflow: BrowserWorkflow) => readonly BrowserAction[] | undefined;
 export type BrowserDiagnosticCode = 'invalid-workflow' | 'scope-denied' | 'authentication-failed'
-  | 'browser-failed' | 'timeout' | 'network-limit' | 'session-store-failed';
+  | 'browser-failed' | 'timeout' | 'network-limit' | 'session-store-failed' | 'unable-to-proceed' | 'model-budget';
 export interface BrowserDiagnostic { readonly code: BrowserDiagnosticCode; readonly message: string }
 export interface WorkflowObservation extends BrowserObservation {
   readonly outcome: 'COMPLETED' | 'FAILED' | 'SKIPPED';

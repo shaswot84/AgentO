@@ -1,9 +1,10 @@
 # AgentO Browser Workflow Adapter
 
-`TesterArmyE2EAdapter` implements core `BrowserWorkflowDriver` using
+`TesterArmyE2EAdapter` implements core `BrowserWorkflowRuntimeDriver` using
 [TesterArmy e2e](https://github.com/tester-army/e2e), `@e2e-dev/web`, and Chromium.
 Target profiles supply personas, authentication, approved origins, and workflow
-hints. Trusted recipes or an iterative planner drive the same browser engine.
+hints. Trusted recipes or workflow orchestration drive the same browser engine;
+model calls live in [the optional workflow layer](../../../packages/workflow/README.md).
 Results contain normalized, immutable evidence and no vulnerability verdicts.
 
 ## Install and verify
@@ -15,6 +16,8 @@ Dependencies are pinned to `e2e@0.20.0`, `@e2e-dev/web@0.14.0`, and
 ```sh
 npm ci --prefix packages/core
 npm run build --prefix packages/core
+npm ci --prefix packages/workflow
+npm run build --prefix packages/workflow
 npm ci --prefix plugins/tools/e2e-browser
 npm ci --prefix demo-apps/demo-app-01
 cd plugins/tools/e2e-browser
@@ -27,11 +30,13 @@ Linux needs Chromium's system libraries; Playwright supplies
 `npx playwright-core install-deps chromium` when OS package installation is
 appropriate. Workflows never install packages or download browsers themselves.
 
-`check` runs typecheck, build, and **44 unit tests**. The **31 opt-in real-browser
-tests** run the storefront and a distinct JWT SPA on ephemeral loopback ports.
+`check` runs typecheck, build, and **58 unit tests**. The **53 opt-in real-browser
+tests** cover the storefront, JWT SPA, portal, edge SPA, and semantic-planning
+fixtures on ephemeral loopback ports.
 They cover equivalent workflows, all configured personas, private file session
 reuse and isolation, stale-state recovery, identity/role mismatch, screenshots,
-structured form submission, both CLI targets, and scope escape paths. A forbidden
+structured form submission, configured CLI targets, scope escape paths, and
+fake-model planning/credential/prompt-injection regressions. A forbidden
 server must receive zero requests. Tests remove temporary files and close browsers.
 
 ## Try both targets
@@ -119,6 +124,27 @@ browser SDKs. An identity ID selects a configured persona. If the profile omits
 personas, the adapter uses discovered context identities. When both declare a
 persona, authentication type and roles must agree.
 
+## Optional semantic planning
+
+Wrap this deterministic driver with `BrowserWorkflowOrchestrator` from
+`@agento/workflow`; provide a target profile, optional trusted recipe/planner,
+`LLMWorkflowPlanner(modelProvider)`, and a deterministic completion predicate where
+available. Register the wrapper as core's browser provider. Known recipes can run
+with zero model calls; semantic planning can start from the approved project base
+URL without a fixture-specific starting route.
+
+`OpenAIModelProvider` lives in a separate optional package and requires a selected
+model and backend API-key resolver. [Workflow setup](../../../packages/workflow/README.md)
+and [provider setup](../../models/openai/README.md) describe registration and limits.
+Ordinary tests use fake model responses and make no paid API calls.
+
+The workflow layer sends bounded, explicitly untrusted page models with opaque
+control IDs. Local selectors and native state guards remain private. Each proposal
+is validated against the latest page and runtime scope. Credential references need
+an explicit policy, are resolved privately, and are rechecked after resolver delay.
+Native link clicks preserve query parameters while model URLs stay redacted.
+The browser adapter contains no model SDK imports or model API calls.
+
 ## Configure an authorized application
 
 Pass trusted backend configuration through `TesterArmyE2EOptions`:
@@ -160,8 +186,9 @@ and declarative custom authentication provide an extension boundary.
 
 CAPTCHA, passkeys/WebAuthn, complex MFA, enterprise OAuth/SAML/SSO, native mobile
 or desktop apps, and arbitrary token/cookie injection are not implemented.
-The built-in planner is a fixture example; arbitrary business goals require a
-trusted target planner or recipe. This is not a universal autonomous web agent.
+The built-in deterministic planners are fixture examples. Optional semantic planning
+requires a configured model provider and trusted target/authentication policy;
+workflow completion depends on the visible controls and configured verification.
 
 ## Scope, evidence, and sessions
 
@@ -189,7 +216,8 @@ Bindings include project, base URL, approved origins, persona, authentication ty
 roles, target ID, credential reference, and strategy ID. Snapshots expire after
 30 minutes and are verified before reuse and after workflow execution. Failed
 verification deletes stale state; an available login starts a fresh context.
-Use `browser.forgetSession(project, persona)` to invalidate a matching snapshot.
+Use `browser.forgetSession(project, persona)` to invalidate a matching snapshot;
+pass the target as its third argument when orchestration supplies a separate profile.
 Snapshots contain credentials and are not encrypted.
 
 Screenshots are off by default. `screenshot: { directory, maskSelectors }` masks

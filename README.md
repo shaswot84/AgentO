@@ -55,22 +55,29 @@ AgentO/
 │   └── frontend/      # Project setup, discovery summaries, and evidence previews
 ├── packages/
 │   ├── core/          # Tool-independent contracts, domain types, and orchestrator
-│   └── discovery/     # Repository metadata, stack detection, and mode selection
+│   ├── discovery/     # Repository metadata, stack detection, and mode selection
+│   └── workflow/      # Recipe-first and optional semantic planning with action validation
 ├── plugins/
 │   ├── frameworks/
 │   │   └── express/   # Express routes, middleware, configuration, and source evidence
+│   ├── models/
+│   │   └── openai/    # Optional bounded structured-generation provider
 │   └── tools/
 │       ├── semgrep/   # Normalized static XSS/SQLi candidates and source/sink evidence
 │       └── e2e-browser/ # Portable target profiles, persona workflows, and browser evidence
 ├── demo-apps/
 │   ├── demo-app-01/   # Controlled e-commerce target app (dual-mode: vulnerable / fixed)
-│   └── demo-app-02/   # Fastify + JWT + PostgreSQL + Redis microservice for discovery robustness
+│   ├── demo-app-02/   # Fastify + JWT + PostgreSQL + Redis microservice for discovery robustness
+│   ├── demo-app-03/   # Server-rendered portal with form redirects and CSRF
+│   └── demo-app-04/   # SPA with multi-step authentication and sessionStorage tokens
 └── LICENSE            # Apache 2.0 License
 ```
 
 - **`apps/frontend`**: React + TypeScript workspace for project setup, saved discovery imports, scan progress, and finding evidence. Scan and finding views currently use clearly labelled demo fixtures. See [frontend setup and boundaries](apps/frontend/README.md).
 - **`packages/core`**: Contains the decoupled domain model (`Project`, `Endpoint`, `Identity`, `Evidence`, `Finding`), provider interfaces, and the core pipeline orchestrator.
 - **`packages/discovery`**: Reads manifests and source syntax to identify languages, frameworks, dependencies, probable databases/authentication/middleware, and repository structure. It selects black-box mode when the stack is unsupported or a compatible Express adapter is unavailable. See [discovery usage and verification](packages/discovery/README.md).
+- **`packages/workflow`**: Chooses trusted recipes or optional semantic model proposals, validates current page references and credential permissions, and enforces finite planning budgets. Model input uses redacted page models; the browser executes approved actions. See [workflow registration and boundaries](packages/workflow/README.md).
+- **`plugins/models/openai`**: Optional structured-generation provider with explicit model selection, backend API-key resolution, bounded transport, and sanitized results. See [provider setup](plugins/models/openai/README.md).
 - **`plugins/frameworks/express`**: Implements the core framework adapter for read-only JS/TS route extraction, mounted middleware, request inputs, session/cookie/CORS configuration, and database observations. Recognizes all 19 declared demo routes and integrates with discovery through explicit adapter registration. See [adapter setup, verification, and boundaries](plugins/frameworks/express/README.md).
 - **`plugins/tools/semgrep`**: Implements the core static analyzer with bundled JS/TS taint rules for XSS and SQL injection candidates, normalized source/sink evidence, bounded AST context, and optional precomputed Express endpoint association. Static signals require runtime verification. See [installation, CLI, integration, and limitations](plugins/tools/semgrep/README.md).
 - **`plugins/tools/e2e-browser`**: Runs portable browser workflows through TesterArmy e2e and Chromium. Target profiles configure personas, authentication, origins, and workflow hints; recipes or bounded iterative planners drive the browser. Verified against a storefront and a distinct JWT SPA, with isolated saved sessions and normalized evidence. See [setup, examples, and compatibility](plugins/tools/e2e-browser/README.md).

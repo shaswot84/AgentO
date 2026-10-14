@@ -1,12 +1,9 @@
 import { createHash } from 'node:crypto';
-import type { Identity, Project } from '@agento/core';
+import { BrowserWorkflowFailure, type Identity, type Project, type WorkflowFailureCode } from '@agento/core';
 import type { BrowserAction, BrowserState } from './types.js';
 
-export class BrowserError extends Error {
-  constructor(readonly code: 'invalid-workflow' | 'scope-denied' | 'authentication-failed'
-    | 'browser-failed' | 'timeout' | 'session-store-failed') {
-    super(code);
-  }
+export class BrowserError extends BrowserWorkflowFailure {
+  constructor(code: WorkflowFailureCode) { super(code); }
 }
 
 /** Exact scheme/host/port scope, with no suffix, wildcard, or same-site expansion. */
