@@ -1,4 +1,4 @@
-# AgentO Core — Phase 2
+# AgentO Core
 
 Tool-independent TypeScript contracts and a small orchestration skeleton. This
 package has **no runtime dependencies** and imports no scanner, browser, framework,
@@ -27,6 +27,9 @@ Import types and `AgentOOrchestrator` from `@agento/core`. `src/index.ts` export
 | `StaticAnalyzer` | Produce normalized signals and evidence from a supplied project |
 | `FrameworkAdapter` | Declare support and extract normalized application structure |
 | `BrowserWorkflowDriver` | Observe identity-specific workflows and execute browser plans |
+| `TargetApplicationProfile` / `Persona` | Declare target origins, personas, authentication, and workflow hints |
+| `AuthenticationStrategy` | Supply persona verification and optional bounded login actions |
+| `WorkflowPlanner` | Choose actions iteratively from normalized page inspections |
 | `SecurityScanner` | Execute a structured plan and return normalized results |
 | `CWEPlugin` | Detect candidates, generate tests, and evaluate supplied evidence |
 | `ReasoningModel` | Review hypotheses with structured, evidence-referenced output |

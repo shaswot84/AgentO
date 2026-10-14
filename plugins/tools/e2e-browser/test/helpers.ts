@@ -1,5 +1,5 @@
 import { vi } from 'vitest';
-import type { AnalysisContext, Identity, SecurityTestPlan } from '@agento/core';
+import type { AnalysisContext, BrowserPageInspection, Identity, SecurityTestPlan } from '@agento/core';
 import type { BrowserAction, BrowserRuntime, BrowserRuntimeRequest, BrowserState } from '../src/types.js';
 
 export const alice: Identity = { id: 'alice', label: 'Alice', roles: ['customer'], authentication: 'session-cookie' };
@@ -24,6 +24,7 @@ export function fakeRuntime(options: { verify?: () => boolean; perform?: (action
       else if (action.action === 'navigate') request.onNetwork({ url: request.assertUrl(action.url), method: 'GET', status: 200, resourceType: 'document', blocked: false });
     });
     const session = { perform, verify: vi.fn(async () => options.verify?.() ?? true),
+      inspect: async (): Promise<BrowserPageInspection> => ({ url: request.project.baseUrl, controls: [] }),
       captureState: async () => state, snapshot: async () => ({ url: 'http://127.0.0.1:3000/orders' }), close: vi.fn(async () => undefined) };
     sessions.push(session); return session;
   });

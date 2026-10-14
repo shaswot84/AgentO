@@ -27,9 +27,10 @@ export class BrowserScope {
     if (!this.origins.includes(url.origin)) throw new BrowserError('scope-denied');
     return url.href;
   }
-  binding(project: Project, identity: Identity): string {
+  binding(project: Project, identity: Identity, targetBinding?: readonly (string | undefined)[]): string {
     return createHash('sha256').update(JSON.stringify([
       project.id, this.baseUrl, this.origins, identity.id, identity.authentication, [...identity.roles].sort(),
+      ...(targetBinding ? [targetBinding] : []),
     ])).digest('hex');
   }
   validateActions(actions: readonly BrowserAction[]): void {
@@ -41,7 +42,7 @@ export class BrowserScope {
         case 'fill':
           if (typeof action.value !== 'string' || action.value.length > 16_384) throw new BrowserError('invalid-workflow');
           break;
-        case 'click': case 'wait-visible': break;
+        case 'click': case 'submit': case 'wait-visible': break;
         default: throw new BrowserError('invalid-workflow');
       }
       if ('selector' in action && (typeof action.selector !== 'string' || !action.selector || action.selector.length > 2048)) {

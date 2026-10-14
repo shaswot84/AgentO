@@ -5,6 +5,7 @@ import { join, resolve } from 'node:path';
 import { web, surfaceOf } from '@e2e-dev/web';
 import type { OperationContext } from 'e2e/engine';
 import type { BrowserContext, Page, Request, Response } from 'playwright-core';
+import type { BrowserPageInspection } from '@agento/core';
 import { BrowserError } from './policy.js';
 import type { BrowserAction, BrowserRuntime, BrowserRuntimeRequest, BrowserSession, BrowserState, ResponseExpectation } from './types.js';
 
@@ -32,8 +33,14 @@ export class E2EWebRuntime implements BrowserRuntime {
       context.setDefaultTimeout(Math.min(10_000, request.timeoutMs));
       const blocked = new WeakSet<Request>();
       let primaryPage: Page | undefined;
-      const record = (item: Request, status: number | null, denied = false) => request.onNetwork({
-        url: item.url(), method: item.method(), resourceType: item.resourceType(), status, blocked: denied });
+      const record = (item: Request, status: number | null, denied = false, headers?: Record<string, string>) => {
+        let initiatingPage: string | undefined;
+        try { initiatingPage = item.frame().page().url(); } catch { /* Worker requests have no page. */ }
+        request.onNetwork({ url: item.url(), method: item.method(), resourceType: item.resourceType(), status, blocked: denied,
+          timestamp: new Date().toISOString(), ...(initiatingPage ? { initiatingPage } : {}),
+          ...(headers ? { headers: { 'content-type': headers['content-type'] ?? '',
+            'x-content-type-options': headers['x-content-type-options'] ?? '' } } : {}) });
+      };
       const guards = new WeakMap<Page, Promise<void>>();
       const guardPage = (page: Page): Promise<void> => {
         let ready = guards.get(page);
@@ -116,7 +123,7 @@ export class E2EWebRuntime implements BrowserRuntime {
           blockedReason: 'websocket-unsupported' });
         socket.close();
       });
-      context.on('response', response => { if (!blocked.has(response.request())) record(response.request(), response.status()); });
+      context.on('response', response => { if (!blocked.has(response.request())) record(response.request(), response.status(), false, response.headers()); });
       context.on('requestfailed', item => { if (!blocked.has(item)) record(item, null); });
       // Use the public live context for AgentO's bounded deterministic action grammar. These
       // actions are outside the e2e test harness; raw harness traces are neither made nor exported.
@@ -154,6 +161,7 @@ class LiveSession implements BrowserSession {
       case 'wait-url': await this.page.waitForURL(this.request.assertUrl(action.url), { waitUntil: 'domcontentloaded' }); break;
       case 'fill': await this.page.locator(action.selector).fill(action.value); break;
       case 'click': await this.page.locator(action.selector).click(); break;
+      case 'submit': await this.page.locator(action.selector).evaluate((element: HTMLFormElement) => element.requestSubmit()); break;
       case 'wait-visible': await this.page.locator(action.selector).waitFor({ state: 'visible' }); break;
     }
     if (response) {
@@ -168,13 +176,59 @@ class LiveSession implements BrowserSession {
     const response = await this.page.goto(this.request.assertUrl(verification.url), { waitUntil: 'domcontentloaded' });
     if (!response || response.status() !== 200) return false;
     try {
-      let value: unknown = await response.json();
-      for (const key of verification.identityPath) {
-        if (!value || typeof value !== 'object' || !Object.hasOwn(value, key)) return false;
-        value = (value as Record<string, unknown>)[key];
+      if ('identitySelector' in verification) {
+        const identity = this.page.locator(verification.identitySelector);
+        await identity.waitFor({ state: 'visible' });
+        if ((await identity.textContent())?.trim() !== verification.expectedIdentity) return false;
+        if (verification.role) {
+          const role = this.page.locator(verification.role.selector);
+          await role.waitFor({ state: 'visible' });
+          if ((await role.textContent())?.trim() !== verification.role.expected) return false;
+        }
+        return true;
       }
-      return value === verification.expectedIdentity;
+      const body: unknown = await response.json();
+      const read = (path: readonly string[]) => {
+        let value = body;
+        for (const key of path) {
+          if (!value || typeof value !== 'object' || !Object.hasOwn(value, key)) return undefined;
+          value = (value as Record<string, unknown>)[key];
+        }
+        return value;
+      };
+      return read(verification.identityPath) === verification.expectedIdentity
+        && (!verification.role || read(verification.role.path) === verification.role.expected);
     } catch { return false; }
+  }
+
+  async inspect(): Promise<BrowserPageInspection> {
+    const url = this.page.url();
+    if (url !== 'about:blank') this.request.assertUrl(url);
+    const controls = await this.page.locator('a, button, input, form, [role="button"]').evaluateAll(elements => {
+      const kinds = { A: 'link', BUTTON: 'button', INPUT: 'input', FORM: 'form' } as const;
+      return elements.slice(0, 1000).filter(element => {
+        const rect = element.getBoundingClientRect();
+        return rect.width > 0 && rect.height > 0 && getComputedStyle(element).visibility !== 'hidden';
+      }).slice(0, 100).map(element => {
+        // Absolute CSS paths work without injecting IDs or changing the application DOM.
+        const parts: string[] = [];
+        let node: Element | null = element;
+        while (node && parts.length < 30) {
+          const tag = node.tagName.toLowerCase();
+          const parent: Element | null = node.parentElement;
+          const siblings: Element[] = parent ? [...parent.children].filter(child => child.tagName === node!.tagName) : [];
+          parts.unshift(`${tag}:nth-of-type(${parent ? siblings.indexOf(node) + 1 : 1})`);
+          node = parent;
+        }
+        const kind = kinds[element.tagName as keyof typeof kinds] ?? 'button';
+        // Never read input values, hidden content, HTML, scripts, or form contents.
+        const label = element.getAttribute('aria-label') ?? (kind === 'input' ? element.getAttribute('placeholder')
+          : kind === 'form' ? '' : (element as HTMLElement).innerText);
+        return { selector: parts.join(' > '), kind, label: (label ?? '').trim().slice(0, 256),
+          ...(element instanceof HTMLAnchorElement ? { href: element.href } : {}) };
+      });
+    });
+    return { url, controls };
   }
 
   async captureState(): Promise<BrowserState> {

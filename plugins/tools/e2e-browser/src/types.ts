@@ -1,26 +1,7 @@
-import type { AnalysisContext, BrowserObservation, BrowserWorkflow, Identity, Project } from '@agento/core';
+import type { AnalysisContext, BrowserAction, BrowserObservation, BrowserPageInspection, BrowserWorkflow,
+  Credentials, Persona, Project, ResponseExpectation, SessionVerification, TargetApplicationProfile, WorkflowPlanner } from '@agento/core';
+export type { BrowserAction, Credentials, ResponseExpectation, SessionVerification } from '@agento/core';
 
-export interface ResponseExpectation {
-  /** Absolute URL or path; an optional trailing * matches a path prefix. */
-  readonly url: string;
-  readonly method?: string;
-  readonly status?: number;
-}
-/** Trusted backend recipes, never evaluated JavaScript, shell commands, or model prose. */
-export type BrowserAction =
-  | { readonly action: 'navigate'; readonly url: string; readonly response?: ResponseExpectation }
-  | { readonly action: 'fill'; readonly selector: string; readonly value: string }
-  | { readonly action: 'click'; readonly selector: string; readonly response?: ResponseExpectation }
-  | { readonly action: 'wait-url'; readonly url: string }
-  | { readonly action: 'wait-visible'; readonly selector: string };
-
-export interface Credentials { readonly username: string; readonly password: string }
-export interface SessionVerification {
-  readonly url: string;
-  /** Path in the authenticated JSON response, for example ['user', 'username']. */
-  readonly identityPath: readonly string[];
-  readonly expectedIdentity: string;
-}
 export interface FormAuthentication {
   readonly loginUrl: string;
   readonly usernameSelector: string;
@@ -28,7 +9,7 @@ export interface FormAuthentication {
   readonly submitSelector: string;
   readonly response: ResponseExpectation;
   readonly successUrl?: string;
-  readonly verification: (identity: Identity) => SessionVerification;
+  readonly verification: (identity: Persona) => SessionVerification;
 }
 /** Raw state is adapter-private credential material. It must never enter core evidence. */
 export interface BrowserState { readonly format: string; readonly version: number; readonly data: unknown }
@@ -49,11 +30,16 @@ export interface NetworkRecord {
   readonly resourceType: string;
   readonly status: number | null;
   readonly blocked: boolean;
+  readonly initiatingPage?: string;
+  readonly timestamp?: string;
+  /** Only the explicit safe response-header allowlist is retained. */
+  readonly headers?: Readonly<Record<string, string>>;
   readonly blockedReason?: 'origin-scope' | 'popup-unsupported' | 'worker-unsupported' | 'websocket-unsupported';
 }
 export interface BrowserSnapshot { readonly url: string; readonly screenshotPath?: string }
 export interface BrowserSession {
   perform(action: BrowserAction): Promise<void>;
+  inspect(): Promise<BrowserPageInspection>;
   verify(verification: SessionVerification): Promise<boolean>;
   captureState(): Promise<BrowserState>;
   snapshot(): Promise<BrowserSnapshot>;
@@ -79,9 +65,13 @@ export interface WorkflowObservation extends BrowserObservation {
   readonly diagnostics: readonly BrowserDiagnostic[];
 }
 export interface TesterArmyE2EOptions {
+  readonly target?: TargetApplicationProfile;
+  readonly workflowPlanner?: WorkflowPlanner;
+  readonly maxWorkflowActions?: number;
   readonly resolveGoal?: GoalResolver;
+  /** Compatibility shorthand for a FormLoginStrategy. */
   readonly authentication?: FormAuthentication;
-  readonly credentials?: (identity: Identity, project: Project) => Promise<Credentials>;
+  readonly credentials?: (identity: Persona, project: Project) => Promise<Credentials>;
   readonly runtime?: BrowserRuntime;
   readonly sessionStore?: SessionStore;
   readonly timeoutMs?: number;

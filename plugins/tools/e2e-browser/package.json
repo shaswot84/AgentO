@@ -11,7 +11,7 @@
     "build": "node node_modules/typescript/bin/tsc -p tsconfig.build.json",
     "typecheck": "node node_modules/typescript/bin/tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
-    "test:integration": "AGENTO_BROWSER_INTEGRATION=1 vitest run test/integration.test.ts",
+    "test:integration": "AGENTO_BROWSER_INTEGRATION=1 vitest run test/integration.test.ts test/portability.integration.test.ts",
     "check": "npm run typecheck && npm run build && npm test",
     "observe": "node dist/cli.js"
   },
