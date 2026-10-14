@@ -5,6 +5,8 @@ import type { AnalysisContext } from '@agento/core';
 import { TesterArmyE2EAdapter } from './adapter.js';
 import { storefrontBrowserOptions } from './targets/storefront.js';
 import { purchasesBrowserOptions } from './targets/purchases.js';
+import { portalBrowserOptions } from './targets/portal.js';
+import { edgeSpaBrowserOptions } from './targets/edge-spa.js';
 import { FileSessionStore } from './sessions.js';
 
 /** Standalone controlled-fixture runner. Other applications configure the library API. */
@@ -20,12 +22,15 @@ export async function main(args = process.argv.slice(2)): Promise<number> {
     const baseUrl = values.get('--url'), allowedOrigin = values.get('--allow-origin');
     if (!baseUrl || !allowedOrigin) throw new Error();
     const targetName = values.get('--target') ?? 'storefront';
-    if (!['storefront', 'purchases'].includes(targetName)) throw new Error();
-    const options = targetName === 'storefront' ? storefrontBrowserOptions([allowedOrigin]) : purchasesBrowserOptions([allowedOrigin]);
+    if (!['storefront', 'purchases', 'portal', 'edge-spa'].includes(targetName)) throw new Error();
+    const options = targetName === 'storefront' ? storefrontBrowserOptions([allowedOrigin])
+      : targetName === 'purchases' ? purchasesBrowserOptions([allowedOrigin])
+      : targetName === 'portal' ? portalBrowserOptions([allowedOrigin])
+      : edgeSpaBrowserOptions([allowedOrigin]);
     const identities = options.target!.personas!;
     const identityId = values.get('--identity') ?? identities[0]!.id;
     if (!identities.some(item => item.id === identityId)) throw new Error();
-    // Seeded credentials are only for the two local controlled fixtures.
+    // Seeded credentials are only for local controlled demo targets.
     if (!['localhost', '127.0.0.1', '[::1]'].includes(new URL(baseUrl).hostname)) throw new Error();
     const context: AnalysisContext = { project: { id: `controlled-${targetName}`, name: 'Controlled fixture', mode: 'black-box',
       baseUrl, allowedOrigins: [allowedOrigin], languages: [] }, components: [], endpoints: [],
@@ -43,7 +48,7 @@ export async function main(args = process.argv.slice(2)): Promise<number> {
     process.stdout.write(formatted);
     return result.outcome === 'COMPLETED' ? 0 : 1;
   } catch {
-    process.stderr.write('Usage: npm run observe -- --url <loopback-url> --allow-origin <origin> [--target storefront|purchases] [--identity <persona>] [--goal "open newest order"] [--session-dir .agento-browser] [--output <path>]\n');
+    process.stderr.write('Usage: npm run observe -- --url <loopback-url> --allow-origin <origin> [--target storefront|purchases|portal|edge-spa] [--identity <persona>] [--goal "open newest order"] [--session-dir .agento-browser] [--output <path>]\n');
     return 2;
   }
 }

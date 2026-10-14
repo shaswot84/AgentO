@@ -1,0 +1,107 @@
+{
+  "repositoryPath": "/home/momo/Documents/ChatGPT/AgentO/demo-apps/demo-app-04",
+  "name": "demo-app-04",
+  "languages": [
+    "typescript"
+  ],
+  "frameworks": [
+    "express"
+  ],
+  "dependencies": [
+    {
+      "name": "express",
+      "version": "^5.3.0",
+      "kind": "dependencies",
+      "manifest": "package.json"
+    },
+    {
+      "name": "ws",
+      "version": "^8.18.0",
+      "kind": "dependencies",
+      "manifest": "package.json"
+    },
+    {
+      "name": "@types/express",
+      "version": "^5.0.6",
+      "kind": "devDependencies",
+      "manifest": "package.json"
+    },
+    {
+      "name": "@types/node",
+      "version": "^22.13.1",
+      "kind": "devDependencies",
+      "manifest": "package.json"
+    },
+    {
+      "name": "@types/supertest",
+      "version": "^7.2.1",
+      "kind": "devDependencies",
+      "manifest": "package.json"
+    },
+    {
+      "name": "@types/ws",
+      "version": "^8.5.14",
+      "kind": "devDependencies",
+      "manifest": "package.json"
+    },
+    {
+      "name": "supertest",
+      "version": "^7.3.1",
+      "kind": "devDependencies",
+      "manifest": "package.json"
+    },
+    {
+      "name": "tsx",
+      "version": "^4.23.15",
+      "kind": "devDependencies",
+      "manifest": "package.json"
+    },
+    {
+      "name": "typescript",
+      "version": "^5.7.3",
+      "kind": "devDependencies",
+      "manifest": "package.json"
+    },
+    {
+      "name": "vitest",
+      "version": "^3.0.5",
+      "kind": "devDependencies",
+      "manifest": "package.json"
+    }
+  ],
+  "databases": [],
+  "orms": [],
+  "authentication": [],
+  "authenticationPackages": [],
+  "middleware": [],
+  "structure": {
+    "manifests": [
+      {
+        "file": "package.json",
+        "directory": ".",
+        "name": "demo-app-04",
+        "workspacePatterns": []
+      }
+    ],
+    "directories": [
+      "src",
+      "test"
+    ],
+    "sourceDirectories": [
+      "src"
+    ],
+    "testDirectories": [
+      "test"
+    ],
+    "staticDirectories": [],
+    "sourceFileCount": 3
+  },
+  "expressAdapterAvailable": true,
+  "availableAdapterIds": [
+    "express-framework-adapter"
+  ],
+  "supportedCodeAwareMode": true,
+  "mode": "code-aware",
+  "fallbackReasons": [],
+  "diagnostics": []
+}

@@ -53,7 +53,23 @@ npm run observe -- --target purchases --url http://127.0.0.1:3100 \
   --goal "open newest order"
 ```
 
-The CLI uses local controlled fixtures and seeded credentials. `--target`
+For the SSR Multi-Page Portal fixture (`demo-apps/demo-app-03`):
+
+```sh
+npm run observe -- --target portal --url http://127.0.0.1:3300 \
+  --allow-origin http://127.0.0.1:3300 --identity analyst \
+  --goal "open latest report"
+```
+
+For the Modern Edge-Case SPA fixture (`demo-apps/demo-app-04`):
+
+```sh
+npm run observe -- --target edge-spa --url http://127.0.0.1:3400 \
+  --allow-origin http://127.0.0.1:3400 --identity operator \
+  --goal "open latest telemetry"
+```
+
+The CLI uses local controlled targets and seeded credentials. `--target`
 defaults to `storefront`; production targets use the library API. JSON is printed
 to stdout; exit codes are `0` for completion, `1` for workflow failure/refusal,
 and `2` for invalid arguments. `--output <file.json>` also writes the observation
@@ -61,15 +77,22 @@ to disk. `--session-dir .agento-browser` enables private saved sessions between
 invocations; this directory is ignored by Git. Custom session directories belong
 outside source control.
 
-| Target | Personas | Authentication | Workflow API |
+| Target | Personas | Authentication | Workflow API / Verification |
 | --- | --- | --- | --- |
-| Storefront | alice, bob, admin | HTML form and session cookies | `/api/orders/102`, `/201`, `/301` |
-| Purchases SPA | buyer-one, buyer-two, manager | Distinct form; signed JWT in localStorage; bearer fetches | `/api/v1/purchases/BUY-302`, `/BUY-711`, `/MGR-900` |
+| Storefront (`demo-app-01`) | alice, bob, admin | HTML form and session cookies | `/api/orders/102`, `/201`, `/301` |
+| Purchases SPA (`purchases.mjs`) | buyer-one, buyer-two, manager | Distinct form; signed JWT in localStorage; bearer fetches | `/api/v1/purchases/BUY-302`, `/BUY-711`, `/MGR-900` |
+| SSR Portal (`demo-app-03`) | analyst, admin | HTML form with CSRF and 302/303 redirect; session cookies | `/reports/REP-501`; server-rendered DOM `#user-display` |
+| Edge SPA (`demo-app-04`) | operator, supervisor | Multi-step auth sequence; signed JWT in `sessionStorage` | `/api/telemetry/TEL-900`; `#user-account` |
 
-Fixtures and recipes live in `src/targets/`; `src/demo.ts` preserves older imports.
-The second application is a small dependency-free test fixture, distinct from the
-existing database-backed discovery demo. Switching target configuration requires
-no change to `adapter.ts`, `runtime.ts`, or scope enforcement.
+Fixtures and target profiles live in `src/targets/`; `src/demo.ts` preserves older imports.
+Switching target configuration requires no change to `adapter.ts`, `runtime.ts`, or scope enforcement.
+
+### Verified Architectural Scenarios & Boundaries
+
+1. **Multi-Page App (MPA) 302/303 Form Redirects (`demo-app-03`)**: Form login correctly preserves hidden CSRF tokens and tracks 302 redirects to server-rendered dashboards, verified via DOM text matching without JSON APIs.
+2. **Multi-Step Authentication (`demo-app-04`)**: Proves that single-step `FormLoginStrategy` cannot complete modern multi-step login flows (e.g. identifier lookup followed by dynamic password reveal). Demonstrates how declarative custom `AuthenticationStrategy` handles multi-step preparation sequences.
+3. **`sessionStorage` State Boundary (`demo-app-04`)**: Proves that Playwright's `context.storageState()` does not serialize `window.sessionStorage`. Sessions for SPAs using `sessionStorage` tokens cannot be reused across fresh browser contexts and require re-authentication.
+4. **Strict Scope Enforcement (`demo-app-04`)**: Real-time WebSockets (`/escape/websocket`) and unapproved external CDN resources (`/escape/cdn`) are actively intercepted and blocked (`websocket-unsupported`, `origin-scope`), failing the workflow with `scope-denied`.
 
 ## Register with core
 

@@ -1,0 +1,38 @@
+{
+  "name": "demo-app-04",
+  "version": "1.0.0",
+  "description": "AgentO Demo Application 04 — Modern Edge-Case SPA (Multi-Step Login + sessionStorage + Background WebSocket/Worker/CDN)",
+  "main": "dist/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/server.ts",
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "keywords": [
+    "spa",
+    "jwt",
+    "session-storage",
+    "multi-step-auth",
+    "websockets",
+    "portability-demo"
+  ],
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "express": "^5.3.0",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^22.13.1",
+    "@types/supertest": "^7.2.1",
+    "@types/ws": "^8.5.14",
+    "supertest": "^7.3.1",
+    "tsx": "^4.23.15",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.5"
+  }
+}
