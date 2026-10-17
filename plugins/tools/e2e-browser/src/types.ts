@@ -1,4 +1,4 @@
-import type { AnalysisContext, BrowserAction, BrowserObservation, BrowserPageInspection, BrowserWorkflow,
+import type { AnalysisContext, BrowserAction, BrowserContextCookie, BrowserObservation, BrowserPageInspection, BrowserWorkflow,
   Credentials, Persona, Project, ResponseExpectation, SessionVerification, TargetApplicationProfile, WorkflowPlanner } from '@agento/core';
 export type { BrowserAction, Credentials, ResponseExpectation, SessionVerification } from '@agento/core';
 
@@ -38,6 +38,8 @@ export interface NetworkRecord {
 }
 export interface BrowserSnapshot { readonly url: string; readonly screenshotPath?: string }
 export interface BrowserSession {
+  readCookies?(): Promise<readonly BrowserContextCookie[]>;
+  replaceCookies?(cookies: readonly BrowserContextCookie[]): Promise<void>;
   perform(action: BrowserAction): Promise<void>;
   inspect(): Promise<BrowserPageInspection>;
   verify(verification: SessionVerification): Promise<boolean>;

@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Runtime Capabilities (`packages/runtime`)**: Added scoped single-exchange HTTP execution, bounded binary response collection and timings, structured header/cookie parsing, callback-scoped browser control, isolated expiring authentication sessions, and cookie/network observations without assessment rules or vendor imports.
+- **Runtime Session Transfer and Verification**: Added private active-context cookie read/replace capabilities to the guarded browser interface, browser-to-HTTP and HTTP-to-browser session transfer, mocked lifecycle/isolation tests, and live HTTP/Chromium checks for Alice/Bob/Admin. Documented setup, limits, privacy boundaries, and supported authentication.
 - **Optional Semantic Browser Planning (`packages/workflow`, `packages/core`)**: Added provider-independent model/page/action/history contracts, recipe-first workflow orchestration, constrained LLM proposals, deterministic scope and credential validation, bounded recovery and model budgets, and explicit completion provenance.
 - **OpenAI Model Provider (`plugins/models/openai`)**: Added an optional bounded Structured Outputs provider with caller-selected model and backend credentials, cancellation, sanitized failures, token accounting, and mocked transport tests.
 - **Semantic Workflow Safety and Verification**: Added fake-model unit and Chromium coverage for unfamiliar UI planning, prompt injection, private credential references, stale state, provider failures, recipe recovery, query-link navigation, nested storage redaction, and runtime scope narrowing. Browser capabilities remain deterministic and existing workflows remain supported.

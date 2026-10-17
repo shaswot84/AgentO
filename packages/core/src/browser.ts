@@ -26,6 +26,15 @@ export interface Persona extends Identity {
 
 /** Private backend material; exclude from profiles, context, evidence and planner input. */
 export interface Credentials { readonly username: string; readonly password: string }
+/** Private backend material for context transfer. Never include in model input or evidence. */
+export interface BrowserContextCookie {
+  readonly name: string; readonly value: string; readonly domain: string; readonly path: string;
+  /** Unix seconds; -1 denotes a session cookie. */
+  readonly expires: number;
+  readonly httpOnly: boolean; readonly secure: boolean;
+  readonly sameSite: 'Strict' | 'Lax' | 'None';
+  readonly partitionKey?: string;
+}
 export type SessionVerification = {
   readonly url: string;
   readonly expectedIdentity: string;

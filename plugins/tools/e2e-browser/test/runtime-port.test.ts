@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import type { BrowserPageInspection, BrowserWorkflowSession } from '@agento/core';
+import type { BrowserContextCookie, BrowserPageInspection, BrowserWorkflowSession } from '@agento/core';
 import { TesterArmyE2EAdapter, demoBrowserOptions } from '../src/index.js';
 import { context, fakeRuntime, workflow } from './helpers.js';
 
@@ -115,5 +115,39 @@ describe('guarded browser workflow capability port', () => {
       await port.fillCredential('input', 'token' as 'password');
     });
     expect(invalid.diagnostics[0]?.code).toBe('authentication-failed'); expect(credentials).toHaveBeenCalledOnce();
+  });
+});
+
+describe('private runtime cookie transfer', () => {
+  const cookie = { name: 'runtime_sid', value: 'private-runtime-transfer', domain: '127.0.0.1', path: '/',
+    expires: -1, httpOnly: true, secure: false, sameSite: 'Lax' as const };
+  it('reads and replaces active context cookies without putting raw values in observations', async () => {
+    const runtime = fakeRuntime(), original = runtime.start.getMockImplementation()!;
+    let current: BrowserContextCookie[] = [cookie];
+    runtime.start.mockImplementation(async request => ({ ...await original(request),
+      readCookies: async () => current,
+      replaceCookies: async (incoming: readonly BrowserContextCookie[]) => { current = [...incoming]; },
+    }));
+    let escaped: BrowserWorkflowSession | undefined;
+    const result = await new TesterArmyE2EAdapter({ runtime }).runWorkflow(context, { ...workflow, identityId: 'anonymous' }, async port => {
+      escaped = port;
+      const exported = await port.readCookies!();
+      expect(exported[0]?.value).toBe('private-runtime-transfer'); expect(Object.isFrozen(exported[0])).toBe(true);
+      await port.replaceCookies!([{ ...cookie, value: 'rotated-private-runtime-transfer' }]);
+      expect((await port.readCookies!())[0]?.value).toBe('rotated-private-runtime-transfer');
+    });
+    expect(result.outcome).toBe('COMPLETED');
+    expect(JSON.stringify(result)).not.toContain('private-runtime-transfer');
+    await expect(escaped!.readCookies!()).rejects.toMatchObject({ code: 'timeout' });
+    await expect(escaped!.replaceCookies!([cookie])).rejects.toMatchObject({ code: 'timeout' });
+  });
+  it('rejects imported cookies outside the configured hosts before changing the context', async () => {
+    const runtime = fakeRuntime(), original = runtime.start.getMockImplementation()!;
+    let writes = 0;
+    runtime.start.mockImplementation(async request => ({ ...await original(request), replaceCookies: async () => { writes++; } }));
+    const result = await new TesterArmyE2EAdapter({ runtime }).runWorkflow(context, { ...workflow, identityId: 'anonymous' }, async port => {
+      await port.replaceCookies!([{ ...cookie, domain: 'external.example' }]);
+    });
+    expect(result.outcome).toBe('FAILED'); expect(writes).toBe(0);
   });
 });

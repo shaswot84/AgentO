@@ -5,7 +5,7 @@ import { join, resolve } from 'node:path';
 import { web, surfaceOf } from '@e2e-dev/web';
 import type { OperationContext } from 'e2e/engine';
 import type { BrowserContext, Page, Request, Response } from 'playwright-core';
-import type { BrowserPageInspection } from '@agento/core';
+import type { BrowserContextCookie, BrowserPageInspection } from '@agento/core';
 import { BrowserError, redactUrl } from './policy.js';
 import { privateStorageValues } from './private-values.js';
 import type { BrowserAction, BrowserRuntime, BrowserRuntimeRequest, BrowserSession, BrowserState, ResponseExpectation } from './types.js';
@@ -279,6 +279,15 @@ class LiveSession implements BrowserSession {
       headings: raw.headings.map(value => redact(value, 256)), visibleTextSummary: redact(raw.visibleTextSummary, 4096),
       controls: raw.controls.map(control => ({ ...control, label: redact(control.label, 256),
         ...(control.href ? { href: redactUrl(control.href, privateValues) } : {}) })) };
+  }
+
+  async readCookies(): Promise<readonly BrowserContextCookie[]> {
+    return this.context.cookies();
+  }
+
+  async replaceCookies(cookies: readonly BrowserContextCookie[]): Promise<void> {
+    await this.context.clearCookies();
+    await this.context.addCookies([...cookies]);
   }
 
   async captureState(): Promise<BrowserState> {

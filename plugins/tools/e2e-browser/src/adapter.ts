@@ -240,7 +240,7 @@ export class TesterArmyE2EAdapter implements BrowserWorkflowRuntimeDriver {
           const stateId = createHash('sha256').update(JSON.stringify([runId, raw.stateId, page])).digest('hex');
           assertActive(); return freeze({ ...page, stateId });
         };
-        const port: BrowserWorkflowSession = Object.freeze({ signal: controller.signal,
+        const port: BrowserWorkflowSession = Object.freeze<BrowserWorkflowSession>({ signal: controller.signal,
           persona: freeze(structuredClone(identity)), inspect, perform,
           fillCredential: async (selector: string, field: 'username' | 'password', guard?: { readonly stateId: string }) => {
             assertActive();
@@ -259,6 +259,22 @@ export class TesterArmyE2EAdapter implements BrowserWorkflowRuntimeDriver {
           network: () => {
             assertActive(); return freeze(records.map(record => ({ url: redactUrl(record.url, secrets),
               method: record.method, status: record.status, blocked: record.blocked })));
+          },
+          readCookies: async () => {
+            assertActive();
+            if (!session!.readCookies) throw new BrowserError('browser-failed');
+            const cookies = await bounded(session!.readCookies());
+            scope!.validateState({ format: 'playwright-storage-state', version: 1, data: { cookies, origins: [] } });
+            secrets.push(...cookies.map(cookie => cookie.value));
+            assertActive(); return freeze(structuredClone(cookies));
+          },
+          replaceCookies: async cookies => {
+            assertActive();
+            if (!session!.replaceCookies) throw new BrowserError('browser-failed');
+            const copy = structuredClone(cookies);
+            scope!.validateState({ format: 'playwright-storage-state', version: 1, data: { cookies: copy, origins: [] } });
+            secrets.push(...copy.map(cookie => cookie.value));
+            await bounded(session!.replaceCookies(copy)); assertActive();
           },
         });
         try { await bounded(execute(port)); } finally { portActive = false; }

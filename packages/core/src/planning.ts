@@ -1,4 +1,4 @@
-import type { BrowserAction, BrowserPageInspection, Persona, TargetApplicationProfile, WorkflowPlanner } from './browser.js';
+import type { BrowserAction, BrowserContextCookie, BrowserPageInspection, Persona, TargetApplicationProfile, WorkflowPlanner } from './browser.js';
 import type { AnalysisContext, JsonValue } from './domain.js';
 import type { BrowserObservation, BrowserWorkflow, BrowserWorkflowDriver } from './contracts.js';
 
@@ -20,6 +20,9 @@ export interface BrowserWorkflowSession {
   fillCredential(selector: string, field: 'username' | 'password', guard?: { readonly stateId: string }): Promise<void>;
   assertUrl(url: string): string;
   network(): readonly BrowserNetworkObservation[];
+  /** Optional trusted backend operations; raw values must never reach a model or public evidence. */
+  readCookies?(): Promise<readonly BrowserContextCookie[]>;
+  replaceCookies?(cookies: readonly BrowserContextCookie[]): Promise<void>;
 }
 export interface BrowserWorkflowRuntimeDriver extends BrowserWorkflowDriver {
   runWorkflow(context: AnalysisContext, workflow: BrowserWorkflow,
