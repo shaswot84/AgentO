@@ -52,6 +52,20 @@ const post = (path: string, value: unknown, headers = {}) => fetch(`${base}${pat
 });
 
 describe('same-origin local API transport', () => {
+  it('reads and saves planning summaries over HTTP without starting a source scan', async () => {
+    const client = createHttpClient((path, options) => fetch(`${base}${path}`, options));
+    const project = await client.createProject(input);
+    expect(await client.getInvestigation(project.id)).toMatchObject({ projectId: project.id, state: 'empty', generatedAt: null, hypotheses: [], plans: [] });
+    const saved = await client.refreshInvestigation(project.id);
+    expect(saved.generatedAt).not.toBeNull();
+    expect(saved.execution).toBe('not-configured');
+    expect(saved.coverage).toHaveLength(7);
+    expect(await client.getInvestigation(project.id)).toEqual(saved);
+    await expect(client.getInvestigation('missing')).rejects.toMatchObject({ code: 'PROJECT_NOT_FOUND' });
+    const denied = await fetch(`${base}/api/projects/${project.id}/investigation`, { method: 'POST',
+      headers: { 'Content-Type': 'application/json', Origin: 'https://foreign.example' }, body: '{}' });
+    expect(denied.status).toBe(403);
+  });
   it('serves the browser client over real HTTP, including persisted project reads and typed empty states', async () => {
     const client = createHttpClient((path, options) => fetch(`${base}${path}`, options));
     const project = await client.createProject(input);
@@ -143,7 +157,7 @@ describe('same-origin local API transport', () => {
     expect((await fetch(`${base}/api/projects`, { method: 'DELETE' })).status).toBe(405);
     expect((await fetch(`${base}/api/unknown`)).status).toBe(404);
   });
-  it('supports DELETE /api/projects/:id to delete projects and rejects demo-shop', async () => {
+  it('supports DELETE /api/projects/:id to delete projects including demo-shop', async () => {
     const project = (await (await post('/api/projects', { input })).json()).data;
     const deleteRes = await fetch(`${base}/api/projects/${project.id}`, { method: 'DELETE' });
     expect(deleteRes.status).toBe(200);
@@ -154,8 +168,12 @@ describe('same-origin local API transport', () => {
     expect(getRes.status).toBe(404);
 
     const demoDelete = await fetch(`${base}/api/projects/demo-shop`, { method: 'DELETE' });
-    expect(demoDelete.status).toBe(400);
-    expect((await demoDelete.json()).code).toBe('INVALID_INPUT');
+    expect(demoDelete.status).toBe(200);
+    expect((await demoDelete.json()).data).toEqual({ success: true });
+
+    const secondDemoDelete = await fetch(`${base}/api/projects/demo-shop`, { method: 'DELETE' });
+    expect(secondDemoDelete.status).toBe(404);
+    expect((await secondDemoDelete.json()).code).toBe('PROJECT_NOT_FOUND');
 
     const unknownDelete = await fetch(`${base}/api/projects/missing-id`, { method: 'DELETE' });
     expect(unknownDelete.status).toBe(404);

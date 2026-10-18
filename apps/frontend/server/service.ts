@@ -11,6 +11,7 @@ import { Workspace } from './workspace.ts';
 import type { ProjectRecord } from './workspace.ts';
 import { securityModelFor } from './security-model.ts';
 import { fromFrameworkAnalysis, fromStaticAnalysis } from '../../../packages/security-model/src/contributions.ts';
+import { emptyInvestigation, generateInvestigation, modelFingerprint } from './investigation.ts';
 
 const demoId = 'demo-shop';
 const isActive = (scan?: ScanSnapshot) => scan?.state === 'pending' || scan?.state === 'running';
@@ -32,6 +33,12 @@ export class LocalService implements AgentOClient {
   private readonly storageFailures = new Set<string>();
   constructor(private readonly workspace: Workspace, private readonly execution: ExecutionServices) {}
 
+  private ensureNotDeletedDemo(id: string): void {
+    if (id === demoId && this.workspace.isDemoDeleted()) {
+      throw new AgentOClientError('PROJECT_NOT_FOUND', 'This project is not available in the workspace.');
+    }
+  }
+
   private record(id: string, records = this.workspace.read()): ProjectRecord {
     const record = records.find(item => item.project.id === id);
     if (!record) throw new AgentOClientError('PROJECT_NOT_FOUND', 'This project is not available in the workspace.');
@@ -40,8 +47,17 @@ export class LocalService implements AgentOClient {
   private summary(record: ProjectRecord): ProjectSummary {
     return { ...record.project, ...(record.scan ? { scanState: record.scan.state } : {}) };
   }
-  async listProjects() { return [...this.workspace.read().map(record => this.summary(record)), ...await this.demo.listProjects()]; }
-  async getProject(id: string) { return id === demoId ? this.demo.getProject(id) : this.summary(this.record(id)); }
+  async listProjects() {
+    const demo = this.workspace.isDemoDeleted() ? [] : await this.demo.listProjects();
+    return [...this.workspace.read().map(record => this.summary(record)), ...demo];
+  }
+  async getProject(id: string) {
+    if (id === demoId) {
+      this.ensureNotDeletedDemo(id);
+      return this.demo.getProject(id);
+    }
+    return this.summary(this.record(id));
+  }
 
   async createProject(input: ProjectInput, discovery?: DiscoveryResult) {
     if (!input || typeof input.name !== 'string' || typeof input.repositoryPath !== 'string'
@@ -63,7 +79,12 @@ export class LocalService implements AgentOClient {
     });
   }
   async deleteProject(id: string): Promise<void> {
-    if (id === demoId) throw new AgentOClientError('INVALID_INPUT', 'The demo fixture is read-only and cannot be deleted.');
+    if (id === demoId) {
+      this.ensureNotDeletedDemo(id);
+      await this.workspace.deleteDemo();
+      await this.demo.deleteProject(id);
+      return;
+    }
     await this.workspace.update(records => {
       const index = records.findIndex(item => item.project.id === id);
       if (index === -1) throw new AgentOClientError('PROJECT_NOT_FOUND', 'This project is not available in the workspace.');
@@ -74,7 +95,10 @@ export class LocalService implements AgentOClient {
     this.storageFailures.delete(id);
   }
   async importDiscovery(id: string, discovery: DiscoveryResult) {
-    if (id === demoId) throw new AgentOClientError('INVALID_INPUT', 'Create a project to save live discovery; the demo fixture is read-only.');
+    if (id === demoId) {
+      this.ensureNotDeletedDemo(id);
+      throw new AgentOClientError('INVALID_INPUT', 'Create a project to save live discovery; the demo fixture is read-only.');
+    }
     return this.workspace.update(records => {
       const record = this.record(id, records);
       if (isActive(record.scan)) throw new AgentOClientError('SCAN_IN_PROGRESS', 'Wait for the current scan before changing discovery.');
@@ -84,29 +108,80 @@ export class LocalService implements AgentOClient {
     });
   }
   async getDiscovery(id: string) {
-    if (id === demoId) return this.demo.getDiscovery(id);
+    if (id === demoId) {
+      this.ensureNotDeletedDemo(id);
+      return this.demo.getDiscovery(id);
+    }
     const result = this.record(id).discovery;
     if (!result) throw new AgentOClientError('DISCOVERY_UNAVAILABLE', 'Run discovery or import a saved discovery result.');
     return result;
   }
   async getScan(id: string) {
-    if (id === demoId) return this.demo.getScan(id);
+    if (id === demoId) {
+      this.ensureNotDeletedDemo(id);
+      return this.demo.getScan(id);
+    }
     if (this.storageFailures.has(id)) throw new AgentOClientError('CLIENT_UNAVAILABLE', 'Scan results could not be saved. Check workspace disk access and restart the service.');
     const result = this.record(id).scan;
     if (!result) throw new AgentOClientError('SCAN_UNAVAILABLE', 'No scan has run. Start a local static scan to collect source evidence.');
     return result;
   }
   async getSecurityModel(id: string) {
-    return id === demoId ? this.demo.getSecurityModel(id) : securityModelFor(this.record(id));
+    if (id === demoId) {
+      this.ensureNotDeletedDemo(id);
+      return this.demo.getSecurityModel(id);
+    }
+    return securityModelFor(this.record(id));
   }
-  async getFindings(id: string) { return id === demoId ? this.demo.getFindings(id) : this.record(id).findings; }
+  async getInvestigation(id: string) {
+    if (id === demoId) {
+      this.ensureNotDeletedDemo(id);
+      return this.demo.getInvestigation(id);
+    }
+    const record = this.record(id), source = securityModelFor(record);
+    if (!record.investigation) return emptyInvestigation(source);
+    const saved = record.investigation;
+    return saved.fingerprint === modelFingerprint(source) ? saved.snapshot
+      : { ...saved.snapshot, state: 'stale' as const, sourceState: source.state,
+        diagnostics: [...new Set([...saved.snapshot.diagnostics, 'model-changed'])] };
+  }
+  async refreshInvestigation(id: string) {
+    if (id === demoId) {
+      this.ensureNotDeletedDemo(id);
+      return this.demo.getInvestigation(id);
+    }
+    const record = this.record(id);
+    if (isActive(record.scan)) throw new AgentOClientError('SCAN_IN_PROGRESS', 'Wait for the scan to finish before generating hypotheses and plans.');
+    let result;
+    try { result = await generateInvestigation(securityModelFor(record)); }
+    catch { throw new AgentOClientError('CLIENT_UNAVAILABLE', 'Planning is unavailable. Build the CWE rules, hypothesis engine, and test planner, then try again.'); }
+    return this.workspace.update(records => {
+      const current = this.record(id, records);
+      if (isActive(current.scan) || modelFingerprint(securityModelFor(current)) !== result.fingerprint) {
+        throw new AgentOClientError('CLIENT_UNAVAILABLE', 'Application observations changed during planning. Generate plans again.');
+      }
+      current.investigation = result;
+      return result.snapshot;
+    });
+  }
+  async getFindings(id: string) {
+    if (id === demoId) {
+      this.ensureNotDeletedDemo(id);
+      return this.demo.getFindings(id);
+    }
+    return this.record(id).findings;
+  }
   async getFinding(id: string, findingId: string) {
     const finding = (await this.getFindings(id)).find(item => item.id === findingId);
     if (!finding) throw new AgentOClientError('FINDING_NOT_FOUND', 'This finding is not available for the selected project.');
     return finding;
   }
   async getWorkflows(id: string) {
-    return id === demoId ? this.demo.getWorkflows(id) : (this.record(id).workflows ?? []);
+    if (id === demoId) {
+      this.ensureNotDeletedDemo(id);
+      return this.demo.getWorkflows(id);
+    }
+    return (this.record(id).workflows ?? []);
   }
   async getWorkflow(id: string, workflowId: string) {
     const workflow = (await this.getWorkflows(id)).find(item => item.id === workflowId);
@@ -114,7 +189,10 @@ export class LocalService implements AgentOClient {
     return workflow;
   }
   async runWorkflow(id: string, input: BrowserWorkflowInput): Promise<BrowserWorkflowResult> {
-    if (id === demoId) throw new AgentOClientError('INVALID_INPUT', 'Create a project to execute live workflows; the demo contains recorded fixture workflows.');
+    if (id === demoId) {
+      this.ensureNotDeletedDemo(id);
+      throw new AgentOClientError('INVALID_INPUT', 'Create a project to execute live workflows; the demo contains recorded fixture workflows.');
+    }
     if (!input || typeof input.goal !== 'string' || !input.goal.trim() || input.goal.length > 2_000
       || (input.identityId !== undefined && (typeof input.identityId !== 'string' || input.identityId.length > 100))
       || (input.targetName !== undefined && (typeof input.targetName !== 'string' || input.targetName.length > 100))
@@ -136,13 +214,16 @@ export class LocalService implements AgentOClient {
 
 
   async startScan(id: string): Promise<ScanSnapshot> {
-    if (id === demoId) throw new AgentOClientError('INVALID_INPUT', 'Create a project for live scans; the demo contains synthetic evidence.');
+    if (id === demoId) {
+      this.ensureNotDeletedDemo(id);
+      throw new AgentOClientError('INVALID_INPUT', 'Create a project for live scans; the demo contains synthetic evidence.');
+    }
     const scan = await this.workspace.update(records => {
       const record = this.record(id, records);
       if (isActive(record.scan)) throw new AgentOClientError('SCAN_IN_PROGRESS', 'A scan is already running for this project.');
       if (records.some(item => isActive(item.scan))) throw new AgentOClientError('SCAN_IN_PROGRESS', 'The local scanner is busy. Wait for the current scan to finish.');
       record.scan = { id: randomUUID(), projectId: id, source: 'execution-api', state: 'pending',
-        stages: scanStages(), summary: 'Local static scan queued. Runtime verification is unavailable.' };
+        stages: scanStages(), summary: 'Source scan and local planning queued. Runtime verification is unavailable.' };
       record.findings = [];
       return record.scan;
     });
@@ -190,12 +271,39 @@ export class LocalService implements AgentOClient {
           targetUrl: current.baseUrl, repositoryPath: current.repositoryPath!, allowedOrigins: current.allowedOrigins,
           diagnostics: [...discovery.diagnostics, ...analysis.diagnostics, ...frameworkDiagnostics],
           contributions: [...(framework ? [fromFrameworkAnalysis(framework)] : []), fromStaticAnalysis(analysis)] };
-        record.scan = { ...record.scan!, state: completed ? 'complete' : 'failed', completedAt: new Date().toISOString(),
+        record.scan = { ...record.scan!, state: 'running',
           summary: `${completed ? 'Static analysis completed' : `Static analysis ${analysis.status}`}. ${findings.length} candidate finding(s). Runtime verification was not run; no vulnerability is confirmed.`,
           diagnostics: [...discovery.diagnostics, ...analysis.diagnostics].map(({ code, message }) => ({ code, message })),
           stages: record.scan!.stages.map(stage => stage.id === 'static'
             ? { ...stage, status: completed ? 'complete' : analysis.status === 'skipped' ? 'unavailable' : 'failed', details: `Semgrep analysis ${analysis.status}. Review diagnostics for incomplete coverage.` }
             : stage.id === 'findings' ? { ...stage, status: hasResults ? 'complete' : 'unavailable', details: hasResults ? `${findings.length} hypotheses saved with recorded evidence and review guidance.` : 'No complete analysis is available. An empty result does not establish safety.' } : stage) };
+      });
+      let planningAvailable = false;
+      try {
+        await this.progress(id, scanId, 'hypotheses', 'running', 'Generating evidence-linked questions from the saved application model.');
+        const investigation = await generateInvestigation(securityModelFor(this.record(id)), async count => {
+          await this.progress(id, scanId, 'hypotheses', 'complete', `${count} grounded hypotheses generated. No vulnerability verdicts were made.`);
+          await this.progress(id, scanId, 'planning', 'running', 'Preparing test steps and checking planning prerequisites.');
+        });
+        await this.workspace.update(records => {
+          const record = this.record(id, records);
+          record.investigation = investigation;
+          const { plans } = investigation.snapshot;
+          record.scan = { ...record.scan!, stages: record.scan!.stages.map(stage => stage.id === 'planning'
+            ? { ...stage, status: 'complete', details: `${plans.length} test drafts saved. ${plans.filter(plan => plan.readiness === 'BLOCKED').length} blocked by missing prerequisites. No tests were executed.` } : stage) };
+        });
+        planningAvailable = true;
+      } catch {
+        await this.workspace.update(records => {
+          const record = this.record(id, records);
+          record.scan = { ...record.scan!, stages: record.scan!.stages.map(stage => ['hypotheses', 'planning'].includes(stage.id) && stage.status !== 'complete'
+            ? { ...stage, status: 'unavailable', details: 'Planning could not finish. Build the CWE rules, hypothesis engine, and test planner. Generate analysis from Hypotheses to retry.' } : stage) };
+        });
+      }
+      await this.workspace.update(records => {
+        const record = this.record(id, records);
+        record.scan = { ...record.scan!, state: completed ? 'complete' : 'failed', completedAt: new Date().toISOString(),
+          summary: `${record.scan!.summary}${planningAvailable ? ' Hypotheses and test drafts are available.' : ' Hypothesis generation or test planning was unavailable.'}` };
       });
     } catch {
       try {

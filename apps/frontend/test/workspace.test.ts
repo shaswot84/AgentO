@@ -109,7 +109,15 @@ describe('durable local projects', () => {
     const restarted = new LocalService(await Workspace.open(file), execution);
     expect((await restarted.listProjects()).some(p => p.id === project1.id)).toBe(false);
 
-    await expect(service.deleteProject('demo-shop')).rejects.toMatchObject({ code: 'INVALID_INPUT' });
+    await service.deleteProject('demo-shop');
+    const afterDemoDelete = await service.listProjects();
+    expect(afterDemoDelete.some(p => p.id === 'demo-shop')).toBe(false);
+    expect(afterDemoDelete).toHaveLength(1);
+
+    const restartedAfterDemoDelete = new LocalService(await Workspace.open(file), execution);
+    expect((await restartedAfterDemoDelete.listProjects()).some(p => p.id === 'demo-shop')).toBe(false);
+
+    await expect(service.deleteProject('demo-shop')).rejects.toMatchObject({ code: 'PROJECT_NOT_FOUND' });
     await expect(service.deleteProject('unknown-id')).rejects.toMatchObject({ code: 'PROJECT_NOT_FOUND' });
   });
 });

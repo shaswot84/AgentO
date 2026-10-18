@@ -83,7 +83,7 @@ export function createLocalApi(options: { root: string; file: string; execution:
         }
         data = await options.execution.discover(input.repositoryPath.trim());
       } else {
-        const match = /^\/api\/projects(?:\/([^/]+)(?:\/(discovery|security-model|scan|findings|workflows)(?:\/([^/]+))?)?)?$/u.exec(pathname);
+        const match = /^\/api\/projects(?:\/([^/]+)(?:\/(discovery|security-model|investigation|scan|findings|workflows)(?:\/([^/]+))?)?)?$/u.exec(pathname);
         if (!match) { respond(res, 404, { ok: false, code: 'INVALID_INPUT', error: 'Unknown workspace API route.' }); return; }
         const [, encodedId, resource, encodedFinding] = match;
         const id = encodedId ? decodeURIComponent(encodedId) : undefined;
@@ -101,6 +101,11 @@ export function createLocalApi(options: { root: string; file: string; execution:
           status = 200;
         } else if (id && resource === 'discovery' && !encodedFinding && req.method === 'GET') data = await client.getDiscovery(id);
         else if (id && resource === 'security-model' && !encodedFinding && req.method === 'GET') data = await client.getSecurityModel(id);
+        else if (id && resource === 'investigation' && !encodedFinding && req.method === 'GET') data = await client.getInvestigation(id);
+        else if (id && resource === 'investigation' && !encodedFinding && req.method === 'POST') {
+          await body(req);
+          data = await client.refreshInvestigation(id);
+        }
         else if (id && resource === 'discovery' && !encodedFinding && req.method === 'POST') data = await client.importDiscovery(id, (await body(req)).discovery as DiscoveryResult);
         else if (id && resource === 'scan' && !encodedFinding && req.method === 'GET') data = await client.getScan(id);
         else if (id && resource === 'scan' && !encodedFinding && req.method === 'POST') {

@@ -1,0 +1,305 @@
+{
+  "projectId": "demo-shop",
+  "sourceType": "demo-fixture",
+  "state": "ready",
+  "generatedAt": "2026-10-18T00:00:00.000Z",
+  "sourceUpdatedAt": "2026-10-18T00:00:00.000Z",
+  "sourceState": "ready",
+  "hypotheses": [
+    {
+      "id": "hypothesis:f32c311dc557eeadd3ed935751abe1cbf18f1b86e7470ffdb69f3ad24fcbf945",
+      "cweId": "CWE-639",
+      "title": "Authorization bypass through a user-controlled key",
+      "reason": "Evidence links an owner-bound resource and request input to this endpoint; their relationship is unresolved and ownership enforcement remains unverified.",
+      "origin": "deterministic",
+      "endpoint": {
+        "method": "GET",
+        "path": "/api/orders/:id"
+      },
+      "supports": [
+        {
+          "statement": "Evidence links an owner-bound resource and request input to this endpoint; their relationship is unresolved and ownership enforcement remains unverified.",
+          "evidenceIds": [
+            "model-cookie",
+            "model-cors",
+            "model-db",
+            "model-flow",
+            "model-owner",
+            "model-route",
+            "model-runtime"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "id": "model-cookie",
+          "kind": "configuration",
+          "producerId": "synthetic-model-fixture",
+          "capturedAt": "2026-10-18T00:00:00.000Z",
+          "summary": "Synthetic example: cookie. No live test was run."
+        },
+        {
+          "id": "model-cors",
+          "kind": "configuration",
+          "producerId": "synthetic-model-fixture",
+          "capturedAt": "2026-10-18T00:00:00.000Z",
+          "summary": "Synthetic example: cors. No live test was run."
+        },
+        {
+          "id": "model-db",
+          "kind": "source-location",
+          "producerId": "synthetic-model-fixture",
+          "capturedAt": "2026-10-18T00:00:00.000Z",
+          "summary": "Synthetic example: database-operation. No live test was run."
+        },
+        {
+          "id": "model-flow",
+          "kind": "static-analysis",
+          "producerId": "synthetic-model-fixture",
+          "capturedAt": "2026-10-18T00:00:00.000Z",
+          "summary": "Synthetic example: static-candidate. No live test was run."
+        },
+        {
+          "id": "model-owner",
+          "kind": "resource-ownership",
+          "producerId": "synthetic-model-fixture",
+          "capturedAt": "2026-10-18T00:00:00.000Z",
+          "summary": "Synthetic example: ownership. No live test was run."
+        },
+        {
+          "id": "model-route",
+          "kind": "source-location",
+          "producerId": "synthetic-model-fixture",
+          "capturedAt": "2026-10-18T00:00:00.000Z",
+          "summary": "Synthetic example: route. No live test was run."
+        },
+        {
+          "id": "model-runtime",
+          "kind": "http-response",
+          "producerId": "synthetic-model-fixture",
+          "capturedAt": "2026-10-18T00:00:00.000Z",
+          "summary": "Synthetic example: http-response. No live test was run."
+        }
+      ],
+      "limitations": [
+        "Candidate observations do not establish a vulnerability; runtime evidence and CWE evaluation are required."
+      ]
+    }
+  ],
+  "plans": [
+    {
+      "id": "plan:bf6259ac172ee7e8594c534322c8a5af9161e01e0551671f584de35f5cdf7f64",
+      "hypothesisId": "hypothesis:f32c311dc557eeadd3ed935751abe1cbf18f1b86e7470ffdb69f3ad24fcbf945",
+      "cweId": "CWE-639",
+      "title": "Authorization bypass through a user-controlled key",
+      "probeId": "authorization",
+      "readiness": "BLOCKED",
+      "prerequisites": [
+        {
+          "code": "authorization-policy-required"
+        },
+        {
+          "code": "input-required",
+          "parameter": {
+            "name": "id",
+            "location": "path"
+          }
+        }
+      ],
+      "requiredCapabilities": [
+        "probe:authorization",
+        "request-executor",
+        "response-collector",
+        "authentication-manager",
+        "response-comparator"
+      ],
+      "optionalCapabilities": [
+        "browser-controller"
+      ],
+      "steps": [
+        {
+          "id": "establish_owner_session",
+          "action": "session.establish",
+          "dependsOn": [],
+          "expectedObservation": "An isolated authenticated session for the declared identity."
+        },
+        {
+          "id": "identify_owned_resource",
+          "action": "resource.identify",
+          "dependsOn": [
+            "establish_owner_session"
+          ],
+          "expectedObservation": "An owner-bound resource and private content markers."
+        },
+        {
+          "id": "owner_baseline",
+          "action": "request.baseline",
+          "dependsOn": [
+            "identify_owned_resource"
+          ],
+          "expectedObservation": "A complete successful response for the owned resource."
+        },
+        {
+          "id": "establish_attacker_session",
+          "action": "session.establish",
+          "dependsOn": [
+            "owner_baseline"
+          ],
+          "expectedObservation": "An isolated authenticated session for the declared identity."
+        },
+        {
+          "id": "request_resource_as_attacker",
+          "action": "request.as-attacker",
+          "dependsOn": [
+            "establish_attacker_session"
+          ],
+          "expectedObservation": "The same request under the isolated attacker session."
+        },
+        {
+          "id": "request_resource_anonymously",
+          "action": "request.anonymous",
+          "dependsOn": [
+            "request_resource_as_attacker"
+          ],
+          "expectedObservation": "The same request without session credentials."
+        },
+        {
+          "id": "compare_authorization_responses",
+          "action": "responses.compare",
+          "dependsOn": [
+            "request_resource_anonymously"
+          ],
+          "expectedObservation": "Status, body digest and private owner-marker comparisons."
+        },
+        {
+          "id": "verify_observations",
+          "action": "verify",
+          "dependsOn": [
+            "compare_authorization_responses"
+          ],
+          "expectedObservation": "Evidence-bound rule evaluation or an inconclusive result."
+        }
+      ],
+      "verification": {
+        "strategy": "authorization",
+        "evidenceRequirements": [
+          "same-project-and-probe",
+          "same-target-and-method",
+          "same-resource-and-declared-identities",
+          "isolated-sessions",
+          "private-owner-markers"
+        ]
+      },
+      "limitations": [
+        "Planning readiness does not approve execution or establish capability availability.",
+        "Private input references must be resolved and the exact target scope checked by the execution host.",
+        "Owner content markers must be established privately; HTTP success or body equality alone is insufficient."
+      ],
+      "execution": "not-run"
+    }
+  ],
+  "coverage": [
+    {
+      "cweId": "CWE-79",
+      "title": "Cross-site scripting",
+      "probeId": "xss",
+      "requiredCapabilities": [
+        "request-executor",
+        "response-collector"
+      ],
+      "optionalCapabilities": [
+        "authentication-manager",
+        "browser-controller",
+        "xss-scanner"
+      ]
+    },
+    {
+      "cweId": "CWE-89",
+      "title": "SQL injection",
+      "probeId": "sql-injection",
+      "requiredCapabilities": [
+        "request-executor",
+        "response-collector",
+        "response-comparator"
+      ],
+      "optionalCapabilities": [
+        "authentication-manager",
+        "sql-scanner"
+      ]
+    },
+    {
+      "cweId": "CWE-639",
+      "title": "Authorization bypass through a user-controlled key",
+      "probeId": "authorization",
+      "requiredCapabilities": [
+        "request-executor",
+        "response-collector",
+        "authentication-manager",
+        "response-comparator"
+      ],
+      "optionalCapabilities": [
+        "browser-controller"
+      ]
+    },
+    {
+      "cweId": "CWE-862",
+      "title": "Missing authorization on a protected resource",
+      "probeId": "authorization",
+      "requiredCapabilities": [
+        "request-executor",
+        "response-collector",
+        "authentication-manager",
+        "response-comparator"
+      ],
+      "optionalCapabilities": [
+        "browser-controller"
+      ]
+    },
+    {
+      "cweId": "CWE-942",
+      "title": "Permissive cross-origin policy",
+      "probeId": "cross-origin",
+      "requiredCapabilities": [
+        "request-executor",
+        "response-collector",
+        "header-analyzer"
+      ],
+      "optionalCapabilities": [
+        "authentication-manager"
+      ]
+    },
+    {
+      "cweId": "CWE-1004",
+      "title": "Sensitive cookie without HttpOnly",
+      "probeId": "cookie-security",
+      "requiredCapabilities": [
+        "request-executor",
+        "response-collector",
+        "cookie-analyzer"
+      ],
+      "optionalCapabilities": [
+        "authentication-manager",
+        "cookie-inspector",
+        "browser-controller"
+      ]
+    },
+    {
+      "cweId": "CWE-614",
+      "title": "Sensitive cookie without Secure",
+      "probeId": "cookie-security",
+      "requiredCapabilities": [
+        "request-executor",
+        "response-collector",
+        "cookie-analyzer"
+      ],
+      "optionalCapabilities": [
+        "authentication-manager",
+        "cookie-inspector",
+        "browser-controller"
+      ]
+    }
+  ],
+  "diagnostics": [],
+  "modelReview": "disabled",
+  "execution": "not-configured"
+}

@@ -37,6 +37,8 @@ export function createHttpClient(transport: typeof fetch = (...args) => fetch(..
     importDiscovery: (id, discovery) => request(`${projectPath(id)}/discovery`, { discovery }),
     getDiscovery: id => request(`${projectPath(id)}/discovery`),
     getSecurityModel: id => request(`${projectPath(id)}/security-model`),
+    getInvestigation: id => request(`${projectPath(id)}/investigation`),
+    refreshInvestigation: id => request(`${projectPath(id)}/investigation`, {}),
     startScan: id => request(`${projectPath(id)}/scan`, {}),
     getScan: id => request(`${projectPath(id)}/scan`),
     deleteProject: async (id) => { await request(projectPath(id), undefined, 'DELETE'); },

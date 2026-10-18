@@ -47,6 +47,12 @@ describe.skipIf(process.env.AGENTO_FRONTEND_INTEGRATION !== '1')('installed loca
       expect(model.model.corsConfigurations.length).toBeGreaterThan(0);
       expect(model.model.dataFlows.length).toBeGreaterThan(0);
       expect(model.model.evidence.every(item => item.projectId === project.id)).toBe(true);
+      const investigation = await restarted.getInvestigation(project.id);
+      expect(investigation.hypotheses.some(item => item.cweId === 'CWE-79')).toBe(true);
+      expect(investigation.hypotheses.some(item => item.cweId === 'CWE-89')).toBe(true);
+      expect(investigation.plans.length).toBeGreaterThan(0);
+      expect(investigation.plans.every(item => item.execution === 'not-run')).toBe(true);
+      expect(scan.stages.find(stage => stage.id === 'planning')?.status).toBe('complete');
     } finally { await rm(folder, { recursive: true, force: true }); }
   }, 30_000);
 });

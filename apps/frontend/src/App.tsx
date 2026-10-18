@@ -3,17 +3,20 @@ import type { DependencyList, FormEvent, ReactNode } from 'react';
 import type { FindingStatus } from '@agento/core';
 import type { DiscoveryResult } from '@agento/discovery';
 import { SecurityModelView } from './SecurityModelView';
+import { InvestigationView } from './InvestigationView';
 import { workflowNotification, workflowProfiles } from './workflow-catalog';
 import { AgentOClientError, parseSavedDiscovery, validateProjectInput } from './client';
 import type { AgentOClient, BrowserWorkflowResult, FindingDetail, ObservedNetworkTraffic, ProjectInput, ProjectInputErrors, ProjectSummary } from './client';
 
-type View = 'projects' | 'discovery' | 'model' | 'workflows' | 'scan' | 'findings';
+type View = 'projects' | 'discovery' | 'model' | 'workflows' | 'scan' | 'hypotheses' | 'plans' | 'findings';
 const views: { id: View; label: string; icon: IconName }[] = [
   { id: 'projects', label: 'Projects', icon: 'folder' },
   { id: 'discovery', label: 'Discovery', icon: 'compass' },
   { id: 'model', label: 'Application Model', icon: 'network' },
   { id: 'workflows', label: 'Workflows', icon: 'browser' },
   { id: 'scan', label: 'Scan progress', icon: 'activity' },
+  { id: 'hypotheses', label: 'Hypotheses', icon: 'search' },
+  { id: 'plans', label: 'Test plans', icon: 'file' },
   { id: 'findings', label: 'Findings', icon: 'shield' },
 ];
 const statusLabels: Record<FindingStatus, string> = {
@@ -89,6 +92,8 @@ function currentView(): View {
 
 export function App({ client }: { client: AgentOClient }) {
   const [view, setView] = useState<View>(currentView);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [focusHypothesis, setFocusHypothesis] = useState('');
   const [revision, setRevision] = useState(0);
   const [selectedId, setSelectedId] = useState('');
   const [newProjectOpen, setNewProjectOpen] = useState(false);
@@ -102,11 +107,11 @@ export function App({ client }: { client: AgentOClient }) {
   const selected = projects.find(project => project.id === selectedId) ?? projects[0];
 
   useEffect(() => {
-    const changed = () => { setView(currentView()); };
+    const changed = () => { const next = currentView(); setView(next); setMobileNavOpen(false); if (next !== 'plans') setFocusHypothesis(''); };
     window.addEventListener('hashchange', changed);
     return () => window.removeEventListener('hashchange', changed);
   }, []);
-  function navigate(next: View) { setView(next); window.location.hash = next; setNotification(null); window.scrollTo({ top: 0 }); }
+  function navigate(next: View) { setView(next); window.location.hash = next; setMobileNavOpen(false); setNotification(null); window.scrollTo({ top: 0 }); }
   function openProject(project: ProjectSummary) { setSelectedId(project.id); navigate('discovery'); }
   function saved(project: ProjectSummary) {
     setSelectedId(project.id); setRevision(value => value + 1); setNewProjectOpen(false); setImportOpen(false);
@@ -138,29 +143,32 @@ export function App({ client }: { client: AgentOClient }) {
   }
 
   const heading = {
-    projects: { eyebrow: 'APPLICATION SECURITY', title: 'Projects', subtitle: 'Your applications, their context, and the next step toward proof.' },
-    discovery: { eyebrow: selected?.name ?? 'PROJECT INTELLIGENCE', title: 'Discovery', subtitle: 'Understand your stack, repository, and available analysis capabilities.' },
-    model: { eyebrow: selected?.name ?? 'APPLICATION KNOWLEDGE', title: 'Application Model', subtitle: 'Explore routes, identities, resources, and the evidence connecting source code to runtime behavior.' },
-    workflows: { eyebrow: selected?.name ?? 'BROWSER WORKFLOW LAYER', title: 'Browser Workflows', subtitle: 'Inspect runtime user actions, discovered endpoints, session state, and intercepted network evidence.' },
-    scan: { eyebrow: selected?.name ?? 'INVESTIGATION', title: 'Scan progress', subtitle: 'Follow each stage from repository context to an evidence-backed verdict.' },
-    findings: { eyebrow: selected?.name ?? 'INVESTIGATION', title: 'Findings', subtitle: 'Review signals, inspect the evidence, and decide what needs attention.' },
+    projects: { title: 'Projects', subtitle: 'Your applications and the context behind each investigation.' },
+    discovery: { title: 'Discovery', subtitle: 'Understand the stack, repository, and available analysis tools.' },
+    model: { title: 'Application Model', subtitle: 'Explore the routes, identities, resources, and observations you have collected.' },
+    workflows: { title: 'Browser Workflows', subtitle: 'Observe user journeys and retain their actions, sessions, and network evidence.' },
+    scan: { title: 'Scan progress', subtitle: 'Follow source analysis, hypothesis generation, and test planning.' },
+    hypotheses: { title: 'Hypotheses', subtitle: 'Turn application observations into questions worth investigating.' },
+    plans: { title: 'Test plans', subtitle: 'Understand each proposed check, its evidence requirements, and what it needs next.' },
+    findings: { title: 'Findings', subtitle: 'Review recorded candidates, verification status, and supporting evidence.' },
   }[view];
 
   return <div className="app-shell">
     <a className="skip-link" href="#main-content" onClick={event => { event.preventDefault(); document.getElementById('main-content')?.focus(); }}>Skip to content</a>
-    <aside className="sidebar">
-      <div className="brand"><div className="brand-mark"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="m4 20 8-16 8 16M8 14h8" /></svg></div><div><div className="brand-name">AgentO<span style={{ color: '#ef805d' }}>.</span></div><div className="brand-caption">Find the proof.</div></div></div>
-      <div className="nav-heading section-label">WORKSPACE</div><nav className="nav" aria-label="Main navigation">{views.map(item => <a key={item.id} href={`#${item.id}`} className={`nav-item ${view === item.id ? 'active' : ''}`} aria-current={view === item.id ? 'page' : undefined} onClick={() => navigate(item.id)}><span className="nav-icon"><Icon name={item.icon} /></span><span className="nav-label">{item.label}</span>{item.id === 'projects' && <span className="nav-count">{projects.length}</span>}</a>)}</nav>
-      <div className="sidebar-footer"><div className="session-heading"><Icon name="info" /><strong>{client.storage === 'disk' ? 'Local workspace' : 'Demo workspace'}</strong></div><p>{client.storage === 'disk' ? 'Projects and results are saved on this computer. Static scans collect source candidates.' : 'Projects reset on reload.'}</p><span className="session-label">{client.storage === 'disk' ? 'LOCAL SERVICE' : 'DEMONSTRATION'}</span></div>
+    <aside className={`sidebar ${mobileNavOpen ? 'is-open' : ''}`}>
+      <div className="brand"><a className="brand-link" href="#projects" onClick={() => navigate('projects')} aria-label="AgentO projects"><div className="brand-mark"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m4 20 8-16 8 16M8 14h8" /></svg></div><div><div className="brand-name">AgentO<span>.</span></div><div className="brand-caption">Security workspace</div></div></a><button type="button" className="mobile-menu" aria-expanded={mobileNavOpen} aria-controls="workspace-navigation" onClick={() => setMobileNavOpen(value => !value)}>{mobileNavOpen ? <Icon name="close" /> : <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.65"><path d="M4 6h16M4 12h16M4 18h16" /></svg>}<span>{mobileNavOpen ? 'Close' : 'Menu'}</span></button></div>
+      <nav id="workspace-navigation" className="nav" aria-label="Main navigation">{views.map(item => <div className="nav-entry" key={item.id}>{['projects', 'discovery', 'hypotheses'].includes(item.id) && <div className="nav-heading">{item.id === 'projects' ? 'Workspace' : item.id === 'discovery' ? 'Collect context' : 'Investigate'}</div>}<a href={`#${item.id}`} className={`nav-item ${view === item.id ? 'active' : ''}`} aria-current={view === item.id ? 'page' : undefined} onClick={() => { setFocusHypothesis(''); navigate(item.id); }}><span className="nav-icon"><Icon name={item.icon} /></span><span className="nav-label">{item.label}</span>{item.id === 'projects' && <span className="nav-count">{projects.length}</span>}</a></div>)}</nav>
+      <div className="sidebar-footer"><div className="session-heading"><span className="workspace-dot" aria-hidden="true" /><strong>{client.storage === 'disk' ? 'Local workspace' : 'Demo workspace'}</strong></div><p>{client.storage === 'disk' ? 'Your projects and results stay on this computer.' : 'Session data resets on reload.'}</p><span className="session-label">{client.storage === 'disk' ? 'Saved on this device' : 'Synthetic demonstration'}</span></div>
     </aside>
     <div className="workspace">
       <header className="topbar"><div className="breadcrumb"><span>Workspace</span><span aria-hidden="true">/</span><strong>{views.find(item => item.id === view)?.label}</strong></div><div className="topbar-status">{view !== 'projects' && projects.length > 0 && <><label className="screen-reader-only" htmlFor="project-picker">Selected project</label><select id="project-picker" className="project-picker" value={selected?.id ?? ''} onChange={event => { setSelectedId(event.target.value); setNotification(null); }}>{projects.map(project => <option key={project.id} value={project.id}>{project.name}</option>)}</select></>}<span className="local-status">{client.storage === 'disk' ? 'Local service' : 'Demo preview'}</span></div></header>
       <main id="main-content" className="main-content" tabIndex={-1}>
-        <div className="page-heading"><div><div className="eyebrow">{heading.eyebrow}</div><h1>{heading.title}</h1><p>{heading.subtitle}</p></div><div className="heading-actions">{view === 'discovery' && selected && (client.storage === 'memory' || selected.dataSource !== 'demo-fixture') && <><button type="button" className="button primary" aria-label="Refresh discovery" onClick={() => void rescanSelected()} disabled={rescanning}><Icon name="compass" />{rescanning ? 'Discovering…' : 'Refresh'}</button><button className="button secondary" onClick={() => setImportOpen(true)}><Icon name="file" />Import JSON</button>{selected.id !== 'demo-shop' && <button type="button" className="button danger" onClick={() => setProjectToDelete(selected)}><Icon name="trash" />Delete project</button>}</>}{view === 'workflows' && selected && <button type="button" className="button primary" onClick={() => setWorkflowRunOpen(true)}><Icon name="plus" />Run workflow</button>}{view === 'projects' && <button className="button primary" onClick={() => setNewProjectOpen(true)}><Icon name="plus" />New project</button>}</div></div>
+        <div className="page-heading"><div><h1>{heading.title}</h1><p>{heading.subtitle}</p></div><div className="heading-actions">{view === 'discovery' && selected && <>{(client.storage === 'memory' || selected.dataSource !== 'demo-fixture') && <><button type="button" className="button primary" aria-label="Refresh discovery" onClick={() => void rescanSelected()} disabled={rescanning}><Icon name="compass" />{rescanning ? 'Discovering…' : 'Refresh'}</button><button className="button secondary" onClick={() => setImportOpen(true)}><Icon name="file" />Import JSON</button></>}<button type="button" className="button danger" onClick={() => setProjectToDelete(selected)}><Icon name="trash" />Delete project</button></>}{view === 'workflows' && selected && <button type="button" className="button primary" onClick={() => setWorkflowRunOpen(true)}><Icon name="plus" />Run workflow</button>}{view === 'projects' && <button className="button primary" onClick={() => setNewProjectOpen(true)}><Icon name="plus" />New project</button>}</div></div>
         {notification && <div className={`notice ${notification.kind}`} role={notification.kind === 'error' ? 'alert' : 'status'}><Icon name={notification.kind === 'success' ? 'check' : 'info'} /><p>{notification.message}</p><button className="icon-button" aria-label="Dismiss notification" onClick={() => setNotification(null)}><Icon name="close" /></button></div>}
         {projectsState.loading ? <Loading /> : projectsState.error ? <ErrorState retry={projectsState.retry} /> : view === 'projects' ? <ProjectsView projects={projects} persistent={client.storage === 'disk'} onSelect={openProject} onDelete={project => setProjectToDelete(project)} onCreate={() => setNewProjectOpen(true)} onExplore={() => { setSelectedId('demo-shop'); navigate('findings'); }} /> : selected ? <>
           {view === 'discovery' && <DiscoveryView client={client} project={selected} revision={revision} onImport={() => setImportOpen(true)} onRescan={() => void rescanSelected()} rescanning={rescanning} onDelete={() => setProjectToDelete(selected)} />}
           {view === 'model' && <SecurityModelView key={selected.id} client={client} project={selected} />}
+          {(view === 'hypotheses' || view === 'plans') && <InvestigationView key={selected.id} client={client} project={selected} view={view} focusHypothesis={focusHypothesis} onOpenPlans={id => { setFocusHypothesis(id); navigate('plans'); }} />}
           {view === 'workflows' && <WorkflowsView key={selected.id} client={client} project={selected} onDemo={() => setSelectedId('demo-shop')} onRunWorkflow={() => setWorkflowRunOpen(true)} />}
           {view === 'scan' && <ScanView key={selected.id} client={client} project={selected} onDemo={() => setSelectedId('demo-shop')} onNavigateWorkflows={() => navigate('workflows')} />}
           {view === 'findings' && <FindingsView key={selected.id} client={client} project={selected} onDemo={() => setSelectedId('demo-shop')} onNavigateWorkflows={() => navigate('workflows')} />}
@@ -200,7 +208,7 @@ function ProjectsView({ projects, persistent, onSelect, onDelete, onCreate, onEx
         <div className="project-mode"><span className="card-label">ANALYSIS MODE</span><ModeBadge mode={project.mode} /></div>
         <div className="project-source"><span className="card-label">DATA SOURCE</span><span className={`badge ${project.dataSource === 'demo-fixture' ? 'status-hypothesis' : 'neutral'}`}>{project.dataSource === 'demo-fixture' ? 'Demo fixture' : project.dataSource === 'saved-discovery' ? 'Saved discovery' : 'Setup only'}</span></div>
         <div className="project-actions">
-          {project.id !== 'demo-shop' && project.dataSource !== 'demo-fixture' && (
+          {onDelete && (
             <button type="button" className="icon-button danger project-delete" aria-label={`Delete ${project.name}`} title={`Delete ${project.name}`} onClick={e => { e.stopPropagation(); onDelete(project); }}><Icon name="trash" /></button>
           )}
           <button type="button" className="project-open icon-button" aria-label={`Open ${project.name}`} onClick={() => onSelect(project)}><Icon name="arrow" /></button>
@@ -208,10 +216,11 @@ function ProjectsView({ projects, persistent, onSelect, onDelete, onCreate, onEx
       </article>)}</div>}
       <div className="panel-footnote"><Icon name="info" /><span>{persistent ? 'Projects, discovery, and the latest scan results are saved on this computer.' : 'Session only. Projects and imports reset when you reload.'}</span></div>
     </Panel>
-    <div className="next-steps">
-      <section className="next-step"><div className="step-icon"><Icon name="compass" /></div><div><div className="section-label">START WITH CONTEXT</div><h2>Bring your application into focus</h2><p>Add a repository and target, then run discovery or import a saved snapshot.</p><button className="text-button" onClick={onCreate}>Set up a project <Icon name="arrow" /></button></div></section>
-      <section className="next-step"><div className="step-icon"><Icon name="shield" /></div><div><div className="section-label">EXPLORE THE WORKFLOW</div><h2>See what evidence looks like</h2><p>Review five example findings, their evidence, and suggested fixes.</p><button className="text-button" onClick={onExplore}>Explore demo findings <Icon name="arrow" /></button><span className="demo-caption">Synthetic evidence · no live tests</span></div></section>
-    </div>
+    <section className="workspace-guide" aria-labelledby="workspace-guide-title">
+      <div><h2 id="workspace-guide-title">From context to a clear next step</h2><p>Build understanding before you draw a conclusion.</p></div>
+      <div className="guide-steps"><a href="#discovery"><span>Discover</span><p>Map the stack and routes</p></a><a href="#model"><span>Connect observations</span><p>Inspect the application model</p></a><a href="#hypotheses"><span>Investigate</span><p>Review questions and test plans</p></a></div>
+      <div className="guide-demo"><p>New to AgentO? Explore the labelled example workspace.</p><button className="text-button" onClick={onExplore}>Explore demo findings <Icon name="arrow" /></button></div>
+    </section>
   </>;
 }
 
@@ -222,7 +231,7 @@ function DiscoveryView({ client, project, revision, onImport, onRescan, rescanni
   const canRefresh = onRescan && (client.storage === 'memory' || project.dataSource !== 'demo-fixture');
   const result = useRequest(() => client.getDiscovery(project.id), [client, project.id, revision]);
   if (result.loading) return <Loading />;
-  if (result.error instanceof AgentOClientError && result.error.code === 'DISCOVERY_UNAVAILABLE') return <Panel title={project.name}><Empty title="Add your repository context" action={<div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>{canRefresh && <button className="button primary" onClick={onRescan} disabled={rescanning}><Icon name="compass" />{rescanning ? 'Scanning…' : 'Run discovery'}</button>}<button className="button secondary" onClick={onImport}><Icon name="file" />Import discovery JSON</button>{onDelete && project.id !== 'demo-shop' && project.dataSource !== 'demo-fixture' && <button type="button" className="button danger" onClick={onDelete}><Icon name="trash" />Delete project</button>}</div>}>This project has no saved discovery result. Run discovery or import the JSON created by AgentO's repository discovery CLI.</Empty></Panel>;
+  if (result.error instanceof AgentOClientError && result.error.code === 'DISCOVERY_UNAVAILABLE') return <Panel title={project.name}><Empty title="Add your repository context" action={<div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>{canRefresh && <button className="button primary" onClick={onRescan} disabled={rescanning}><Icon name="compass" />{rescanning ? 'Scanning…' : 'Run discovery'}</button>}<button className="button secondary" onClick={onImport}><Icon name="file" />Import discovery JSON</button>{onDelete && <button type="button" className="button danger" onClick={onDelete}><Icon name="trash" />Delete project</button>}</div>}>This project has no saved discovery result. Run discovery or import the JSON created by AgentO's repository discovery CLI.</Empty></Panel>;
   if (result.error || !result.data) return <ErrorState retry={result.retry} />;
   const data = result.data;
   return <>
@@ -231,7 +240,7 @@ function DiscoveryView({ client, project, revision, onImport, onRescan, rescanni
     {!data.supportedCodeAwareMode && <div className="notice warning"><Icon name="info" /><div><h3>Black-box mode selected</h3><ul>{data.fallbackReasons.map(reason => <li key={reason}>{reason}</li>)}</ul></div></div>}
     {data.diagnostics.length > 0 && <div className="notice error" role="status"><Icon name="info" /><div><h3>Discovery needs attention</h3><ul>{data.diagnostics.map((item, index) => <li key={index}><span className="mono">{item.file}</span>: {item.message}</li>)}</ul></div></div>}
     <div className="discovery-grid"><Panel title="Application fingerprint" description={project.name}><div className="surface-body"><Technology label="Languages" values={data.languages} /><Technology label="Frameworks" values={data.frameworks} /><Technology label="Database hints" values={data.databases} /><Technology label="ORM hints" values={data.orms} /><Technology label="Authentication" values={data.authentication} /><Technology label="Auth packages" values={data.authenticationPackages} /><Technology label="Available adapters" values={data.availableAdapterIds} /></div></Panel>
-    <Panel title="Project & scope" description="Declared project metadata, not testing authorization."><div className="surface-body"><dl className="definition-grid"><div className="definition"><dt>Repository</dt><dd className="mono">{project.repositoryPath}</dd></div><div className="definition"><dt>Target URL</dt><dd className="mono">{project.baseUrl}</dd></div><div className="definition"><dt>Allowed origins</dt><dd>{project.allowedOrigins.map(origin => <div className="mono" key={origin}>{origin}</div>)}</dd></div><div className="definition"><dt>Snapshot name</dt><dd>{data.name}</dd></div></dl><div className="adapter-callout"><Icon name="shield" /><div><h3>{data.expressAdapterAvailable ? 'Adapter registered' : 'Express adapter unavailable'}</h3><p>Discovery describes source support. Backend policy checks will govern actual execution.</p></div></div>{((canRefresh) || (onDelete && project.id !== 'demo-shop' && project.dataSource !== 'demo-fixture')) && <div style={{ marginTop: 14, display: 'flex', gap: 10, flexWrap: 'wrap' }}>{canRefresh && <button type="button" className="button secondary" onClick={onRescan} disabled={rescanning}><Icon name="compass" />{rescanning ? 'Re-scanning repository…' : 'Re-scan this repository'}</button>}{onDelete && project.id !== 'demo-shop' && project.dataSource !== 'demo-fixture' && <button type="button" className="button danger" onClick={onDelete}><Icon name="trash" />Delete project</button>}</div>}</div></Panel></div>
+    <Panel title="Project & scope" description="Declared project metadata, not testing authorization."><div className="surface-body"><dl className="definition-grid"><div className="definition"><dt>Repository</dt><dd className="mono">{project.repositoryPath}</dd></div><div className="definition"><dt>Target URL</dt><dd className="mono">{project.baseUrl}</dd></div><div className="definition"><dt>Allowed origins</dt><dd>{project.allowedOrigins.map(origin => <div className="mono" key={origin}>{origin}</div>)}</dd></div><div className="definition"><dt>Snapshot name</dt><dd>{data.name}</dd></div></dl><div className="adapter-callout"><Icon name="shield" /><div><h3>{data.expressAdapterAvailable ? 'Adapter registered' : 'Express adapter unavailable'}</h3><p>Discovery describes source support. Backend policy checks will govern actual execution.</p></div></div>{((canRefresh) || (onDelete)) && <div style={{ marginTop: 14, display: 'flex', gap: 10, flexWrap: 'wrap' }}>{canRefresh && <button type="button" className="button secondary" onClick={onRescan} disabled={rescanning}><Icon name="compass" />{rescanning ? 'Re-scanning repository…' : 'Re-scan this repository'}</button>}{onDelete && <button type="button" className="button danger" onClick={onDelete}><Icon name="trash" />Delete project</button>}</div>}</div></Panel></div>
     <div className="stack" style={{ marginTop: 22 }}><Panel title="Middleware observations" description="Probable packages and literal header writes. These observations are not vulnerabilities.">{data.middleware.length === 0 ? <Empty title="No middleware hints">No recognized middleware was present in this saved result.</Empty> : <div className="table-wrap"><table className="data-table"><thead><tr><th scope="col">Middleware</th><th scope="col">Kind</th><th scope="col">Basis</th><th scope="col">Source</th></tr></thead><tbody>{data.middleware.map((item, index) => <tr key={index}><td className="mono">{item.name}</td><td><span className="tag">{item.kind}</span></td><td>{item.basis}</td><td className="mono">{item.file}{item.line ? `:${item.line}` : ''}</td></tr>)}</tbody></table></div>}</Panel>
     <Panel title="Repository structure" description="Visited directories and manifests from the saved inventory."><div className="surface-body"><dl className="definition-grid">{[['Source directories', data.structure.sourceDirectories], ['Test directories', data.structure.testDirectories], ['Static directories', data.structure.staticDirectories], ['All visited directories', data.structure.directories]].map(([label, values]) => <div key={label as string} className="definition"><dt>{label as string}</dt><dd className="mono">{(values as readonly string[]).join(', ') || 'None recorded'}</dd></div>)}</dl><div className="section-label" style={{ marginTop: 24 }}>MANIFEST FILES</div>{data.structure.manifests.map(manifest => <div className="file-list" key={manifest.file}><Icon name="file" /><div><span className="mono">{manifest.file}</span><p className="muted">{manifest.name ?? 'Unnamed manifest'} · Root: {manifest.directory}{manifest.workspacePatterns.length ? ` · Workspaces: ${manifest.workspacePatterns.join(', ')}` : ''}</p></div></div>)}{!data.structure.manifests.length && <p className="muted">No manifests recorded.</p>}</div></Panel>
     <Dependencies data={data} /></div>
@@ -312,7 +321,7 @@ function WorkflowsView({ client, project, onDemo, onRunWorkflow }: { client: Age
   const hasFixtures = all.some(w => w.sourceType === 'demo-fixture');
 
   return <>
-    {hasFixtures && <div className="fixture-banner"><Icon name="info" /><p><strong>Browser workflow demonstrations.</strong> {fixtureOnly ? 'Recorded workflows verify multi-persona execution, session reuse, endpoint discovery, and scope enforcement.' : 'Contains recorded demonstrations alongside live results.'}</p></div>}
+    {hasFixtures && <div className="fixture-banner"><Icon name="info" /><p><strong>Browser workflow demonstrations.</strong> {fixtureOnly ? 'Synthetic workflows demonstrate personas, sessions, endpoint discovery, and scope enforcement. No live tests were run for these examples.' : 'Contains synthetic demonstrations alongside execution results.'}</p></div>}
 
     <div className="metric-grid">
       <Metric label={fixtureOnly ? "Demo workflows" : "Recorded workflows"} value={all.length.toString().padStart(2, '0')} detail={fixtureOnly ? "Demonstrated browser runs" : "Total executed workflows"} icon="browser" />
@@ -409,8 +418,8 @@ function WorkflowDetailPanel({ workflow, onRerun }: { workflow: BrowserWorkflowR
     <section className="surface finding-detail" aria-label="Selected workflow">
       <div className="surface-heading">
         <div>
-          <div className="eyebrow">{workflow.targetUrl} · PERSONA: {workflow.identityId.toUpperCase()}</div>
           <h2>{workflow.goal}</h2>
+          <div className="context-label">{workflow.targetUrl} · Persona: {workflow.identityId}</div>
           <div className="tag-list" style={{ marginTop: 8 }}>
             <OutcomeBadge outcome={workflow.outcome} />
             <span className="badge neutral mono">{workflow.identityId}</span>
@@ -481,7 +490,7 @@ function WorkflowDetailPanel({ workflow, onRerun }: { workflow: BrowserWorkflowR
             {workflow.session && (
               <>
                 <div className="section-label" style={{ marginTop: 20 }}>AUTHENTICATED SESSION & ISOLATION</div>
-                <div style={{ padding: '12px 16px', background: '#101722', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-sm)' }}>
+                <div style={{ padding: '12px 16px', background: 'var(--bg-surface-elevated)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-sm)' }}>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 14, width: '100%' }}>
                     <div>
                       <span className="card-label">SESSION STATUS</span>
@@ -511,7 +520,7 @@ function WorkflowDetailPanel({ workflow, onRerun }: { workflow: BrowserWorkflowR
             {workflow.pageModelSummary && (
               <>
                 <div className="section-label" style={{ marginTop: 24 }}>PAGE MODEL INSPECTION (NORMALIZED DOM)</div>
-                <div className="surface" style={{ padding: 16, background: '#101722', border: '1px solid var(--border-subtle)' }}>
+                <div className="surface" style={{ padding: 16, background: 'var(--bg-surface-elevated)', border: '1px solid var(--border-subtle)' }}>
                   <p style={{ margin: '0 0 10px', fontSize: 13, color: 'var(--ink)' }}>
                     <strong>Page Title:</strong> <span className="mono">{workflow.pageModelSummary.title}</span>
                   </p>
@@ -741,6 +750,7 @@ function ScanView({ client, project, onDemo, onNavigateWorkflows }: { client: Ag
           {fixture && <div className="notice info" style={{ marginTop: 20, marginBottom: 0 }}><Icon name="info" /><p>Replay changes only this screen. It sends no requests to the configured target.</p></div>}
         </div>
       </Panel>
+      <Panel title="Continue the investigation"><div className="surface-body"><p className="muted">Review the questions and test drafts produced from your saved application observations.</p><div className="model-actions" style={{ justifyContent: 'flex-start', marginTop: 16 }}><a className="button primary" href="#hypotheses">Review hypotheses</a><a className="button secondary" href="#plans">Inspect test plans</a></div></div></Panel>
       {onNavigateWorkflows && (
         <Panel title="Browser Workflow Layer">
           <div className="surface-body">
@@ -811,7 +821,7 @@ function FindingDetailPanel({ finding, onNavigateWorkflows }: { finding: Finding
   ] as const;
   const [tab, setTab] = useState<(typeof tabs)[number]['id']>('overview');
   return <section className="surface finding-detail" aria-label="Selected finding">
-    <div className="surface-heading"><div><div className="eyebrow">{finding.cweId} · {finding.owaspCategory}</div><h2>{finding.title}</h2><div className="tag-list"><FindingBadge status={finding.status} /><span className={`badge severity-${finding.severity}`}>{finding.severity} severity</span><span className="badge neutral">{finding.confidence} confidence</span></div></div></div>
+    <div className="surface-heading"><div><h2>{finding.title}</h2><div className="context-label">{finding.cweId} · {finding.owaspCategory}</div><div className="tag-list"><FindingBadge status={finding.status} /><span className={`badge severity-${finding.severity}`}>{finding.severity} severity</span><span className="badge neutral">{finding.confidence} confidence</span></div></div></div>
     <div className="detail-tabs" role="tablist" aria-label="Finding information">{tabs.map((item, index) => <button key={item.id} role="tab" id={`finding-tab-${item.id}`} aria-selected={tab === item.id} aria-controls={`finding-panel-${item.id}`} tabIndex={tab === item.id ? 0 : -1} onClick={() => setTab(item.id)} onKeyDown={event => {
       if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
       event.preventDefault();

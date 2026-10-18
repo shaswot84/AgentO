@@ -52,7 +52,7 @@ AgentO focuses on high-impact OWASP Top 10 categories:
 ```text
 AgentO/
 ├── apps/
-│   └── frontend/      # Projects, discovery, and static scan evidence
+│   └── frontend/      # Application context, hypotheses, test plans, and evidence
 ├── packages/
 │   ├── core/          # Tool-independent contracts, domain types, and orchestrator
 │   ├── discovery/     # Repository metadata, stack detection, and mode selection
@@ -78,7 +78,7 @@ AgentO/
 └── LICENSE            # Apache 2.0 License
 ```
 
-- **`apps/frontend`**: React + TypeScript workspace for project setup, discovery, the merged application model, browser workflows, static scan progress, and finding evidence. Saved observations retain their provenance; demo examples are explicitly labelled. See [frontend setup and boundaries](apps/frontend/README.md).
+- **`apps/frontend`**: React + TypeScript workspace for discovery, application models, browser workflows, source scans, hypotheses, test plans, and finding evidence. Plans show readiness, missing inputs, and rule coverage. Results are saved locally; demo examples are labelled synthetic. Runtime test execution remains unconfigured. See [frontend setup and boundaries](apps/frontend/README.md).
 - **`packages/core`**: Contains the decoupled domain model (`Project`, `Endpoint`, `Identity`, `Evidence`, `Finding`), provider interfaces, and the core pipeline orchestrator.
 - **`packages/discovery`**: Reads manifests and source syntax to identify languages, frameworks, dependencies, probable databases/authentication/middleware, and repository structure. It selects black-box mode when the stack is unsupported or a compatible Express adapter is unavailable. See [discovery usage and verification](packages/discovery/README.md).
 - **`packages/workflow`**: Chooses trusted recipes or optional semantic model proposals, validates current page references and credential permissions, and enforces finite planning budgets. Model input uses redacted page models; the browser executes approved actions. See [workflow registration and boundaries](packages/workflow/README.md).

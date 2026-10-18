@@ -8,6 +8,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Investigation workspace**: Added views for hypotheses and test plans. Show evidence, test steps, missing inputs, required capabilities, and rule coverage. Keep planning status separate from test results.
+- **Local planning service**: Generate hypotheses and test drafts from saved application data. Save the results on the local device. Mark old results when the application data changes. Keep private plan inputs on the host.
+- **Scan planning stages**: Added hypothesis generation and test planning after source analysis. Show progress and errors. The planning stages do not send requests to the target.
+
 - **Security Test Planning (`packages/test-planner`)**: Added deterministic JSON plans for all seven supported CWEs with probe and capability requirements, ordered actions, identity and private input bindings, explicit prerequisites, and structured verification criteria. Preserves rule plan IDs and withholds blocked drafts through an optional core planner port.
 - **Test Planner Verification and Documentation**: Added vulnerable and secure fixture coverage, hypothesis/rule/core compatibility checks, scope and privacy validation, package setup and usage documentation, and compiled exports. Planning remains separate from tool selection and execution.
 - **Security Hypothesis Engine (`packages/hypothesis-engine`)**: Added hypothesis generation from registered CWE candidates and evidence. Added contextual rules for seven CWE types with reasons and provenance data. Added handling for fixed controls and optional schema-based model reviews. The engine keeps deterministic results if the model fails. The engine validates references to endpoints and evidence. Added limits for model usage, cancellation support, and core contract integration.
@@ -55,6 +59,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **Documentation**: Updated the root `README.md` file with a reference and usage link for `packages/discovery`.
 
 ### Changed
+
+- **Demo Fixture Project Deletion (`apps/frontend`)**: Enabled deletion of the "AgentO Demo Store" fixture from the Applications list and Discovery view. Updated `LocalService`, `Workspace`, and `createFixtureClient` to persist deletion across service restarts and remove read-only restrictions.
+- **Workspace interface**: Added a light work area, dark navigation, and clear result states. Added a menu for small screens and a font that loads from the local service. Improved text contrast. Used the specified font for evidence values. Reduced repeated text. Connected hypotheses to their proposed test plans. Updated setup and scope instructions.
 
 - **Changelog Standard and Agent Instructions (`AGENTS.md`, `CHANGELOG.md`)**: Updated `AGENTS.md` to require ASD-STE100 (Simplified Technical English) for all `CHANGELOG.md` updates. Rewrote all existing `CHANGELOG.md` content to comply with ASD-STE100 rules for sentence length, simple vocabulary, active voice, and clear structure.
 - **Frontend Local Execution and Semgrep Discovery (`apps/frontend`, `.env.example`, `README.md`, `apps/frontend/README.md`)**: Added automatic path detection for the Semgrep binary. The service checks `process.env.AGENTO_SEMGREP_EXECUTABLE`, `/tmp/agento-semgrep-venv/bin/semgrep`, and `plugins/tools/semgrep/.venv/bin/semgrep` before it checks the system `$PATH`. Added `AGENTO_SEMGREP_EXECUTABLE` to `.env` and `.env.example`. Documented Semgrep virtual environment setup in the root `README.md` and `apps/frontend/README.md` files.

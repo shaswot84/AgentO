@@ -247,7 +247,10 @@ describe('replaceable fixture client', () => {
     expect(await api.listProjects()).toHaveLength(1);
     await expect(api.getProject(project.id)).rejects.toMatchObject({ code: 'PROJECT_NOT_FOUND' });
 
-    await expect(api.deleteProject('demo-shop')).rejects.toMatchObject({ code: 'INVALID_INPUT' });
+    await api.deleteProject('demo-shop');
+    expect(await api.listProjects()).toHaveLength(0);
+    await expect(api.getProject('demo-shop')).rejects.toMatchObject({ code: 'PROJECT_NOT_FOUND' });
+    await expect(api.deleteProject('demo-shop')).rejects.toMatchObject({ code: 'PROJECT_NOT_FOUND' });
     await expect(api.deleteProject('non-existent')).rejects.toMatchObject({ code: 'PROJECT_NOT_FOUND' });
 
     let requestedUrl = '';

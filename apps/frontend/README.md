@@ -62,8 +62,10 @@ available. The Evidence tab preserves normalized provider facts and provenance.
 The Remediation tab provides evidence-linked candidate review guidance and suggested
 regression checks. These are suggestions; patches are neither generated nor applied.
 
-Static candidates remain `HYPOTHESIS` findings. Runtime verification rules are not
-configured, and the service does not contact the target or use credentials. A
+Static candidates remain `HYPOTHESIS` findings. The source scan also generates
+evidence-linked hypotheses and structured test drafts when the planning packages
+are built. Runtime test execution is not configured. Source analysis and planning
+do not contact the target or use credentials. A
 completed static scan is not a completed vulnerability assessment. Unsupported
 stacks, unavailable tools, partial analysis, and failed runs remain visible with
 diagnostics; an empty result never proves the application safe. Partial runs can
@@ -145,6 +147,37 @@ or workflows again when the model reports that context is unavailable. New
 projects start empty; the seeded application model is explicitly synthetic.
 An observed request, successful session, or static data-flow candidate is not a
 vulnerability verdict.
+
+## Hypotheses and test plans
+
+Build `packages/runtime`, `packages/security-model`, `plugins/cwe`,
+`packages/hypothesis-engine`, and `packages/test-planner` after their local
+prerequisites. Use `npm ci --prefix <package>` and `npm run build --prefix <package>`
+for each package in that order.
+
+A source scan runs **Evidence-linked hypotheses** and **Security test planning**
+after it saves the application model. Open **Hypotheses** to inspect the questions,
+affected routes, supporting observations, and evidence provenance. **Inspect test
+plan** opens the related draft. **Test plans** shows ordered steps, missing inputs,
+verification requirements, and required or optional capabilities. Expand
+**Supported checks** to see the seven registered CWE rules and five probe families.
+
+**Generate hypotheses & plans** and **Regenerate analysis** use the saved application
+model. These actions make no target requests or external model calls. Results are
+saved to disk. New source or browser observations mark previous results as stale.
+Older workspaces can generate these results without rerunning a source scan when
+an application model is already retained.
+
+`READY` means that planning prerequisites are present. It does not establish tool
+availability, authorize testing, or mean a test ran. `BLOCKED` drafts explain what
+must be supplied by the host. Runtime test execution remains unconfigured. Missing
+ownership policy, anonymous-access decisions, sensitive cookie declarations, and
+private input bindings are never guessed. Empty results do not establish safety.
+
+The API exposes only a deliberate summary: hypothesis reasons, public evidence
+metadata, step descriptions, prerequisites, and capability requirements. Raw plan
+scopes, private input references, parameter values, response bodies, cookie values,
+and session material stay on the host. The demo is clearly marked synthetic.
 
 ## Browser workflows
 

@@ -2,8 +2,9 @@ import type { DiscoveryResult } from '@agento/discovery';
 import { demoDiscovery } from '../data/demo-discovery.ts';
 import { DEMO_PROJECT_ID, demoFindings, demoProject, demoScan, demoWorkflows } from '../data/fixtures.ts';
 import { demoSecurityModel, emptySecurityModel } from '../data/model-fixture.ts';
+import demoInvestigation from '../data/demo-investigation.json' with { type: 'json' };
 import { AgentOClientError } from './types.ts';
-import type { AgentOClient, BrowserWorkflowInput, BrowserWorkflowResult, ProjectInput, ProjectSummary } from './types.ts';
+import type { AgentOClient, BrowserWorkflowInput, BrowserWorkflowResult, InvestigationSnapshot, ProjectInput, ProjectSummary } from './types.ts';
 
 import { parseSavedDiscovery, validateProjectInput } from './validation.ts';
 
@@ -115,14 +116,24 @@ export function createFixtureClient(options: FixtureClientOptions = {}): AgentOC
       const current = project(projectId);
       return clone(projectId === DEMO_PROJECT_ID ? demoSecurityModel : emptySecurityModel(current));
     },
+    async getInvestigation(projectId) {
+      await ready('getInvestigation');
+      project(projectId);
+      if (projectId === DEMO_PROJECT_ID) return clone(demoInvestigation as InvestigationSnapshot);
+      return { ...clone(demoInvestigation as InvestigationSnapshot), projectId, state: 'empty',
+        generatedAt: null, sourceUpdatedAt: null, sourceState: 'empty', hypotheses: [], plans: [], diagnostics: [] };
+    },
+    async refreshInvestigation(projectId) {
+      await ready('refreshInvestigation');
+      project(projectId);
+      if (projectId === DEMO_PROJECT_ID) return clone(demoInvestigation as InvestigationSnapshot);
+      throw new AgentOClientError('CLIENT_UNAVAILABLE', 'Generate hypotheses and plans with the local workspace service.');
+    },
     async startScan() {
       throw new AgentOClientError('SCAN_UNAVAILABLE', 'Live scans require the local workspace service.');
     },
     async deleteProject(projectId) {
       await ready('deleteProject');
-      if (projectId === DEMO_PROJECT_ID) {
-        throw new AgentOClientError('INVALID_INPUT', 'The demo fixture is read-only and cannot be deleted.');
-      }
       project(projectId);
       projects.delete(projectId);
       discoveries.delete(projectId);

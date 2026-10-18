@@ -1,6 +1,8 @@
 import type { Endpoint, Evidence, Finding, Identity, Project, RemediationSuggestion, Resource, SecuritySignal } from '@agento/core';
 import type { DiscoveryResult } from '@agento/discovery';
 import type { ApplicationSecurityModel } from '@agento/security-model';
+import type { InvestigationSnapshot } from './investigation.ts';
+export type * from './investigation.ts';
 
 export interface SecurityModelInputSummary {
   readonly runId: string;
@@ -138,6 +140,8 @@ export interface AgentOClient {
   importDiscovery(projectId: string, discovery: DiscoveryResult): Promise<ProjectSummary>;
   getDiscovery(projectId: string): Promise<DiscoveryResult>;
   getSecurityModel(projectId: string): Promise<SecurityModelSnapshot>;
+  getInvestigation(projectId: string): Promise<InvestigationSnapshot>;
+  refreshInvestigation(projectId: string): Promise<InvestigationSnapshot>;
   getScan(projectId: string): Promise<ScanSnapshot>;
   startScan(projectId: string): Promise<ScanSnapshot>;
   deleteProject(projectId: string): Promise<void>;

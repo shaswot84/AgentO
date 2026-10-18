@@ -5,6 +5,7 @@ import type { DiscoveryResult } from '@agento/discovery';
 import type { BrowserWorkflowResult, FindingDetail, ProjectSummary, ScanSnapshot } from '../src/client/types.ts';
 import { parseSavedDiscovery, validateProjectInput } from '../src/client/validation.ts';
 import type { RetainedModelSource } from './security-model.ts';
+import type { RetainedInvestigation } from './investigation.ts';
 
 export interface ProjectRecord {
   project: ProjectSummary;
@@ -13,8 +14,9 @@ export interface ProjectRecord {
   findings: readonly FindingDetail[];
   workflows?: readonly BrowserWorkflowResult[];
   modelSource?: RetainedModelSource;
+  investigation?: RetainedInvestigation;
 }
-interface WorkspaceData { version: 1; projects: ProjectRecord[] }
+interface WorkspaceData { version: 1; projects: ProjectRecord[]; deletedDemo?: boolean }
 
 
 /** One local service owns the file. Writes commit to disk before becoming visible. */
@@ -33,7 +35,7 @@ export class Workspace {
     }
     const data = JSON.parse(raw) as WorkspaceData;
     // Fail closed on an incompatible/corrupt store; never silently replace it.
-    if (data.version !== 1 || !Array.isArray(data.projects)) throw new Error('Invalid workspace');
+    if (data.version !== 1 || !Array.isArray(data.projects) || (data.deletedDemo !== undefined && typeof data.deletedDemo !== 'boolean')) throw new Error('Invalid workspace');
     const ids = new Set<string>();
     for (const record of data.projects) {
       const project = record.project;
@@ -55,6 +57,12 @@ export class Workspace {
       if (record.workflows && (!Array.isArray(record.workflows) || record.workflows.some(wf => wf.projectId !== project.id))) {
         throw new Error('Invalid workspace workflows');
       }
+      if (record.investigation && (typeof record.investigation.fingerprint !== 'string'
+        || record.investigation.snapshot?.projectId !== project.id
+        || record.investigation.snapshot.sourceType !== 'execution-api'
+        || !Array.isArray(record.investigation.snapshot.hypotheses)
+        || !Array.isArray(record.investigation.snapshot.plans)
+        || !Array.isArray(record.investigation.snapshot.coverage))) throw new Error('Invalid workspace investigation');
       if (record.modelSource && (record.modelSource.version !== 1 || typeof record.modelSource.scanId !== 'string'
         || typeof record.modelSource.capturedAt !== 'string' || !Number.isFinite(Date.parse(record.modelSource.capturedAt))
         || typeof record.modelSource.targetUrl !== 'string' || typeof record.modelSource.repositoryPath !== 'string'
@@ -79,11 +87,13 @@ export class Workspace {
   }
 
   read(): ProjectRecord[] { return structuredClone(this.data.projects); }
+  isDemoDeleted(): boolean { return Boolean(this.data.deletedDemo); }
+  deleteDemo(): Promise<void> { return this.update((_, data) => { data.deletedDemo = true; }); }
 
-  update<T>(change: (records: ProjectRecord[]) => T): Promise<T> {
+  update<T>(change: (records: ProjectRecord[], data: WorkspaceData) => T): Promise<T> {
     const task = this.pending.then(async () => {
       const next = structuredClone(this.data);
-      const result = change(next.projects);
+      const result = change(next.projects, next);
       const directory = dirname(this.file);
       await mkdir(directory, { recursive: true, mode: 0o700 });
       const temporary = `${this.file}.${randomUUID()}.tmp`;

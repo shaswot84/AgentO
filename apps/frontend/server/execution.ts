@@ -91,6 +91,8 @@ export const scanStages = (): readonly ScanStage[] => [
   { id: 'discovery', label: 'Repository discovery', status: 'pending', details: 'Inspect the configured repository and select available adapters.' },
   { id: 'static', label: 'Static security analysis', status: 'pending', details: 'Run bundled Semgrep XSS and SQL injection candidate rules.' },
   { id: 'findings', label: 'Findings and remediation guidance', status: 'pending', details: 'Attach recorded source evidence and candidate review guidance.' },
+  { id: 'hypotheses', label: 'Evidence-linked hypotheses', status: 'pending', details: 'Generate investigation questions from retained application observations.' },
+  { id: 'planning', label: 'Security test planning', status: 'pending', details: 'Prepare test drafts and report missing prerequisites. No tests are executed.' },
   { id: 'runtime', label: 'Runtime verification', status: 'unavailable', details: 'Runtime verification rules are not configured. Candidates remain hypotheses.' },
 ];
 
