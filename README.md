@@ -60,6 +60,7 @@ AgentO/
 │   ├── security-model/ # Evidence-preserving source, browser and runtime application model
 │   └── workflow/      # Recipe-first and optional semantic planning with action validation
 ├── plugins/
+│   ├── cwe/           # Independent vulnerability rules consuming normalized probe evidence
 │   ├── frameworks/
 │   │   └── express/   # Express routes, middleware, configuration, and source evidence
 │   ├── models/
@@ -81,6 +82,7 @@ AgentO/
 - **`packages/workflow`**: Chooses trusted recipes or optional semantic model proposals, validates current page references and credential permissions, and enforces finite planning budgets. Model input uses redacted page models; the browser executes approved actions. See [workflow registration and boundaries](packages/workflow/README.md).
 - **`packages/runtime`**: Provides scoped HTTP/browser capabilities and reusable cookie, cross-origin, authorization, XSS and SQL probes. Probes return immutable observations for later policy interpretation. See [runtime setup, usage, and boundaries](packages/runtime/README.md).
 - **`packages/security-model`**: Merges source, browser and runtime observations into a framework-independent application model with canonical endpoints, provenance, configuration, data-flow candidates and ownership observations. See [model assembly and merge rules](packages/security-model/README.md).
+- **`plugins/cwe`**: Provides all seven CWE rules, independent registration, model-based candidates, declarative probe plans and evidence-linked verdicts. Rules interpret normalized observations and explicit application policy. See [rule setup, proof requirements and execution boundaries](plugins/cwe/README.md).
 - **`plugins/models/openai`**: Optional structured-generation provider with explicit model selection, backend API-key resolution, bounded transport, and sanitized results. See [provider setup](plugins/models/openai/README.md).
 - **`plugins/frameworks/express`**: Implements the core framework adapter for read-only JS/TS route extraction, mounted middleware, request inputs, session/cookie/CORS configuration, and database observations. Recognizes all 19 declared demo routes and integrates with discovery through explicit adapter registration. See [adapter setup, verification, and boundaries](plugins/frameworks/express/README.md).
 - **`plugins/tools/semgrep`**: Implements the core static analyzer with bundled JS/TS taint rules for XSS and SQL injection candidates, normalized source/sink evidence, bounded AST context, and optional precomputed Express endpoint association. Static signals require runtime verification. See [installation, CLI, integration, and limitations](plugins/tools/semgrep/README.md).

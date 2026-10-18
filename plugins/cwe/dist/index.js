@@ -1,0 +1,10 @@
+export { EvidenceCWEPlugin } from './base.js';
+export { CWEPluginRegistry } from './registry.js';
+export { toCoreEvidence, fromCoreEvidence } from './evidence.js';
+export { CWE79Plugin } from './cwe-79.js';
+export { CWE89Plugin } from './cwe-89.js';
+export { CWE639Plugin } from './cwe-639.js';
+export { CWE862Plugin } from './cwe-862.js';
+export { CWE942Plugin } from './cwe-942.js';
+export { CWE1004Plugin } from './cwe-1004.js';
+export { CWE614Plugin } from './cwe-614.js';

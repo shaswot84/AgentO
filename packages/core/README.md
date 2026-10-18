@@ -96,7 +96,9 @@ This is an architecture demonstration, **not a production scanning entry point**
 The core itself treats `allowedOrigins` as declared scope. The implemented
 [browser adapter](../../plugins/tools/e2e-browser/README.md) enforces exact origins
 for its browser workflows and returns normalized evidence through these contracts.
-CWE detection rules are not implemented in core. Repository discovery and mode selection
+CWE detection rules live in [the independent rule package](../../plugins/cwe/README.md).
+That package implements the existing plugin lifecycle without changing this orchestrator.
+Repository discovery and mode selection
 are available in [the discovery package](../discovery/README.md). Endpoint merging, capability
 selection across multiple tools, cross-tool policy enforcement, runtime evidence
 immutability/storage/redaction, and substantive verification remain later phases.
