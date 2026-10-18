@@ -11,7 +11,7 @@
     "build": "node node_modules/typescript/bin/tsc -p tsconfig.build.json",
     "typecheck": "node node_modules/typescript/bin/tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
-    "test:integration": "AGENTO_RUNTIME_INTEGRATION=1 vitest run test/live.test.ts",
+    "test:integration": "AGENTO_RUNTIME_INTEGRATION=1 vitest run test/live.test.ts test/probes.live.test.ts",
     "check": "npm run typecheck && npm run build && npm test"
   },
   "dependencies": { "@agento/core": "file:../core" },

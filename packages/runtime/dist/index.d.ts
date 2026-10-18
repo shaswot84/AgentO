@@ -8,3 +8,4 @@ export { WorkflowBrowserController, SessionNetworkObserver, SessionCookieInspect
 export type { WorkflowBrowserOptions } from './browser.js';
 export { RuntimeAuthenticationManager } from './authentication.js';
 export type { SessionManagerOptions } from './authentication.js';
+export * from './probes/index.js';

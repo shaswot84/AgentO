@@ -11,4 +11,13 @@ describe('runtime dependency boundary', () => {
       expect(source, file).not.toMatch(/from ['"](?:playwright|puppeteer|e2e|@e2e|@agento\/tool-)/);
     }
   });
+  it('keeps probe investigations independent of vendors, rule verdicts and the model package', async () => {
+    const directory = new URL('../src/probes/', import.meta.url);
+    for (const file of (await readdir(directory)).filter(file => file.endsWith('.ts'))) {
+      const source = await readFile(new URL(file, directory), 'utf8');
+      expect(source, file).not.toMatch(/CWE-\d+|\bOWASP\b|\bFinding\b|\bCWEPlugin\b/);
+      expect(source, file).not.toMatch(/from ['"](?:playwright|puppeteer|e2e|@e2e|@agento\/(?:tool-|security-model|framework-))/);
+      expect(source, file).not.toMatch(/\bfetch\s*\(|from ['"]node:(?:http|https)['"]/);
+    }
+  });
 });
