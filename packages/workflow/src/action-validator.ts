@@ -7,13 +7,29 @@ export const ACTION_TYPES = ['click', 'fill', 'submit', 'navigate-within-scope',
 const fields = ['pageId', 'actionType', 'elementId', 'navigationId', 'inputRef', 'confidence', 'explanation', 'expectedOutcome'];
 const nullable = (value: unknown, limit: number) => value === null || (typeof value === 'string' && value.length > 0 && value.length <= limit);
 
+const ALLOWED_KEYS = new Set(['pageId', 'actionType', 'action', 'elementId', 'navigationId', 'inputRef', 'confidence', 'explanation', 'expectedOutcome']);
+
 export function parsePlannedAction(value: unknown): PlannedAction {
   if (!value || typeof value !== 'object' || Array.isArray(value)) throw new BrowserWorkflowFailure('invalid-workflow');
-  const action = value as Record<string, unknown>;
-  if (Object.keys(action).length !== fields.length || !fields.every(key => Object.hasOwn(action, key))
-    || typeof action.pageId !== 'string' || !action.pageId || action.pageId.length > 200
-    || !ACTION_TYPES.includes(action.actionType as PlannedAction['actionType'])
-    || !nullable(action.elementId, 200) || !nullable(action.navigationId, 200) || !nullable(action.inputRef, 100)
+  const raw = value as Record<string, unknown>;
+  if (Object.keys(raw).some(key => !ALLOWED_KEYS.has(key))) throw new BrowserWorkflowFailure('invalid-workflow');
+  const pageId = raw.pageId;
+  const actionType = raw.actionType ?? raw.action;
+  if (typeof pageId !== 'string' || !pageId || pageId.length > 200
+    || typeof actionType !== 'string' || !ACTION_TYPES.includes(actionType as PlannedAction['actionType'])) {
+    throw new BrowserWorkflowFailure('invalid-workflow');
+  }
+  const action: Record<string, unknown> = {
+    pageId,
+    actionType,
+    elementId: raw.elementId ?? null,
+    navigationId: raw.navigationId ?? null,
+    inputRef: raw.inputRef ?? null,
+    confidence: typeof raw.confidence === 'number' ? raw.confidence : (raw.confidence === undefined ? 1.0 : raw.confidence),
+    explanation: typeof raw.explanation === 'string' ? raw.explanation : (raw.explanation === undefined ? null : raw.explanation),
+    expectedOutcome: typeof raw.expectedOutcome === 'string' ? raw.expectedOutcome : (raw.expectedOutcome === undefined ? `Execute ${actionType}` : raw.expectedOutcome),
+  };
+  if (!nullable(action.elementId, 200) || !nullable(action.navigationId, 200) || !nullable(action.inputRef, 100)
     || !nullable(action.explanation, 500)
     || typeof action.confidence !== 'number' || !Number.isFinite(action.confidence) || action.confidence < 0 || action.confidence > 1
     || typeof action.expectedOutcome !== 'string' || !action.expectedOutcome || action.expectedOutcome.length > 500) {

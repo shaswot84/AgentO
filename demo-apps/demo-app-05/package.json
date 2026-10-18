@@ -1,0 +1,37 @@
+{
+  "name": "demo-app-05",
+  "version": "1.0.0",
+  "description": "AgentO Demo Application 05 — Enterprise Cloud Ops Console (Tabs + Dynamic Modals + Indirect Terminology)",
+  "main": "dist/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/server.ts",
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "keywords": [
+    "express",
+    "spa",
+    "dashboard",
+    "tabs",
+    "modals",
+    "semantic-planning",
+    "portability-demo"
+  ],
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "express": "^5.3.0"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.10",
+    "@types/express": "^5.0.6",
+    "@types/node": "^22.13.1",
+    "tsx": "^4.23.15",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.5"
+  }
+}
