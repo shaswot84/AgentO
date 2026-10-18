@@ -1,6 +1,6 @@
 import type { JsonValue, ModelGenerationRequest, ModelGenerationResult, ModelProvider, ModelUsage } from '@agento/core';
 
-const ENDPOINT = 'https://api.openai.com/v1/responses';
+const DEFAULT_ENDPOINT = 'https://api.openai.com/v1/responses';
 const DEFAULT_REQUEST_BYTES = 262_144;
 const DEFAULT_RESPONSE_BYTES = 524_288;
 const DEFAULT_OUTPUT_TOKENS = 16_384;
@@ -11,6 +11,8 @@ export interface OpenAIModelProviderOptions {
   readonly model: string;
   /** Backend-only resolver. The API key is never part of the model request input. */
   readonly resolveApiKey: (signal: AbortSignal) => string | undefined | Promise<string | undefined>;
+  /** Optional custom endpoint (e.g. Ollama Cloud or OpenAI-compatible proxies). Defaults to https://api.openai.com/v1/responses. */
+  readonly endpoint?: string;
   /** Trusted transport injection for tests; production uses native fetch. */
   readonly fetch?: typeof globalThis.fetch;
   readonly maxRequestBytes?: number;
@@ -67,6 +69,12 @@ function failure(code: string, usage?: ModelUsage): ModelGenerationResult {
   return { status: 'failed', code, ...(usage ? { usage } : {}) };
 }
 
+function extractJsonText(text: string): string {
+  const trimmed = text.trim();
+  const match = /^```(?:json)?\s*([\s\S]*?)\s*```$/i.exec(trimmed);
+  return match?.[1] ? match[1].trim() : trimmed;
+}
+
 function parseEnvelope(envelope: unknown, maxOutputTokens: number): ModelGenerationResult {
   if (!record(envelope) || envelope.object !== 'response') return failure('OPENAI_MALFORMED_RESPONSE');
   const usage = usageFrom(envelope.usage);
@@ -97,7 +105,8 @@ function parseEnvelope(envelope: unknown, maxOutputTokens: number): ModelGenerat
   if (refused) return { status: 'refused', code: 'OPENAI_REFUSED', ...(usage ? { usage } : {}) };
   if (!usage || outputText === undefined) return failure('OPENAI_MALFORMED_RESPONSE', usage);
   try {
-    const value: unknown = JSON.parse(outputText);
+    const rawJson = extractJsonText(outputText);
+    const value: unknown = JSON.parse(rawJson);
     if (!jsonSafe(value)) return failure('OPENAI_INVALID_JSON', usage);
     return { status: 'completed', value, usage };
   } catch {
@@ -137,6 +146,7 @@ async function boundedBody(response: Response, maxBytes: number, signal: AbortSi
 /** Optional provider; generation never executes browser actions or confirms findings. */
 export class OpenAIModelProvider implements ModelProvider {
   readonly id = 'openai';
+  private readonly endpoint: string;
   private readonly transport: typeof globalThis.fetch;
   private readonly maxRequestBytes: number;
   private readonly maxResponseBytes: number;
@@ -148,6 +158,20 @@ export class OpenAIModelProvider implements ModelProvider {
       || typeof options.resolveApiKey !== 'function' || (options.fetch !== undefined && typeof options.fetch !== 'function')) {
       throw new Error('Invalid OpenAI provider options.');
     }
+    if (options.endpoint !== undefined) {
+      if (typeof options.endpoint !== 'string' || options.endpoint.trim().length === 0) {
+        throw new Error('Invalid OpenAI provider options.');
+      }
+      try {
+        const parsed = new URL(options.endpoint);
+        if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') {
+          throw new Error('Invalid OpenAI provider options.');
+        }
+      } catch {
+        throw new Error('Invalid OpenAI provider options.');
+      }
+    }
+    this.endpoint = options.endpoint ?? DEFAULT_ENDPOINT;
     this.transport = options.fetch ?? globalThis.fetch;
     this.maxRequestBytes = options.maxRequestBytes ?? DEFAULT_REQUEST_BYTES;
     this.maxResponseBytes = options.maxResponseBytes ?? DEFAULT_RESPONSE_BYTES;
@@ -218,7 +242,7 @@ export class OpenAIModelProvider implements ModelProvider {
     if (typeof key !== 'string' || key.trim().length === 0 || key.length > 8_192 || /[\s\u0000-\u001f\u007f]/.test(key)) {
       throw new ProviderFailure('OPENAI_API_KEY_UNAVAILABLE');
     }
-    const response = await this.transport(ENDPOINT, {
+    const response = await this.transport(this.endpoint, {
       method: 'POST',
       headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
       body,
@@ -226,7 +250,7 @@ export class OpenAIModelProvider implements ModelProvider {
       redirect: 'error',
     });
     signal.throwIfAborted();
-    if (response.redirected || (response.url && response.url !== ENDPOINT)) {
+    if (response.redirected || (response.url && response.url !== this.endpoint)) {
       void response.body?.cancel().catch(() => {});
       throw new ProviderFailure('OPENAI_UNSUPPORTED_REDIRECT');
     }
@@ -247,4 +271,20 @@ export class OpenAIModelProvider implements ModelProvider {
     catch { throw new ProviderFailure('OPENAI_MALFORMED_RESPONSE'); }
     return parseEnvelope(envelope, request.maxOutputTokens);
   }
+}
+
+/** Create an OpenAI or Ollama Cloud compatible model provider using environment variables. */
+export function createOpenAIModelProvider(options?: Partial<OpenAIModelProviderOptions>): OpenAIModelProvider {
+  const model = options?.model ?? process.env.OPENAI_MODEL ?? process.env.OLLAMA_MODEL ?? 'gemma4:31b';
+  const rawBase = options?.endpoint ?? process.env.OPENAI_BASE_URL ?? process.env.OLLAMA_BASE_URL;
+  const endpoint = rawBase
+    ? (rawBase.endsWith('/responses') ? rawBase : `${rawBase.replace(/\/+$/, '')}/responses`)
+    : undefined;
+  const resolveApiKey = options?.resolveApiKey ?? (() => process.env.OPENAI_API_KEY ?? process.env.OLLAMA_API_KEY);
+  return new OpenAIModelProvider({
+    ...options,
+    model,
+    ...(endpoint ? { endpoint } : {}),
+    resolveApiKey,
+  });
 }

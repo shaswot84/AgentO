@@ -14,6 +14,10 @@ export interface ExecutionServices {
 }
 
 export function localExecution(root: string): ExecutionServices {
+  try {
+    const envPath = resolve(root, '.env');
+    if (existsSync(envPath) && typeof process.loadEnvFile === 'function') process.loadEnvFile(envPath);
+  } catch { /* Ignore missing or unreadable env file */ }
   // Load installed host providers only when used, outside the browser bundle.
   const load = (path: string): Promise<unknown> => import(/* @vite-ignore */ pathToFileURL(resolve(root, path)).href);
   const expressModule = () => load('plugins/frameworks/express/dist/index.js') as Promise<{ ExpressFrameworkAdapter: new () => FrameworkAdapter }>;

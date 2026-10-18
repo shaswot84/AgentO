@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { JsonValue, ModelGenerationRequest } from '@agento/core';
-import { OpenAIModelProvider } from '../src/index.js';
+import { OpenAIModelProvider, createOpenAIModelProvider } from '../src/index.js';
 
 const KEY = 'test-only-api-key';
 const SECRET = 'private-http-error-credential';
@@ -245,5 +245,50 @@ describe('OpenAIModelProvider', () => {
     expect(() => provider(mockFetch(), { model: 'bad\nmodel' })).toThrow('Invalid OpenAI provider options.');
     expect(() => provider(mockFetch(), { maxTimeoutMs: Infinity })).toThrow('Invalid OpenAI provider limits.');
     expect(() => provider(mockFetch(), { maxResponseBytes: 3_000_000 })).toThrow('Invalid OpenAI provider limits.');
+    expect(() => provider(mockFetch(), { endpoint: 'ftp://invalid-scheme.test' })).toThrow('Invalid OpenAI provider options.');
+    expect(() => provider(mockFetch(), { endpoint: 'not-a-url' })).toThrow('Invalid OpenAI provider options.');
+  });
+
+  it('supports custom OpenAI-compatible endpoints like Ollama Cloud', async () => {
+    const fetch = mockFetch();
+    const customEndpoint = 'https://ollama.com/v1/responses';
+    const instance = provider(fetch, { model: 'gemma4:31b', endpoint: customEndpoint });
+    const result = await instance.generateStructured(request());
+    expect(result.status).toBe('completed');
+    expect(fetch).toHaveBeenCalledTimes(1);
+    const [url] = fetch.mock.calls[0]!;
+    expect(url).toBe(customEndpoint);
+  });
+
+  it('parses JSON wrapped in markdown code fences from models like gemma4:31b', async () => {
+    const fencedContent = { type: 'output_text', text: '```json\n{\n  "done": true\n}\n```' };
+    const fetch = mockFetch(envelope({ output: [message(fencedContent)] }));
+    const instance = provider(fetch, { model: 'gemma4:31b' });
+    const result = await instance.generateStructured(request());
+    expect(result).toEqual({ status: 'completed', value: { done: true }, usage: { inputTokens: 123, outputTokens: 45 } });
+  });
+
+  it('creates provider from environment variables with safe defaults', async () => {
+    const prevKey = process.env.OPENAI_API_KEY;
+    const prevBase = process.env.OPENAI_BASE_URL;
+    const prevModel = process.env.OPENAI_MODEL;
+    try {
+      process.env.OPENAI_API_KEY = 'env-secret-key';
+      process.env.OPENAI_BASE_URL = 'https://ollama.com/v1';
+      process.env.OPENAI_MODEL = 'gemma4:31b';
+      const fetch = mockFetch();
+      const instance = createOpenAIModelProvider({ fetch });
+      const result = await instance.generateStructured(request());
+      expect(result.status).toBe('completed');
+      expect(fetch).toHaveBeenCalledTimes(1);
+      const [url, opts] = fetch.mock.calls[0]!;
+      expect(url).toBe('https://ollama.com/v1/responses');
+      expect(opts?.headers).toMatchObject({ Authorization: 'Bearer env-secret-key' });
+    } finally {
+      if (prevKey === undefined) delete process.env.OPENAI_API_KEY; else process.env.OPENAI_API_KEY = prevKey;
+      if (prevBase === undefined) delete process.env.OPENAI_BASE_URL; else process.env.OPENAI_BASE_URL = prevBase;
+      if (prevModel === undefined) delete process.env.OPENAI_MODEL; else process.env.OPENAI_MODEL = prevModel;
+    }
   });
 });
+
