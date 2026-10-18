@@ -51,7 +51,12 @@ export function localExecution(root: string): ExecutionServices {
       const { SemgrepAdapter } = await load('plugins/tools/semgrep/dist/index.js') as {
         SemgrepAdapter: new (options: SemgrepAdapterOptions) => { analyze: (project: Project) => Promise<SemgrepAnalysis> };
       };
-      const executable = process.env.AGENTO_SEMGREP_EXECUTABLE;
+      const candidates = [
+        process.env.AGENTO_SEMGREP_EXECUTABLE,
+        '/tmp/agento-semgrep-venv/bin/semgrep',
+        resolve(root, 'plugins/tools/semgrep/.venv/bin/semgrep'),
+      ].filter(Boolean) as string[];
+      const executable = candidates.find(candidate => existsSync(candidate));
       const adapter = new SemgrepAdapter({ ...(executable ? { executable } : {}), ...(framework ? { frameworkAnalysis: framework } : {}) });
       const analysis = await adapter.analyze(scoped);
       return { analysis, ...(framework ? { framework } : {}) };

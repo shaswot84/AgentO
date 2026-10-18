@@ -34,12 +34,20 @@ npm ci --prefix plugins/tools/semgrep
 npm run build --prefix plugins/tools/semgrep
 ```
 
-Install the pinned Semgrep release using the [adapter instructions](../../plugins/tools/semgrep/README.md).
-The service uses `semgrep` on PATH, or a host-configured executable:
+Install the pinned Semgrep release using the [adapter instructions](../../plugins/tools/semgrep/README.md):
 
 ```sh
-AGENTO_SEMGREP_EXECUTABLE=/absolute/path/to/semgrep npm run dev --prefix apps/frontend
+python3 -m venv /tmp/agento-semgrep-venv
+/tmp/agento-semgrep-venv/bin/python -m pip install -r plugins/tools/semgrep/requirements.txt
 ```
+
+Configure `AGENTO_SEMGREP_EXECUTABLE` in your `.env` (copied from `.env.example`), or pass it in the environment:
+
+```sh
+AGENTO_SEMGREP_EXECUTABLE=/tmp/agento-semgrep-venv/bin/semgrep npm run dev --prefix apps/frontend
+```
+
+The frontend local execution service automatically probes `process.env.AGENTO_SEMGREP_EXECUTABLE`, `/tmp/agento-semgrep-venv/bin/semgrep`, and `plugins/tools/semgrep/.venv/bin/semgrep` before falling back to `semgrep` on system `$PATH`.
 
 Create a project with its repository path, target URL, and explicit allowed origins.
 Use **Discover**, the local demo shortcuts, or **Refresh** to inspect the repository.
@@ -112,7 +120,7 @@ Semgrep executable are trusted administrator configuration, never browser inputs
 
 ```sh
 npm run check --prefix apps/frontend
-AGENTO_SEMGREP_EXECUTABLE=/absolute/path/to/semgrep npm run test:integration --prefix apps/frontend
+AGENTO_SEMGREP_EXECUTABLE=/tmp/agento-semgrep-venv/bin/semgrep npm run test:integration --prefix apps/frontend
 ```
 
 `check` runs typechecking, a production build, and client/workspace/real-HTTP API

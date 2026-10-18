@@ -92,7 +92,24 @@ AgentO/
 
 ## Run the Frontend
 
-Use Node.js 22.12 or later. From the repository root:
+Use Node.js 22.12 or later and Python 3.10 or later (for static security analysis). From the repository root:
+
+### 1. Configure Environment & Static Analysis Tooling
+
+AgentO uses pinned Semgrep Community Edition for static code analysis (CWE-79 XSS and CWE-89 SQL injection). Install it in a virtual environment and set up `.env`:
+
+```sh
+# 1. Create a virtual environment and install pinned Semgrep
+python3 -m venv /tmp/agento-semgrep-venv
+/tmp/agento-semgrep-venv/bin/python -m pip install -r plugins/tools/semgrep/requirements.txt
+
+# 2. Configure environment (copy template)
+cp .env.example .env
+```
+
+`AGENTO_SEMGREP_EXECUTABLE=/tmp/agento-semgrep-venv/bin/semgrep` is predefined in `.env` and `.env.example`. The frontend execution service also automatically checks `/tmp/agento-semgrep-venv/bin/semgrep` and `plugins/tools/semgrep/.venv/bin/semgrep` before falling back to `semgrep` on system `$PATH`.
+
+### 2. Start the Frontend Workspace
 
 ```sh
 cd apps/frontend

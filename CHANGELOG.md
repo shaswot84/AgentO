@@ -44,6 +44,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- **Frontend Local Execution & Semgrep Tool Discovery (`apps/frontend`, `.env.example`, `README.md`, `apps/frontend/README.md`)**: Added automatic candidate path resolution for the pinned Semgrep binary (`process.env.AGENTO_SEMGREP_EXECUTABLE`, `/tmp/agento-semgrep-venv/bin/semgrep`, and `plugins/tools/semgrep/.venv/bin/semgrep`) before falling back to system `$PATH`. Configured `AGENTO_SEMGREP_EXECUTABLE` in `.env` and `.env.example`, and documented Semgrep virtual environment setup and configuration instructions in both the root `README.md` and `apps/frontend/README.md`.
 - **Frontend Scope Documentation**: Clarified real static execution, persistent workspace configuration, tool prerequisites, and the separation between recorded results, demo fixtures, and unavailable runtime verification.
 - **Browser Workflow Design Documentation**: Defined optional LLM-assisted semantic planning with provider boundaries, normalized untrusted page models, validated actions, credential references, bounded failure recovery, and portability/prompt-injection test requirements.
 - **Frontend UI/UX (`apps/frontend`)**: Improved workspace hierarchy, responsive project browsing and source filters, guided project setup, finding evidence navigation, readable status feedback, and keyboard/mobile accessibility; corrected outdated framework preview wording and documented the updated flows and local discovery controls.
