@@ -1,8 +1,9 @@
 import type { DiscoveryResult } from '@agento/discovery';
 import { demoDiscovery } from '../data/demo-discovery.ts';
-import { DEMO_PROJECT_ID, demoFindings, demoProject, demoScan } from '../data/fixtures.ts';
+import { DEMO_PROJECT_ID, demoFindings, demoProject, demoScan, demoWorkflows } from '../data/fixtures.ts';
 import { AgentOClientError } from './types.ts';
-import type { AgentOClient, ProjectInput, ProjectSummary } from './types.ts';
+import type { AgentOClient, BrowserWorkflowInput, BrowserWorkflowResult, ProjectInput, ProjectSummary } from './types.ts';
+
 import { parseSavedDiscovery, validateProjectInput } from './validation.ts';
 
 export interface FixtureClientOptions {
@@ -26,7 +27,9 @@ function checkRepositoryPath(repositoryPath: string, discovery: DiscoveryResult)
 export function createFixtureClient(options: FixtureClientOptions = {}): AgentOClient {
   const projects = new Map<string, ProjectSummary>([[DEMO_PROJECT_ID, clone(demoProject)]]);
   const discoveries = new Map<string, DiscoveryResult>([[DEMO_PROJECT_ID, clone(demoDiscovery)]]);
+  const workflows = new Map<string, BrowserWorkflowResult[]>([[DEMO_PROJECT_ID, clone([...demoWorkflows])]]);
   let projectSequence = 0;
+
 
   async function ready(method: keyof AgentOClient): Promise<void> {
     await new Promise<void>((resolve) => setTimeout(resolve, Math.max(0, options.delayMs ?? 180)));
@@ -121,5 +124,51 @@ export function createFixtureClient(options: FixtureClientOptions = {}): AgentOC
       if (!finding) throw new AgentOClientError('FINDING_NOT_FOUND', 'This finding is not available for the selected project.');
       return clone(finding);
     },
+    async getWorkflows(projectId) {
+      await ready('getWorkflows');
+      project(projectId);
+      return clone(workflows.get(projectId) ?? []);
+    },
+    async getWorkflow(projectId, workflowId) {
+      await ready('getWorkflow');
+      project(projectId);
+      const list = workflows.get(projectId) ?? [];
+      const item = list.find(w => w.id === workflowId);
+      if (!item) throw new AgentOClientError('WORKFLOW_NOT_FOUND', 'This workflow observation is not available for the selected project.');
+      return clone(item);
+    },
+    async runWorkflow(projectId, input) {
+      await ready('runWorkflow');
+      const p = project(projectId);
+      if (projectId === DEMO_PROJECT_ID) {
+        throw new AgentOClientError('INVALID_INPUT', 'Create a project for live workflows; the demo contains recorded fixture workflows.');
+      }
+      const newWf: BrowserWorkflowResult = {
+        id: `wf-${Date.now()}`,
+        projectId,
+        goal: input.goal,
+        identityId: input.identityId || 'alice',
+        personaLabel: input.identityId ? input.identityId[0]!.toUpperCase() + input.identityId.slice(1) : 'Alice',
+        targetUrl: p.baseUrl,
+        outcome: 'COMPLETED',
+        completionType: 'recipe-completed',
+        durationMs: 950,
+        actionsCount: 5,
+        finalUrl: p.baseUrl,
+        endpoints: [],
+        network: [
+          { url: p.baseUrl, method: 'GET', status: 200, resourceType: 'document', blocked: false, timestamp: new Date().toISOString() },
+        ],
+        diagnostics: [],
+        evidence: [],
+        sourceType: 'demo-fixture',
+        executedAt: new Date().toISOString(),
+      };
+      const list = workflows.get(projectId) ?? [];
+      list.unshift(newWf);
+      workflows.set(projectId, list);
+      return clone(newWf);
+    },
   };
 }
+

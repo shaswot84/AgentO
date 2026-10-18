@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Browser Workflow Layer Frontend Visibility (`apps/frontend`)**: Added a dedicated Browser Workflows view in the frontend workspace for inspecting automated browser execution results. Users can review goal statements, outcome badges (COMPLETED, FAILED, SKIPPED), duration, action counts, persona authentication and session reuse state, detected DOM page models and interactive elements, discovered attack-surface endpoints with parameters and roles, observed network traffic filtered by status or blocked origin scope, step-by-step action timelines, and evidence trails. Added seeded demonstration scenarios (`demo-shop`) covering storefront order browsing, session reuse, privileged administrative oversight, multi-page portal redirect/CSRF tracking, and strict scope guard boundary defense, along with live workflow execution against configured projects via Playwright integration, workspace persistence, and cross-navigation links from Scan Progress and Findings views.
 - **Local Frontend Execution and Persistence (`apps/frontend`)**: Connected project, discovery, scan, finding, evidence, and remediation views to a same-origin loopback API in development and preview. Added atomic private disk storage, exclusive workspace ownership, interrupted-run recovery, real discovery/Semgrep execution with polled progress, and evidence-linked candidate guidance. Static candidates remain hypotheses; runtime verification is explicitly unavailable and demo fixtures stay labelled and read-only.
 - **Frontend Integration Verification**: Added persistence, concurrency, failure, HTTP transport and request-boundary tests, plus an opt-in real Semgrep integration test. Updated setup and storage documentation.
 - **Application Security Model (`packages/security-model`)**: Added immutable, framework-independent assembly of source, browser and public runtime observations, origin-aware endpoint deduplication and aliases, parameters, authentication/role claims, resource ownership, source handlers, data-flow candidates, database operations, cookie/CORS configuration and preserved evidence provenance.
@@ -39,6 +40,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- **Frontend Scope Documentation**: Clarified real static execution, persistent workspace configuration, tool prerequisites, and the separation between recorded results, demo fixtures, and unavailable runtime verification.
 - **Browser Workflow Design Documentation**: Defined optional LLM-assisted semantic planning with provider boundaries, normalized untrusted page models, validated actions, credential references, bounded failure recovery, and portability/prompt-injection test requirements.
 - **Frontend UI/UX (`apps/frontend`)**: Improved workspace hierarchy, responsive project browsing and source filters, guided project setup, finding evidence navigation, readable status feedback, and keyboard/mobile accessibility; corrected outdated framework preview wording and documented the updated flows and local discovery controls.
 

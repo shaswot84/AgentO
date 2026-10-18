@@ -213,4 +213,28 @@ describe('replaceable fixture client', () => {
     const failing = createFixtureClient({ delayMs: 0, failMethods: ['listProjects'] });
     await expect(failing.listProjects()).rejects.toMatchObject({ code: 'CLIENT_UNAVAILABLE', message: 'Project data could not be loaded. Try again.' });
   });
+
+  it('exposes browser workflow records, queries workflow details, and runs workflows', async () => {
+    const api = client();
+    const workflows = await api.getWorkflows('demo-shop');
+    expect(workflows).toHaveLength(5);
+    expect(workflows[0]!.id).toBe('wf-alice-orders');
+    expect(workflows[0]!.session?.personaId).toBe('alice');
+    expect(workflows[0]!.network.length).toBeGreaterThan(0);
+    expect(workflows[0]!.endpoints.length).toBeGreaterThan(0);
+
+    const single = await api.getWorkflow('demo-shop', 'wf-alice-orders');
+    expect(single.goal).toContain('Alice');
+
+    await expect(api.getWorkflow('demo-shop', 'missing-wf')).rejects.toMatchObject({ code: 'WORKFLOW_NOT_FOUND' });
+
+    const project = await api.createProject(validInput);
+    const ran = await api.runWorkflow(project.id, { goal: 'Test workflow run', identityId: 'alice' });
+    expect(ran.outcome).toBe('COMPLETED');
+    expect(ran.goal).toBe('Test workflow run');
+
+    const projectWorkflows = await api.getWorkflows(project.id);
+    expect(projectWorkflows).toHaveLength(1);
+    expect(projectWorkflows[0]!.id).toBe(ran.id);
+  });
 });

@@ -2,8 +2,9 @@ import { randomUUID } from 'node:crypto';
 import type { DiscoveryResult } from '@agento/discovery';
 import { createFixtureClient } from '../src/client/fixture-client.ts';
 import { AgentOClientError } from '../src/client/types.ts';
-import type { AgentOClient, ProjectInput, ProjectSummary, ScanSnapshot, ScanStage } from '../src/client/types.ts';
+import type { AgentOClient, BrowserWorkflowInput, BrowserWorkflowResult, ProjectInput, ProjectSummary, ScanSnapshot, ScanStage } from '../src/client/types.ts';
 import { parseSavedDiscovery, validateProjectInput } from '../src/client/validation.ts';
+
 import { candidateFindings, scanStages } from './execution.ts';
 import type { ExecutionServices } from './execution.ts';
 import { Workspace } from './workspace.ts';
@@ -88,6 +89,32 @@ export class LocalService implements AgentOClient {
     if (!finding) throw new AgentOClientError('FINDING_NOT_FOUND', 'This finding is not available for the selected project.');
     return finding;
   }
+  async getWorkflows(id: string) {
+    return id === demoId ? this.demo.getWorkflows(id) : (this.record(id).workflows ?? []);
+  }
+  async getWorkflow(id: string, workflowId: string) {
+    const workflow = (await this.getWorkflows(id)).find(item => item.id === workflowId);
+    if (!workflow) throw new AgentOClientError('WORKFLOW_NOT_FOUND', 'This workflow observation is not available for the selected project.');
+    return workflow;
+  }
+  async runWorkflow(id: string, input: BrowserWorkflowInput): Promise<BrowserWorkflowResult> {
+    if (id === demoId) throw new AgentOClientError('INVALID_INPUT', 'Create a project to execute live workflows; the demo contains recorded fixture workflows.');
+    if (!input || typeof input.goal !== 'string' || !input.goal.trim()) {
+      throw new AgentOClientError('INVALID_INPUT', 'Enter a workflow goal to execute.');
+    }
+    const project = this.record(id).project;
+    if (!this.execution.observeWorkflow) {
+      throw new AgentOClientError('CLIENT_UNAVAILABLE', 'Browser workflow execution service is unavailable.');
+    }
+    const result = await this.execution.observeWorkflow(project, input);
+    await this.workspace.update(records => {
+      const record = this.record(id, records);
+      const existing = (record.workflows ?? []).filter(item => item.id !== result.id);
+      record.workflows = [result, ...existing];
+    });
+    return result;
+  }
+
 
   async startScan(id: string): Promise<ScanSnapshot> {
     if (id === demoId) throw new AgentOClientError('INVALID_INPUT', 'Create a project for live scans; the demo contains synthetic evidence.');

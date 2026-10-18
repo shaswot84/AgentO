@@ -41,6 +41,70 @@ export interface FindingDetail extends Finding {
   readonly remediation: RemediationSuggestion;
 }
 
+export interface ObservedNetworkTraffic {
+  readonly url: string;
+  readonly method: string;
+  readonly status: number | null;
+  readonly resourceType: string;
+  readonly blocked: boolean;
+  readonly blockedReason?: 'origin-scope' | 'popup-unsupported' | 'worker-unsupported' | 'websocket-unsupported';
+  readonly initiatingPage?: string;
+  readonly timestamp?: string;
+  readonly headers?: Readonly<Record<string, string>>;
+}
+
+export interface WorkflowStepRecord {
+  readonly pageId?: string;
+  readonly actionType: string;
+  readonly outcome: 'completed' | 'failed' | 'rejected';
+  readonly url?: string;
+  readonly selector?: string;
+  readonly code?: string;
+  readonly details?: string;
+}
+
+export interface BrowserWorkflowResult {
+  readonly id: string;
+  readonly projectId: string;
+  readonly goal: string;
+  readonly identityId: string;
+  readonly personaLabel?: string;
+  readonly targetUrl: string;
+  readonly outcome: 'COMPLETED' | 'FAILED' | 'SKIPPED';
+  readonly completionType?: string;
+  readonly durationMs?: number;
+  readonly actionsCount: number;
+  readonly recoveryAttempts?: number;
+  readonly modelCalls?: number;
+  readonly modelTokens?: number;
+  readonly finalUrl?: string;
+  readonly sourceType: 'demo-fixture' | 'execution-api';
+  readonly executedAt: string;
+  readonly endpoints: readonly Endpoint[];
+  readonly network: readonly ObservedNetworkTraffic[];
+  readonly steps?: readonly WorkflowStepRecord[];
+  readonly session?: {
+    readonly personaId: string;
+    readonly authenticated: boolean;
+    readonly reused: boolean;
+    readonly sessionRef?: string;
+    readonly targetId?: string;
+  };
+  readonly pageModelSummary?: {
+    readonly title: string;
+    readonly headings: readonly string[];
+    readonly interactiveElementCount: number;
+  };
+  readonly diagnostics: readonly { readonly code: string; readonly message: string }[];
+  readonly evidence: readonly Evidence[];
+}
+
+export interface BrowserWorkflowInput {
+  readonly goal: string;
+  readonly identityId?: string;
+  readonly targetName?: string;
+}
+
 /** Browser-facing contract; repository access and execution stay on the host. */
 export interface AgentOClient {
   readonly storage: 'disk' | 'memory';
@@ -53,11 +117,14 @@ export interface AgentOClient {
   startScan(projectId: string): Promise<ScanSnapshot>;
   getFindings(projectId: string): Promise<readonly FindingDetail[]>;
   getFinding(projectId: string, findingId: string): Promise<FindingDetail>;
+  getWorkflows(projectId: string): Promise<readonly BrowserWorkflowResult[]>;
+  getWorkflow(projectId: string, workflowId: string): Promise<BrowserWorkflowResult>;
+  runWorkflow(projectId: string, input: BrowserWorkflowInput): Promise<BrowserWorkflowResult>;
 }
 
 export type ClientErrorCode = 'INVALID_INPUT' | 'INVALID_DISCOVERY' | 'PROJECT_NOT_FOUND'
   | 'DISCOVERY_UNAVAILABLE' | 'SCAN_UNAVAILABLE' | 'FINDING_NOT_FOUND' | 'CLIENT_UNAVAILABLE'
-  | 'SCAN_IN_PROGRESS' | 'REQUEST_FORBIDDEN';
+  | 'SCAN_IN_PROGRESS' | 'REQUEST_FORBIDDEN' | 'WORKFLOW_NOT_FOUND' | 'WORKFLOW_FAILED';
 
 export class AgentOClientError extends Error {
   constructor(readonly code: ClientErrorCode, message: string) {
@@ -65,3 +132,4 @@ export class AgentOClientError extends Error {
     this.name = 'AgentOClientError';
   }
 }
+

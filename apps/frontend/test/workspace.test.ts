@@ -175,4 +175,34 @@ describe('local scan lifecycle and provenance', () => {
     await expect(service.startScan('demo-shop')).rejects.toMatchObject({ code: 'INVALID_INPUT' });
     await expect(service.importDiscovery('demo-shop', discovery())).rejects.toMatchObject({ code: 'INVALID_INPUT' });
   });
+  it('persists workflows with project records and enforces fixture immutability', async () => {
+    const { service, file } = await setup({
+      ...execution,
+      observeWorkflow: async (project, input) => ({
+        id: 'wf-local-1',
+        projectId: project.id,
+        goal: input.goal,
+        identityId: input.identityId || 'alice',
+        targetUrl: project.baseUrl,
+        outcome: 'COMPLETED',
+        actionsCount: 2,
+        endpoints: [],
+        network: [],
+        diagnostics: [],
+        evidence: [],
+        sourceType: 'execution-api',
+        executedAt: new Date().toISOString(),
+      }),
+    });
+    const project = await service.createProject(input);
+    const ran = await service.runWorkflow(project.id, { goal: 'Test persistent workflow' });
+    expect(ran.id).toBe('wf-local-1');
+
+    const restarted = new LocalService(await Workspace.open(file), execution);
+    const workflows = await restarted.getWorkflows(project.id);
+    expect(workflows).toHaveLength(1);
+    expect(workflows[0]!.goal).toBe('Test persistent workflow');
+
+    await expect(service.runWorkflow('demo-shop', { goal: 'test' })).rejects.toMatchObject({ code: 'INVALID_INPUT' });
+  });
 });

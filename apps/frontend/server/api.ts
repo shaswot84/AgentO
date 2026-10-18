@@ -83,7 +83,7 @@ export function createLocalApi(options: { root: string; file: string; execution:
         }
         data = await options.execution.discover(input.repositoryPath.trim());
       } else {
-        const match = /^\/api\/projects(?:\/([^/]+)(?:\/(discovery|scan|findings)(?:\/([^/]+))?)?)?$/u.exec(pathname);
+        const match = /^\/api\/projects(?:\/([^/]+)(?:\/(discovery|scan|findings|workflows)(?:\/([^/]+))?)?)?$/u.exec(pathname);
         if (!match) { respond(res, 404, { ok: false, code: 'INVALID_INPUT', error: 'Unknown workspace API route.' }); return; }
         const [, encodedId, resource, encodedFinding] = match;
         const id = encodedId ? decodeURIComponent(encodedId) : undefined;
@@ -103,6 +103,13 @@ export function createLocalApi(options: { root: string; file: string; execution:
           status = 202;
         } else if (id && resource === 'findings' && req.method === 'GET') {
           data = encodedFinding ? await client.getFinding(id, decodeURIComponent(encodedFinding)) : await client.getFindings(id);
+        } else if (id && resource === 'workflows' && req.method === 'GET') {
+          data = encodedFinding ? await client.getWorkflow(id, decodeURIComponent(encodedFinding)) : await client.getWorkflows(id);
+        } else if (id && resource === 'workflows' && !encodedFinding && req.method === 'POST') {
+          const input = await body(req);
+          if (!client.runWorkflow) throw new AgentOClientError('CLIENT_UNAVAILABLE', 'Workflow execution is not supported by this client.');
+          data = await client.runWorkflow(id, input as any);
+          status = 200;
         } else { respond(res, 405, { ok: false, code: 'INVALID_INPUT', error: 'Unsupported workspace API method.' }); return; }
       }
       respond(res, status, { ok: true, data });
@@ -110,10 +117,11 @@ export function createLocalApi(options: { root: string; file: string; execution:
       const known = error instanceof AgentOClientError;
       const code = known ? error.code : 'CLIENT_UNAVAILABLE';
       const status = code === 'REQUEST_FORBIDDEN' ? 403 : code === 'SCAN_IN_PROGRESS' ? 409
-        : ['PROJECT_NOT_FOUND', 'FINDING_NOT_FOUND', 'SCAN_UNAVAILABLE', 'DISCOVERY_UNAVAILABLE'].includes(code) ? 404
-        : ['INVALID_INPUT', 'INVALID_DISCOVERY'].includes(code) ? 400 : 503;
+        : ['PROJECT_NOT_FOUND', 'FINDING_NOT_FOUND', 'SCAN_UNAVAILABLE', 'DISCOVERY_UNAVAILABLE', 'WORKFLOW_NOT_FOUND'].includes(code) ? 404
+        : ['INVALID_INPUT', 'INVALID_DISCOVERY', 'WORKFLOW_FAILED'].includes(code) ? 400 : 503;
       respond(res, status, { ok: false, code, error: known ? error.message : 'The local workspace service could not complete the request. Check package builds, workspace access, and local tool installation.' });
     }
+
   };
   return Object.assign(middleware, { async close() {
     try { if (service) await (await service).idle(); }

@@ -3,12 +3,13 @@ import type { DependencyList, FormEvent, ReactNode } from 'react';
 import type { FindingStatus } from '@agento/core';
 import type { DiscoveryResult } from '@agento/discovery';
 import { AgentOClientError, parseSavedDiscovery, validateProjectInput } from './client';
-import type { AgentOClient, FindingDetail, ProjectInput, ProjectInputErrors, ProjectSummary } from './client';
+import type { AgentOClient, BrowserWorkflowInput, BrowserWorkflowResult, FindingDetail, ObservedNetworkTraffic, ProjectInput, ProjectInputErrors, ProjectSummary } from './client';
 
-type View = 'projects' | 'discovery' | 'scan' | 'findings';
+type View = 'projects' | 'discovery' | 'workflows' | 'scan' | 'findings';
 const views: { id: View; label: string; icon: IconName }[] = [
   { id: 'projects', label: 'Projects', icon: 'folder' },
   { id: 'discovery', label: 'Discovery', icon: 'compass' },
+  { id: 'workflows', label: 'Workflows', icon: 'browser' },
   { id: 'scan', label: 'Scan progress', icon: 'activity' },
   { id: 'findings', label: 'Findings', icon: 'shield' },
 ];
@@ -16,7 +17,7 @@ const statusLabels: Record<FindingStatus, string> = {
   HYPOTHESIS: 'Hypothesis', LIKELY: 'Likely', CONFIRMED: 'Confirmed',
   NOT_REPRODUCED: 'Not reproduced', REJECTED: 'Rejected',
 };
-type IconName = 'folder' | 'compass' | 'activity' | 'shield' | 'plus' | 'arrow' | 'search' | 'info' | 'check' | 'close' | 'file';
+type IconName = 'folder' | 'compass' | 'activity' | 'shield' | 'plus' | 'arrow' | 'search' | 'info' | 'check' | 'close' | 'file' | 'browser' | 'network';
 const iconPaths: Record<IconName, string> = {
   folder: 'M3 7V5h6l2 2h10v13H3V7Z',
   compass: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm4 5-3 5-5 3 3-5 5-3Z',
@@ -27,7 +28,10 @@ const iconPaths: Record<IconName, string> = {
   info: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 8v6m0-10v1',
   check: 'm5 12 4 4 10-10', close: 'm6 6 12 12M6 18 18 6',
   file: 'M5 3h9l5 5v13H5V3Zm9 0v6h5M9 13h6m-6 4h6',
+  browser: 'M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2Zm0 5h18M8 6.5h.01M11 6.5h.01M14 6.5h.01',
+  network: 'M12 2a3 3 0 0 0-3 3c0 .54.14 1.05.39 1.49L5.49 10.4A3 3 0 0 0 5 10a3 3 0 1 0 2.83 4h8.34A3 3 0 1 0 19 12a3 3 0 0 0-.49.04l-3.9-3.91c.25-.44.39-.95.39-1.49a3 3 0 0 0-3-3Z',
 };
+
 function Icon({ name }: { name: IconName }) {
   return <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round"><path d={iconPaths[name]} /></svg>;
 }
@@ -85,6 +89,7 @@ export function App({ client }: { client: AgentOClient }) {
   const [selectedId, setSelectedId] = useState('');
   const [newProjectOpen, setNewProjectOpen] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
+  const [workflowRunOpen, setWorkflowRunOpen] = useState(false);
   const [rescanning, setRescanning] = useState(false);
   const [notification, setNotification] = useState<{ message: string; kind: 'success' | 'warning' | 'error' } | null>(null);
   const projectsState = useRequest(() => client.listProjects(), [client, revision, view]);
@@ -130,6 +135,7 @@ export function App({ client }: { client: AgentOClient }) {
   const heading = {
     projects: { eyebrow: 'APPLICATION SECURITY', title: 'Projects', subtitle: 'Your applications, their context, and the next step toward proof.' },
     discovery: { eyebrow: selected?.name ?? 'PROJECT INTELLIGENCE', title: 'Discovery', subtitle: 'Understand your stack, repository, and available analysis capabilities.' },
+    workflows: { eyebrow: selected?.name ?? 'BROWSER WORKFLOW LAYER', title: 'Browser Workflows', subtitle: 'Inspect runtime user actions, discovered endpoints, session state, and intercepted network evidence.' },
     scan: { eyebrow: selected?.name ?? 'INVESTIGATION', title: 'Scan progress', subtitle: 'Follow each stage from repository context to an evidence-backed verdict.' },
     findings: { eyebrow: selected?.name ?? 'INVESTIGATION', title: 'Findings', subtitle: 'Review signals, inspect the evidence, and decide what needs attention.' },
   }[view];
@@ -144,19 +150,22 @@ export function App({ client }: { client: AgentOClient }) {
     <div className="workspace">
       <header className="topbar"><div className="breadcrumb"><span>Workspace</span><span aria-hidden="true">/</span><strong>{views.find(item => item.id === view)?.label}</strong></div><div className="topbar-status">{view !== 'projects' && projects.length > 0 && <><label className="screen-reader-only" htmlFor="project-picker">Selected project</label><select id="project-picker" className="project-picker" value={selected?.id ?? ''} onChange={event => { setSelectedId(event.target.value); setNotification(null); }}>{projects.map(project => <option key={project.id} value={project.id}>{project.name}</option>)}</select></>}<span className="local-status">{client.storage === 'disk' ? 'Local service' : 'Demo preview'}</span></div></header>
       <main id="main-content" className="main-content" tabIndex={-1}>
-        <div className="page-heading"><div><div className="eyebrow">{heading.eyebrow}</div><h1>{heading.title}</h1><p>{heading.subtitle}</p></div><div className="heading-actions">{view === 'discovery' && selected && (client.storage === 'memory' || selected.dataSource !== 'demo-fixture') && <><button type="button" className="button primary" aria-label="Refresh discovery" onClick={() => void rescanSelected()} disabled={rescanning}><Icon name="compass" />{rescanning ? 'Discovering…' : 'Refresh'}</button><button className="button secondary" onClick={() => setImportOpen(true)}><Icon name="file" />Import JSON</button></>}{view === 'projects' && <button className="button primary" onClick={() => setNewProjectOpen(true)}><Icon name="plus" />New project</button>}</div></div>
+        <div className="page-heading"><div><div className="eyebrow">{heading.eyebrow}</div><h1>{heading.title}</h1><p>{heading.subtitle}</p></div><div className="heading-actions">{view === 'discovery' && selected && (client.storage === 'memory' || selected.dataSource !== 'demo-fixture') && <><button type="button" className="button primary" aria-label="Refresh discovery" onClick={() => void rescanSelected()} disabled={rescanning}><Icon name="compass" />{rescanning ? 'Discovering…' : 'Refresh'}</button><button className="button secondary" onClick={() => setImportOpen(true)}><Icon name="file" />Import JSON</button></>}{view === 'workflows' && selected && <button type="button" className="button primary" onClick={() => setWorkflowRunOpen(true)}><Icon name="plus" />Run workflow</button>}{view === 'projects' && <button className="button primary" onClick={() => setNewProjectOpen(true)}><Icon name="plus" />New project</button>}</div></div>
         {notification && <div className={`notice ${notification.kind}`} role={notification.kind === 'error' ? 'alert' : 'status'}><Icon name={notification.kind === 'success' ? 'check' : 'info'} /><p>{notification.message}</p><button className="icon-button" aria-label="Dismiss notification" onClick={() => setNotification(null)}><Icon name="close" /></button></div>}
         {projectsState.loading ? <Loading /> : projectsState.error ? <ErrorState retry={projectsState.retry} /> : view === 'projects' ? <ProjectsView projects={projects} persistent={client.storage === 'disk'} onSelect={openProject} onCreate={() => setNewProjectOpen(true)} onExplore={() => { setSelectedId('demo-shop'); navigate('findings'); }} /> : selected ? <>
           {view === 'discovery' && <DiscoveryView client={client} project={selected} revision={revision} onImport={() => setImportOpen(true)} onRescan={() => void rescanSelected()} rescanning={rescanning} />}
-          {view === 'scan' && <ScanView key={selected.id} client={client} project={selected} onDemo={() => setSelectedId('demo-shop')} />}
-          {view === 'findings' && <FindingsView key={selected.id} client={client} project={selected} onDemo={() => setSelectedId('demo-shop')} />}
+          {view === 'workflows' && <WorkflowsView key={selected.id} client={client} project={selected} onDemo={() => setSelectedId('demo-shop')} onRunWorkflow={() => setWorkflowRunOpen(true)} />}
+          {view === 'scan' && <ScanView key={selected.id} client={client} project={selected} onDemo={() => setSelectedId('demo-shop')} onNavigateWorkflows={() => navigate('workflows')} />}
+          {view === 'findings' && <FindingsView key={selected.id} client={client} project={selected} onDemo={() => setSelectedId('demo-shop')} onNavigateWorkflows={() => navigate('workflows')} />}
         </> : <Panel title="Project workspace"><Empty title="Choose your first project" action={<button className="button primary" onClick={() => setNewProjectOpen(true)}>New project</button>}>Configure a repository and target to begin organizing its discovery results.</Empty></Panel>}
       </main>
     </div>
     {newProjectOpen && <ProjectDialog client={client} onClose={() => setNewProjectOpen(false)} onSaved={saved} />}
     {importOpen && selected && <ImportDialog client={client} project={selected} onClose={() => setImportOpen(false)} onSaved={saved} />}
+    {workflowRunOpen && selected && <WorkflowRunDialog client={client} project={selected} onClose={() => setWorkflowRunOpen(false)} onCompleted={wf => { setSelectedId(selected.id); setRevision(value => value + 1); setNotification({ message: `Workflow completed (${wf.outcome}): ${wf.goal}`, kind: wf.outcome === 'COMPLETED' ? 'success' : 'warning' }); }} />}
   </div>;
 }
+
 
 function ProjectsView({ projects, persistent, onSelect, onCreate, onExplore }: { projects: readonly ProjectSummary[]; persistent: boolean; onSelect: (project: ProjectSummary) => void; onCreate: () => void; onExplore: () => void }) {
   const [query, setQuery] = useState('');
@@ -221,7 +230,454 @@ function Dependencies({ data }: { data: DiscoveryResult }) {
   return <Panel title="Dependency inventory" description="Runtime, development, optional, and peer declarations retain their provenance."><div className="toolbar"><div className="search-field"><Icon name="search" /><label className="screen-reader-only" htmlFor="dependency-search">Search dependencies</label><input id="dependency-search" placeholder="Search packages…" value={query} onChange={event => setQuery(event.target.value)} /></div><span className="muted">{dependencies.length} declarations</span></div>{dependencies.length ? <div className="table-wrap"><table className="data-table"><thead><tr><th scope="col">Package</th><th scope="col">Version</th><th scope="col">Section</th><th scope="col">Manifest</th></tr></thead><tbody>{dependencies.map((item, index) => <tr key={index}><td className="mono">{item.name}</td><td className="mono">{item.version}</td><td>{item.kind}</td><td className="mono">{item.manifest}</td></tr>)}</tbody></table></div> : <Empty title="No matching dependencies">Try a different package name or dependency section.</Empty>}</Panel>;
 }
 
-function ScanView({ client, project, onDemo }: { client: AgentOClient; project: ProjectSummary; onDemo: () => void }) {
+function OutcomeBadge({ outcome }: { outcome: BrowserWorkflowResult['outcome'] }) {
+  const cls = outcome === 'COMPLETED' ? 'status-confirmed' : outcome === 'FAILED' ? 'status-rejected' : 'status-not_reproduced';
+  return <span className={`badge ${cls}`}>{outcome}</span>;
+}
+
+function StatusCodeBadge({ status, blocked }: { status: number | null; blocked?: boolean }) {
+  if (blocked) return <span className="badge status-rejected mono">BLOCKED</span>;
+  if (status === null) return <span className="badge neutral mono">PENDING</span>;
+  const cls = status >= 200 && status < 300 ? 'status-confirmed'
+    : status >= 300 && status < 400 ? 'mode-code-aware'
+    : status >= 400 && status < 500 ? 'severity-high'
+    : 'status-rejected';
+  return <span className={`badge ${cls} mono`}>{status}</span>;
+}
+
+function WorkflowsView({ client, project, onDemo, onRunWorkflow }: { client: AgentOClient; project: ProjectSummary; onDemo: () => void; onRunWorkflow: () => void }) {
+  const result = useRequest(() => client.getWorkflows(project.id), [client, project.id]);
+  const [query, setQuery] = useState('');
+  const [outcomeFilter, setOutcomeFilter] = useState('');
+  const [identityFilter, setIdentityFilter] = useState('');
+  const [selectedWorkflowId, setSelectedWorkflowId] = useState('');
+
+  if (result.loading) return <Loading />;
+  if (result.error || !result.data) return <ErrorState retry={result.retry} />;
+  const all = result.data;
+
+  if (!all.length) {
+    return <Panel title="Browser Workflows">
+      <Empty title="No browser workflows recorded" action={
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+          <button type="button" className="button primary" onClick={onRunWorkflow}>
+            <Icon name="plus" />
+            Run a browser workflow
+          </button>
+          <button type="button" className="button secondary" onClick={onDemo}>
+            Explore demo workflows
+          </button>
+        </div>
+      }>
+        Execute browser workflows to explore web applications, discover runtime API endpoints, verify authenticated personas, and record strict origin-scope network traffic.
+      </Empty>
+    </Panel>;
+  }
+
+  const identities = [...new Set(all.map(w => w.identityId))];
+  const totalCompleted = all.filter(w => w.outcome === 'COMPLETED').length;
+  const totalEndpoints = new Set(all.flatMap(w => w.endpoints.map(e => `${e.method} ${e.path}`))).size;
+  const totalNetworkRecords = all.reduce((sum, w) => sum + w.network.length, 0);
+
+  const filtered = all.filter(w => {
+    const matchesOutcome = !outcomeFilter || w.outcome === outcomeFilter;
+    const matchesIdentity = !identityFilter || w.identityId === identityFilter;
+    const text = `${w.goal} ${w.identityId} ${w.personaLabel || ''} ${w.targetUrl} ${w.endpoints.map(e => e.path).join(' ')}`.toLowerCase();
+    const matchesQuery = !query || text.includes(query.trim().toLowerCase());
+    return matchesOutcome && matchesIdentity && matchesQuery;
+  });
+
+  const selected = filtered.find(w => w.id === selectedWorkflowId) ?? filtered[0];
+
+  function resetFilters() {
+    setQuery('');
+    setOutcomeFilter('');
+    setIdentityFilter('');
+  }
+
+  const fixtureOnly = all.every(w => w.sourceType === 'demo-fixture');
+  const hasFixtures = all.some(w => w.sourceType === 'demo-fixture');
+
+  return <>
+    {hasFixtures && <div className="fixture-banner"><Icon name="info" /><p><strong>Browser workflow demonstrations.</strong> {fixtureOnly ? 'Recorded workflows verify multi-persona execution, session reuse, endpoint discovery, and scope enforcement.' : 'Contains recorded demonstrations alongside live results.'}</p></div>}
+
+    <div className="metric-grid">
+      <Metric label={fixtureOnly ? "Demo workflows" : "Recorded workflows"} value={all.length.toString().padStart(2, '0')} detail={fixtureOnly ? "Demonstrated browser runs" : "Total executed workflows"} icon="browser" />
+      <Metric label="Completed outcomes" value={totalCompleted.toString().padStart(2, '0')} detail={`${Math.round(totalCompleted / (all.length || 1) * 100)}% successful goals`} icon="check" />
+      <Metric label="Endpoints discovered" value={totalEndpoints.toString().padStart(2, '0')} detail="REST / SPA routes verified" icon="compass" />
+      <Metric label="Network observations" value={totalNetworkRecords.toString().padStart(2, '0')} detail="Intercepted HTTP traffic" icon="activity" />
+    </div>
+
+    <div className="surface" style={{ marginBottom: 20 }}>
+      <div className="toolbar">
+        <div className="search-field">
+          <Icon name="search" />
+          <label className="screen-reader-only" htmlFor="workflow-search">Search workflows</label>
+          <input id="workflow-search" placeholder="Search goal, persona, endpoint…" value={query} onChange={e => setQuery(e.target.value)} />
+        </div>
+        <label className="screen-reader-only" htmlFor="workflow-outcome-filter">Filter outcome</label>
+        <select className="filter-select" id="workflow-outcome-filter" value={outcomeFilter} onChange={e => setOutcomeFilter(e.target.value)}>
+          <option value="">All outcomes</option>
+          <option value="COMPLETED">Completed</option>
+          <option value="FAILED">Failed</option>
+          <option value="SKIPPED">Skipped</option>
+        </select>
+        <label className="screen-reader-only" htmlFor="workflow-identity-filter">Filter persona</label>
+        <select className="filter-select" id="workflow-identity-filter" value={identityFilter} onChange={e => setIdentityFilter(e.target.value)}>
+          <option value="">All personas</option>
+          {identities.map(id => <option key={id} value={id}>{id}</option>)}
+        </select>
+        {(query || outcomeFilter || identityFilter) && <button className="text-button" onClick={resetFilters}>Clear filters</button>}
+        <span className="muted" role="status">{filtered.length} of {all.length} workflows</span>
+      </div>
+    </div>
+
+    {selected ? (
+      <div className="finding-layout">
+        <Panel title="Workflow Queue" description="Select a browser workflow to inspect its full worked results.">
+          <div className="finding-list">
+            {filtered.map(wf => (
+              <button
+                key={wf.id}
+                className={`finding-item ${selected.id === wf.id ? 'selected' : ''}`}
+                onClick={() => setSelectedWorkflowId(wf.id)}
+                aria-pressed={selected.id === wf.id}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+                  <span className="badge neutral mono">{wf.identityId}</span>
+                  <OutcomeBadge outcome={wf.outcome} />
+                </div>
+                <h3 style={{ fontSize: 13, margin: '4px 0', textAlign: 'left' }}>{wf.goal}</h3>
+                <div className="mono muted" style={{ fontSize: 11, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                  <span>{wf.endpoints.length} endpoint{wf.endpoints.length === 1 ? '' : 's'}</span>
+                  <span>·</span>
+                  <span>{wf.network.length} requests</span>
+                  {wf.durationMs ? <><span>·</span><span>{(wf.durationMs / 1000).toFixed(2)}s</span></> : null}
+                </div>
+              </button>
+            ))}
+          </div>
+        </Panel>
+
+        <WorkflowDetailPanel key={selected.id} workflow={selected} onRerun={onRunWorkflow} />
+      </div>
+    ) : (
+      <Panel title="Workflow Queue">
+        <Empty title="No matching workflows" action={<button className="button secondary" onClick={resetFilters}>Clear filters</button>}>
+          Try a different search term or select another persona filter.
+        </Empty>
+      </Panel>
+    )}
+  </>;
+}
+
+function WorkflowDetailPanel({ workflow, onRerun }: { workflow: BrowserWorkflowResult; onRerun: () => void }) {
+  const fixture = workflow.sourceType === 'demo-fixture';
+  const tabs = [
+    { id: 'overview', label: 'Overview' },
+    { id: 'endpoints', label: `Endpoints (${workflow.endpoints.length})` },
+    { id: 'network', label: `Network Traffic (${workflow.network.length})` },
+    { id: 'steps', label: `Steps (${workflow.steps?.length ?? 0})` },
+    { id: 'evidence', label: `Evidence (${workflow.evidence.length})` },
+  ] as const;
+  const [tab, setTab] = useState<(typeof tabs)[number]['id']>('overview');
+  const [networkFilter, setNetworkFilter] = useState('');
+
+  const filteredNetwork = workflow.network.filter(item => {
+    if (!networkFilter) return true;
+    if (networkFilter === 'blocked') return item.blocked;
+    if (networkFilter === '2xx') return item.status && item.status >= 200 && item.status < 300;
+    if (networkFilter === '3xx') return item.status && item.status >= 300 && item.status < 400;
+    if (networkFilter === '4xx') return item.status && item.status >= 400 && item.status < 500;
+    return true;
+  });
+
+  return (
+    <section className="surface finding-detail" aria-label="Selected workflow">
+      <div className="surface-heading">
+        <div>
+          <div className="eyebrow">{workflow.targetUrl} · PERSONA: {workflow.identityId.toUpperCase()}</div>
+          <h2>{workflow.goal}</h2>
+          <div className="tag-list" style={{ marginTop: 8 }}>
+            <OutcomeBadge outcome={workflow.outcome} />
+            <span className="badge neutral mono">{workflow.identityId}</span>
+            {workflow.completionType && <span className="badge mode-code-aware">{workflow.completionType}</span>}
+            {workflow.durationMs ? <span className="badge neutral">{(workflow.durationMs / 1000).toFixed(2)}s</span> : null}
+            <span className="badge neutral">{workflow.actionsCount} actions</span>
+          </div>
+        </div>
+        <button type="button" className="button secondary" onClick={onRerun}>
+          <Icon name="activity" />
+          Run Workflow
+        </button>
+      </div>
+
+      <div className="detail-tabs" role="tablist" aria-label="Workflow information">
+        {tabs.map((item, index) => (
+          <button
+            key={item.id}
+            role="tab"
+            id={`workflow-tab-${item.id}`}
+            aria-selected={tab === item.id}
+            aria-controls={`workflow-panel-${item.id}`}
+            tabIndex={tab === item.id ? 0 : -1}
+            onClick={() => setTab(item.id)}
+            onKeyDown={event => {
+              if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+              event.preventDefault();
+              const next = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 : (index + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+              const nextTab = tabs[next];
+              if (nextTab) { setTab(nextTab.id); document.getElementById(`workflow-tab-${nextTab.id}`)?.focus(); }
+            }}
+          >
+            {item.label}
+          </button>
+        ))}
+      </div>
+
+      {tabs.map(item => (
+        <div
+          key={item.id}
+          role="tabpanel"
+          id={`workflow-panel-${item.id}`}
+          aria-labelledby={`workflow-tab-${item.id}`}
+          hidden={tab !== item.id}
+          tabIndex={0}
+          className="surface-body detail-panel"
+        >
+          {item.id === 'overview' && <>
+            <div className="section-label">WORKFLOW EXECUTION SUMMARY{fixture ? ' · DEMO' : ''}</div>
+            <dl className="definition-grid endpoint-summary">
+              <div className="definition"><dt>Goal</dt><dd>{workflow.goal}</dd></div>
+              <div className="definition"><dt>Persona / Identity</dt><dd className="mono">{workflow.personaLabel || workflow.identityId}</dd></div>
+              <div className="definition"><dt>Target URL</dt><dd className="mono">{workflow.targetUrl}</dd></div>
+              <div className="definition"><dt>Final Destination</dt><dd className="mono">{workflow.finalUrl || 'Initial / blank'}</dd></div>
+              <div className="definition"><dt>Completion Mechanism</dt><dd className="mono">{workflow.completionType || 'unconfirmed'}</dd></div>
+              <div className="definition"><dt>Actions Executed</dt><dd className="mono">{workflow.actionsCount} action(s)</dd></div>
+            </dl>
+
+            {workflow.session && (
+              <>
+                <div className="section-label" style={{ marginTop: 20 }}>AUTHENTICATED SESSION & ISOLATION</div>
+                <div style={{ padding: '12px 16px', background: '#101722', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-sm)' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 14, width: '100%' }}>
+                    <div>
+                      <span className="card-label">SESSION STATUS</span>
+                      <div style={{ marginTop: 4 }}>
+                        <span className={`badge ${workflow.session.authenticated ? 'status-confirmed' : 'status-rejected'}`}>
+                          {workflow.session.authenticated ? 'Authenticated' : 'Unauthenticated'}
+                        </span>
+                      </div>
+                    </div>
+                    <div>
+                      <span className="card-label">SESSION REUSE</span>
+                      <div style={{ marginTop: 4 }}>
+                        <span className="badge neutral">
+                          {workflow.session.reused ? 'Reused from Cache/Disk' : 'Fresh Session Verified'}
+                        </span>
+                      </div>
+                    </div>
+                    {workflow.session.sessionRef && <div>
+                      <span className="card-label">SESSION REF</span>
+                      <div className="mono" style={{ marginTop: 4, color: 'var(--ink)' }}>{workflow.session.sessionRef}</div>
+                    </div>}
+                  </div>
+                </div>
+              </>
+            )}
+
+            {workflow.pageModelSummary && (
+              <>
+                <div className="section-label" style={{ marginTop: 24 }}>PAGE MODEL INSPECTION (NORMALIZED DOM)</div>
+                <div className="surface" style={{ padding: 16, background: '#101722', border: '1px solid var(--border-subtle)' }}>
+                  <p style={{ margin: '0 0 10px', fontSize: 13, color: 'var(--ink)' }}>
+                    <strong>Page Title:</strong> <span className="mono">{workflow.pageModelSummary.title}</span>
+                  </p>
+                  <p style={{ margin: '0 0 10px', fontSize: 12 }}>
+                    <strong>Interactive Elements:</strong> {workflow.pageModelSummary.interactiveElementCount} discovered elements (buttons, links, inputs)
+                  </p>
+                  {workflow.pageModelSummary.headings.length > 0 && (
+                    <div>
+                      <span className="card-label">HEADINGS DETECTED</span>
+                      <div className="tag-list" style={{ marginTop: 6 }}>
+                        {workflow.pageModelSummary.headings.map(h => <span key={h} className="tag">{h}</span>)}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+
+            {workflow.diagnostics.length > 0 && (
+              <div className="notice warning" style={{ marginTop: 20 }}>
+                <Icon name="info" />
+                <div>
+                  <h3>Workflow Diagnostics</h3>
+                  <ul>
+                    {workflow.diagnostics.map((d, i) => (
+                      <li key={i}><strong>{d.code}:</strong> {d.message}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
+          </>}
+
+          {item.id === 'endpoints' && <>
+            <div className="section-label">DISCOVERED APPLICATION ENDPOINTS{fixture ? ' · DEMO' : ''}</div>
+            <p style={{ fontSize: 13, marginBottom: 16, color: 'var(--muted)' }}>
+              These endpoints were reached or called during the browser session, establishing live attack surface context.
+            </p>
+            {workflow.endpoints.length === 0 ? (
+              <Empty title="No endpoints discovered">
+                No distinct API endpoints were invoked during this browser workflow.
+              </Empty>
+            ) : (
+              <div className="table-wrap">
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Method</th>
+                      <th scope="col">Endpoint Path</th>
+                      <th scope="col">Auth</th>
+                      <th scope="col">Roles</th>
+                      <th scope="col">Parameters</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {workflow.endpoints.map((ep, i) => (
+                      <tr key={ep.id || i}>
+                        <td>
+                          <span className={`badge ${ep.method === 'GET' ? 'mode-code-aware' : ep.method === 'POST' ? 'severity-high' : 'neutral'} mono`}>
+                            {ep.method}
+                          </span>
+                        </td>
+                        <td className="mono" style={{ color: 'var(--ink)', fontWeight: 600 }}>{ep.path}</td>
+                        <td><span className="tag">{ep.authentication}</span></td>
+                        <td>{ep.roles?.join(', ') || <span className="muted">Any</span>}</td>
+                        <td className="mono">{ep.parameters?.map(p => `${p.name} (${p.location})`).join(', ') || 'None'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </>}
+
+          {item.id === 'network' && <>
+            <div className="section-label">OBSERVED NETWORK TRAFFIC ({workflow.network.length})</div>
+            <div className="toolbar" style={{ marginBottom: 16 }}>
+              <span className="muted" style={{ fontSize: 12 }}>Filter traffic:</span>
+              <button type="button" className={`button small ${!networkFilter ? 'primary' : 'secondary'}`} onClick={() => setNetworkFilter('')}>All ({workflow.network.length})</button>
+              <button type="button" className={`button small ${networkFilter === '2xx' ? 'primary' : 'secondary'}`} onClick={() => setNetworkFilter('2xx')}>2xx Success</button>
+              <button type="button" className={`button small ${networkFilter === '3xx' ? 'primary' : 'secondary'}`} onClick={() => setNetworkFilter('3xx')}>3xx Redirects</button>
+              <button type="button" className={`button small ${networkFilter === 'blocked' ? 'primary' : 'secondary'}`} onClick={() => setNetworkFilter('blocked')}>Blocked Scope</button>
+            </div>
+
+            {filteredNetwork.length === 0 ? (
+              <Empty title="No traffic matches filter">No network records match this filter.</Empty>
+            ) : (
+              <div className="table-wrap">
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Status</th>
+                      <th scope="col">Method</th>
+                      <th scope="col">URL</th>
+                      <th scope="col">Type</th>
+                      <th scope="col">Scope Verdict</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredNetwork.map((net, i) => (
+                      <tr key={i}>
+                        <td><StatusCodeBadge status={net.status} blocked={net.blocked} /></td>
+                        <td className="mono">{net.method}</td>
+                        <td className="mono" style={{ maxWidth: 360, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          <span title={net.url}>{net.url}</span>
+                        </td>
+                        <td><span className="tag">{net.resourceType}</span></td>
+                        <td>
+                          {net.blocked ? (
+                            <span className="badge status-rejected mono" title={net.blockedReason}>
+                              Refused: {net.blockedReason || 'origin-scope'}
+                            </span>
+                          ) : (
+                            <span className="badge status-confirmed">In-scope</span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </>}
+
+          {item.id === 'steps' && <>
+            <div className="section-label">ACTION TIMELINE & EXECUTED STEPS</div>
+            {(!workflow.steps || workflow.steps.length === 0) ? (
+              <Empty title="No step records">
+                Step-level logging was not retained for this workflow. Check the summary facts in Overview.
+              </Empty>
+            ) : (
+              <ol className="timeline">
+                {workflow.steps.map((st, i) => (
+                  <li key={i} className={`timeline-item ${st.outcome === 'completed' ? 'completed' : 'failed'}`}>
+                    <span className="timeline-marker" aria-hidden="true">
+                      {st.outcome === 'completed' ? <Icon name="check" /> : '!'}
+                    </span>
+                    <div className="timeline-content">
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                        <span className="badge mode-code-aware mono">{st.actionType}</span>
+                        <span className={`badge ${st.outcome === 'completed' ? 'status-confirmed' : 'status-rejected'}`}>{st.outcome}</span>
+                      </div>
+                      <p style={{ margin: 0, fontSize: 13, color: 'var(--ink)' }}>{st.details || st.actionType}</p>
+                      {st.selector && <p className="mono muted" style={{ fontSize: 11, marginTop: 4 }}>Selector: {st.selector}</p>}
+                      {st.url && <p className="mono muted" style={{ fontSize: 11, marginTop: 4 }}>URL: {st.url}</p>}
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            )}
+          </>}
+
+          {item.id === 'evidence' && <>
+            <div className="section-label">EVIDENCE TRAIL ({workflow.evidence.length})</div>
+            {workflow.evidence.map((evidence, index) => (
+              <article className="evidence-card" key={evidence.id || index}>
+                <div className="evidence-header">
+                  <h3>
+                    <span className="evidence-number">{index + 1}</span>
+                    {evidence.kind.replaceAll('-', ' ')}
+                  </h3>
+                  <span className="badge neutral">{fixture ? 'Fixture evidence' : 'Recorded evidence'}</span>
+                </div>
+                <p>{evidence.summary}</p>
+                <details className="evidence-metadata">
+                  <summary>Structured facts & provenance</summary>
+                  <dl className="evidence-facts">
+                    {Object.entries(evidence.facts).map(([key, value]) => (
+                      <div key={key}>
+                        <dt>{key.replace(/([a-z])([A-Z])/g, '$1 $2')}</dt>
+                        <dd>{typeof value === 'string' ? value : JSON.stringify(value)}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                  <p className="evidence-source mono">{evidence.id} · {evidence.producerId}</p>
+                </details>
+              </article>
+            ))}
+            {!workflow.evidence.length && <p className="muted">No evidence items recorded for this workflow.</p>}
+          </>}
+        </div>
+      ))}
+    </section>
+  );
+}
+
+
+function ScanView({ client, project, onDemo, onNavigateWorkflows }: { client: AgentOClient; project: ProjectSummary; onDemo: () => void; onNavigateWorkflows?: (() => void) | undefined }) {
   const result = useRequest(() => client.getScan(project.id), [client, project.id], {
     interval: 1000, while: scan => scan.state === 'pending' || scan.state === 'running',
   });
@@ -266,11 +722,34 @@ function ScanView({ client, project, onDemo }: { client: AgentOClient; project: 
         {fixture && <button className="button primary" onClick={() => { if (playing) setPlaying(false); else { setStep(0); setPlaying(true); } }}><Icon name="activity" />{playing ? 'Stop preview' : 'Replay preview'}</button>}
       </div>
     </Panel>
-    <div className="stack"><Panel title={fixture ? 'What this preview shows' : 'Scan summary'}><div className="surface-body"><p className="muted" role="status">{result.data.summary}</p>{result.data.completedAt && <p className="help-text">Recorded: {new Date(result.data.completedAt).toLocaleString()}</p>}{Boolean(result.data.diagnostics?.length) && <div className="notice warning"><ul>{result.data.diagnostics!.map((diagnostic, index) => <li key={index}><strong>{diagnostic.code}</strong>: {diagnostic.message}</li>)}</ul></div>}{fixture && <div className="notice info" style={{ marginTop: 20, marginBottom: 0 }}><Icon name="info" /><p>Replay changes only this screen. It sends no requests to the configured target.</p></div>}</div></Panel><Panel title="Current project"><div className="surface-body"><h3>{project.name}</h3><p className="mono muted" style={{ margin: '8px 0 18px' }}>{project.baseUrl}</p><ModeBadge mode={project.mode} /></div></Panel></div>
+    <div className="stack">
+      <Panel title={fixture ? 'What this preview shows' : 'Scan summary'}>
+        <div className="surface-body">
+          <p className="muted" role="status">{result.data.summary}</p>
+          {result.data.completedAt && <p className="help-text">Recorded: {new Date(result.data.completedAt).toLocaleString()}</p>}
+          {Boolean(result.data.diagnostics?.length) && <div className="notice warning"><ul>{result.data.diagnostics!.map((diagnostic, index) => <li key={index}><strong>{diagnostic.code}</strong>: {diagnostic.message}</li>)}</ul></div>}
+          {fixture && <div className="notice info" style={{ marginTop: 20, marginBottom: 0 }}><Icon name="info" /><p>Replay changes only this screen. It sends no requests to the configured target.</p></div>}
+        </div>
+      </Panel>
+      {onNavigateWorkflows && (
+        <Panel title="Browser Workflow Layer">
+          <div className="surface-body">
+            <p className="muted" style={{ marginBottom: 14 }}>
+              Observe real user workflows, session auth, and discovered attack surfaces with network-level origin enforcement.
+            </p>
+            <button type="button" className="button secondary" onClick={onNavigateWorkflows}>
+              <Icon name="browser" />
+              View browser workflows
+            </button>
+          </div>
+        </Panel>
+      )}
+      <Panel title="Current project"><div className="surface-body"><h3>{project.name}</h3><p className="mono muted" style={{ margin: '8px 0 18px' }}>{project.baseUrl}</p><ModeBadge mode={project.mode} /></div></Panel>
+    </div>
   </div></>;
 }
 
-function FindingsView({ client, project, onDemo }: { client: AgentOClient; project: ProjectSummary; onDemo: () => void }) {
+function FindingsView({ client, project, onDemo, onNavigateWorkflows }: { client: AgentOClient; project: ProjectSummary; onDemo: () => void; onNavigateWorkflows?: (() => void) | undefined }) {
   const result = useRequest(async () => {
     const scan = await client.getScan(project.id).catch(error => {
       if (error instanceof AgentOClientError && error.code === 'SCAN_UNAVAILABLE') return undefined;
@@ -297,10 +776,10 @@ function FindingsView({ client, project, onDemo }: { client: AgentOClient; proje
   const hasFixtures = all.some(finding => finding.sourceType === 'demo-fixture');
   return <>{hasFixtures && <FixtureNotice mixed={!fixtureOnly} />}<div className="metric-grid"><Metric label={fixtureOnly ? 'Fixture findings' : 'Findings'} value={all.length.toString().padStart(2, '0')} detail={fixtureOnly ? 'Synthetic investigation results' : 'Investigation results'} icon="shield" /><Metric label={fixtureOnly ? 'Confirmed fixtures' : 'Confirmed findings'} value={all.filter(finding => finding.status === 'CONFIRMED').length.toString().padStart(2, '0')} detail={fixtureOnly ? 'Demonstrates an evidence-backed verdict' : 'Evidence-backed verdicts'} icon="check" /><Metric label="Need investigation" value={all.filter(finding => ['HYPOTHESIS', 'LIKELY'].includes(finding.status)).length.toString().padStart(2, '0')} detail="Hypotheses and likely candidates" icon="search" /><Metric label={fixtureOnly ? 'Closed fixtures' : 'Closed findings'} value={all.filter(finding => ['NOT_REPRODUCED', 'REJECTED'].includes(finding.status)).length.toString().padStart(2, '0')} detail="Not reproduced or rejected" icon="file" /></div>
     <div className="surface" style={{ marginBottom: 20 }}><div className="toolbar"><div className="search-field"><Icon name="search" /><label className="screen-reader-only" htmlFor="finding-search">Search findings</label><input id="finding-search" placeholder="Search findings, CWE, or route…" value={query} onChange={event => setQuery(event.target.value)} /></div><label className="screen-reader-only" htmlFor="status-filter">Filter finding status</label><select className="filter-select" id="status-filter" value={status} onChange={event => setStatus(event.target.value)}><option value="">All statuses</option>{Object.entries(statusLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select>{(query || status) && <button className="text-button" onClick={clearFilters}>Clear filters</button>}<span className="muted" role="status">{filtered.length} of {all.length} findings</span></div></div>
-    {selected ? <div className="finding-layout"><Panel title="Investigation queue" description="Select a signal to review its evidence."><div className="finding-list">{filtered.map(finding => <button key={finding.id} className={`finding-item ${selected.id === finding.id ? 'selected' : ''}`} onClick={() => selectFinding(finding.id)} aria-pressed={selected.id === finding.id}><span className={`badge severity-${finding.severity}`}>{finding.severity}</span><FindingBadge status={finding.status} /><h3>{finding.title}</h3><div className="mono">{finding.cweId} · {finding.endpoint?.method} {finding.endpoint?.path ?? 'Source candidate'}</div></button>)}</div></Panel><FindingDetails client={client} projectId={project.id} findingId={selected.id} focusRequest={focusRequest} /></div> : <Panel title="Investigation queue"><Empty title="No matching findings" action={<button className="button secondary" onClick={clearFilters}>Clear filters</button>}>Try a different search or select another finding status.</Empty></Panel>}
+    {selected ? <div className="finding-layout"><Panel title="Investigation queue" description="Select a signal to review its evidence."><div className="finding-list">{filtered.map(finding => <button key={finding.id} className={`finding-item ${selected.id === finding.id ? 'selected' : ''}`} onClick={() => selectFinding(finding.id)} aria-pressed={selected.id === finding.id}><span className={`badge severity-${finding.severity}`}>{finding.severity}</span><FindingBadge status={finding.status} /><h3>{finding.title}</h3><div className="mono">{finding.cweId} · {finding.endpoint?.method} {finding.endpoint?.path ?? 'Source candidate'}</div></button>)}</div></Panel><FindingDetails client={client} projectId={project.id} findingId={selected.id} focusRequest={focusRequest} onNavigateWorkflows={onNavigateWorkflows} /></div> : <Panel title="Investigation queue"><Empty title="No matching findings" action={<button className="button secondary" onClick={clearFilters}>Clear filters</button>}>Try a different search or select another finding status.</Empty></Panel>}
   </>;
 }
-function FindingDetails({ client, projectId, findingId, focusRequest }: { client: AgentOClient; projectId: string; findingId: string; focusRequest: number }) {
+function FindingDetails({ client, projectId, findingId, focusRequest, onNavigateWorkflows }: { client: AgentOClient; projectId: string; findingId: string; focusRequest: number; onNavigateWorkflows?: (() => void) | undefined }) {
   const result = useRequest(() => client.getFinding(projectId, findingId), [client, projectId, findingId]);
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -310,10 +789,10 @@ function FindingDetails({ client, projectId, findingId, focusRequest }: { client
     }
   }, [result.data, findingId, focusRequest]);
   return <div className="finding-detail-anchor" ref={ref} tabIndex={-1}>
-    {result.loading ? <Panel title="Finding details"><Loading /></Panel> : result.error || !result.data ? <Panel title="Finding details"><ErrorState retry={result.retry} /></Panel> : <FindingDetailPanel key={findingId} finding={result.data} />}
+    {result.loading ? <Panel title="Finding details"><Loading /></Panel> : result.error || !result.data ? <Panel title="Finding details"><ErrorState retry={result.retry} /></Panel> : <FindingDetailPanel key={findingId} finding={result.data} onNavigateWorkflows={onNavigateWorkflows} />}
   </div>;
 }
-function FindingDetailPanel({ finding }: { finding: FindingDetail }) {
+function FindingDetailPanel({ finding, onNavigateWorkflows }: { finding: FindingDetail; onNavigateWorkflows?: (() => void) | undefined }) {
   const fixture = finding.sourceType === 'demo-fixture';
   const tabs = [
     { id: 'overview', label: 'Overview' },
@@ -335,6 +814,18 @@ function FindingDetailPanel({ finding }: { finding: FindingDetail }) {
         <div className="section-label">ROOT CAUSE{fixture ? ' · FIXTURE' : ''}</div><p className="finding-summary">{finding.rootCause}</p>
         <dl className="definition-grid endpoint-summary"><div className="definition"><dt>Affected endpoint</dt><dd className="mono">{finding.endpoint ? `${finding.endpoint.method} ${finding.endpoint.path}` : 'No endpoint recorded'}</dd></div><div className="definition"><dt>Source location</dt><dd className="mono">{finding.source ? `${finding.source.file}:${finding.source.startLine}` : 'No source recorded'}</dd></div></dl>
         <div className="evidence-preview"><Icon name="file" /><div><h3>{finding.evidence.length} evidence {finding.evidence.length === 1 ? 'item' : 'items'} attached</h3><p>{fixture ? 'Synthetic examples illustrate how a verdict connects to its evidence.' : 'Review the observations that support this finding.'}</p><button className="text-button" onClick={() => { setTab('evidence'); document.getElementById('finding-tab-evidence')?.focus(); }}>Review evidence <Icon name="arrow" /></button></div></div>
+        {onNavigateWorkflows && (
+          <div className="notice info" style={{ marginTop: 16 }}>
+            <Icon name="browser" />
+            <div>
+              <h3>Dynamic Browser Evidence</h3>
+              <p>Explore runtime page models, intercepted HTTP responses, and session persistence in the Browser Workflow Layer.</p>
+              <button type="button" className="button secondary small" style={{ marginTop: 8 }} onClick={onNavigateWorkflows}>
+                <Icon name="browser" /> Open Browser Workflows
+              </button>
+            </div>
+          </div>
+        )}
       </>}
       {item.id === 'evidence' && <>
         <div className="section-label">EVIDENCE TRAIL{fixture ? ' · SYNTHETIC' : ''}</div>
@@ -543,5 +1034,196 @@ function ImportDialog({ client, project, onClose, onSaved }: { client: AgentOCli
     </button>
   </div>
   <FileField required saved={saved} onRead={file => { setError(''); void saved.read(file); }} />{error && <div className="notice error" role="alert">{error}</div>}<p className="help-text">This replaces the saved discovery snapshot. It does not create scan results or evidence.</p></div><div className="dialog-footer"><button type="button" className="button secondary" onClick={onClose} disabled={saving || discovering}>Cancel</button><button className="button primary" disabled={saving || discovering || saved.reading || !saved.data || Boolean(saved.error)}>{saving ? 'Importing…' : 'Import snapshot'}</button></div></form></Dialog>;
+}
+
+function WorkflowRunDialog({
+  client,
+  project,
+  onClose,
+  onCompleted,
+}: {
+  client: AgentOClient;
+  project: ProjectSummary;
+  onClose: () => void;
+  onCompleted: (workflow: BrowserWorkflowResult) => void;
+}) {
+  const [goal, setGoal] = useState('Log in as Alice, explore order history, and verify authorization guards');
+  const [identityId, setIdentityId] = useState('alice');
+  const [targetName, setTargetName] = useState('storefront');
+  const [running, setRunning] = useState(false);
+  const [error, setError] = useState('');
+
+  const recipes = [
+    {
+      title: 'Alice Storefront Exploration',
+      target: 'storefront',
+      identity: 'alice',
+      goal: 'Log in as Alice, explore order history, and verify authorization guards',
+      description: 'Executes Alice login flow, cookie verification, and order detail browsing.',
+    },
+    {
+      title: 'Bob Storefront (Session Reuse)',
+      target: 'storefront',
+      identity: 'bob',
+      goal: 'Log in as Bob, inspect cached session, and attempt order detail requests',
+      description: 'Tests session caching, reuses identity tokens, and validates scope limits.',
+    },
+    {
+      title: 'Admin Privileged Console',
+      target: 'storefront',
+      identity: 'admin',
+      goal: 'Access administrative console, inspect privilege boundary, and query customer orders',
+      description: 'Simulates admin persona to discover high-privilege endpoints and actions.',
+    },
+    {
+      title: 'Portal MPA Redirect & CSRF',
+      target: 'portal',
+      identity: 'alice',
+      goal: 'Navigate multi-page portal, follow 302 redirects safely, and observe CSRF tokens',
+      description: 'Evaluates multi-step form submissions with anti-CSRF token lifecycle.',
+    },
+    {
+      title: 'Strict Scope Guard (Edge SPA)',
+      target: 'edge-spa',
+      identity: 'alice',
+      goal: 'Browse single-page application and verify third-party / external domain blocks',
+      description: 'Validates strict origin enforcement blocking unapproved out-of-scope traffic.',
+    },
+  ];
+
+  async function submit(event: FormEvent) {
+    event.preventDefault();
+    if (!goal.trim()) {
+      setError('Please provide a workflow goal.');
+      return;
+    }
+    setRunning(true);
+    setError('');
+    try {
+      const result = await client.runWorkflow(project.id, {
+        goal: goal.trim(),
+        identityId,
+        targetName,
+      });
+      onCompleted(result);
+      onClose();
+    } catch (err: unknown) {
+      setError(clientErrorMessage(err));
+    } finally {
+      setRunning(false);
+    }
+  }
+
+  return (
+    <Dialog
+      title="Run browser workflow"
+      description={`Execute an automated browser session against ${project.name} (${project.baseUrl}).`}
+      onClose={onClose}
+      busy={running}
+    >
+      <form noValidate onSubmit={submit}>
+        <div className="dialog-body">
+          <div className="demo-quickstart" style={{ marginBottom: 16 }}>
+            <div className="quickstart-heading">
+              <Icon name="browser" />
+              <div>
+                <h3>Select a Workflow Scenario</h3>
+                <p>Pick a preconfigured scenario recipe or customize parameters below.</p>
+              </div>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 8, marginTop: 10 }}>
+              {recipes.map(r => (
+                <button
+                  key={r.title}
+                  type="button"
+                  className={`button secondary small ${goal === r.goal && identityId === r.identity ? 'primary' : ''}`}
+                  style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', padding: '8px 12px' }}
+                  disabled={running}
+                  onClick={() => {
+                    setGoal(r.goal);
+                    setIdentityId(r.identity);
+                    setTargetName(r.target);
+                    setError('');
+                  }}
+                >
+                  <div style={{ fontWeight: 600, display: 'flex', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span>{r.title}</span>
+                    <span className="badge neutral mono" style={{ fontSize: 10 }}>{r.identity} · {r.target}</span>
+                  </div>
+                  <span className="muted" style={{ fontSize: 11, marginTop: 2 }}>{r.description}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <fieldset className="form-section" disabled={running}>
+            <legend>Workflow parameters</legend>
+            <div className="form-grid">
+              <div className="form-field full-width">
+                <label htmlFor="workflow-goal">Goal description</label>
+                <textarea
+                  id="workflow-goal"
+                  rows={2}
+                  value={goal}
+                  onChange={e => { setGoal(e.target.value); setError(''); }}
+                  placeholder="e.g. Navigate to checkout and inspect network traffic"
+                  required
+                />
+              </div>
+              <div className="form-field">
+                <label htmlFor="workflow-identity">Persona / Identity</label>
+                <select
+                  id="workflow-identity"
+                  className="filter-select"
+                  value={identityId}
+                  onChange={e => setIdentityId(e.target.value)}
+                >
+                  <option value="alice">Alice (Storefront Customer)</option>
+                  <option value="bob">Bob (Alternative Customer)</option>
+                  <option value="admin">Admin (Privileged User)</option>
+                  <option value="anonymous">Anonymous (Unauthenticated)</option>
+                </select>
+              </div>
+              <div className="form-field">
+                <label htmlFor="workflow-target">Adapter Profile</label>
+                <select
+                  id="workflow-target"
+                  className="filter-select"
+                  value={targetName}
+                  onChange={e => setTargetName(e.target.value)}
+                >
+                  <option value="storefront">Storefront (REST & Cookies)</option>
+                  <option value="purchases">Purchases (Orders & BOLA/IDOR)</option>
+                  <option value="portal">Portal (MPA & CSRF)</option>
+                  <option value="edge-spa">Edge SPA (Strict Scope)</option>
+                </select>
+              </div>
+            </div>
+          </fieldset>
+
+          {error && <div className="notice error form-error" role="alert">{error}</div>}
+
+          <div className="notice info" style={{ marginTop: 12 }}>
+            <Icon name="info" />
+            <p>
+              {client.storage === 'disk'
+                ? 'Executes a sandboxed browser observation session with Playwright and records endpoints, network traffic, and evidence.'
+                : 'Demo mode simulates execution and appends the observed workflow record to your session.'}
+            </p>
+          </div>
+        </div>
+
+        <div className="dialog-footer">
+          <button type="button" className="button secondary" onClick={onClose} disabled={running}>
+            Cancel
+          </button>
+          <button className="button primary" disabled={running || !goal.trim()}>
+            <Icon name="browser" />
+            {running ? 'Executing workflow…' : 'Run workflow'}
+          </button>
+        </div>
+      </form>
+    </Dialog>
+  );
 }
 

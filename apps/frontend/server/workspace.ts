@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { mkdir, readFile, rename, rm, writeFile } from 'node:fs/promises';
 import { dirname } from 'node:path';
 import type { DiscoveryResult } from '@agento/discovery';
-import type { FindingDetail, ProjectSummary, ScanSnapshot } from '../src/client/types.ts';
+import type { BrowserWorkflowResult, FindingDetail, ProjectSummary, ScanSnapshot } from '../src/client/types.ts';
 import { parseSavedDiscovery, validateProjectInput } from '../src/client/validation.ts';
 
 export interface ProjectRecord {
@@ -10,8 +10,10 @@ export interface ProjectRecord {
   discovery?: DiscoveryResult;
   scan?: ScanSnapshot;
   findings: readonly FindingDetail[];
+  workflows?: readonly BrowserWorkflowResult[];
 }
 interface WorkspaceData { version: 1; projects: ProjectRecord[] }
+
 
 /** One local service owns the file. Writes commit to disk before becoming visible. */
 export class Workspace {
@@ -48,7 +50,11 @@ export class Workspace {
       if (record.findings.some(finding => finding.projectId !== project.id || finding.sourceType !== 'execution-api')) {
         throw new Error('Invalid workspace findings');
       }
+      if (record.workflows && (!Array.isArray(record.workflows) || record.workflows.some(wf => wf.projectId !== project.id))) {
+        throw new Error('Invalid workspace workflows');
+      }
     }
+
     workspace.data = data;
     if (data.projects.some(record => record.scan && ['pending', 'running'].includes(record.scan.state))) {
       await workspace.update(records => {

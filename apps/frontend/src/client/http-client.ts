@@ -3,7 +3,7 @@ import type { AgentOClient, ClientErrorCode } from './types';
 
 const codes: readonly ClientErrorCode[] = ['INVALID_INPUT', 'INVALID_DISCOVERY', 'PROJECT_NOT_FOUND',
   'DISCOVERY_UNAVAILABLE', 'SCAN_UNAVAILABLE', 'FINDING_NOT_FOUND', 'CLIENT_UNAVAILABLE',
-  'SCAN_IN_PROGRESS', 'REQUEST_FORBIDDEN'];
+  'SCAN_IN_PROGRESS', 'REQUEST_FORBIDDEN', 'WORKFLOW_NOT_FOUND', 'WORKFLOW_FAILED'];
 
 /** No fixture fallback: service failures remain visible to the user. */
 export function createHttpClient(transport: typeof fetch = (...args) => fetch(...args)): AgentOClient {
@@ -35,5 +35,9 @@ export function createHttpClient(transport: typeof fetch = (...args) => fetch(..
     getScan: id => request(`${projectPath(id)}/scan`),
     getFindings: id => request(`${projectPath(id)}/findings`),
     getFinding: (id, findingId) => request(`${projectPath(id)}/findings/${encodeURIComponent(findingId)}`),
+    getWorkflows: id => request(`${projectPath(id)}/workflows`),
+    getWorkflow: (id, workflowId) => request(`${projectPath(id)}/workflows/${encodeURIComponent(workflowId)}`),
+    runWorkflow: (id, input) => request(`${projectPath(id)}/workflows`, input),
   };
 }
+

@@ -14,6 +14,21 @@ const input = { name: 'HTTP project', repositoryPath: '/work/http', baseUrl: 'ht
 const execution: ExecutionServices = {
   discover: async repositoryPath => ({ ...demoDiscovery, repositoryPath }),
   analyze: async () => ({ analysis: { status: 'completed', diagnostics: [], signals: [], evidence: [] } }),
+  observeWorkflow: async (project, input) => ({
+    id: 'wf-executed-1',
+    projectId: project.id,
+    goal: input.goal,
+    identityId: input.identityId || 'alice',
+    targetUrl: project.baseUrl,
+    outcome: 'COMPLETED',
+    actionsCount: 3,
+    endpoints: [{ id: 'ep-1', componentId: 'comp-1', path: '/api/test', method: 'GET', authentication: 'required', parameters: [], roles: [], evidenceIds: [] }],
+    network: [{ url: `${project.baseUrl}/api/test`, method: 'GET', status: 200, resourceType: 'fetch', blocked: false }],
+    diagnostics: [],
+    evidence: [],
+    sourceType: 'execution-api',
+    executedAt: new Date().toISOString(),
+  }),
 };
 let server: Server;
 let folder: string;
@@ -80,6 +95,32 @@ describe('same-origin local API transport', () => {
     await expect.poll(async () => (await (await fetch(`${base}/api/projects/${project.id}/scan`)).json()).data.state).toBe('complete');
     const findings = await fetch(`${base}/api/projects/${project.id}/findings`);
     expect((await findings.json()).data).toEqual([]);
+  });
+  it('serves browser workflow lists and details, and executes new workflows', async () => {
+    const demoRes = await fetch(`${base}/api/projects/demo-shop/workflows`);
+    expect(demoRes.status).toBe(200);
+    const demoData = (await demoRes.json()).data;
+    expect(demoData).toHaveLength(5);
+    expect(demoData[0].id).toBe('wf-alice-orders');
+
+    const singleRes = await fetch(`${base}/api/projects/demo-shop/workflows/wf-alice-orders`);
+    expect(singleRes.status).toBe(200);
+    expect((await singleRes.json()).data.goal).toContain('Alice');
+
+    const missingRes = await fetch(`${base}/api/projects/demo-shop/workflows/non-existent`);
+    expect(missingRes.status).toBe(404);
+    expect((await missingRes.json()).code).toBe('WORKFLOW_NOT_FOUND');
+
+    const project = (await (await post('/api/projects', { input })).json()).data;
+    const runRes = await post(`/api/projects/${project.id}/workflows`, { goal: 'Verify cart flow' });
+    expect(runRes.status).toBe(200);
+    const runData = (await runRes.json()).data;
+    expect(runData.goal).toBe('Verify cart flow');
+    expect(runData.outcome).toBe('COMPLETED');
+
+    const listRes = await fetch(`${base}/api/projects/${project.id}/workflows`);
+    expect(listRes.status).toBe(200);
+    expect((await listRes.json()).data).toHaveLength(1);
   });
   it('handles unknown projects and unsupported methods without leaking internals', async () => {
     const response = await fetch(`${base}/api/projects/unknown`);
