@@ -1,6 +1,7 @@
 import type { DiscoveryResult } from '@agento/discovery';
 import { demoDiscovery } from '../data/demo-discovery.ts';
 import { DEMO_PROJECT_ID, demoFindings, demoProject, demoScan, demoWorkflows } from '../data/fixtures.ts';
+import { demoSecurityModel, emptySecurityModel } from '../data/model-fixture.ts';
 import { AgentOClientError } from './types.ts';
 import type { AgentOClient, BrowserWorkflowInput, BrowserWorkflowResult, ProjectInput, ProjectSummary } from './types.ts';
 
@@ -108,6 +109,11 @@ export function createFixtureClient(options: FixtureClientOptions = {}): AgentOC
       project(projectId);
       if (projectId !== DEMO_PROJECT_ID) throw new AgentOClientError('SCAN_UNAVAILABLE', 'No scan is available for this project. Scan execution is not connected yet.');
       return clone(demoScan);
+    },
+    async getSecurityModel(projectId) {
+      await ready('getSecurityModel');
+      const current = project(projectId);
+      return clone(projectId === DEMO_PROJECT_ID ? demoSecurityModel : emptySecurityModel(current));
     },
     async startScan() {
       throw new AgentOClientError('SCAN_UNAVAILABLE', 'Live scans require the local workspace service.');

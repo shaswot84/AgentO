@@ -40,6 +40,13 @@ describe.skipIf(process.env.AGENTO_FRONTEND_INTEGRATION !== '1')('installed loca
         && finding.evidence.length > 0 && finding.remediation.evidenceIds.length > 0)).toBe(true);
       const restarted = new LocalService(await Workspace.open(file), services);
       expect(await restarted.getFindings(project.id)).toEqual(findings);
+      const model = await restarted.getSecurityModel(project.id);
+      expect(model.model.endpoints).toHaveLength(19);
+      expect(model.model.databaseOperations.length).toBeGreaterThan(0);
+      expect(model.model.cookies.length).toBeGreaterThan(0);
+      expect(model.model.corsConfigurations.length).toBeGreaterThan(0);
+      expect(model.model.dataFlows.length).toBeGreaterThan(0);
+      expect(model.model.evidence.every(item => item.projectId === project.id)).toBe(true);
     } finally { await rm(folder, { recursive: true, force: true }); }
   }, 30_000);
 });

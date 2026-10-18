@@ -93,7 +93,8 @@ node packages/discovery/dist/cli.js /absolute/repository > /tmp/discovery.json
 
 The browser uses `createHttpClient()` through the `AgentOClient` contract. Node
 filesystem access, adapter imports, process execution, and persistence stay in
-`server/`; the browser bundles only compile-time core/discovery types. The
+`server/`; core, discovery and security-model contracts are type-only browser
+imports. The
 in-memory fixture client remains available for tests and explicit demonstrations,
 and is never a fallback for a failed HTTP request.
 
@@ -101,7 +102,10 @@ The default private store is `apps/frontend/.agento/workspace.json`. Its dedicat
 directory gets local ignore rules, mode `0700`, and atomic file replacements with
 mode `0600`. It contains project metadata, discovery, and each project's latest
 scan and findings, including normalized source evidence and remediation guidance.
-Starting another scan replaces the prior result. There is no scan-history archive
+It also retains full source-model contributions and public workflow observations.
+Starting another scan replaces the prior scan result; the prior source-model
+snapshot remains labelled as older until new source observations replace it.
+There is no scan-history archive
 or credential store.
 
 Set `AGENTO_WORKSPACE_FILE` on the host to choose a different file; protect and
@@ -115,6 +119,32 @@ Host header, reject cross-origin/cross-site browser requests, bound JSON request
 bodies, and sanitize execution failures. Keep the service local; it has no remote
 user authentication or deployment configuration. Host package builds and the
 Semgrep executable are trusted administrator configuration, never browser inputs.
+
+## Application model
+
+Open **Application Model** after Discovery to explore AgentO's retained source and
+runtime knowledge. Search and filter endpoints by origin, method, authentication,
+role, and observation source. Selecting a route reveals parameter requirements,
+authentication claims, source handlers, resource ownership, database operations,
+data-flow candidates, cookies and CORS observations. Evidence links open the
+original producer, timestamp, source location and facts without rewriting provider
+endpoint IDs.
+
+The local service retains full framework/static contributions after a scan and
+public persona, resource, signal and evidence records after browser workflows.
+`GET /api/projects/:id/security-model` assembles those records on the backend;
+**Refresh model** only rereads saved observations. It never runs a scanner or
+contacts the target. Source snapshots are bound to their project URL, origins and
+repository. Contributing-run times, partial coverage, rejected contributions and
+model conflicts stay visible; older source context is labelled when a replacement
+scan is pending or failed.
+
+Existing workspaces remain compatible. Older scans lack the full source context,
+and older workflow records may lack public identity declarations. Run those scans
+or workflows again when the model reports that context is unavailable. New
+projects start empty; the seeded application model is explicitly synthetic.
+An observed request, successful session, or static data-flow candidate is not a
+vulnerability verdict.
 
 ## Browser workflows
 

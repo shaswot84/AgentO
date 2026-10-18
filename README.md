@@ -75,7 +75,7 @@ AgentO/
 └── LICENSE            # Apache 2.0 License
 ```
 
-- **`apps/frontend`**: React + TypeScript workspace for project setup, saved discovery imports, scan progress, and finding evidence. Scan and finding views currently use clearly labelled demo fixtures. See [frontend setup and boundaries](apps/frontend/README.md).
+- **`apps/frontend`**: React + TypeScript workspace for project setup, discovery, the merged application model, browser workflows, static scan progress, and finding evidence. Saved observations retain their provenance; demo examples are explicitly labelled. See [frontend setup and boundaries](apps/frontend/README.md).
 - **`packages/core`**: Contains the decoupled domain model (`Project`, `Endpoint`, `Identity`, `Evidence`, `Finding`), provider interfaces, and the core pipeline orchestrator.
 - **`packages/discovery`**: Reads manifests and source syntax to identify languages, frameworks, dependencies, probable databases/authentication/middleware, and repository structure. It selects black-box mode when the stack is unsupported or a compatible Express adapter is unavailable. See [discovery usage and verification](packages/discovery/README.md).
 - **`packages/workflow`**: Chooses trusted recipes or optional semantic model proposals, validates current page references and credential permissions, and enforces finite planning budgets. Model input uses redacted page models; the browser executes approved actions. See [workflow registration and boundaries](packages/workflow/README.md).

@@ -68,6 +68,11 @@ describe.skipIf(process.env.AGENTO_FRONTEND_BROWSER_INTEGRATION !== '1')('natura
     const restored = await Workspace.open(join(folder, 'workspace.json'));
     expect(restored.read()[0]!.workflows?.[0]).toEqual(result);
     expect(result.pageModelSummary?.title).toContain('REP-501');
+    const model = await client.getSecurityModel(project.id);
+    expect(model.model.endpoints.some(endpoint => endpoint.path === '/reports/REP-501')).toBe(true);
+    expect(model.model.identities).toContainEqual(expect.objectContaining({ id: 'analyst', label: 'Analyst' }));
+    expect(model.inputs[0]).toMatchObject({ runId: result.id, source: 'browser', included: true });
+    expect(JSON.stringify(model)).not.toMatch(/Analyst!123|credentialsRef|apiKey/);
   }, 60_000);
 });
 

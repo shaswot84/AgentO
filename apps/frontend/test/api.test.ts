@@ -60,9 +60,23 @@ describe('same-origin local API transport', () => {
     await expect(client.getDiscovery(project.id)).rejects.toMatchObject({ code: 'DISCOVERY_UNAVAILABLE' });
     await expect(client.getScan(project.id)).rejects.toMatchObject({ code: 'SCAN_UNAVAILABLE' });
     expect(await client.getFindings(project.id)).toEqual([]);
+    expect(await client.getSecurityModel(project.id)).toMatchObject({ projectId: project.id, state: 'empty', sourceType: 'execution-api' });
     const found = await post('/api/discover', { repositoryPath: input.repositoryPath });
     await client.importDiscovery(project.id, (await found.json()).data);
     expect((await client.getDiscovery(project.id)).repositoryPath).toBe(input.repositoryPath);
+  });
+  it('exposes application model snapshots through a read-only route with explicit fixture provenance', async () => {
+    const client = createHttpClient((path, options) => fetch(`${base}${path}`, options));
+    const demo = await client.getSecurityModel('demo-shop');
+    expect(demo.sourceType).toBe('demo-fixture');
+    expect(demo.model.endpoints.length).toBeGreaterThan(0);
+    const project = await client.createProject(input);
+    await client.runWorkflow(project.id, { goal: 'Observe API' });
+    const result = await client.getSecurityModel(project.id);
+    expect(result.model.endpoints).toHaveLength(1);
+    expect(result.inputs[0]).toMatchObject({ source: 'browser', runId: 'wf-executed-1', included: true });
+    expect((await post(`/api/projects/${project.id}/security-model`, {})).status).toBe(405);
+    await expect(client.getSecurityModel('unknown')).rejects.toMatchObject({ code: 'PROJECT_NOT_FOUND' });
   });
   it('rejects cross-origin mutations before saving or executing work', async () => {
     const response = await post('/api/projects', { input }, { Origin: 'https://attacker.example' });

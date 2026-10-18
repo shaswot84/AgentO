@@ -9,6 +9,8 @@ import { candidateFindings, scanStages } from './execution.ts';
 import type { ExecutionServices } from './execution.ts';
 import { Workspace } from './workspace.ts';
 import type { ProjectRecord } from './workspace.ts';
+import { securityModelFor } from './security-model.ts';
+import { fromFrameworkAnalysis, fromStaticAnalysis } from '../../../packages/security-model/src/contributions.ts';
 
 const demoId = 'demo-shop';
 const isActive = (scan?: ScanSnapshot) => scan?.state === 'pending' || scan?.state === 'running';
@@ -93,6 +95,9 @@ export class LocalService implements AgentOClient {
     const result = this.record(id).scan;
     if (!result) throw new AgentOClientError('SCAN_UNAVAILABLE', 'No scan has run. Start a local static scan to collect source evidence.');
     return result;
+  }
+  async getSecurityModel(id: string) {
+    return id === demoId ? this.demo.getSecurityModel(id) : securityModelFor(this.record(id));
   }
   async getFindings(id: string) { return id === demoId ? this.demo.getFindings(id) : this.record(id).findings; }
   async getFinding(id: string, findingId: string) {
@@ -180,6 +185,11 @@ export class LocalService implements AgentOClient {
       await this.workspace.update(records => {
         const record = this.record(id, records);
         record.findings = findings;
+        const frameworkDiagnostics = (framework as typeof framework & { readonly diagnostics?: readonly { readonly code: string; readonly message: string }[] })?.diagnostics ?? [];
+        record.modelSource = { version: 1, scanId, capturedAt: new Date().toISOString(), status: analysis.status,
+          targetUrl: current.baseUrl, repositoryPath: current.repositoryPath!, allowedOrigins: current.allowedOrigins,
+          diagnostics: [...discovery.diagnostics, ...analysis.diagnostics, ...frameworkDiagnostics],
+          contributions: [...(framework ? [fromFrameworkAnalysis(framework)] : []), fromStaticAnalysis(analysis)] };
         record.scan = { ...record.scan!, state: completed ? 'complete' : 'failed', completedAt: new Date().toISOString(),
           summary: `${completed ? 'Static analysis completed' : `Static analysis ${analysis.status}`}. ${findings.length} candidate finding(s). Runtime verification was not run; no vulnerability is confirmed.`,
           diagnostics: [...discovery.diagnostics, ...analysis.diagnostics].map(({ code, message }) => ({ code, message })),

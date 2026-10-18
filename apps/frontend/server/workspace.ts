@@ -4,6 +4,7 @@ import { dirname } from 'node:path';
 import type { DiscoveryResult } from '@agento/discovery';
 import type { BrowserWorkflowResult, FindingDetail, ProjectSummary, ScanSnapshot } from '../src/client/types.ts';
 import { parseSavedDiscovery, validateProjectInput } from '../src/client/validation.ts';
+import type { RetainedModelSource } from './security-model.ts';
 
 export interface ProjectRecord {
   project: ProjectSummary;
@@ -11,6 +12,7 @@ export interface ProjectRecord {
   scan?: ScanSnapshot;
   findings: readonly FindingDetail[];
   workflows?: readonly BrowserWorkflowResult[];
+  modelSource?: RetainedModelSource;
 }
 interface WorkspaceData { version: 1; projects: ProjectRecord[] }
 
@@ -53,6 +55,12 @@ export class Workspace {
       if (record.workflows && (!Array.isArray(record.workflows) || record.workflows.some(wf => wf.projectId !== project.id))) {
         throw new Error('Invalid workspace workflows');
       }
+      if (record.modelSource && (record.modelSource.version !== 1 || typeof record.modelSource.scanId !== 'string'
+        || typeof record.modelSource.capturedAt !== 'string' || !Number.isFinite(Date.parse(record.modelSource.capturedAt))
+        || typeof record.modelSource.targetUrl !== 'string' || typeof record.modelSource.repositoryPath !== 'string'
+        || !Array.isArray(record.modelSource.allowedOrigins) || !Array.isArray(record.modelSource.diagnostics)
+        || !['completed', 'partial', 'failed', 'skipped'].includes(record.modelSource.status)
+        || !Array.isArray(record.modelSource.contributions))) throw new Error('Invalid workspace source model');
     }
 
     workspace.data = data;

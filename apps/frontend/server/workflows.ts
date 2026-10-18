@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import type { AnalysisContext, BrowserExecutionObservation, ModelProvider, Project } from '@agento/core';
+import type { AnalysisContext, BrowserExecutionObservation, Identity, ModelProvider, Project } from '@agento/core';
 import type { BrowserWorkflowInput, BrowserWorkflowResult, ObservedNetworkTraffic } from '../src/client/types.ts';
 import { workflowProfiles } from '../src/workflow-catalog.ts';
 
@@ -57,11 +57,11 @@ export async function observeBrowserWorkflow(project: Project, input: BrowserWor
   });
   const started = Date.now();
   const observation = await orchestrator.observe(context, request);
-  return resultFromObservation(base, persona.label, observation, Date.now() - started);
+  return resultFromObservation(base, persona, observation, Date.now() - started);
 }
 
 function resultFromObservation(base: { id: string; projectId: string; goal: string; identityId: string;
-  targetUrl: string; sourceType: 'execution-api'; executedAt: string }, personaLabel: string,
+  targetUrl: string; sourceType: 'execution-api'; executedAt: string }, persona: Identity,
   observation: BrowserExecutionObservation, durationMs: number): BrowserWorkflowResult {
   const network: ObservedNetworkTraffic[] = [];
   const requests = new Map<string, number>();
@@ -95,7 +95,7 @@ function resultFromObservation(base: { id: string; projectId: string; goal: stri
   const rawSummary = planning?.pageModelSummary;
   const summary = rawSummary && typeof rawSummary === 'object' && !Array.isArray(rawSummary)
     ? rawSummary as Readonly<Record<string, unknown>> : undefined;
-  return { ...base, personaLabel, outcome: observation.outcome, durationMs,
+  return { ...base, personaLabel: persona.label, outcome: observation.outcome, durationMs,
     completionType: typeof planning?.completion === 'string' ? planning.completion : 'unconfirmed',
     actionsCount: number(browser?.executedActions), modelCalls: number(planning?.modelCalls), modelTokens: number(planning?.modelTokens),
     recoveryAttempts: number(planning?.recoveryAttempts), ...(typeof finalUrl === 'string' ? { finalUrl } : {}),
@@ -107,5 +107,7 @@ function resultFromObservation(base: { id: string; projectId: string; goal: stri
       title: String(summary.title ?? ''), headings: Array.isArray(summary.headings) ? summary.headings.filter((item): item is string => typeof item === 'string') : [],
       interactiveElementCount: number(summary.interactiveElementCount),
     } } : {}),
-    endpoints: observation.endpoints, network, ...(session ? { session } : {}), diagnostics: observation.diagnostics, evidence: observation.evidence };
+    endpoints: observation.endpoints, resources: observation.resources, signals: observation.signals,
+    identities: [{ id: persona.id, label: persona.label, roles: persona.roles, authentication: persona.authentication }],
+    network, ...(session ? { session } : {}), diagnostics: observation.diagnostics, evidence: observation.evidence };
 }

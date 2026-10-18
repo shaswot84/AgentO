@@ -1,0 +1,726 @@
+{
+  "projectId": "demo-shop",
+  "sourceType": "demo-fixture",
+  "state": "ready",
+  "updatedAt": "2026-10-18T00:00:00.000Z",
+  "model": {
+    "schemaVersion": 1,
+    "project": {
+      "id": "demo-shop",
+      "name": "AgentO Demo Store",
+      "repositoryPath": "demo-app",
+      "baseUrl": "http://localhost:3000",
+      "allowedOrigins": [
+        "http://localhost:3000"
+      ],
+      "mode": "code-aware",
+      "languages": [
+        "javascript",
+        "typescript"
+      ],
+      "dataSource": "demo-fixture",
+      "createdAt": "2026-10-10T00:00:00.000Z"
+    },
+    "identities": [
+      {
+        "id": "admin",
+        "label": "Admin",
+        "roles": [
+          "admin"
+        ],
+        "authentication": "session-cookie"
+      },
+      {
+        "id": "alice",
+        "label": "Alice",
+        "roles": [
+          "customer"
+        ],
+        "authentication": "session-cookie"
+      }
+    ],
+    "components": [
+      {
+        "id": "demo-db",
+        "projectId": "demo-shop",
+        "name": "Orders database",
+        "kind": "database"
+      },
+      {
+        "id": "demo-service",
+        "projectId": "demo-shop",
+        "name": "Demo Store API",
+        "kind": "service"
+      }
+    ],
+    "endpoints": [
+      {
+        "id": "model:endpoint:eece6614226a2f31c613848175b9877c",
+        "componentId": "demo-service",
+        "componentIds": [
+          "demo-service"
+        ],
+        "origin": "http://localhost:3000",
+        "method": "GET",
+        "path": "/api/admin/users",
+        "aliases": [
+          "source-admin"
+        ],
+        "observations": [
+          {
+            "source": "source",
+            "origin": "http://localhost:3000",
+            "endpoint": {
+              "id": "source-admin",
+              "componentId": "demo-service",
+              "method": "GET",
+              "path": "/api/admin/users",
+              "parameters": [],
+              "authentication": "required",
+              "roles": [
+                "admin"
+              ],
+              "evidenceIds": [
+                "model-admin-route"
+              ]
+            }
+          }
+        ],
+        "parameters": [],
+        "authentication": "required",
+        "roles": [
+          "admin"
+        ],
+        "evidenceIds": [
+          "model-admin-route"
+        ]
+      },
+      {
+        "id": "model:endpoint:523691c6849809995e1e3668978a5053",
+        "componentId": "demo-service",
+        "componentIds": [
+          "demo-service"
+        ],
+        "origin": "http://localhost:3000",
+        "method": "GET",
+        "path": "/api/orders/:id",
+        "aliases": [
+          "browser-order",
+          "source-order"
+        ],
+        "observations": [
+          {
+            "source": "source",
+            "origin": "http://localhost:3000",
+            "endpoint": {
+              "id": "source-order",
+              "componentId": "demo-service",
+              "method": "GET",
+              "path": "/api/orders/:id",
+              "parameters": [
+                {
+                  "name": "id",
+                  "location": "path",
+                  "required": true
+                }
+              ],
+              "authentication": "required",
+              "roles": [
+                "customer",
+                "admin"
+              ],
+              "handler": {
+                "file": "src/routes/orders.ts",
+                "startLine": 104,
+                "endLine": 107,
+                "symbol": "getOrder"
+              },
+              "evidenceIds": [
+                "model-route",
+                "model-db",
+                "model-flow",
+                "model-cookie",
+                "model-cors"
+              ]
+            }
+          },
+          {
+            "source": "browser",
+            "origin": "http://localhost:3000",
+            "endpoint": {
+              "id": "browser-order",
+              "componentId": "demo-service",
+              "method": "GET",
+              "path": "/api/orders/102",
+              "parameters": [],
+              "authentication": "unknown",
+              "roles": [],
+              "evidenceIds": [
+                "model-runtime",
+                "model-owner"
+              ]
+            }
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "location": "path",
+            "required": true
+          }
+        ],
+        "authentication": "required",
+        "roles": [
+          "admin",
+          "customer"
+        ],
+        "handler": {
+          "file": "src/routes/orders.ts",
+          "startLine": 104,
+          "endLine": 107,
+          "symbol": "getOrder"
+        },
+        "evidenceIds": [
+          "model-cookie",
+          "model-cors",
+          "model-db",
+          "model-flow",
+          "model-owner",
+          "model-route",
+          "model-runtime"
+        ]
+      }
+    ],
+    "resources": [
+      {
+        "id": "order-102",
+        "projectId": "demo-shop",
+        "type": "Order",
+        "externalKey": "102",
+        "ownerIdentityId": "alice",
+        "endpointId": "model:endpoint:523691c6849809995e1e3668978a5053",
+        "evidenceIds": [
+          "model-owner"
+        ]
+      }
+    ],
+    "signals": [],
+    "evidence": [
+      {
+        "id": "model-admin-route",
+        "kind": "source-location",
+        "projectId": "demo-shop",
+        "producerId": "synthetic-model-fixture",
+        "capturedAt": "2026-10-18T00:00:00.000Z",
+        "summary": "Synthetic example: route. No live test was run.",
+        "endpointId": "source-admin",
+        "facts": {
+          "observation": "route",
+          "fixture": true
+        },
+        "source": {
+          "file": "src/routes/admin.ts",
+          "startLine": 20
+        }
+      },
+      {
+        "id": "model-cookie",
+        "kind": "configuration",
+        "projectId": "demo-shop",
+        "producerId": "synthetic-model-fixture",
+        "capturedAt": "2026-10-18T00:00:00.000Z",
+        "summary": "Synthetic example: cookie. No live test was run.",
+        "endpointId": "source-order",
+        "facts": {
+          "observation": "cookie",
+          "name": "session",
+          "options": {
+            "httpOnly": true,
+            "secure": false,
+            "sameSite": "Lax"
+          },
+          "runtimeVerified": false,
+          "fixture": true
+        }
+      },
+      {
+        "id": "model-cors",
+        "kind": "configuration",
+        "projectId": "demo-shop",
+        "producerId": "synthetic-model-fixture",
+        "capturedAt": "2026-10-18T00:00:00.000Z",
+        "summary": "Synthetic example: cors. No live test was run.",
+        "endpointId": "source-order",
+        "facts": {
+          "observation": "cors",
+          "options": {
+            "origin": "http://localhost:3000",
+            "credentials": true
+          },
+          "runtimeVerified": false,
+          "fixture": true
+        }
+      },
+      {
+        "id": "model-db",
+        "kind": "source-location",
+        "projectId": "demo-shop",
+        "producerId": "synthetic-model-fixture",
+        "capturedAt": "2026-10-18T00:00:00.000Z",
+        "summary": "Synthetic example: database-operation. No live test was run.",
+        "endpointId": "source-order",
+        "facts": {
+          "observation": "database-operation",
+          "operation": "SELECT",
+          "tables": [
+            "orders"
+          ],
+          "api": "query",
+          "runtimeVerified": false,
+          "fixture": true
+        },
+        "source": {
+          "file": "src/routes/orders.ts",
+          "startLine": 104,
+          "endLine": 107,
+          "symbol": "getOrder"
+        }
+      },
+      {
+        "id": "model-flow",
+        "kind": "static-analysis",
+        "projectId": "demo-shop",
+        "producerId": "synthetic-model-fixture",
+        "capturedAt": "2026-10-18T00:00:00.000Z",
+        "summary": "Synthetic example: static-candidate. No live test was run.",
+        "endpointId": "source-order",
+        "facts": {
+          "observation": "static-candidate",
+          "sources": [
+            {
+              "kind": "request-params",
+              "location": {
+                "file": "src/routes/orders.ts",
+                "startLine": 104,
+                "endLine": 107,
+                "symbol": "getOrder"
+              }
+            }
+          ],
+          "sink": {
+            "kind": "query",
+            "location": {
+              "file": "src/routes/orders.ts",
+              "startLine": 104,
+              "endLine": 107,
+              "symbol": "getOrder"
+            }
+          },
+          "contextResolution": "syntax-only",
+          "requiresRuntimeVerification": true,
+          "runtimeVerified": false,
+          "fixture": true
+        },
+        "source": {
+          "file": "src/routes/orders.ts",
+          "startLine": 104,
+          "endLine": 107,
+          "symbol": "getOrder"
+        }
+      },
+      {
+        "id": "model-owner",
+        "kind": "resource-ownership",
+        "projectId": "demo-shop",
+        "producerId": "synthetic-model-fixture",
+        "capturedAt": "2026-10-18T00:00:00.000Z",
+        "summary": "Synthetic example: ownership. No live test was run.",
+        "endpointId": "browser-order",
+        "facts": {
+          "observation": "ownership",
+          "resourceId": "order-102",
+          "ownerIdentityId": "alice",
+          "fixture": true
+        },
+        "identityId": "alice"
+      },
+      {
+        "id": "model-route",
+        "kind": "source-location",
+        "projectId": "demo-shop",
+        "producerId": "synthetic-model-fixture",
+        "capturedAt": "2026-10-18T00:00:00.000Z",
+        "summary": "Synthetic example: route. No live test was run.",
+        "endpointId": "source-order",
+        "facts": {
+          "observation": "route",
+          "fixture": true
+        },
+        "source": {
+          "file": "src/routes/orders.ts",
+          "startLine": 104,
+          "endLine": 107,
+          "symbol": "getOrder"
+        }
+      },
+      {
+        "id": "model-runtime",
+        "kind": "http-response",
+        "projectId": "demo-shop",
+        "producerId": "synthetic-model-fixture",
+        "capturedAt": "2026-10-18T00:00:00.000Z",
+        "summary": "Synthetic example: http-response. No live test was run.",
+        "endpointId": "browser-order",
+        "facts": {
+          "url": "http://localhost:3000/api/orders/102",
+          "origin": "http://localhost:3000",
+          "method": "GET",
+          "status": 200,
+          "observation": "http-response",
+          "fixture": true
+        }
+      }
+    ],
+    "endpointAliases": {
+      "source-admin": "model:endpoint:eece6614226a2f31c613848175b9877c",
+      "model:endpoint:eece6614226a2f31c613848175b9877c": "model:endpoint:eece6614226a2f31c613848175b9877c",
+      "browser-order": "model:endpoint:523691c6849809995e1e3668978a5053",
+      "source-order": "model:endpoint:523691c6849809995e1e3668978a5053",
+      "model:endpoint:523691c6849809995e1e3668978a5053": "model:endpoint:523691c6849809995e1e3668978a5053"
+    },
+    "parameters": [
+      {
+        "endpointId": "model:endpoint:523691c6849809995e1e3668978a5053",
+        "name": "id",
+        "location": "path",
+        "required": true,
+        "evidenceIds": [
+          "model-cookie",
+          "model-cors",
+          "model-db",
+          "model-flow",
+          "model-route"
+        ]
+      }
+    ],
+    "authenticationRequirements": [
+      {
+        "endpointId": "model:endpoint:523691c6849809995e1e3668978a5053",
+        "requirement": "required",
+        "roles": [
+          "customer",
+          "admin"
+        ],
+        "source": "source",
+        "evidenceIds": [
+          "model-route",
+          "model-db",
+          "model-flow",
+          "model-cookie",
+          "model-cors"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:523691c6849809995e1e3668978a5053",
+        "requirement": "unknown",
+        "roles": [],
+        "source": "browser",
+        "evidenceIds": [
+          "model-runtime",
+          "model-owner"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:eece6614226a2f31c613848175b9877c",
+        "requirement": "required",
+        "roles": [
+          "admin"
+        ],
+        "source": "source",
+        "evidenceIds": [
+          "model-admin-route"
+        ]
+      }
+    ],
+    "userRoles": [
+      {
+        "name": "admin",
+        "identityIds": [
+          "admin"
+        ],
+        "endpointIds": [
+          "model:endpoint:eece6614226a2f31c613848175b9877c",
+          "model:endpoint:523691c6849809995e1e3668978a5053"
+        ],
+        "evidenceIds": [
+          "model-admin-route",
+          "model-cookie",
+          "model-cors",
+          "model-db",
+          "model-flow",
+          "model-route"
+        ]
+      },
+      {
+        "name": "customer",
+        "identityIds": [
+          "alice"
+        ],
+        "endpointIds": [
+          "model:endpoint:523691c6849809995e1e3668978a5053"
+        ],
+        "evidenceIds": [
+          "model-cookie",
+          "model-cors",
+          "model-db",
+          "model-flow",
+          "model-route"
+        ]
+      }
+    ],
+    "sourceHandlers": [
+      {
+        "endpointId": "model:endpoint:523691c6849809995e1e3668978a5053",
+        "source": {
+          "file": "src/routes/orders.ts",
+          "startLine": 104,
+          "endLine": 107,
+          "symbol": "getOrder"
+        },
+        "evidenceIds": [
+          "model-cookie",
+          "model-cors",
+          "model-db",
+          "model-flow",
+          "model-route"
+        ]
+      }
+    ],
+    "resourceTypes": [
+      {
+        "id": "model-fact:fb5794567a51d7523c97c46aad0c68eb8c60ec1da29aef9bb70676eb4c3673ac",
+        "kind": "resource-type",
+        "source": "browser",
+        "endpointIds": [
+          "model:endpoint:523691c6849809995e1e3668978a5053"
+        ],
+        "evidenceIds": [
+          "model-owner"
+        ],
+        "details": {
+          "resourceId": "order-102",
+          "type": "Order",
+          "externalKey": "102"
+        }
+      }
+    ],
+    "observedOwnership": [
+      {
+        "id": "model-fact:3f639d7819db896472650d7bf7bd674576ee8a645d410b2e686da93eb21b82e0",
+        "kind": "ownership",
+        "source": "browser",
+        "endpointIds": [
+          "model:endpoint:523691c6849809995e1e3668978a5053"
+        ],
+        "evidenceIds": [
+          "model-owner"
+        ],
+        "details": {
+          "resourceId": "order-102",
+          "ownerIdentityId": "alice"
+        }
+      },
+      {
+        "id": "model-fact:4fc4a767bfd82670d597bb80efaf3a6897e82b1a9e09e19c62b9a451b085137b",
+        "kind": "ownership",
+        "source": "browser",
+        "endpointIds": [
+          "model:endpoint:523691c6849809995e1e3668978a5053"
+        ],
+        "evidenceIds": [
+          "model-owner"
+        ],
+        "details": {
+          "observation": "ownership",
+          "resourceId": "order-102",
+          "ownerIdentityId": "alice",
+          "fixture": true
+        }
+      }
+    ],
+    "dataFlows": [
+      {
+        "id": "model-fact:b2087a9fff1ab89289a0791408e059f8ee855d565c48d9c71d71684891c3e047",
+        "kind": "data-flow",
+        "source": "source",
+        "endpointIds": [
+          "model:endpoint:523691c6849809995e1e3668978a5053"
+        ],
+        "evidenceIds": [
+          "model-flow"
+        ],
+        "details": {
+          "observation": "static-candidate",
+          "sources": [
+            {
+              "kind": "request-params",
+              "location": {
+                "file": "src/routes/orders.ts",
+                "startLine": 104,
+                "endLine": 107,
+                "symbol": "getOrder"
+              }
+            }
+          ],
+          "sink": {
+            "kind": "query",
+            "location": {
+              "file": "src/routes/orders.ts",
+              "startLine": 104,
+              "endLine": 107,
+              "symbol": "getOrder"
+            }
+          },
+          "contextResolution": "syntax-only",
+          "requiresRuntimeVerification": true,
+          "runtimeVerified": false,
+          "fixture": true,
+          "sourceLocation": {
+            "file": "src/routes/orders.ts",
+            "startLine": 104,
+            "endLine": 107,
+            "symbol": "getOrder"
+          }
+        }
+      }
+    ],
+    "databaseOperations": [
+      {
+        "id": "model-fact:55846ecf13ddcf01e382651a0aa88fc18502d6ca127059347e61315d8eb35bc1",
+        "kind": "database-operation",
+        "source": "source",
+        "endpointIds": [
+          "model:endpoint:523691c6849809995e1e3668978a5053"
+        ],
+        "evidenceIds": [
+          "model-db"
+        ],
+        "details": {
+          "observation": "database-operation",
+          "operation": "SELECT",
+          "tables": [
+            "orders"
+          ],
+          "api": "query",
+          "runtimeVerified": false,
+          "fixture": true,
+          "sourceLocation": {
+            "file": "src/routes/orders.ts",
+            "startLine": 104,
+            "endLine": 107,
+            "symbol": "getOrder"
+          }
+        }
+      }
+    ],
+    "cookies": [
+      {
+        "id": "model-fact:8a862406bca382e95a680cb6f17350bf2eecfeee8719f53f302da4a177b8e44e",
+        "kind": "cookie",
+        "source": "source",
+        "endpointIds": [
+          "model:endpoint:523691c6849809995e1e3668978a5053"
+        ],
+        "evidenceIds": [
+          "model-cookie"
+        ],
+        "details": {
+          "observation": "cookie",
+          "name": "session",
+          "options": {
+            "httpOnly": true,
+            "secure": false,
+            "sameSite": "Lax"
+          },
+          "runtimeVerified": false,
+          "fixture": true
+        }
+      }
+    ],
+    "corsConfigurations": [
+      {
+        "id": "model-fact:63f7a76a277a9293d69dcb83d3ec3372f5f22a5c4c0aa386ebf878c0fdd5ea49",
+        "kind": "cors",
+        "source": "source",
+        "endpointIds": [
+          "model:endpoint:523691c6849809995e1e3668978a5053"
+        ],
+        "evidenceIds": [
+          "model-cors"
+        ],
+        "details": {
+          "observation": "cors",
+          "options": {
+            "origin": "http://localhost:3000",
+            "credentials": true
+          },
+          "runtimeVerified": false,
+          "fixture": true
+        }
+      }
+    ],
+    "runtimeObservations": [
+      {
+        "id": "model-owner",
+        "kind": "resource-ownership",
+        "projectId": "demo-shop",
+        "producerId": "synthetic-model-fixture",
+        "capturedAt": "2026-10-18T00:00:00.000Z",
+        "summary": "Synthetic example: ownership. No live test was run.",
+        "endpointId": "browser-order",
+        "facts": {
+          "observation": "ownership",
+          "resourceId": "order-102",
+          "ownerIdentityId": "alice",
+          "fixture": true
+        },
+        "identityId": "alice"
+      },
+      {
+        "id": "model-runtime",
+        "kind": "http-response",
+        "projectId": "demo-shop",
+        "producerId": "synthetic-model-fixture",
+        "capturedAt": "2026-10-18T00:00:00.000Z",
+        "summary": "Synthetic example: http-response. No live test was run.",
+        "endpointId": "browser-order",
+        "facts": {
+          "url": "http://localhost:3000/api/orders/102",
+          "origin": "http://localhost:3000",
+          "method": "GET",
+          "status": 200,
+          "observation": "http-response",
+          "fixture": true
+        }
+      }
+    ],
+    "diagnostics": []
+  },
+  "inputs": [
+    {
+      "runId": "synthetic-source",
+      "source": "source",
+      "capturedAt": "2026-10-18T00:00:00.000Z",
+      "outcome": "completed",
+      "included": true
+    },
+    {
+      "runId": "synthetic-browser",
+      "source": "browser",
+      "capturedAt": "2026-10-18T00:00:00.000Z",
+      "outcome": "COMPLETED",
+      "included": true
+    }
+  ],
+  "diagnostics": []
+}

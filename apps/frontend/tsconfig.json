@@ -12,11 +12,14 @@
     "noEmit": true,
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
+    "resolveJsonModule": true,
     "isolatedModules": true,
     "types": ["vite/client", "node"],
     "paths": {
       "@agento/core": ["../../packages/core/src/index.ts"],
-      "@agento/discovery": ["../../packages/discovery/src/types.ts"]
+      "@agento/discovery": ["../../packages/discovery/src/types.ts"],
+      "@agento/security-model": ["../../packages/security-model/src/contracts.ts"],
+      "@agento/runtime": ["../../packages/runtime/src/contracts.ts"]
     }
   },
   "include": ["src", "server", "test", "vite.config.ts"]

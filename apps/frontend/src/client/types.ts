@@ -1,5 +1,24 @@
-import type { Endpoint, Evidence, Finding, Project, RemediationSuggestion } from '@agento/core';
+import type { Endpoint, Evidence, Finding, Identity, Project, RemediationSuggestion, Resource, SecuritySignal } from '@agento/core';
 import type { DiscoveryResult } from '@agento/discovery';
+import type { ApplicationSecurityModel } from '@agento/security-model';
+
+export interface SecurityModelInputSummary {
+  readonly runId: string;
+  readonly source: 'source' | 'browser';
+  readonly capturedAt: string;
+  readonly outcome: string;
+  readonly included: boolean;
+}
+
+export interface SecurityModelSnapshot {
+  readonly projectId: string;
+  readonly sourceType: 'demo-fixture' | 'execution-api';
+  readonly state: 'empty' | 'ready' | 'partial' | 'stale';
+  readonly updatedAt: string | null;
+  readonly model: ApplicationSecurityModel;
+  readonly inputs: readonly SecurityModelInputSummary[];
+  readonly diagnostics: readonly { readonly code: string; readonly message: string }[];
+}
 
 export interface ProjectInput {
   readonly name: string;
@@ -81,6 +100,10 @@ export interface BrowserWorkflowResult {
   readonly sourceType: 'demo-fixture' | 'execution-api';
   readonly executedAt: string;
   readonly endpoints: readonly Endpoint[];
+  readonly resources?: readonly Resource[];
+  readonly signals?: readonly SecuritySignal[];
+  /** Public persona declarations only; excludes backend credentials and session material. */
+  readonly identities?: readonly Identity[];
   readonly network: readonly ObservedNetworkTraffic[];
   readonly steps?: readonly WorkflowStepRecord[];
   readonly session?: {
@@ -114,6 +137,7 @@ export interface AgentOClient {
   createProject(input: ProjectInput, discovery?: DiscoveryResult): Promise<ProjectSummary>;
   importDiscovery(projectId: string, discovery: DiscoveryResult): Promise<ProjectSummary>;
   getDiscovery(projectId: string): Promise<DiscoveryResult>;
+  getSecurityModel(projectId: string): Promise<SecurityModelSnapshot>;
   getScan(projectId: string): Promise<ScanSnapshot>;
   startScan(projectId: string): Promise<ScanSnapshot>;
   deleteProject(projectId: string): Promise<void>;

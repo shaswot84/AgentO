@@ -2,14 +2,16 @@ import { useEffect, useRef, useState } from 'react';
 import type { DependencyList, FormEvent, ReactNode } from 'react';
 import type { FindingStatus } from '@agento/core';
 import type { DiscoveryResult } from '@agento/discovery';
+import { SecurityModelView } from './SecurityModelView';
 import { workflowNotification, workflowProfiles } from './workflow-catalog';
 import { AgentOClientError, parseSavedDiscovery, validateProjectInput } from './client';
 import type { AgentOClient, BrowserWorkflowResult, FindingDetail, ObservedNetworkTraffic, ProjectInput, ProjectInputErrors, ProjectSummary } from './client';
 
-type View = 'projects' | 'discovery' | 'workflows' | 'scan' | 'findings';
+type View = 'projects' | 'discovery' | 'model' | 'workflows' | 'scan' | 'findings';
 const views: { id: View; label: string; icon: IconName }[] = [
   { id: 'projects', label: 'Projects', icon: 'folder' },
   { id: 'discovery', label: 'Discovery', icon: 'compass' },
+  { id: 'model', label: 'Application Model', icon: 'network' },
   { id: 'workflows', label: 'Workflows', icon: 'browser' },
   { id: 'scan', label: 'Scan progress', icon: 'activity' },
   { id: 'findings', label: 'Findings', icon: 'shield' },
@@ -138,6 +140,7 @@ export function App({ client }: { client: AgentOClient }) {
   const heading = {
     projects: { eyebrow: 'APPLICATION SECURITY', title: 'Projects', subtitle: 'Your applications, their context, and the next step toward proof.' },
     discovery: { eyebrow: selected?.name ?? 'PROJECT INTELLIGENCE', title: 'Discovery', subtitle: 'Understand your stack, repository, and available analysis capabilities.' },
+    model: { eyebrow: selected?.name ?? 'APPLICATION KNOWLEDGE', title: 'Application Model', subtitle: 'Explore routes, identities, resources, and the evidence connecting source code to runtime behavior.' },
     workflows: { eyebrow: selected?.name ?? 'BROWSER WORKFLOW LAYER', title: 'Browser Workflows', subtitle: 'Inspect runtime user actions, discovered endpoints, session state, and intercepted network evidence.' },
     scan: { eyebrow: selected?.name ?? 'INVESTIGATION', title: 'Scan progress', subtitle: 'Follow each stage from repository context to an evidence-backed verdict.' },
     findings: { eyebrow: selected?.name ?? 'INVESTIGATION', title: 'Findings', subtitle: 'Review signals, inspect the evidence, and decide what needs attention.' },
@@ -157,6 +160,7 @@ export function App({ client }: { client: AgentOClient }) {
         {notification && <div className={`notice ${notification.kind}`} role={notification.kind === 'error' ? 'alert' : 'status'}><Icon name={notification.kind === 'success' ? 'check' : 'info'} /><p>{notification.message}</p><button className="icon-button" aria-label="Dismiss notification" onClick={() => setNotification(null)}><Icon name="close" /></button></div>}
         {projectsState.loading ? <Loading /> : projectsState.error ? <ErrorState retry={projectsState.retry} /> : view === 'projects' ? <ProjectsView projects={projects} persistent={client.storage === 'disk'} onSelect={openProject} onDelete={project => setProjectToDelete(project)} onCreate={() => setNewProjectOpen(true)} onExplore={() => { setSelectedId('demo-shop'); navigate('findings'); }} /> : selected ? <>
           {view === 'discovery' && <DiscoveryView client={client} project={selected} revision={revision} onImport={() => setImportOpen(true)} onRescan={() => void rescanSelected()} rescanning={rescanning} onDelete={() => setProjectToDelete(selected)} />}
+          {view === 'model' && <SecurityModelView key={selected.id} client={client} project={selected} />}
           {view === 'workflows' && <WorkflowsView key={selected.id} client={client} project={selected} onDemo={() => setSelectedId('demo-shop')} onRunWorkflow={() => setWorkflowRunOpen(true)} />}
           {view === 'scan' && <ScanView key={selected.id} client={client} project={selected} onDemo={() => setSelectedId('demo-shop')} onNavigateWorkflows={() => navigate('workflows')} />}
           {view === 'findings' && <FindingsView key={selected.id} client={client} project={selected} onDemo={() => setSelectedId('demo-shop')} onNavigateWorkflows={() => navigate('workflows')} />}
