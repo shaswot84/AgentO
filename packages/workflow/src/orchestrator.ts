@@ -154,6 +154,7 @@ export class BrowserWorkflowOrchestrator implements BrowserWorkflowDriver {
           catch (error) { recover(normalizedFailure(error)); }
         }
         if (deterministicComplete) {
+          await inspect();
           if (!this.options.completion) { completion = 'recipe-completed'; return; }
           if (await isComplete()) return;
           if (!planner || recoveries >= this.budgets.maxRecoveryAttempts) throw new BrowserWorkflowFailure('unable-to-proceed');
@@ -235,7 +236,11 @@ export class BrowserWorkflowOrchestrator implements BrowserWorkflowDriver {
         workflowId: workflow.id, completion: observation.outcome === 'COMPLETED' ? completion : 'unconfirmed',
         modelCalls: planner?.usage.modelCalls ?? 0, modelTokens: planner?.usage.tokens ?? 0,
         actions, recoveryAttempts: recoveries,
-        ...(finalPage ? { pageId: finalPage.id, url: finalPage.url } : {})
+        history: history.map(entry => ({ ...entry })),
+        ...(finalPage ? { pageId: finalPage.id, url: finalPage.url, pageModelSummary: {
+          title: finalPage.title, headings: [...finalPage.headings],
+          interactiveElementCount: finalPage.interactiveElements.length,
+        } } : {})
       }
     }] });
   }

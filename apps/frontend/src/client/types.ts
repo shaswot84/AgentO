@@ -103,6 +103,7 @@ export interface BrowserWorkflowInput {
   readonly goal: string;
   readonly identityId?: string;
   readonly targetName?: string;
+  readonly planningMode?: 'automatic' | 'recipes';
 }
 
 /** Browser-facing contract; repository access and execution stay on the host. */

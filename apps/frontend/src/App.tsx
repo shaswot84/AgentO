@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import type { DependencyList, FormEvent, ReactNode } from 'react';
 import type { FindingStatus } from '@agento/core';
 import type { DiscoveryResult } from '@agento/discovery';
+import { workflowNotification, workflowProfiles } from './workflow-catalog';
 import { AgentOClientError, parseSavedDiscovery, validateProjectInput } from './client';
-import type { AgentOClient, BrowserWorkflowInput, BrowserWorkflowResult, FindingDetail, ObservedNetworkTraffic, ProjectInput, ProjectInputErrors, ProjectSummary } from './client';
+import type { AgentOClient, BrowserWorkflowResult, FindingDetail, ObservedNetworkTraffic, ProjectInput, ProjectInputErrors, ProjectSummary } from './client';
 
 type View = 'projects' | 'discovery' | 'workflows' | 'scan' | 'findings';
 const views: { id: View; label: string; icon: IconName }[] = [
@@ -164,7 +165,7 @@ export function App({ client }: { client: AgentOClient }) {
     </div>
     {newProjectOpen && <ProjectDialog client={client} onClose={() => setNewProjectOpen(false)} onSaved={saved} />}
     {importOpen && selected && <ImportDialog client={client} project={selected} onClose={() => setImportOpen(false)} onSaved={saved} />}
-    {workflowRunOpen && selected && <WorkflowRunDialog client={client} project={selected} onClose={() => setWorkflowRunOpen(false)} onCompleted={wf => { setSelectedId(selected.id); setRevision(value => value + 1); setNotification({ message: `Workflow completed (${wf.outcome}): ${wf.goal}`, kind: wf.outcome === 'COMPLETED' ? 'success' : 'warning' }); }} />}
+    {workflowRunOpen && selected && <WorkflowRunDialog client={client} project={selected} onClose={() => setWorkflowRunOpen(false)} onCompleted={wf => { setSelectedId(selected.id); setRevision(value => value + 1); setNotification({ message: workflowNotification(wf), kind: wf.outcome === 'COMPLETED' ? 'success' : 'warning' }); }} />}
     {projectToDelete && <DeleteProjectDialog client={client} project={projectToDelete} onClose={() => setProjectToDelete(null)} onDeleted={deleted => { setRevision(value => value + 1); setNotification({ message: `Project "${deleted.name}" has been deleted.`, kind: 'success' }); if (selectedId === deleted.id) { setSelectedId(''); navigate('projects'); } setProjectToDelete(null); }} />}
   </div>;
 }
@@ -420,6 +421,12 @@ function WorkflowDetailPanel({ workflow, onRerun }: { workflow: BrowserWorkflowR
         </button>
       </div>
 
+      {workflow.diagnostics.length > 0 && <div className="surface-body notice warning" role="status">
+        <Icon name="info" /><div><strong>Workflow {workflow.outcome.toLowerCase()}</strong>
+          <ul>{workflow.diagnostics.map((diagnostic, index) => <li key={index}><strong>{diagnostic.code}:</strong> {diagnostic.message}</li>)}</ul>
+        </div>
+      </div>}
+
       <div className="detail-tabs" role="tablist" aria-label="Workflow information">
         {tabs.map((item, index) => (
           <button
@@ -455,6 +462,7 @@ function WorkflowDetailPanel({ workflow, onRerun }: { workflow: BrowserWorkflowR
         >
           {item.id === 'overview' && <>
             <div className="section-label">WORKFLOW EXECUTION SUMMARY{fixture ? ' · DEMO' : ''}</div>
+            <p className="muted">Completion describes browser goal progress. These observations carry no vulnerability verdict.</p>
             <dl className="definition-grid endpoint-summary">
               <div className="definition"><dt>Goal</dt><dd>{workflow.goal}</dd></div>
               <div className="definition"><dt>Persona / Identity</dt><dd className="mono">{workflow.personaLabel || workflow.identityId}</dd></div>
@@ -462,6 +470,8 @@ function WorkflowDetailPanel({ workflow, onRerun }: { workflow: BrowserWorkflowR
               <div className="definition"><dt>Final Destination</dt><dd className="mono">{workflow.finalUrl || 'Initial / blank'}</dd></div>
               <div className="definition"><dt>Completion Mechanism</dt><dd className="mono">{workflow.completionType || 'unconfirmed'}</dd></div>
               <div className="definition"><dt>Actions Executed</dt><dd className="mono">{workflow.actionsCount} action(s)</dd></div>
+              <div className="definition"><dt>Model Usage</dt><dd>{workflow.modelCalls ?? 0} calls · {workflow.modelTokens ?? 0} tokens</dd></div>
+              <div className="definition"><dt>Recovery Attempts</dt><dd>{workflow.recoveryAttempts ?? 0}</dd></div>
             </dl>
 
             {workflow.session && (
@@ -516,19 +526,6 @@ function WorkflowDetailPanel({ workflow, onRerun }: { workflow: BrowserWorkflowR
               </>
             )}
 
-            {workflow.diagnostics.length > 0 && (
-              <div className="notice warning" style={{ marginTop: 20 }}>
-                <Icon name="info" />
-                <div>
-                  <h3>Workflow Diagnostics</h3>
-                  <ul>
-                    {workflow.diagnostics.map((d, i) => (
-                      <li key={i}><strong>{d.code}:</strong> {d.message}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            )}
           </>}
 
           {item.id === 'endpoints' && <>
@@ -623,7 +620,8 @@ function WorkflowDetailPanel({ workflow, onRerun }: { workflow: BrowserWorkflowR
           </>}
 
           {item.id === 'steps' && <>
-            <div className="section-label">ACTION TIMELINE & EXECUTED STEPS</div>
+            <div className="section-label">RECENT WORKFLOW STEPS</div>
+            {!fixture && <p className="muted">Up to ten recent steps are retained. The action total also includes authentication actions.</p>}
             {(!workflow.steps || workflow.steps.length === 0) ? (
               <Empty title="No step records">
                 Step-level logging was not retained for this workflow. Check the summary facts in Overview.
@@ -1097,49 +1095,14 @@ function WorkflowRunDialog({
   onClose: () => void;
   onCompleted: (workflow: BrowserWorkflowResult) => void;
 }) {
-  const [goal, setGoal] = useState('Log in as Alice, explore order history, and verify authorization guards');
+  const [goal, setGoal] = useState(workflowProfiles[0]!.suggestedGoal);
   const [identityId, setIdentityId] = useState('alice');
   const [targetName, setTargetName] = useState('storefront');
   const [running, setRunning] = useState(false);
   const [error, setError] = useState('');
 
-  const recipes = [
-    {
-      title: 'Alice Storefront Exploration',
-      target: 'storefront',
-      identity: 'alice',
-      goal: 'Log in as Alice, explore order history, and verify authorization guards',
-      description: 'Executes Alice login flow, cookie verification, and order detail browsing.',
-    },
-    {
-      title: 'Bob Storefront (Session Reuse)',
-      target: 'storefront',
-      identity: 'bob',
-      goal: 'Log in as Bob, inspect cached session, and attempt order detail requests',
-      description: 'Tests session caching, reuses identity tokens, and validates scope limits.',
-    },
-    {
-      title: 'Admin Privileged Console',
-      target: 'storefront',
-      identity: 'admin',
-      goal: 'Access administrative console, inspect privilege boundary, and query customer orders',
-      description: 'Simulates admin persona to discover high-privilege endpoints and actions.',
-    },
-    {
-      title: 'Portal MPA Redirect & CSRF',
-      target: 'portal',
-      identity: 'alice',
-      goal: 'Navigate multi-page portal, follow 302 redirects safely, and observe CSRF tokens',
-      description: 'Evaluates multi-step form submissions with anti-CSRF token lifecycle.',
-    },
-    {
-      title: 'Strict Scope Guard (Edge SPA)',
-      target: 'edge-spa',
-      identity: 'alice',
-      goal: 'Browse single-page application and verify third-party / external domain blocks',
-      description: 'Validates strict origin enforcement blocking unapproved out-of-scope traffic.',
-    },
-  ];
+  const [planningMode, setPlanningMode] = useState<'automatic' | 'recipes'>('automatic');
+  const profile = workflowProfiles.find(item => item.id === targetName)!;
 
   async function submit(event: FormEvent) {
     event.preventDefault();
@@ -1154,6 +1117,7 @@ function WorkflowRunDialog({
         goal: goal.trim(),
         identityId,
         targetName,
+        planningMode,
       });
       onCompleted(result);
       onClose();
@@ -1177,32 +1141,15 @@ function WorkflowRunDialog({
             <div className="quickstart-heading">
               <Icon name="browser" />
               <div>
-                <h3>Select a Workflow Scenario</h3>
-                <p>Pick a preconfigured scenario recipe or customize parameters below.</p>
+                <h3>Describe your goal</h3>
+                <p>Automatic planning uses a model for unfamiliar goals. Listed recipes run without model calls.</p>
               </div>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 8, marginTop: 10 }}>
-              {recipes.map(r => (
-                <button
-                  key={r.title}
-                  type="button"
-                  className={`button secondary small ${goal === r.goal && identityId === r.identity ? 'primary' : ''}`}
-                  style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', padding: '8px 12px' }}
-                  disabled={running}
-                  onClick={() => {
-                    setGoal(r.goal);
-                    setIdentityId(r.identity);
-                    setTargetName(r.target);
-                    setError('');
-                  }}
-                >
-                  <div style={{ fontWeight: 600, display: 'flex', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span>{r.title}</span>
-                    <span className="badge neutral mono" style={{ fontSize: 10 }}>{r.identity} · {r.target}</span>
-                  </div>
-                  <span className="muted" style={{ fontSize: 11, marginTop: 2 }}>{r.description}</span>
-                </button>
-              ))}
+            <div className="tag-list" style={{ marginTop: 10 }}>
+              <button type="button" className="button secondary small" disabled={running}
+                onClick={() => { setGoal(profile.suggestedGoal); setPlanningMode('automatic'); }}>Try a natural-language goal</button>
+              {profile.recipeGoals.map(recipe => <button key={recipe} type="button" className="button secondary small" disabled={running}
+                onClick={() => { setGoal(recipe); setError(''); }}>{recipe}</button>)}
             </div>
           </div>
 
@@ -1213,7 +1160,8 @@ function WorkflowRunDialog({
                 <label htmlFor="workflow-goal">Goal description</label>
                 <textarea
                   id="workflow-goal"
-                  rows={2}
+                  rows={3}
+                  maxLength={2000}
                   value={goal}
                   onChange={e => { setGoal(e.target.value); setError(''); }}
                   placeholder="e.g. Navigate to checkout and inspect network traffic"
@@ -1228,10 +1176,7 @@ function WorkflowRunDialog({
                   value={identityId}
                   onChange={e => setIdentityId(e.target.value)}
                 >
-                  <option value="alice">Alice (Storefront Customer)</option>
-                  <option value="bob">Bob (Alternative Customer)</option>
-                  <option value="admin">Admin (Privileged User)</option>
-                  <option value="anonymous">Anonymous (Unauthenticated)</option>
+                  {profile.personas.map(persona => <option key={persona.id} value={persona.id}>{persona.label}</option>)}
                 </select>
               </div>
               <div className="form-field">
@@ -1240,13 +1185,21 @@ function WorkflowRunDialog({
                   id="workflow-target"
                   className="filter-select"
                   value={targetName}
-                  onChange={e => setTargetName(e.target.value)}
+                  onChange={e => {
+                    const next = workflowProfiles.find(item => item.id === e.target.value)!;
+                    setTargetName(next.id); setIdentityId(next.personas[0]!.id); setGoal(next.suggestedGoal); setError('');
+                  }}
                 >
-                  <option value="storefront">Storefront (REST & Cookies)</option>
-                  <option value="purchases">Purchases (Orders & BOLA/IDOR)</option>
-                  <option value="portal">Portal (MPA & CSRF)</option>
-                  <option value="edge-spa">Edge SPA (Strict Scope)</option>
+                  {workflowProfiles.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}
                 </select>
+              </div>
+              <div className="form-field full-width">
+                <label htmlFor="workflow-planning">Planning</label>
+                <select id="workflow-planning" value={planningMode} onChange={e => setPlanningMode(e.target.value as 'automatic' | 'recipes')}>
+                  <option value="automatic">Automatic — recipes first, then model planning</option>
+                  <option value="recipes">Recipes only — no model calls</option>
+                </select>
+                <p className="muted">Uses the selected persona and allowed origins. Built-in profiles are for local demo applications.</p>
               </div>
             </div>
           </fieldset>
@@ -1257,7 +1210,7 @@ function WorkflowRunDialog({
             <Icon name="info" />
             <p>
               {client.storage === 'disk'
-                ? 'Executes a sandboxed browser observation session with Playwright and records endpoints, network traffic, and evidence.'
+                ? 'Records browser actions and network evidence. Natural-language planning requires a model configured on the local service. Completion records goal progress; security findings require separate verification.'
                 : 'Demo mode simulates execution and appends the observed workflow record to your session.'}
             </p>
           </div>

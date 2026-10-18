@@ -51,6 +51,10 @@ This entry step keeps native scope guards and uses no application route assumpti
 - A deterministic completion predicate takes precedence over a model completion
   claim. Without one, evidence records `planner-assessed` provenance. Neither
   workflow completion nor model confidence establishes a vulnerability verdict.
+- Planning evidence retains bounded recent history, model usage, recovery counts
+  and the final normalized page title, headings and interactive-element count.
+  Recipes refresh the final page before recording completion. Selectors, raw
+  provider payloads and private browser state stay outside this evidence.
 - Safe browser/selector failures can recover within budget. Scope and credential
   denials stop the workflow. Provider failure can use an explicitly configured
   deterministic planner; errors and provider payloads stay out of evidence.

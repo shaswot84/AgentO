@@ -12,6 +12,7 @@
     "typecheck": "node node_modules/typescript/bin/tsc --noEmit",
     "test": "vitest run",
     "test:integration": "AGENTO_FRONTEND_INTEGRATION=1 vitest run test/execution.integration.test.ts",
+    "test:browser": "AGENTO_FRONTEND_BROWSER_INTEGRATION=1 vitest run test/browser.integration.test.ts",
     "check": "npm run typecheck && npm run build && npm test"
   },
   "dependencies": {

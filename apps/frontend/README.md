@@ -116,10 +116,44 @@ bodies, and sanitize execution failures. Keep the service local; it has no remot
 user authentication or deployment configuration. Host package builds and the
 Semgrep executable are trusted administrator configuration, never browser inputs.
 
+## Browser workflows
+
+Build the host packages after installing their dependencies:
+
+```sh
+npm run build --prefix packages/core
+npm run build --prefix packages/workflow
+npm run build --prefix plugins/tools/e2e-browser
+npm run build --prefix plugins/models/openai
+```
+
+Install Chromium using the [browser adapter instructions](../../plugins/tools/e2e-browser/README.md)
+and start the target demo application. In **Workflows → Run workflow**, choose the
+matching application profile and persona, then describe a goal. **Automatic** runs
+registered recipes first and uses bounded model planning for unfamiliar goals.
+**Recipes only** never calls a model; the listed recipe buttons provide valid goals.
+
+Natural-language planning uses the existing backend provider configuration in the
+root `.env`: `OPENAI_API_KEY`, `OPENAI_MODEL`, and optional `OPENAI_BASE_URL`, or
+their `OLLAMA_*` aliases. Restart the local service after changing configuration.
+Without a configured key, recipes still work and free-form goals show an actionable
+`planner-unavailable` diagnostic. Keys stay on the host. Ordinary tests use fake
+model responses and never require a paid API call.
+
+Built-in profiles use seeded demo credentials and accept loopback targets and
+origins only. Profiles offer their actual personas; a goal's text does not switch
+accounts. Completion labels distinguish trusted recipes from `planner-assessed`
+goal progress. Browser observations do not establish a vulnerability verdict.
+
+Results retain model usage, up to ten recent steps, final page metadata, session
+observations and linked network evidence. Failure diagnostics remain visible on
+every result tab. All results are saved in the private workspace.
+
 ## Verification and accessibility
 
 ```sh
 npm run check --prefix apps/frontend
+npm run test:browser --prefix apps/frontend
 AGENTO_SEMGREP_EXECUTABLE=/tmp/agento-semgrep-venv/bin/semgrep npm run test:integration --prefix apps/frontend
 ```
 
@@ -127,6 +161,9 @@ AGENTO_SEMGREP_EXECUTABLE=/tmp/agento-semgrep-venv/bin/semgrep npm run test:inte
 tests. HTTP tests require loopback socket access. The opt-in integration test uses
 the built discovery/Express/Semgrep providers against the demo source and verifies
 candidate evidence and persistence without starting the target application.
+`test:browser` uses real Chromium and an ephemeral audit portal, a fake model,
+the HTTP client/API and private workspace persistence. It needs installed browser
+dependencies and loopback access, and makes no external model calls.
 
 The interface provides labelled controls, visible focus, keyboard navigation,
 responsive layouts, and loading/error/empty states. Findings tabs support arrow

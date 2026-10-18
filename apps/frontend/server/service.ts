@@ -65,7 +65,7 @@ export class LocalService implements AgentOClient {
     await this.workspace.update(records => {
       const index = records.findIndex(item => item.project.id === id);
       if (index === -1) throw new AgentOClientError('PROJECT_NOT_FOUND', 'This project is not available in the workspace.');
-      const record = records[index];
+      const record = records[index]!;
       if (isActive(record.scan)) throw new AgentOClientError('SCAN_IN_PROGRESS', 'Wait for the current scan to finish before deleting the project.');
       records.splice(index, 1);
     });
@@ -110,8 +110,11 @@ export class LocalService implements AgentOClient {
   }
   async runWorkflow(id: string, input: BrowserWorkflowInput): Promise<BrowserWorkflowResult> {
     if (id === demoId) throw new AgentOClientError('INVALID_INPUT', 'Create a project to execute live workflows; the demo contains recorded fixture workflows.');
-    if (!input || typeof input.goal !== 'string' || !input.goal.trim()) {
-      throw new AgentOClientError('INVALID_INPUT', 'Enter a workflow goal to execute.');
+    if (!input || typeof input.goal !== 'string' || !input.goal.trim() || input.goal.length > 2_000
+      || (input.identityId !== undefined && (typeof input.identityId !== 'string' || input.identityId.length > 100))
+      || (input.targetName !== undefined && (typeof input.targetName !== 'string' || input.targetName.length > 100))
+      || (input.planningMode !== undefined && !['automatic', 'recipes'].includes(input.planningMode))) {
+      throw new AgentOClientError('INVALID_INPUT', 'Enter a goal of up to 2,000 characters and valid workflow parameters.');
     }
     const project = this.record(id).project;
     if (!this.execution.observeWorkflow) {
