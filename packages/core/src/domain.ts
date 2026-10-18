@@ -154,7 +154,7 @@ export interface Finding {
   readonly testPlanIds: readonly string[];
 }
 
-/** Flat exchange context only; merging/lineage belongs to the future security-model package. */
+/** Flat exchange context; richer merging and lineage live in @agento/security-model. */
 export interface AnalysisContext {
   readonly project: Project;
   readonly components: readonly Component[];
