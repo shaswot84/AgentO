@@ -59,6 +59,7 @@ AgentO/
 │   ├── hypothesis-engine/ # Evidence-grounded hypotheses and optional structured reasoning
 │   ├── runtime/       # Scoped capabilities and reusable security investigations
 │   ├── security-model/ # Evidence-preserving source, browser and runtime application model
+│   ├── test-planner/  # Structured probe plans, prerequisites and verification criteria
 │   └── workflow/      # Recipe-first and optional semantic planning with action validation
 ├── plugins/
 │   ├── cwe/           # Independent vulnerability rules consuming normalized probe evidence
@@ -85,6 +86,7 @@ AgentO/
 - **`packages/security-model`**: Merges source, browser and runtime observations into a framework-independent application model with canonical endpoints, provenance, configuration, data-flow candidates and ownership observations. See [model assembly and merge rules](packages/security-model/README.md).
 - **`plugins/cwe`**: Provides all seven CWE rules, independent registration, model-based candidates, declarative probe plans and evidence-linked verdicts. Rules interpret normalized observations and explicit application policy. See [rule setup, proof requirements and execution boundaries](plugins/cwe/README.md).
 - **`packages/hypothesis-engine`**: Grounds registered CWE candidates in relevant model observations, attaches concrete reasons and evidence references, and optionally reviews bounded context through a model provider. Results remain hypotheses requiring runtime verification. See [hypothesis generation and reasoning boundaries](packages/hypothesis-engine/README.md).
+- **`packages/test-planner`**: Converts hypotheses into ordered, tool-independent probe plans for all seven CWEs, with private input references, explicit prerequisites and structured verification criteria. See [planning setup and execution boundaries](packages/test-planner/README.md).
 - **`plugins/models/openai`**: Optional structured-generation provider with explicit model selection, backend API-key resolution, bounded transport, and sanitized results. See [provider setup](plugins/models/openai/README.md).
 - **`plugins/frameworks/express`**: Implements the core framework adapter for read-only JS/TS route extraction, mounted middleware, request inputs, session/cookie/CORS configuration, and database observations. Recognizes all 19 declared demo routes and integrates with discovery through explicit adapter registration. See [adapter setup, verification, and boundaries](plugins/frameworks/express/README.md).
 - **`plugins/tools/semgrep`**: Implements the core static analyzer with bundled JS/TS taint rules for XSS and SQL injection candidates, normalized source/sink evidence, bounded AST context, and optional precomputed Express endpoint association. Static signals require runtime verification. See [installation, CLI, integration, and limitations](plugins/tools/semgrep/README.md).

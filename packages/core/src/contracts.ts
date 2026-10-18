@@ -58,6 +58,11 @@ export interface CWEPlugin {
     results: readonly SecurityTestResult[]): Promise<Finding>;
 }
 
+/** Builds structured plans; implementations must omit drafts with unmet planning prerequisites. */
+export interface TestPlanner {
+  generateTests(context: AnalysisContext, hypothesis: SecurityHypothesis): Promise<readonly SecurityTestPlan[]>;
+}
+
 /** Implementations return structured, evidence-referenced hypotheses, never executable prose. */
 export interface ReasoningModel extends ProviderMetadata {
   reviewHypotheses(context: AnalysisContext,

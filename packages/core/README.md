@@ -36,6 +36,7 @@ Import types and `AgentOOrchestrator` from `@agento/core`. `src/index.ts` export
 | `CredentialPolicy` | Authorize persona, destination, and field references before private resolution |
 | `SecurityScanner` | Execute a structured plan and return normalized results |
 | `CWEPlugin` | Detect candidates, generate tests, and evaluate supplied evidence |
+| `TestPlanner` | Optionally generate structured plans with satisfied planning prerequisites |
 | `ReasoningModel` | Review hypotheses with structured, evidence-referenced output |
 | `RemediationProvider` | Suggest fixes and regression tests without applying changes |
 
@@ -81,6 +82,12 @@ or capabilities produce `SKIPPED`; execution exceptions produce `FAILED` and all
 subsequent plans to continue. Error messages from providers are not forwarded.
 Other provider failures and malformed contract output reject the run, making
 configuration or contract errors explicit.
+
+An optional `testPlanner` provider replaces the plugin's test-generation step;
+the originating CWE plugin still evaluates results. The
+[test planner package](../test-planner/README.md) implements this port, exposes
+blocked drafts separately, and preserves rule plan IDs. Private request bindings
+require a host wrapper around its detailed `plan()` API.
 
 The core checks hypothesis/plan/result/finding associations, evidence references,
 and duplicate IDs for evidence, hypotheses, plans, and findings. Evidence is

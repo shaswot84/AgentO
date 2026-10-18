@@ -1,6 +1,6 @@
 import type {
   BrowserWorkflowDriver, CWEPlugin, FrameworkAdapter, ReasoningModel,
-  RemediationProvider, RemediationSuggestion, ScanRequest, SecurityScanner, StaticAnalyzer,
+  RemediationProvider, RemediationSuggestion, ScanRequest, SecurityScanner, StaticAnalyzer, TestPlanner,
 } from './contracts.js';
 import type {
   AnalysisContext, Evidence, Finding, SecurityHypothesis, SecurityTestPlan, SecurityTestResult,
@@ -13,6 +13,7 @@ export interface CoreProviders {
   readonly browser?: BrowserWorkflowDriver;
   readonly scanner?: SecurityScanner;
   readonly reasoning?: ReasoningModel;
+  readonly testPlanner?: TestPlanner;
   readonly remediation?: RemediationProvider;
 }
 
@@ -104,7 +105,7 @@ export class AgentOOrchestrator {
     const remediation: RemediationSuggestion[] = [];
     for (const hypothesis of hypotheses) {
       const plugin = this.plugins.get(hypothesis.cweId)!;
-      const generated = await plugin.generateTests(context, hypothesis);
+      const generated = await (this.providers.testPlanner ?? plugin).generateTests(context, hypothesis);
       const hypothesisResults: SecurityTestResult[] = [];
       for (const plan of generated) {
         if (plan.hypothesisId !== hypothesis.id || plan.cweId !== hypothesis.cweId) {

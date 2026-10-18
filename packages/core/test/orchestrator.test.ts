@@ -37,6 +37,17 @@ describe('Phase 2 orchestration with interface-only fakes', () => {
     expect(scanner).not.toHaveBeenCalled();
   });
 
+  it('delegates planning to an optional provider while keeping evaluation with the originating rule', async () => {
+    const providers = fakeProviders(), plugin = providers.plugins[0]!;
+    const original = plugin.generateTests.bind(plugin);
+    const generate = vi.spyOn(plugin, 'generateTests');
+    const evaluate = vi.spyOn(plugin, 'evaluateEvidence');
+    const plan = vi.fn(original);
+    const report = await new AgentOOrchestrator({ ...providers, testPlanner: { generateTests: plan } }).run(request);
+    expect(plan).toHaveBeenCalledOnce(); expect(generate).not.toHaveBeenCalled();
+    expect(evaluate).toHaveBeenCalledOnce(); expect(report.results[0]?.outcome).toBe('COMPLETED');
+  });
+
   it('allows a scanner replacement without changing the plugin or orchestrator', async () => {
     const providers = fakeProviders();
     const report = await new AgentOOrchestrator({ ...providers, scanner: {
