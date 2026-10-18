@@ -1,5 +1,5 @@
 import type { DiscoveryResult } from '@agento/discovery';
-import type { ProjectInput, ProjectInputErrors } from './types';
+import type { ProjectInput, ProjectInputErrors } from './types.ts';
 
 function httpUrl(value: string): URL | undefined {
   if (value.length > 4096 || !/^https?:\/\//iu.test(value) || /[\u0000-\u0020\u007f\\]/u.test(value)

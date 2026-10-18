@@ -52,7 +52,7 @@ AgentO focuses on high-impact OWASP Top 10 categories:
 ```text
 AgentO/
 ├── apps/
-│   └── frontend/      # Project setup, discovery summaries, and evidence previews
+│   └── frontend/      # Projects, discovery, and static scan evidence
 ├── packages/
 │   ├── core/          # Tool-independent contracts, domain types, and orchestrator
 │   ├── discovery/     # Repository metadata, stack detection, and mode selection
@@ -100,9 +100,15 @@ npm ci
 npm run dev
 ```
 
-The interface runs independently of a target application or security tools. Projects
-and imported discovery results stay in memory for the current session. Real scan
-execution, backend persistence, and credentials will be integrated separately.
+The local workspace saves projects, discovery, and the latest scan results on disk.
+**Run static scan** runs repository discovery and the installed Semgrep adapter;
+scan progress, candidate findings, source evidence, and remediation guidance come
+from that execution. Runtime verification remains unavailable, so static candidates
+are hypotheses. The seeded demo retains its synthetic labels.
+
+Build the host packages and install Semgrep to enable live scans. The interface
+also supports saved discovery imports without those tools. See the
+[frontend guide](apps/frontend/README.md) for setup, storage, and execution limits.
 
 Run `npm run check` in `apps/frontend` to typecheck, build, and test the client.
 

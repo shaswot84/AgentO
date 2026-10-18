@@ -10,6 +10,7 @@
     "exactOptionalPropertyTypes": true,
     "skipLibCheck": true,
     "noEmit": true,
+    "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "types": ["vite/client", "node"],
@@ -18,5 +19,5 @@
       "@agento/discovery": ["../../packages/discovery/src/types.ts"]
     }
   },
-  "include": ["src", "test", "vite.config.ts"]
+  "include": ["src", "server", "test", "vite.config.ts"]
 }

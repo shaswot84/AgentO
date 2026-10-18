@@ -1,9 +1,9 @@
 import type { DiscoveryResult } from '@agento/discovery';
-import { demoDiscovery } from '../data/demo-discovery';
-import { DEMO_PROJECT_ID, demoFindings, demoProject, demoScan } from '../data/fixtures';
-import { AgentOClientError } from './types';
-import type { AgentOClient, ProjectInput, ProjectSummary } from './types';
-import { parseSavedDiscovery, validateProjectInput } from './validation';
+import { demoDiscovery } from '../data/demo-discovery.ts';
+import { DEMO_PROJECT_ID, demoFindings, demoProject, demoScan } from '../data/fixtures.ts';
+import { AgentOClientError } from './types.ts';
+import type { AgentOClient, ProjectInput, ProjectSummary } from './types.ts';
+import { parseSavedDiscovery, validateProjectInput } from './validation.ts';
 
 export interface FixtureClientOptions {
   readonly delayMs?: number;
@@ -42,6 +42,7 @@ export function createFixtureClient(options: FixtureClientOptions = {}): AgentOC
   }
 
   return {
+    storage: 'memory',
     async listProjects() {
       await ready('listProjects');
       return clone([...projects.values()]);
@@ -104,6 +105,9 @@ export function createFixtureClient(options: FixtureClientOptions = {}): AgentOC
       project(projectId);
       if (projectId !== DEMO_PROJECT_ID) throw new AgentOClientError('SCAN_UNAVAILABLE', 'No scan is available for this project. Scan execution is not connected yet.');
       return clone(demoScan);
+    },
+    async startScan() {
+      throw new AgentOClientError('SCAN_UNAVAILABLE', 'Live scans require the local workspace service.');
     },
     async getFindings(projectId) {
       await ready('getFindings');

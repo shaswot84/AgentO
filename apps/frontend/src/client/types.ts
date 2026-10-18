@@ -13,6 +13,7 @@ export type ProjectInputErrors = Partial<Record<keyof ProjectInput, string>>;
 export interface ProjectSummary extends Project {
   readonly dataSource: 'demo-fixture' | 'saved-discovery' | 'project-input';
   readonly createdAt: string;
+  readonly scanState?: ScanSnapshot['state'];
 }
 
 export interface ScanStage {
@@ -30,6 +31,7 @@ export interface ScanSnapshot {
   readonly stages: readonly ScanStage[];
   readonly summary: string;
   readonly completedAt?: string;
+  readonly diagnostics?: readonly { readonly code: string; readonly message: string }[];
 }
 
 export interface FindingDetail extends Finding {
@@ -39,20 +41,23 @@ export interface FindingDetail extends Finding {
   readonly remediation: RemediationSuggestion;
 }
 
-/** Browser-facing contract. A later transport can replace the in-memory client. */
+/** Browser-facing contract; repository access and execution stay on the host. */
 export interface AgentOClient {
+  readonly storage: 'disk' | 'memory';
   listProjects(): Promise<readonly ProjectSummary[]>;
   getProject(projectId: string): Promise<ProjectSummary>;
   createProject(input: ProjectInput, discovery?: DiscoveryResult): Promise<ProjectSummary>;
   importDiscovery(projectId: string, discovery: DiscoveryResult): Promise<ProjectSummary>;
   getDiscovery(projectId: string): Promise<DiscoveryResult>;
   getScan(projectId: string): Promise<ScanSnapshot>;
+  startScan(projectId: string): Promise<ScanSnapshot>;
   getFindings(projectId: string): Promise<readonly FindingDetail[]>;
   getFinding(projectId: string, findingId: string): Promise<FindingDetail>;
 }
 
 export type ClientErrorCode = 'INVALID_INPUT' | 'INVALID_DISCOVERY' | 'PROJECT_NOT_FOUND'
-  | 'DISCOVERY_UNAVAILABLE' | 'SCAN_UNAVAILABLE' | 'FINDING_NOT_FOUND' | 'CLIENT_UNAVAILABLE';
+  | 'DISCOVERY_UNAVAILABLE' | 'SCAN_UNAVAILABLE' | 'FINDING_NOT_FOUND' | 'CLIENT_UNAVAILABLE'
+  | 'SCAN_IN_PROGRESS' | 'REQUEST_FORBIDDEN';
 
 export class AgentOClientError extends Error {
   constructor(readonly code: ClientErrorCode, message: string) {

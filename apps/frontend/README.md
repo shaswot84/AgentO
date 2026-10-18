@@ -1,133 +1,126 @@
 # AgentO Frontend
 
-AgentO's local project and findings interface, built with React, TypeScript, and
-Vite. It displays saved discovery results and clearly labelled demonstration
-data while execution APIs are being developed.
+React, TypeScript, and Vite interface backed by a local workspace API. Projects,
+discovery, and the latest scan results survive browser reloads and service restarts.
+The seeded demo remains explicitly labelled synthetic data.
 
 ## Run locally
 
-Use Node.js 22.12 or later and npm. From the repository root:
+Use Node.js 22.12 or later. From the repository root:
 
 ```sh
 cd apps/frontend
 npm ci
-npm run dev -- --host 127.0.0.1
+npm run dev
 ```
 
-Open the local URL printed by Vite. The frontend installs and builds independently;
-it does not need the core or discovery packages built, a running target, a scanner,
-or a browser automation service.
+Open the printed loopback URL. `npm run build` creates the browser bundle;
+`npm run preview` serves that build with the same local API. A static-only file
+server does not provide the API. The interface and saved discovery imports work
+without a running target, browser automation, or installed security tools.
+
+## Enable local discovery and scans
+
+Build the existing host packages from the repository root:
 
 ```sh
-npm run check
-npm run preview
+npm ci --prefix packages/core
+npm run build --prefix packages/core
+npm ci --prefix packages/discovery
+npm run build --prefix packages/discovery
+npm ci --prefix plugins/frameworks/express
+npm run build --prefix plugins/frameworks/express
+npm ci --prefix plugins/tools/semgrep
+npm run build --prefix plugins/tools/semgrep
 ```
 
-`check` runs TypeScript checking, a production build, and tests. `preview` serves
-the production build created by `check` or `npm run build`.
-
-## Configure a project and import discovery
-
-Create a project from the Projects view, supplying a name, repository path, target
-URL, and explicitly allowed origins, one per line. The target's normalized origin
-is included automatically until you customize **Allowed origins**. The form opens
-that section and focuses the invalid field when scope validation fails.
-**Attach saved discovery** is optional; its repository path populates an empty path
-field. The form validates these inputs before creating a project:
-
-- A name is required and limited to 120 characters.
-- A repository path is required, limited to 4,096 characters, and cannot contain
-  control characters.
-- The target must be an HTTP(S) URL without embedded credentials, whitespace, or
-  backslashes.
-- Provide 1–100 explicit HTTP(S) origins without paths, queries, fragments,
-  credentials, or wildcards. The target's normalized origin must be included.
-
-The repository path is project metadata: entering it does not grant the browser
-filesystem access or start discovery. The target
-and origins describe intended scope; the interface does not authorize or enforce
-security testing.
-
-To produce a discovery file, first build the CLI in a terminal. From the repository
-root:
+Install the pinned Semgrep release using the [adapter instructions](../../plugins/tools/semgrep/README.md).
+The service uses `semgrep` on PATH, or a host-configured executable:
 
 ```sh
-cd packages/core
-npm ci
-npm run build
-cd ../discovery
-npm ci
-npm run build
-cd ../..
+AGENTO_SEMGREP_EXECUTABLE=/absolute/path/to/semgrep npm run dev --prefix apps/frontend
+```
+
+Create a project with its repository path, target URL, and explicit allowed origins.
+Use **Discover**, the local demo shortcuts, or **Refresh** to inspect the repository.
+Alternatively, attach or import a saved discovery JSON file. On **Scan progress**,
+select **Run static scan**. The service refreshes discovery, extracts available
+Express context, and runs the bundled Semgrep XSS and SQL injection candidate rules
+against a bounded source snapshot. The UI polls actual pending/running/completed
+or failed snapshots; replay controls belong only to the synthetic demo.
+
+**Findings** shows recorded source observations and endpoint associations when
+available. The Evidence tab preserves normalized provider facts and provenance.
+The Remediation tab provides evidence-linked candidate review guidance and suggested
+regression checks. These are suggestions; patches are neither generated nor applied.
+
+Static candidates remain `HYPOTHESIS` findings. Runtime verification rules are not
+configured, and the service does not contact the target or use credentials. A
+completed static scan is not a completed vulnerability assessment. Unsupported
+stacks, unavailable tools, partial analysis, and failed runs remain visible with
+diagnostics; an empty result never proves the application safe. Partial runs can
+retain observed hypotheses while the scan is marked failed for incomplete coverage.
+
+## Project setup and imports
+
+Project names are required and limited to 120 characters. Repository paths are
+required, limited to 4,096 characters, and cannot contain control characters.
+Targets must be HTTP(S) URLs without credentials. Declare 1–100 explicit origins
+without paths, queries, fragments, credentials, or wildcards, including the target's
+normalized origin. These fields do not authorize active testing.
+
+Discovery imports accept the supported `DiscoveryResult` schema up to 2 MiB.
+The saved repository path must match the configured project. Invalid or mismatched
+imports preserve existing data. Importing discovery does not create scan results.
+New projects receive no borrowed demo findings. The seeded demo is read-only;
+create a project using a demo shortcut to run real analysis of that repository.
+
+To produce a saved file after building discovery:
+
+```sh
 node packages/discovery/dist/cli.js /absolute/repository > /tmp/discovery.json
 ```
 
-Replace `/absolute/repository` with the repository to inspect. Attach
-`/tmp/discovery.json` in the New project form, or select an existing project and
-use **Import JSON** on its Discovery view.
+## Storage and service boundaries
 
-The browser reads the JSON file you select; the CLI performs repository reads.
-During Vite development, **Discover**, the local demo shortcuts, and **Refresh**
-on the Discovery view also call the existing local development bridge to inspect
-a repository on the host. These controls require the discovery package (and Express adapter for
-code-aware Express analysis) to be built. They do not run security tests. When the
-bridge is unavailable, import a saved JSON file instead.
-Discovery reports diagnostics for unreadable or malformed input and falls back to
-black-box mode when a compatible adapter is unavailable.
+The browser uses `createHttpClient()` through the `AgentOClient` contract. Node
+filesystem access, adapter imports, process execution, and persistence stay in
+`server/`; the browser bundles only compile-time core/discovery types. The
+in-memory fixture client remains available for tests and explicit demonstrations,
+and is never a fallback for a failed HTTP request.
 
-The saved result's repository path must match the configured project path. Imports
-accept files up to 2 MiB and validate the full supported `DiscoveryResult` schema,
-including field types, known enums, and agreement between the selected mode and
-support flag. Unexpected fields, invalid JSON, and mismatched repository paths are
-rejected with an error that does not echo uploaded content.
-Importing it does not run discovery again, extract routes, scan the target, or
-create findings. A newly configured project has no scan progress or evidence;
-discovery appears only when a saved result is attached or imported.
-The seeded demo's snapshot and findings belong only to the seeded demo project.
+The default private store is `apps/frontend/.agento/workspace.json`. Its dedicated
+directory gets local ignore rules, mode `0700`, and atomic file replacements with
+mode `0600`. It contains project metadata, discovery, and each project's latest
+scan and findings, including normalized source evidence and remediation guidance.
+Starting another scan replaces the prior result. There is no scan-history archive
+or credential store.
 
-## Views and demonstration data
+Set `AGENTO_WORKSPACE_FILE` on the host to choose a different file; protect and
+ignore that location yourself. One local service owns each workspace file using
+an exclusive process lock. Interrupted scans become failed records on restart.
+Corrupt or incompatible files are preserved and reported as service errors rather
+than silently replaced. Back up the workspace file if results need to be retained.
 
-- **Projects**: search by name, target, repository, or stack; filter by data source;
-  open a project or configure a new one. Project rows adapt to cards on narrow
-  screens. Clear filters to recover from an empty search.
-- **Discovery**: inspect languages, frameworks, dependencies, database and ORM
-  hints, authentication packages, middleware observations, and repository
-  structure. The mode, adapter availability, fallback reasons, and diagnostics
-  come from the saved result.
-- **Scan progress**: explore labelled fixture progress for the demo. It represents
-  a demonstration, not a real run.
-- **Findings**: explore the demo's fixture findings, source and runtime evidence,
-  and remediation in **Overview**, **Evidence**, and **Remediation** tabs. Use
-  Left/Right arrows, Home, and End to navigate the tabs. Structured evidence facts
-  and provenance expand on demand. On narrow screens, choosing a finding scrolls
-  its details into view. `HYPOTHESIS`, `LIKELY`, `CONFIRMED`, `NOT_REPRODUCED`, and
-  `REJECTED` states are shown explicitly; fixture confirmation is not a result
-  from testing your target.
+Both development and preview APIs require loopback connections and a loopback
+Host header, reject cross-origin/cross-site browser requests, bound JSON request
+bodies, and sanitize execution failures. Keep the service local; it has no remote
+user authentication or deployment configuration. Host package builds and the
+Semgrep executable are trusted administrator configuration, never browser inputs.
 
-Loading, empty, field validation, unavailable-adapter, and failed-operation states
-are displayed in context. Projects without imported discovery or fixture results
-show empty states. Import failures leave the existing project data intact.
+## Verification and accessibility
 
-## Integration and boundaries
+```sh
+npm run check --prefix apps/frontend
+AGENTO_SEMGREP_EXECUTABLE=/absolute/path/to/semgrep npm run test:integration --prefix apps/frontend
+```
 
-The views use the `AgentOClient` interface exported by `src/client/index.ts` and
-the asynchronous `createFixtureClient()` implementation. The application accepts
-an injected client, so a future backend can implement the same interface. It uses
-type-only imports from `@agento/core` and `@agento/discovery`. TypeScript resolves
-these contracts from their source; Node repository traversal and scanner packages
-are not bundled into the browser.
+`check` runs typechecking, a production build, and client/workspace/real-HTTP API
+tests. HTTP tests require loopback socket access. The opt-in integration test uses
+the built discovery/Express/Semgrep providers against the demo source and verifies
+candidate evidence and persistence without starting the target application.
 
-The client contract distinguishes demonstration data from execution API results
-and supports pending, running, complete, and failed scan snapshots. Fixture labels
-and replay controls appear only for demonstration data. No execution API transport
-is connected in this implementation.
-
-The current client stores state in memory. Reloading restores the seeded demo and
-discards configured projects and imported files. It does not use local storage,
-store credentials, contact target URLs, read a repository, invoke security tools,
-or enforce testing policy. Repository access, credentials, execution, persistence,
-and policy decisions belong in the backend.
-
-The layout supports narrow screens, labelled controls, keyboard navigation,
-visible focus, and readable status text alongside colors. Forms provide field
-errors, and asynchronous views expose loading and error feedback.
+The interface provides labelled controls, visible focus, keyboard navigation,
+responsive layouts, and loading/error/empty states. Findings tabs support arrow
+keys, Home, and End. Synthetic examples retain fixture warnings; execution results
+show their actual state and have no demo replay controls.

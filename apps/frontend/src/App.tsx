@@ -53,17 +53,24 @@ function ErrorState({ retry }: { retry: () => void }) {
 function FixtureNotice({ mixed = false }: { mixed?: boolean }) {
   return <div className="fixture-banner"><Icon name="info" /><p><strong>Demo workspace.</strong> {mixed ? 'Demo entries contain synthetic evidence. No tests were run for those entries.' : 'Scan progress and findings are examples. No live security tests have run.'}</p></div>;
 }
-function useRequest<T>(load: () => Promise<T>, dependencies: DependencyList) {
+function useRequest<T>(load: () => Promise<T>, dependencies: DependencyList, poll?: { interval: number; while: (data: T) => boolean }) {
   const loadRef = useRef(load);
   loadRef.current = load;
   const [retryToken, setRetryToken] = useState(0);
   const [state, setState] = useState<{ data: T | undefined; error: unknown; loading: boolean }>({ data: undefined, error: null, loading: true });
   useEffect(() => {
     let active = true;
+    let timer: ReturnType<typeof setTimeout> | undefined;
     setState({ data: undefined, error: null, loading: true });
-    void loadRef.current().then(data => { if (active) setState({ data, error: null, loading: false }); })
-      .catch(error => { if (active) setState({ data: undefined, error, loading: false }); });
-    return () => { active = false; };
+    function refresh() {
+      void loadRef.current().then(data => {
+        if (!active) return;
+        setState({ data, error: null, loading: false });
+        if (poll?.while(data)) timer = setTimeout(refresh, poll.interval);
+      }).catch(error => { if (active) setState({ data: undefined, error, loading: false }); });
+    }
+    refresh();
+    return () => { active = false; clearTimeout(timer); };
   }, [...dependencies, retryToken]);
   return { ...state, retry: () => setRetryToken(token => token + 1) };
 }
@@ -75,12 +82,12 @@ function currentView(): View {
 export function App({ client }: { client: AgentOClient }) {
   const [view, setView] = useState<View>(currentView);
   const [revision, setRevision] = useState(0);
-  const [selectedId, setSelectedId] = useState('demo-shop');
+  const [selectedId, setSelectedId] = useState('');
   const [newProjectOpen, setNewProjectOpen] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
   const [rescanning, setRescanning] = useState(false);
   const [notification, setNotification] = useState<{ message: string; kind: 'success' | 'warning' | 'error' } | null>(null);
-  const projectsState = useRequest(() => client.listProjects(), [client, revision]);
+  const projectsState = useRequest(() => client.listProjects(), [client, revision, view]);
   const projects = projectsState.data ?? [];
   const selected = projects.find(project => project.id === selectedId) ?? projects[0];
 
@@ -93,7 +100,7 @@ export function App({ client }: { client: AgentOClient }) {
   function openProject(project: ProjectSummary) { setSelectedId(project.id); navigate('discovery'); }
   function saved(project: ProjectSummary) {
     setSelectedId(project.id); setRevision(value => value + 1); setNewProjectOpen(false); setImportOpen(false);
-    navigate('discovery'); setNotification({ message: 'Project saved for this session. Reloading resets the workspace.', kind: 'success' });
+    navigate('discovery'); setNotification({ message: client.storage === 'disk' ? 'Project saved to the local workspace.' : 'Project saved for this demonstration session.', kind: 'success' });
   }
 
   async function rescanSelected() {
@@ -132,14 +139,14 @@ export function App({ client }: { client: AgentOClient }) {
     <aside className="sidebar">
       <div className="brand"><div className="brand-mark"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="m4 20 8-16 8 16M8 14h8" /></svg></div><div><div className="brand-name">AgentO<span style={{ color: '#ef805d' }}>.</span></div><div className="brand-caption">Find the proof.</div></div></div>
       <div className="nav-heading section-label">WORKSPACE</div><nav className="nav" aria-label="Main navigation">{views.map(item => <a key={item.id} href={`#${item.id}`} className={`nav-item ${view === item.id ? 'active' : ''}`} aria-current={view === item.id ? 'page' : undefined} onClick={() => navigate(item.id)}><span className="nav-icon"><Icon name={item.icon} /></span><span className="nav-label">{item.label}</span>{item.id === 'projects' && <span className="nav-count">{projects.length}</span>}</a>)}</nav>
-      <div className="sidebar-footer"><div className="session-heading"><Icon name="info" /><strong>Session workspace</strong></div><p>Projects reset on reload.<br />Live security scans are not connected.</p><span className="session-label">LOCAL PREVIEW</span></div>
+      <div className="sidebar-footer"><div className="session-heading"><Icon name="info" /><strong>{client.storage === 'disk' ? 'Local workspace' : 'Demo workspace'}</strong></div><p>{client.storage === 'disk' ? 'Projects and results are saved on this computer. Static scans collect source candidates.' : 'Projects reset on reload.'}</p><span className="session-label">{client.storage === 'disk' ? 'LOCAL SERVICE' : 'DEMONSTRATION'}</span></div>
     </aside>
     <div className="workspace">
-      <header className="topbar"><div className="breadcrumb"><span>Workspace</span><span aria-hidden="true">/</span><strong>{views.find(item => item.id === view)?.label}</strong></div><div className="topbar-status">{view !== 'projects' && projects.length > 0 && <><label className="screen-reader-only" htmlFor="project-picker">Selected project</label><select id="project-picker" className="project-picker" value={selected?.id ?? ''} onChange={event => { setSelectedId(event.target.value); setNotification(null); }}>{projects.map(project => <option key={project.id} value={project.id}>{project.name}</option>)}</select></>}<span className="local-status">Local preview</span></div></header>
+      <header className="topbar"><div className="breadcrumb"><span>Workspace</span><span aria-hidden="true">/</span><strong>{views.find(item => item.id === view)?.label}</strong></div><div className="topbar-status">{view !== 'projects' && projects.length > 0 && <><label className="screen-reader-only" htmlFor="project-picker">Selected project</label><select id="project-picker" className="project-picker" value={selected?.id ?? ''} onChange={event => { setSelectedId(event.target.value); setNotification(null); }}>{projects.map(project => <option key={project.id} value={project.id}>{project.name}</option>)}</select></>}<span className="local-status">{client.storage === 'disk' ? 'Local service' : 'Demo preview'}</span></div></header>
       <main id="main-content" className="main-content" tabIndex={-1}>
-        <div className="page-heading"><div><div className="eyebrow">{heading.eyebrow}</div><h1>{heading.title}</h1><p>{heading.subtitle}</p></div><div className="heading-actions">{view === 'discovery' && selected && <><button type="button" className="button primary" aria-label="Refresh discovery" onClick={() => void rescanSelected()} disabled={rescanning}><Icon name="compass" />{rescanning ? 'Discovering…' : 'Refresh'}</button><button className="button secondary" onClick={() => setImportOpen(true)}><Icon name="file" />Import JSON</button></>}{view === 'projects' && <button className="button primary" onClick={() => setNewProjectOpen(true)}><Icon name="plus" />New project</button>}</div></div>
+        <div className="page-heading"><div><div className="eyebrow">{heading.eyebrow}</div><h1>{heading.title}</h1><p>{heading.subtitle}</p></div><div className="heading-actions">{view === 'discovery' && selected && (client.storage === 'memory' || selected.dataSource !== 'demo-fixture') && <><button type="button" className="button primary" aria-label="Refresh discovery" onClick={() => void rescanSelected()} disabled={rescanning}><Icon name="compass" />{rescanning ? 'Discovering…' : 'Refresh'}</button><button className="button secondary" onClick={() => setImportOpen(true)}><Icon name="file" />Import JSON</button></>}{view === 'projects' && <button className="button primary" onClick={() => setNewProjectOpen(true)}><Icon name="plus" />New project</button>}</div></div>
         {notification && <div className={`notice ${notification.kind}`} role={notification.kind === 'error' ? 'alert' : 'status'}><Icon name={notification.kind === 'success' ? 'check' : 'info'} /><p>{notification.message}</p><button className="icon-button" aria-label="Dismiss notification" onClick={() => setNotification(null)}><Icon name="close" /></button></div>}
-        {projectsState.loading ? <Loading /> : projectsState.error ? <ErrorState retry={projectsState.retry} /> : view === 'projects' ? <ProjectsView projects={projects} onSelect={openProject} onCreate={() => setNewProjectOpen(true)} onExplore={() => { setSelectedId('demo-shop'); navigate('findings'); }} /> : selected ? <>
+        {projectsState.loading ? <Loading /> : projectsState.error ? <ErrorState retry={projectsState.retry} /> : view === 'projects' ? <ProjectsView projects={projects} persistent={client.storage === 'disk'} onSelect={openProject} onCreate={() => setNewProjectOpen(true)} onExplore={() => { setSelectedId('demo-shop'); navigate('findings'); }} /> : selected ? <>
           {view === 'discovery' && <DiscoveryView client={client} project={selected} revision={revision} onImport={() => setImportOpen(true)} onRescan={() => void rescanSelected()} rescanning={rescanning} />}
           {view === 'scan' && <ScanView key={selected.id} client={client} project={selected} onDemo={() => setSelectedId('demo-shop')} />}
           {view === 'findings' && <FindingsView key={selected.id} client={client} project={selected} onDemo={() => setSelectedId('demo-shop')} />}
@@ -151,17 +158,17 @@ export function App({ client }: { client: AgentOClient }) {
   </div>;
 }
 
-function ProjectsView({ projects, onSelect, onCreate, onExplore }: { projects: readonly ProjectSummary[]; onSelect: (project: ProjectSummary) => void; onCreate: () => void; onExplore: () => void }) {
+function ProjectsView({ projects, persistent, onSelect, onCreate, onExplore }: { projects: readonly ProjectSummary[]; persistent: boolean; onSelect: (project: ProjectSummary) => void; onCreate: () => void; onExplore: () => void }) {
   const [query, setQuery] = useState('');
   const [source, setSource] = useState('');
   const filtered = projects.filter(project => (!source || project.dataSource === source) && `${project.name} ${project.baseUrl} ${project.repositoryPath} ${project.languages.join(' ')}`.toLowerCase().includes(query.trim().toLowerCase()));
   function resetFilters() { setQuery(''); setSource(''); }
   return <>
     <div className="metric-grid">
-      <Metric label="Total projects" value={projects.length.toString().padStart(2, '0')} detail="In your current session" icon="folder" />
+      <Metric label="Total projects" value={projects.length.toString().padStart(2, '0')} detail={persistent ? 'In your local workspace' : 'In your current session'} icon="folder" />
       <Metric label="Discovery attached" value={projects.filter(project => project.dataSource !== 'project-input').length.toString().padStart(2, '0')} detail="Repository context available" icon="compass" />
       <Metric label="Code-aware ready" value={projects.filter(project => project.mode === 'code-aware').length.toString().padStart(2, '0')} detail="Projects with compatible adapters" icon="shield" />
-      <Metric label="Live scans" value="00" detail="Execution not yet connected" icon="activity" />
+      <Metric label="Scanned projects" value={projects.filter(project => project.scanState).length.toString().padStart(2, '0')} detail="Local static scan records" icon="activity" />
     </div>
     <Panel title="Applications" description="Open a project to review its discovery." extra={<span className="badge neutral">{projects.length} total</span>}>
       <div className="toolbar">
@@ -177,7 +184,7 @@ function ProjectsView({ projects, onSelect, onCreate, onExplore }: { projects: r
         <div className="project-source"><span className="card-label">DATA SOURCE</span><span className={`badge ${project.dataSource === 'demo-fixture' ? 'status-hypothesis' : 'neutral'}`}>{project.dataSource === 'demo-fixture' ? 'Demo fixture' : project.dataSource === 'saved-discovery' ? 'Saved discovery' : 'Setup only'}</span></div>
         <button className="project-open icon-button" aria-label={`Open ${project.name}`} onClick={() => onSelect(project)}><Icon name="arrow" /></button>
       </article>)}</div>}
-      <div className="panel-footnote"><Icon name="info" /><span>Session only. Projects and imports reset when you reload.</span></div>
+      <div className="panel-footnote"><Icon name="info" /><span>{persistent ? 'Projects, discovery, and the latest scan results are saved on this computer.' : 'Session only. Projects and imports reset when you reload.'}</span></div>
     </Panel>
     <div className="next-steps">
       <section className="next-step"><div className="step-icon"><Icon name="compass" /></div><div><div className="section-label">START WITH CONTEXT</div><h2>Bring your application into focus</h2><p>Add a repository and target, then run discovery or import a saved snapshot.</p><button className="text-button" onClick={onCreate}>Set up a project <Icon name="arrow" /></button></div></section>
@@ -190,18 +197,19 @@ function Technology({ label, values }: { label: string; values: readonly string[
   return <div className="technology-row"><span className="technology-label">{label}</span><div className="technology-value tag-list">{values.length ? values.map(value => <span key={value} className="tag">{value}</span>) : <span className="muted">Not detected</span>}</div></div>;
 }
 function DiscoveryView({ client, project, revision, onImport, onRescan, rescanning }: { client: AgentOClient; project: ProjectSummary; revision: number; onImport: () => void; onRescan?: () => void; rescanning?: boolean }) {
+  const canRefresh = onRescan && (client.storage === 'memory' || project.dataSource !== 'demo-fixture');
   const result = useRequest(() => client.getDiscovery(project.id), [client, project.id, revision]);
   if (result.loading) return <Loading />;
-  if (result.error instanceof AgentOClientError && result.error.code === 'DISCOVERY_UNAVAILABLE') return <Panel title={project.name}><Empty title="Add your repository context" action={<div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>{onRescan && <button className="button primary" onClick={onRescan} disabled={rescanning}><Icon name="compass" />{rescanning ? 'Scanning…' : 'Run discovery'}</button>}<button className="button secondary" onClick={onImport}><Icon name="file" />Import discovery JSON</button></div>}>This project has no saved discovery result. Run discovery or import the JSON created by AgentO's repository discovery CLI.</Empty></Panel>;
+  if (result.error instanceof AgentOClientError && result.error.code === 'DISCOVERY_UNAVAILABLE') return <Panel title={project.name}><Empty title="Add your repository context" action={<div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>{canRefresh && <button className="button primary" onClick={onRescan} disabled={rescanning}><Icon name="compass" />{rescanning ? 'Scanning…' : 'Run discovery'}</button>}<button className="button secondary" onClick={onImport}><Icon name="file" />Import discovery JSON</button></div>}>This project has no saved discovery result. Run discovery or import the JSON created by AgentO's repository discovery CLI.</Empty></Panel>;
   if (result.error || !result.data) return <ErrorState retry={result.retry} />;
   const data = result.data;
   return <>
-    {project.dataSource === 'demo-fixture' && <div className="fixture-banner"><Icon name="info" /><p><strong>Saved demo discovery.</strong> Repository facts come from the controlled demo application. Scan results remain fixtures.</p></div>}
+    {project.dataSource === 'demo-fixture' && <div className="fixture-banner"><Icon name="info" /><p><strong>Saved demo discovery.</strong> This seeded example is read-only. Create a project from a local demo shortcut to run real analysis. Scan results here remain fixtures.</p></div>}
     <div className="metric-grid"><Metric label="Languages" value={data.languages.length} detail={data.languages.join(' / ') || 'Not detected'} icon="file" /><Metric label="Dependencies" value={data.dependencies.length} detail="Direct manifest declarations" icon="folder" /><Metric label="Source files" value={data.structure.sourceFileCount} detail="From the saved repository inventory" icon="compass" /><Metric label="Analysis mode" value={<ModeBadge mode={data.mode} />} detail={data.expressAdapterAvailable ? 'Express adapter registered' : 'Express adapter unavailable'} icon="shield" /></div>
     {!data.supportedCodeAwareMode && <div className="notice warning"><Icon name="info" /><div><h3>Black-box mode selected</h3><ul>{data.fallbackReasons.map(reason => <li key={reason}>{reason}</li>)}</ul></div></div>}
     {data.diagnostics.length > 0 && <div className="notice error" role="status"><Icon name="info" /><div><h3>Discovery needs attention</h3><ul>{data.diagnostics.map((item, index) => <li key={index}><span className="mono">{item.file}</span>: {item.message}</li>)}</ul></div></div>}
     <div className="discovery-grid"><Panel title="Application fingerprint" description={project.name}><div className="surface-body"><Technology label="Languages" values={data.languages} /><Technology label="Frameworks" values={data.frameworks} /><Technology label="Database hints" values={data.databases} /><Technology label="ORM hints" values={data.orms} /><Technology label="Authentication" values={data.authentication} /><Technology label="Auth packages" values={data.authenticationPackages} /><Technology label="Available adapters" values={data.availableAdapterIds} /></div></Panel>
-    <Panel title="Project & scope" description="Declared project metadata, not testing authorization."><div className="surface-body"><dl className="definition-grid"><div className="definition"><dt>Repository</dt><dd className="mono">{project.repositoryPath}</dd></div><div className="definition"><dt>Target URL</dt><dd className="mono">{project.baseUrl}</dd></div><div className="definition"><dt>Allowed origins</dt><dd>{project.allowedOrigins.map(origin => <div className="mono" key={origin}>{origin}</div>)}</dd></div><div className="definition"><dt>Snapshot name</dt><dd>{data.name}</dd></div></dl><div className="adapter-callout"><Icon name="shield" /><div><h3>{data.expressAdapterAvailable ? 'Adapter registered' : 'Express adapter unavailable'}</h3><p>Discovery describes source support. Backend policy checks will govern actual execution.</p></div></div>{onRescan && <div style={{ marginTop: 14 }}><button type="button" className="button secondary" onClick={onRescan} disabled={rescanning}><Icon name="compass" />{rescanning ? 'Re-scanning repository…' : 'Re-scan this repository'}</button></div>}</div></Panel></div>
+    <Panel title="Project & scope" description="Declared project metadata, not testing authorization."><div className="surface-body"><dl className="definition-grid"><div className="definition"><dt>Repository</dt><dd className="mono">{project.repositoryPath}</dd></div><div className="definition"><dt>Target URL</dt><dd className="mono">{project.baseUrl}</dd></div><div className="definition"><dt>Allowed origins</dt><dd>{project.allowedOrigins.map(origin => <div className="mono" key={origin}>{origin}</div>)}</dd></div><div className="definition"><dt>Snapshot name</dt><dd>{data.name}</dd></div></dl><div className="adapter-callout"><Icon name="shield" /><div><h3>{data.expressAdapterAvailable ? 'Adapter registered' : 'Express adapter unavailable'}</h3><p>Discovery describes source support. Backend policy checks will govern actual execution.</p></div></div>{canRefresh && <div style={{ marginTop: 14 }}><button type="button" className="button secondary" onClick={onRescan} disabled={rescanning}><Icon name="compass" />{rescanning ? 'Re-scanning repository…' : 'Re-scan this repository'}</button></div>}</div></Panel></div>
     <div className="stack" style={{ marginTop: 22 }}><Panel title="Middleware observations" description="Probable packages and literal header writes. These observations are not vulnerabilities.">{data.middleware.length === 0 ? <Empty title="No middleware hints">No recognized middleware was present in this saved result.</Empty> : <div className="table-wrap"><table className="data-table"><thead><tr><th scope="col">Middleware</th><th scope="col">Kind</th><th scope="col">Basis</th><th scope="col">Source</th></tr></thead><tbody>{data.middleware.map((item, index) => <tr key={index}><td className="mono">{item.name}</td><td><span className="tag">{item.kind}</span></td><td>{item.basis}</td><td className="mono">{item.file}{item.line ? `:${item.line}` : ''}</td></tr>)}</tbody></table></div>}</Panel>
     <Panel title="Repository structure" description="Visited directories and manifests from the saved inventory."><div className="surface-body"><dl className="definition-grid">{[['Source directories', data.structure.sourceDirectories], ['Test directories', data.structure.testDirectories], ['Static directories', data.structure.staticDirectories], ['All visited directories', data.structure.directories]].map(([label, values]) => <div key={label as string} className="definition"><dt>{label as string}</dt><dd className="mono">{(values as readonly string[]).join(', ') || 'None recorded'}</dd></div>)}</dl><div className="section-label" style={{ marginTop: 24 }}>MANIFEST FILES</div>{data.structure.manifests.map(manifest => <div className="file-list" key={manifest.file}><Icon name="file" /><div><span className="mono">{manifest.file}</span><p className="muted">{manifest.name ?? 'Unnamed manifest'} · Root: {manifest.directory}{manifest.workspacePatterns.length ? ` · Workspaces: ${manifest.workspacePatterns.join(', ')}` : ''}</p></div></div>)}{!data.structure.manifests.length && <p className="muted">No manifests recorded.</p>}</div></Panel>
     <Dependencies data={data} /></div>
@@ -214,7 +222,11 @@ function Dependencies({ data }: { data: DiscoveryResult }) {
 }
 
 function ScanView({ client, project, onDemo }: { client: AgentOClient; project: ProjectSummary; onDemo: () => void }) {
-  const result = useRequest(() => client.getScan(project.id), [client, project.id]);
+  const result = useRequest(() => client.getScan(project.id), [client, project.id], {
+    interval: 1000, while: scan => scan.state === 'pending' || scan.state === 'running',
+  });
+  const [starting, setStarting] = useState(false);
+  const [startError, setStartError] = useState('');
   const [playing, setPlaying] = useState(false);
   const [step, setStep] = useState(0);
   const stages = result.data?.stages ?? [];
@@ -224,32 +236,48 @@ function ScanView({ client, project, onDemo }: { client: AgentOClient; project: 
     const timer = window.setTimeout(() => setStep(value => value + 1), 650);
     return () => window.clearTimeout(timer);
   }, [playing, step, stages.length]);
+  async function startScan() {
+    setStarting(true); setStartError('');
+    try { await client.startScan(project.id); result.retry(); }
+    catch (error) { setStartError(clientErrorMessage(error)); result.retry(); }
+    finally { setStarting(false); }
+  }
+  const active = starting || result.data?.state === 'pending' || result.data?.state === 'running';
+  const controls = client.storage === 'disk' && project.dataSource !== 'demo-fixture'
+    ? <button className="button primary" onClick={() => void startScan()} disabled={active}><Icon name="activity" />{active ? 'Scan in progress…' : 'Run static scan'}</button> : undefined;
   if (result.loading) return <Loading />;
-  if (result.error instanceof AgentOClientError && result.error.code === 'SCAN_UNAVAILABLE') return <Panel title="Scan progress"><Empty title="No scan has run" action={<button className="button secondary" onClick={onDemo}>Explore the demo fixture</button>}>Execution APIs are not connected. Your project's setup and discovery do not create security test results.</Empty></Panel>;
+  if (result.error instanceof AgentOClientError && result.error.code === 'SCAN_UNAVAILABLE') return <Panel title="Scan progress">{startError && <div className="notice error" role="alert">{startError}</div>}<Empty title="No scan has run" action={controls ?? <button className="button secondary" onClick={onDemo}>Explore the demo fixture</button>}>Run local discovery and Semgrep to collect source candidates, evidence, and remediation guidance. Runtime verification is unavailable. Setup and discovery alone do not produce findings.</Empty></Panel>;
   if (result.error || !result.data) return <ErrorState retry={result.retry} />;
   const fixture = result.data.source === 'demo-fixture';
   const completeCount = fixture && playing ? stages.slice(0, step).filter(stage => stage.status === 'complete').length : stages.filter(stage => stage.status === 'complete').length;
-  const progress = stages.length ? Math.round(completeCount / stages.length * 100) : 0;
+  const stageCount = fixture ? stages.length : stages.filter(stage => stage.status !== 'unavailable').length;
+  const progress = stageCount ? Math.round(completeCount / stageCount * 100) : 0;
   const stateLabels = { pending: 'Scan pending', running: 'Scan in progress', complete: 'Scan complete', failed: 'Scan failed' };
-  return <>{fixture && <FixtureNotice />}<div className="scan-layout">
+  return <>{fixture && <FixtureNotice />}{startError && <div className="notice error" role="alert">{startError}</div>}{controls && <div className="heading-actions" style={{ marginBottom: 20 }}>{controls}</div>}<div className="scan-layout">
     <Panel title="Investigation timeline" description={fixture ? 'A replayable demonstration of the evidence workflow.' : 'The latest progress reported by the execution service.'} extra={<span className="badge neutral">{fixture ? 'Fixture' : 'Execution result'}</span>}>
       <div className="surface-body">
-        <div className="progress-summary"><h3>{fixture ? playing ? 'Playing preview' : 'Demo snapshot complete' : stateLabels[result.data.state]}</h3><span className="muted">{completeCount} / {stages.length} stages</span></div>
+        <div className="progress-summary"><h3>{fixture ? playing ? 'Playing preview' : 'Demo snapshot complete' : stateLabels[result.data.state]}</h3><span className="muted">{completeCount} / {stageCount} available stages</span></div>
         <div className="progress-track" role="progressbar" aria-label={fixture ? 'Fixture workflow progress' : 'Scan workflow progress'} aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100}><div className="progress-fill" style={{ width: `${progress}%` }} /></div>
         <ol className="timeline">{stages.map((stage, index) => {
           const state = stage.status === 'unavailable' || stage.status === 'failed' ? stage.status : fixture && playing ? index < step ? 'completed' : index === step ? 'active' : 'pending' : stage.status === 'complete' ? 'completed' : stage.status === 'running' ? 'active' : 'pending';
-          const label = state === 'unavailable' ? 'Adapter unavailable' : state === 'failed' ? 'Stage failed' : state === 'active' ? fixture ? 'Previewing' : 'In progress' : state === 'completed' ? fixture ? 'Fixture stage complete' : 'Stage complete' : fixture ? 'Preview pending' : 'Pending';
+          const label = state === 'unavailable' ? 'Unavailable' : state === 'failed' ? 'Stage failed' : state === 'active' ? fixture ? 'Previewing' : 'In progress' : state === 'completed' ? fixture ? 'Fixture stage complete' : 'Stage complete' : fixture ? 'Preview pending' : 'Pending';
           return <li key={stage.id} className={`timeline-item ${state}`}><span className="timeline-marker" aria-hidden="true">{state === 'completed' ? <Icon name="check" /> : ['unavailable', 'failed'].includes(state) ? '!' : index + 1}</span><div className="timeline-content"><h3>{stage.label}</h3><p>{stage.details}</p><span className="timeline-meta">{label}</span></div></li>;
         })}</ol>
         {fixture && <button className="button primary" onClick={() => { if (playing) setPlaying(false); else { setStep(0); setPlaying(true); } }}><Icon name="activity" />{playing ? 'Stop preview' : 'Replay preview'}</button>}
       </div>
     </Panel>
-    <div className="stack"><Panel title={fixture ? 'What this preview shows' : 'Scan summary'}><div className="surface-body"><p className="muted">{result.data.summary}</p>{fixture && <div className="notice info" style={{ marginTop: 20, marginBottom: 0 }}><Icon name="info" /><p>Replay changes only this screen. It sends no requests to the configured target.</p></div>}</div></Panel><Panel title="Current project"><div className="surface-body"><h3>{project.name}</h3><p className="mono muted" style={{ margin: '8px 0 18px' }}>{project.baseUrl}</p><ModeBadge mode={project.mode} /></div></Panel></div>
+    <div className="stack"><Panel title={fixture ? 'What this preview shows' : 'Scan summary'}><div className="surface-body"><p className="muted" role="status">{result.data.summary}</p>{result.data.completedAt && <p className="help-text">Recorded: {new Date(result.data.completedAt).toLocaleString()}</p>}{Boolean(result.data.diagnostics?.length) && <div className="notice warning"><ul>{result.data.diagnostics!.map((diagnostic, index) => <li key={index}><strong>{diagnostic.code}</strong>: {diagnostic.message}</li>)}</ul></div>}{fixture && <div className="notice info" style={{ marginTop: 20, marginBottom: 0 }}><Icon name="info" /><p>Replay changes only this screen. It sends no requests to the configured target.</p></div>}</div></Panel><Panel title="Current project"><div className="surface-body"><h3>{project.name}</h3><p className="mono muted" style={{ margin: '8px 0 18px' }}>{project.baseUrl}</p><ModeBadge mode={project.mode} /></div></Panel></div>
   </div></>;
 }
 
 function FindingsView({ client, project, onDemo }: { client: AgentOClient; project: ProjectSummary; onDemo: () => void }) {
-  const result = useRequest(() => client.getFindings(project.id), [client, project.id]);
+  const result = useRequest(async () => {
+    const scan = await client.getScan(project.id).catch(error => {
+      if (error instanceof AgentOClientError && error.code === 'SCAN_UNAVAILABLE') return undefined;
+      throw error;
+    });
+    return { scan, findings: await client.getFindings(project.id) };
+  }, [client, project.id], { interval: 1000, while: data => data.scan?.state === 'pending' || data.scan?.state === 'running' });
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState('');
   const [selectedFinding, setSelectedFinding] = useState('');
@@ -261,8 +289,8 @@ function FindingsView({ client, project, onDemo }: { client: AgentOClient; proje
   }
   if (result.loading) return <Loading />;
   if (result.error || !result.data) return <ErrorState retry={result.retry} />;
-  const all = result.data;
-  if (!all.length) return <Panel title="Findings"><Empty title="No findings recorded" action={<button className="button secondary" onClick={onDemo}>Explore the demo fixture</button>}>This project has no executed tests or evidence. Importing discovery does not produce findings.</Empty></Panel>;
+  const all = result.data.findings;
+  if (!all.length) return <Panel title="Findings"><Empty title="No findings recorded" action={<a className="button secondary" href="#scan">Open scan progress</a>}>{result.data.scan?.summary ?? 'This project has no scan results. Open scan progress to run local static analysis. Importing discovery does not produce findings.'}</Empty><button className="text-button" onClick={onDemo}>Explore the demo fixture</button></Panel>;
   const filtered = all.filter(finding => (!status || finding.status === status) && `${finding.title} ${finding.cweId} ${finding.endpoint?.path ?? ''}`.toLowerCase().includes(query.toLowerCase()));
   const selected = filtered.find(finding => finding.id === selectedFinding) ?? filtered[0];
   const fixtureOnly = all.every(finding => finding.sourceType === 'demo-fixture');
@@ -466,7 +494,7 @@ function ProjectDialog({ client, onClose, onSaved }: { client: AgentOClient; onC
     <details className="form-options"><summary><span>Attach saved discovery</span><span className="option-hint">Optional</span></summary><fieldset className="form-section" disabled={saving || discovering}><FileField saved={saved} onRead={file => { void saved.read(file).then(discovery => { if (discovery) setFields(previous => ({ ...previous, name: previous.name || discovery.name, repositoryPath: previous.repositoryPath || discovery.repositoryPath })); }); }} /></fieldset></details>
     {saved.data && <div className="notice success attachment-status" role="status"><Icon name="check" /><p><strong>Discovery attached</strong><br />{saved.data.structure.sourceFileCount} source files · {saved.data.mode} analysis</p></div>}
     {error && <div className="notice error form-error" role="alert">{error}</div>}
-    <p className="help-text form-boundary"><Icon name="info" />Session only. Creating a project does not start a security scan.</p>
+    <p className="help-text form-boundary"><Icon name="info" />{client.storage === 'disk' ? 'Saved on this computer.' : 'Session only.'} Creating a project does not start a security scan.</p>
   </div><div className="dialog-footer"><button type="button" className="button secondary" onClick={onClose} disabled={saving || discovering}>Cancel</button><button className="button primary" disabled={saving || discovering || saved.reading || Boolean(saved.error)}>{saving ? 'Creating…' : 'Create project'}<Icon name="arrow" /></button></div></form></Dialog>;
 }
 

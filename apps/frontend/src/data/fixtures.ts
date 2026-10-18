@@ -1,6 +1,6 @@
 import type { Endpoint, Evidence, EvidenceKind, FindingStatus, JsonValue, Severity, SourceLocation, CWEId } from '@agento/core';
-import type { FindingDetail, ProjectSummary, ScanSnapshot } from '../client/types';
-import { demoDiscovery } from './demo-discovery';
+import type { FindingDetail, ProjectSummary, ScanSnapshot } from '../client/types.ts';
+import { demoDiscovery } from './demo-discovery.ts';
 
 export const DEMO_PROJECT_ID = 'demo-shop';
 const capturedAt = '2026-10-10T00:00:00.000Z';
