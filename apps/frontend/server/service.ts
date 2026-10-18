@@ -60,6 +60,17 @@ export class LocalService implements AgentOClient {
       return project;
     });
   }
+  async deleteProject(id: string): Promise<void> {
+    if (id === demoId) throw new AgentOClientError('INVALID_INPUT', 'The demo fixture is read-only and cannot be deleted.');
+    await this.workspace.update(records => {
+      const index = records.findIndex(item => item.project.id === id);
+      if (index === -1) throw new AgentOClientError('PROJECT_NOT_FOUND', 'This project is not available in the workspace.');
+      const record = records[index];
+      if (isActive(record.scan)) throw new AgentOClientError('SCAN_IN_PROGRESS', 'Wait for the current scan to finish before deleting the project.');
+      records.splice(index, 1);
+    });
+    this.storageFailures.delete(id);
+  }
   async importDiscovery(id: string, discovery: DiscoveryResult) {
     if (id === demoId) throw new AgentOClientError('INVALID_INPUT', 'Create a project to save live discovery; the demo fixture is read-only.');
     return this.workspace.update(records => {

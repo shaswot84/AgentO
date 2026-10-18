@@ -7,11 +7,16 @@ const codes: readonly ClientErrorCode[] = ['INVALID_INPUT', 'INVALID_DISCOVERY',
 
 /** No fixture fallback: service failures remain visible to the user. */
 export function createHttpClient(transport: typeof fetch = (...args) => fetch(...args)): AgentOClient {
-  async function request<T>(path: string, body?: unknown): Promise<T> {
+  async function request<T>(path: string, body?: unknown, method?: string): Promise<T> {
     try {
-      const response = await transport(`/api/projects${path}`, body === undefined ? {} : {
-        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body),
-      });
+      const init: RequestInit = {};
+      if (method) init.method = method;
+      else if (body !== undefined) init.method = 'POST';
+      if (body !== undefined) {
+        init.headers = { 'Content-Type': 'application/json' };
+        init.body = JSON.stringify(body);
+      }
+      const response = await transport(`/api/projects${path}`, init);
       const value = await response.json() as { ok?: boolean; data?: T; error?: string; code?: ClientErrorCode };
       if (!response.ok || value.ok !== true || value.data === undefined) {
         const code = value.code && codes.includes(value.code) ? value.code : 'CLIENT_UNAVAILABLE';
@@ -33,6 +38,7 @@ export function createHttpClient(transport: typeof fetch = (...args) => fetch(..
     getDiscovery: id => request(`${projectPath(id)}/discovery`),
     startScan: id => request(`${projectPath(id)}/scan`, {}),
     getScan: id => request(`${projectPath(id)}/scan`),
+    deleteProject: async (id) => { await request(projectPath(id), undefined, 'DELETE'); },
     getFindings: id => request(`${projectPath(id)}/findings`),
     getFinding: (id, findingId) => request(`${projectPath(id)}/findings/${encodeURIComponent(findingId)}`),
     getWorkflows: id => request(`${projectPath(id)}/workflows`),

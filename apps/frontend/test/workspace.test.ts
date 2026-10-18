@@ -94,6 +94,24 @@ describe('durable local projects', () => {
     await expect(Workspace.open(file)).rejects.toThrow();
     expect(await readFile(file, 'utf8')).toBe('{broken');
   });
+  it('deletes projects from workspace storage and protects read-only or scanning targets', async () => {
+    const { service, file } = await setup();
+    const project1 = await service.createProject(input);
+    const project2 = await service.createProject({ ...input, name: 'Project Two' });
+    expect(await service.listProjects()).toHaveLength(3);
+
+    await service.deleteProject(project1.id);
+    const remaining = await service.listProjects();
+    expect(remaining).toHaveLength(2);
+    expect(remaining.some(p => p.id === project1.id)).toBe(false);
+    expect(remaining.some(p => p.id === project2.id)).toBe(true);
+
+    const restarted = new LocalService(await Workspace.open(file), execution);
+    expect((await restarted.listProjects()).some(p => p.id === project1.id)).toBe(false);
+
+    await expect(service.deleteProject('demo-shop')).rejects.toMatchObject({ code: 'INVALID_INPUT' });
+    await expect(service.deleteProject('unknown-id')).rejects.toMatchObject({ code: 'PROJECT_NOT_FOUND' });
+  });
 });
 
 describe('local scan lifecycle and provenance', () => {
@@ -118,6 +136,7 @@ describe('local scan lifecycle and provenance', () => {
     const second = await service.createProject({ ...input, name: 'Second' });
     await expect(service.startScan(second.id)).rejects.toMatchObject({ code: 'SCAN_IN_PROGRESS' });
     await expect(service.importDiscovery(project.id, discovery())).rejects.toMatchObject({ code: 'SCAN_IN_PROGRESS' });
+    await expect(service.deleteProject(project.id)).rejects.toMatchObject({ code: 'SCAN_IN_PROGRESS' });
     release(); await service.idle();
     const scan = await service.getScan(project.id);
     expect(scan.state).toBe('complete');

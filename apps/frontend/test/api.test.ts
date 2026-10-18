@@ -129,6 +129,24 @@ describe('same-origin local API transport', () => {
     expect((await fetch(`${base}/api/projects`, { method: 'DELETE' })).status).toBe(405);
     expect((await fetch(`${base}/api/unknown`)).status).toBe(404);
   });
+  it('supports DELETE /api/projects/:id to delete projects and rejects demo-shop', async () => {
+    const project = (await (await post('/api/projects', { input })).json()).data;
+    const deleteRes = await fetch(`${base}/api/projects/${project.id}`, { method: 'DELETE' });
+    expect(deleteRes.status).toBe(200);
+    const body = await deleteRes.json();
+    expect(body).toEqual({ ok: true, data: { success: true } });
+
+    const getRes = await fetch(`${base}/api/projects/${project.id}`);
+    expect(getRes.status).toBe(404);
+
+    const demoDelete = await fetch(`${base}/api/projects/demo-shop`, { method: 'DELETE' });
+    expect(demoDelete.status).toBe(400);
+    expect((await demoDelete.json()).code).toBe('INVALID_INPUT');
+
+    const unknownDelete = await fetch(`${base}/api/projects/missing-id`, { method: 'DELETE' });
+    expect(unknownDelete.status).toBe(404);
+    expect((await unknownDelete.json()).code).toBe('PROJECT_NOT_FOUND');
+  });
 });
 
 describe('HTTP failure behavior', () => {

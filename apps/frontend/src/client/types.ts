@@ -115,6 +115,7 @@ export interface AgentOClient {
   getDiscovery(projectId: string): Promise<DiscoveryResult>;
   getScan(projectId: string): Promise<ScanSnapshot>;
   startScan(projectId: string): Promise<ScanSnapshot>;
+  deleteProject(projectId: string): Promise<void>;
   getFindings(projectId: string): Promise<readonly FindingDetail[]>;
   getFinding(projectId: string, findingId: string): Promise<FindingDetail>;
   getWorkflows(projectId: string): Promise<readonly BrowserWorkflowResult[]>;

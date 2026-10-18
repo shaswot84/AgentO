@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { DiscoveryResult } from '@agento/discovery';
-import { createFixtureClient, parseSavedDiscovery, validateProjectInput } from '../src/client';
+import { createFixtureClient, createHttpClient, parseSavedDiscovery, validateProjectInput } from '../src/client';
 import type { ProjectInput } from '../src/client';
 import { demoDiscovery } from '../src/data/demo-discovery';
 
@@ -236,5 +236,32 @@ describe('replaceable fixture client', () => {
     const projectWorkflows = await api.getWorkflows(project.id);
     expect(projectWorkflows).toHaveLength(1);
     expect(projectWorkflows[0]!.id).toBe(ran.id);
+  });
+
+  it('supports deleting projects in fixture client and sends DELETE in HTTP client', async () => {
+    const api = client();
+    const project = await api.createProject(validInput);
+    expect(await api.listProjects()).toHaveLength(2);
+
+    await api.deleteProject(project.id);
+    expect(await api.listProjects()).toHaveLength(1);
+    await expect(api.getProject(project.id)).rejects.toMatchObject({ code: 'PROJECT_NOT_FOUND' });
+
+    await expect(api.deleteProject('demo-shop')).rejects.toMatchObject({ code: 'INVALID_INPUT' });
+    await expect(api.deleteProject('non-existent')).rejects.toMatchObject({ code: 'PROJECT_NOT_FOUND' });
+
+    let requestedUrl = '';
+    let requestedMethod = '';
+    const http = createHttpClient(async (url, init) => {
+      requestedUrl = String(url);
+      requestedMethod = init?.method ?? 'GET';
+      return new Response(JSON.stringify({ ok: true, data: { success: true } }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    });
+    await http.deleteProject('proj-123');
+    expect(requestedUrl).toBe('/api/projects/proj-123');
+    expect(requestedMethod).toBe('DELETE');
   });
 });

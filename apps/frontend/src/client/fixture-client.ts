@@ -112,6 +112,16 @@ export function createFixtureClient(options: FixtureClientOptions = {}): AgentOC
     async startScan() {
       throw new AgentOClientError('SCAN_UNAVAILABLE', 'Live scans require the local workspace service.');
     },
+    async deleteProject(projectId) {
+      await ready('deleteProject');
+      if (projectId === DEMO_PROJECT_ID) {
+        throw new AgentOClientError('INVALID_INPUT', 'The demo fixture is read-only and cannot be deleted.');
+      }
+      project(projectId);
+      projects.delete(projectId);
+      discoveries.delete(projectId);
+      workflows.delete(projectId);
+    },
     async getFindings(projectId) {
       await ready('getFindings');
       project(projectId);

@@ -94,7 +94,12 @@ export function createLocalApi(options: { root: string; file: string; execution:
           data = await client.createProject(input.input as ProjectInput, input.discovery as DiscoveryResult | undefined);
           status = 201;
         } else if (id && !resource && req.method === 'GET') data = await client.getProject(id);
-        else if (id && resource === 'discovery' && !encodedFinding && req.method === 'GET') data = await client.getDiscovery(id);
+        else if (id && !resource && req.method === 'DELETE') {
+          if (!client.deleteProject) throw new AgentOClientError('CLIENT_UNAVAILABLE', 'Project deletion is not supported by this client.');
+          await client.deleteProject(id);
+          data = { success: true };
+          status = 200;
+        } else if (id && resource === 'discovery' && !encodedFinding && req.method === 'GET') data = await client.getDiscovery(id);
         else if (id && resource === 'discovery' && !encodedFinding && req.method === 'POST') data = await client.importDiscovery(id, (await body(req)).discovery as DiscoveryResult);
         else if (id && resource === 'scan' && !encodedFinding && req.method === 'GET') data = await client.getScan(id);
         else if (id && resource === 'scan' && !encodedFinding && req.method === 'POST') {
