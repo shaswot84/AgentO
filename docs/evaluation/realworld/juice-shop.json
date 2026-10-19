@@ -1,0 +1,4462 @@
+{
+  "discovery": {
+    "repositoryPath": "/tmp/agento-realworld-2026-10-19/repos/juice-shop",
+    "name": "juice-shop",
+    "languages": [
+      "javascript",
+      "python",
+      "typescript"
+    ],
+    "frameworks": [
+      "express"
+    ],
+    "dependencies": [
+      {
+        "name": "@angular/animations",
+        "version": "^22.0.1",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "@angular/build",
+        "version": "^22.0.1",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "@angular/cdk",
+        "version": "^22.0.1",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "@angular/cli",
+        "version": "^22.0.1",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "@angular/common",
+        "version": "^22.0.1",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "@angular/compiler",
+        "version": "^22.0.1",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "@angular/compiler-cli",
+        "version": "^22.0.1",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "@angular/core",
+        "version": "^22.0.1",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "@angular/forms",
+        "version": "^22.0.1",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "@angular/material",
+        "version": "^22.0.1",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "@angular/platform-browser",
+        "version": "^22.0.1",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "@angular/router",
+        "version": "^22.0.1",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "@codemirror/lang-javascript",
+        "version": "^6.2.5",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "@codemirror/lang-json",
+        "version": "^6.0.2",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "@codemirror/lang-yaml",
+        "version": "^6.1.2",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "@codemirror/merge",
+        "version": "^6.12.0",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "@cyclonedx/cyclonedx-esbuild",
+        "version": "^1.0.0",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "@fortawesome/fontawesome-svg-core",
+        "version": "~1.2.30",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "@fortawesome/free-brands-svg-icons",
+        "version": "^5.14.0",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "@fortawesome/free-regular-svg-icons",
+        "version": "^5.14.0",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "@fortawesome/free-solid-svg-icons",
+        "version": "^5.14.0",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "@ngx-translate/core",
+        "version": "^17.0.0",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "@ngx-translate/http-loader",
+        "version": "^17.0.0",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "@wagmi/core",
+        "version": "^0.5.8",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "angularx-qrcode",
+        "version": "^21.0.5",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "canvas-confetti",
+        "version": "^1.9.3",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "codemirror",
+        "version": "^6.0.2",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "cookieconsent",
+        "version": "^3.1.1",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "ethers",
+        "version": "^5.7.2",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "flag-icons",
+        "version": "^6.9.2",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "font-mfizz",
+        "version": "^2.4.1",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "jwt-decode",
+        "version": "^4.0.0",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "lodash-es",
+        "version": "^4.17.21",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "material-icons",
+        "version": "^1.13.14",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "ng-gallery",
+        "version": "^12.0.0",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "ng2-file-upload",
+        "version": "^10.0.0",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "ngx-window-token",
+        "version": "^7.0.0",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "ngy-cookie",
+        "version": "^6.0.0",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "rxjs",
+        "version": "7.8.2",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "sass",
+        "version": "^1.86.3",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "snarkdown",
+        "version": "^1.2.2",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "socket.io-client",
+        "version": "^4.8.4",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "solidity-browser-compiler",
+        "version": "^1.1.0",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "tslib",
+        "version": "^2.5.0",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "typescript",
+        "version": "~6.0.3",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "zone.js",
+        "version": "~0.15.0",
+        "kind": "dependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "@angular/language-service",
+        "version": "^22.0.1",
+        "kind": "devDependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "@eslint/js",
+        "version": "9.33.0",
+        "kind": "devDependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "@types/express-serve-static-core",
+        "version": "^4.17.9",
+        "kind": "devDependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "@types/jwt-decode",
+        "version": "^2.2.1",
+        "kind": "devDependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "@types/node",
+        "version": "^26.0.1",
+        "kind": "devDependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "@types/socket.io-client",
+        "version": "^1.4.33",
+        "kind": "devDependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "@vitest/coverage-v8",
+        "version": "^4.1.2",
+        "kind": "devDependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "angular-eslint",
+        "version": "^22.0.0",
+        "kind": "devDependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "esbuild-visualizer",
+        "version": "^0.7.0",
+        "kind": "devDependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "eslint",
+        "version": "^9.33.0",
+        "kind": "devDependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "jsdom",
+        "version": "^29.0.1",
+        "kind": "devDependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "stylelint",
+        "version": "^16.10.0",
+        "kind": "devDependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "stylelint-config-sass-guidelines",
+        "version": "^12.1.0",
+        "kind": "devDependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "stylelint-scss",
+        "version": "^6.0.0",
+        "kind": "devDependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "typescript-eslint",
+        "version": "^8.42.0",
+        "kind": "devDependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "vitest",
+        "version": "^4.1.1",
+        "kind": "devDependencies",
+        "manifest": "frontend/package.json"
+      },
+      {
+        "name": "@ai-sdk/openai-compatible",
+        "version": "^2.0.35",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@fontsource/roboto",
+        "version": "^5.2.9",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "ai",
+        "version": "^6.0.116",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "beercss",
+        "version": "^4.0.19",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "body-parser",
+        "version": "^1.20.4",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "check-dependencies",
+        "version": "^2.0.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "clarinet",
+        "version": "^0.12.6",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "colors",
+        "version": "1.4.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "compression",
+        "version": "^1.8.1",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "config",
+        "version": "^3.3.12",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "cookie-parser",
+        "version": "^1.4.7",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "cookieconsent",
+        "version": "^3.1.1",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "cors",
+        "version": "^2.8.5",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "download",
+        "version": "^8.0.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "errorhandler",
+        "version": "^1.5.1",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "ethers",
+        "version": "^6.16.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "express",
+        "version": "^4.22.1",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "express-ipfilter",
+        "version": "^1.3.2",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "express-jwt",
+        "version": "0.1.3",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "express-rate-limit",
+        "version": "^7.5.1",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "express-robots-txt",
+        "version": "^0.5.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "express-security.txt",
+        "version": "^2.0.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "feature-policy",
+        "version": "^0.6.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "file-stream-rotator",
+        "version": "^1.0.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "file-type",
+        "version": "^16.5.4",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "finale-rest",
+        "version": "^1.2.2",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "fs-extra",
+        "version": "^9.1.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "glob",
+        "version": "^10.4.5",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "graceful-fs",
+        "version": "^4.2.11",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "hashids",
+        "version": "^2.3.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "hbs",
+        "version": "^4.2.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "helmet",
+        "version": "^4.6.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "html-entities",
+        "version": "^1.4.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "i18n",
+        "version": "^0.11.1",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "js-yaml",
+        "version": "^3.14.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "jsonwebtoken",
+        "version": "0.4.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "libxml2-wasm",
+        "version": "^0.7.1",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "marsdb",
+        "version": "^0.6.11",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "material-icons",
+        "version": "^1.13.14",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "median",
+        "version": "^0.0.2",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "morgan",
+        "version": "^1.10.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "multer",
+        "version": "^2.4.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "notevil",
+        "version": "^1.3.3",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "on-finished",
+        "version": "^2.3.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "otplib",
+        "version": "^13.4.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "pdfkit",
+        "version": "^0.11.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "portscanner",
+        "version": "^2.2.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "prom-client",
+        "version": "^15.1.3",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "proxy-agent",
+        "version": "^8.0.2",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "pug",
+        "version": "^3.0.3",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "replace",
+        "version": "^1.2.2",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "sanitize-filename",
+        "version": "^1.6.3",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "sanitize-html",
+        "version": "1.4.2",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "semver",
+        "version": "^7.6.3",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "sequelize",
+        "version": "^6.37.3",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "serve-index",
+        "version": "^1.9.1",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "socket.io",
+        "version": "^4.8.4",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "sqlite3",
+        "version": "^5.1.7",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "svg-captcha",
+        "version": "^1.4.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "swagger-ui-express",
+        "version": "^5.0.1",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "unzipper",
+        "version": "^0.12.3",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "winston",
+        "version": "^3.16.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "z85",
+        "version": "^0.0.2",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "zod",
+        "version": "^4.4.3",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@cyclonedx/cyclonedx-npm",
+        "version": "^2.0.0||^3.0.0||^4.00",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@eslint/js",
+        "version": "^9.33.0",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@istanbuljs/nyc-config-typescript",
+        "version": "^1.0.2",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/clarinet",
+        "version": "^0.12.3",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/compression",
+        "version": "^1.8.1",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/config",
+        "version": "^3.3.5",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/cookie-parser",
+        "version": "^1.4.10",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/cors",
+        "version": "^2.8.19",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/cross-spawn",
+        "version": "^6.0.6",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/diff",
+        "version": "^7.0.1",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/download",
+        "version": "^8.0.5",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/errorhandler",
+        "version": "^1.5.3",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/exif",
+        "version": "^0.6.5",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/express",
+        "version": "^4.17.25",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/express-jwt",
+        "version": "^6.0.4",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/fs-extra",
+        "version": "^9.0.13",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/glob",
+        "version": "^7.2.0",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/graceful-fs",
+        "version": "^4.1.9",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/i18n",
+        "version": "^0.12.0",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/js-yaml",
+        "version": "^3.12.10",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/jsonwebtoken",
+        "version": "^8.5.9",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/jws",
+        "version": "^3.2.10",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/lodash",
+        "version": "^4.17.14",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/morgan",
+        "version": "^1.9.9",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/multer",
+        "version": "^1.4.12",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/node",
+        "version": "^26.0.1",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/on-finished",
+        "version": "^2.3.4",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/pdfkit",
+        "version": "^0.10.6",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/portscanner",
+        "version": "^2.1.4",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/pug",
+        "version": "^2.0.10",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/sanitize-html",
+        "version": "^1.27.2",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/semver",
+        "version": "^7.5.8",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/sequelize",
+        "version": "^4.28.20",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/serve-index",
+        "version": "^1.9.4",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/supertest",
+        "version": "^7.2.0",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/swagger-ui-express",
+        "version": "^4.1.6",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/unzipper",
+        "version": "^0.10.10",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "concurrently",
+        "version": "^5.3.0",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "cypress",
+        "version": "^15.16.0",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "diff",
+        "version": "^9.0.0",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "eslint",
+        "version": "^9.39.4",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "exif",
+        "version": "^0.6.0",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "globals",
+        "version": "^17.4.0",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "neostandard",
+        "version": "^0.13.0",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "nyc",
+        "version": "^15.1.0",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "socket.io-client",
+        "version": "^4.8.4",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "supertest",
+        "version": "^7.2.2",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "tsx",
+        "version": "^4.21.0",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "typescript",
+        "version": "^6.0.3",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "typescript-eslint",
+        "version": "^8.57.1",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      }
+    ],
+    "databases": [
+      "sqlite"
+    ],
+    "orms": [
+      "sequelize"
+    ],
+    "authentication": [
+      "jwt"
+    ],
+    "authenticationPackages": [
+      "express-jwt",
+      "jsonwebtoken"
+    ],
+    "middleware": [
+      {
+        "kind": "cookie",
+        "name": "cookie-parser",
+        "file": "package.json",
+        "basis": "dependency"
+      },
+      {
+        "kind": "cors",
+        "name": "cors",
+        "file": "package.json",
+        "basis": "dependency"
+      },
+      {
+        "kind": "cors",
+        "name": "cors",
+        "file": "server.ts",
+        "basis": "import",
+        "line": 6
+      },
+      {
+        "kind": "cookie",
+        "name": "cookie-parser",
+        "file": "server.ts",
+        "basis": "import",
+        "line": 24
+      }
+    ],
+    "structure": {
+      "manifests": [
+        {
+          "file": "frontend/package.json",
+          "directory": "frontend",
+          "name": "frontend",
+          "workspacePatterns": []
+        },
+        {
+          "file": "package.json",
+          "directory": ".",
+          "name": "juice-shop",
+          "workspacePatterns": []
+        }
+      ],
+      "directories": [
+        "config",
+        "data",
+        "data/static",
+        "data/static/codefixes",
+        "data/static/i18n",
+        "data/static/web3-snippets",
+        "encryptionkeys",
+        "frontend",
+        "frontend/src",
+        "frontend/src/app",
+        "frontend/src/app/Models",
+        "frontend/src/app/Services",
+        "frontend/src/app/about",
+        "frontend/src/app/accounting",
+        "frontend/src/app/address",
+        "frontend/src/app/address-create",
+        "frontend/src/app/address-select",
+        "frontend/src/app/administration",
+        "frontend/src/app/basket",
+        "frontend/src/app/challenge-solved-notification",
+        "frontend/src/app/challenge-status-badge",
+        "frontend/src/app/change-password",
+        "frontend/src/app/chatbot",
+        "frontend/src/app/chatbot/chat-conversation",
+        "frontend/src/app/chatbot/chat-input-box",
+        "frontend/src/app/chatbot/chat-welcome-page",
+        "frontend/src/app/chatbot/chat-welcome-screen",
+        "frontend/src/app/coding-challenge-page",
+        "frontend/src/app/coding-challenge-page/components",
+        "frontend/src/app/coding-challenge-page/components/coding-challenge-find-it",
+        "frontend/src/app/coding-challenge-page/components/coding-challenge-fix-it",
+        "frontend/src/app/coding-challenge-page/components/coding-challenge-section",
+        "frontend/src/app/coding-challenge-page/helpers",
+        "frontend/src/app/complaint",
+        "frontend/src/app/contact",
+        "frontend/src/app/ctf-system-wide-notification",
+        "frontend/src/app/data-export",
+        "frontend/src/app/delivery-method",
+        "frontend/src/app/deluxe-user",
+        "frontend/src/app/error-page",
+        "frontend/src/app/faucet",
+        "frontend/src/app/feedback-details",
+        "frontend/src/app/forgot-password",
+        "frontend/src/app/last-login-ip",
+        "frontend/src/app/login",
+        "frontend/src/app/mat-search-bar",
+        "frontend/src/app/navbar",
+        "frontend/src/app/nft-unlock",
+        "frontend/src/app/oauth",
+        "frontend/src/app/order-completion",
+        "frontend/src/app/order-history",
+        "frontend/src/app/order-summary",
+        "frontend/src/app/password-strength",
+        "frontend/src/app/password-strength-info",
+        "frontend/src/app/payment",
+        "frontend/src/app/payment-method",
+        "frontend/src/app/photo-wall",
+        "frontend/src/app/privacy-policy",
+        "frontend/src/app/privacy-security",
+        "frontend/src/app/product",
+        "frontend/src/app/product-details",
+        "frontend/src/app/product-image",
+        "frontend/src/app/product-review-edit",
+        "frontend/src/app/purchase-basket",
+        "frontend/src/app/qr-code",
+        "frontend/src/app/recycle",
+        "frontend/src/app/register",
+        "frontend/src/app/saved-address",
+        "frontend/src/app/saved-payment-methods",
+        "frontend/src/app/score-board",
+        "frontend/src/app/score-board/components",
+        "frontend/src/app/score-board/components/challenge-card",
+        "frontend/src/app/score-board/components/challenges-unavailable-warning",
+        "frontend/src/app/score-board/components/coding-challenge-progress-score-card",
+        "frontend/src/app/score-board/components/difficulty-overview-score-card",
+        "frontend/src/app/score-board/components/difficulty-stars",
+        "frontend/src/app/score-board/components/filter-settings",
+        "frontend/src/app/score-board/components/filter-settings/components",
+        "frontend/src/app/score-board/components/filter-settings/components/category-filter",
+        "frontend/src/app/score-board/components/filter-settings/components/score-board-additional-settings-dialog",
+        "frontend/src/app/score-board/components/filter-settings/pipes",
+        "frontend/src/app/score-board/components/hacking-challenge-progress-score-card",
+        "frontend/src/app/score-board/components/score-card",
+        "frontend/src/app/score-board/components/tutorial-mode-warning",
+        "frontend/src/app/score-board/components/warning-card",
+        "frontend/src/app/score-board/filter-settings",
+        "frontend/src/app/score-board/helpers",
+        "frontend/src/app/score-board/types",
+        "frontend/src/app/search-result",
+        "frontend/src/app/server-started-notification",
+        "frontend/src/app/shared",
+        "frontend/src/app/sidenav",
+        "frontend/src/app/token-sale",
+        "frontend/src/app/track-result",
+        "frontend/src/app/two-factor-auth",
+        "frontend/src/app/two-factor-auth-enter",
+        "frontend/src/app/user-details",
+        "frontend/src/app/wallet",
+        "frontend/src/app/wallet-web3",
+        "frontend/src/app/web3-sandbox",
+        "frontend/src/app/welcome",
+        "frontend/src/app/welcome-banner",
+        "frontend/src/assets",
+        "frontend/src/assets/i18n",
+        "frontend/src/assets/private",
+        "frontend/src/assets/public",
+        "frontend/src/assets/public/css",
+        "frontend/src/assets/public/images",
+        "frontend/src/assets/public/images/carousel",
+        "frontend/src/assets/public/images/deluxe",
+        "frontend/src/assets/public/images/padding",
+        "frontend/src/assets/public/images/products",
+        "frontend/src/assets/public/images/uploads",
+        "frontend/src/assets/public/videos",
+        "frontend/src/confetti",
+        "frontend/src/environments",
+        "frontend/src/hacking-instructor",
+        "frontend/src/hacking-instructor/challenges",
+        "frontend/src/hacking-instructor/helpers",
+        "frontend/src/mocks",
+        "frontend/src/styles",
+        "ftp",
+        "ftp/quarantine",
+        "i18n",
+        "infrastructure",
+        "infrastructure/terraform",
+        "lib",
+        "lib/scripts",
+        "lib/startup",
+        "models",
+        "monitoring",
+        "routes",
+        "rsn",
+        "screenshots",
+        "scripts",
+        "terraform",
+        "test",
+        "test/api",
+        "test/api/helpers",
+        "test/cypress",
+        "test/cypress/e2e",
+        "test/cypress/support",
+        "test/files",
+        "test/server",
+        "test/server/helpers",
+        "test/smoke",
+        "uploads",
+        "uploads/complaints",
+        "vagrant",
+        "views",
+        "views/themes"
+      ],
+      "sourceDirectories": [
+        "frontend/src",
+        "frontend/src/app",
+        "lib",
+        "test/server"
+      ],
+      "testDirectories": [
+        "test"
+      ],
+      "staticDirectories": [
+        "data/static",
+        "frontend/src/assets",
+        "frontend/src/assets/public"
+      ],
+      "sourceFileCount": 660
+    },
+    "expressAdapterAvailable": true,
+    "availableAdapterIds": [
+      "express-framework-adapter"
+    ],
+    "supportedCodeAwareMode": true,
+    "mode": "code-aware",
+    "fallbackReasons": [],
+    "diagnostics": []
+  },
+  "project": {
+    "id": "juice-shop",
+    "name": "juice-shop",
+    "mode": "code-aware",
+    "repositoryPath": "/tmp/agento-realworld-2026-10-19/repos/juice-shop",
+    "baseUrl": "http://127.0.0.1:1",
+    "allowedOrigins": [
+      "http://127.0.0.1:1"
+    ],
+    "languages": [
+      "javascript",
+      "python",
+      "typescript"
+    ]
+  },
+  "supports": false,
+  "framework": {
+    "components": [
+      {
+        "id": "express:1de530c637562227d5a36ba0",
+        "projectId": "juice-shop",
+        "name": "juice-shop",
+        "kind": "service"
+      }
+    ],
+    "endpoints": [
+      {
+        "id": "express:8e6d4ab7d35032a6cddba26b",
+        "componentId": "express:1de530c637562227d5a36ba0",
+        "method": "GET",
+        "path": "/metrics",
+        "parameters": [],
+        "authentication": "unknown",
+        "roles": [],
+        "evidenceIds": [
+          "express:3c031e23efd1e179205eed8d"
+        ]
+      }
+    ],
+    "resources": [],
+    "signals": [],
+    "evidence": [
+      {
+        "id": "express:3c031e23efd1e179205eed8d",
+        "projectId": "juice-shop",
+        "producerId": "express-framework-adapter",
+        "capturedAt": "2026-10-19T15:17:53.865Z",
+        "kind": "source-location",
+        "source": {
+          "file": "server.ts",
+          "startLine": 759,
+          "endLine": 759
+        },
+        "endpointId": "express:8e6d4ab7d35032a6cddba26b",
+        "summary": "Express source observation: route.",
+        "facts": {
+          "observation": "route",
+          "method": "GET",
+          "path": "/metrics",
+          "handlers": [
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "server.ts",
+                "startLine": 759,
+                "endLine": 759
+              },
+              "package": "./lib/utils"
+            }
+          ],
+          "mounts": [],
+          "bodyUsed": false,
+          "conditional": false,
+          "runtimeVerified": false
+        }
+      }
+    ],
+    "diagnostics": [
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/chatbotPromptInjectionChallenge_1.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/chatbotPromptInjectionChallenge_2_correct.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/chatbotPromptInjectionChallenge_3.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/chatbotPromptInjectionChallenge_4.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/localXssChallenge_1.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/localXssChallenge_2_correct.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/localXssChallenge_3.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/localXssChallenge_4.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/loginAdminChallenge_1.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/loginAdminChallenge_2.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/loginAdminChallenge_3.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/loginAdminChallenge_4_correct.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/loginBenderChallenge_1.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/loginBenderChallenge_2_correct.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/loginBenderChallenge_3.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/loginBenderChallenge_4.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/loginJimChallenge_1_correct.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/loginJimChallenge_2.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/loginJimChallenge_3.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/loginJimChallenge_4.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/registerAdminChallenge_1.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/registerAdminChallenge_2.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/registerAdminChallenge_3_correct.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/registerAdminChallenge_4.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/restfulXssChallenge_1_correct.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/restfulXssChallenge_2.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/restfulXssChallenge_3.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/restfulXssChallenge_4.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/tokenSaleChallenge_1.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/tokenSaleChallenge_2.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/tokenSaleChallenge_3_correct.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/weakPasswordChallenge_1_correct.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/weakPasswordChallenge_2.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/weakPasswordChallenge_3.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/weakPasswordChallenge_4.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/xssBonusChallenge_1_correct.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/xssBonusChallenge_2.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/xssBonusChallenge_3.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/xssBonusChallenge_4.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "unresolved-handler",
+        "source": {
+          "file": "server.ts",
+          "startLine": 759,
+          "endLine": 759
+        },
+        "message": "Handler or middleware could not be resolved."
+      }
+    ]
+  },
+  "analysis": {
+    "status": "partial",
+    "diagnostics": [
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/chatbotPromptInjectionChallenge_1.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/chatbotPromptInjectionChallenge_2_correct.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/chatbotPromptInjectionChallenge_3.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/chatbotPromptInjectionChallenge_4.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/localXssChallenge_1.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/localXssChallenge_2_correct.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/localXssChallenge_3.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/localXssChallenge_4.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/loginAdminChallenge_1.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/loginAdminChallenge_2.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/loginAdminChallenge_3.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/loginAdminChallenge_4_correct.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/loginBenderChallenge_1.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/loginBenderChallenge_2_correct.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/loginBenderChallenge_3.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/loginBenderChallenge_4.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/loginJimChallenge_1_correct.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/loginJimChallenge_2.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/loginJimChallenge_3.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/loginJimChallenge_4.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/registerAdminChallenge_1.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/registerAdminChallenge_2.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/registerAdminChallenge_3_correct.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/registerAdminChallenge_4.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/restfulXssChallenge_1_correct.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/restfulXssChallenge_2.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/restfulXssChallenge_3.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/restfulXssChallenge_4.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/tokenSaleChallenge_1.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/tokenSaleChallenge_2.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/tokenSaleChallenge_3_correct.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/weakPasswordChallenge_1_correct.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/weakPasswordChallenge_2.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/weakPasswordChallenge_3.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/weakPasswordChallenge_4.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/xssBonusChallenge_1_correct.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/xssBonusChallenge_2.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/xssBonusChallenge_3.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "parse-failed",
+        "message": "Source could not be parsed.",
+        "source": {
+          "file": "data/static/codefixes/xssBonusChallenge_4.ts",
+          "startLine": 1
+        }
+      },
+      {
+        "code": "scan-error",
+        "message": "Semgrep did not report scanning every selected source file."
+      }
+    ],
+    "signals": [
+      {
+        "id": "semgrep:5faf2e4a807d6c4be45920cf",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-89"
+        ],
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "source": {
+          "file": "data/static/codefixes/dbSchemaChallenge_1.ts",
+          "startLine": 5,
+          "endLine": 5
+        },
+        "evidenceIds": [
+          "semgrep:ad8f1fe95887ba20d9f4023b"
+        ]
+      },
+      {
+        "id": "semgrep:8a922addafe3d7c114aa9c6e",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-89"
+        ],
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "source": {
+          "file": "data/static/codefixes/dbSchemaChallenge_3.ts",
+          "startLine": 11,
+          "endLine": 11
+        },
+        "evidenceIds": [
+          "semgrep:d629774ebed5e4d57cadb659"
+        ]
+      },
+      {
+        "id": "semgrep:e6fd91e561a914ec74c787aa",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-89"
+        ],
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "source": {
+          "file": "data/static/codefixes/unionSqlInjectionChallenge_1.ts",
+          "startLine": 6,
+          "endLine": 6
+        },
+        "evidenceIds": [
+          "semgrep:388c4d71c0bf7b2d33b79b36"
+        ]
+      },
+      {
+        "id": "semgrep:3d7930e975ee3360b55dabdd",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-89"
+        ],
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "source": {
+          "file": "data/static/codefixes/unionSqlInjectionChallenge_3.ts",
+          "startLine": 10,
+          "endLine": 10
+        },
+        "evidenceIds": [
+          "semgrep:538efbb5feb4052e67b32ab6"
+        ]
+      },
+      {
+        "id": "semgrep:a252829731021a99b7c568e8",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-79"
+        ],
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "source": {
+          "file": "routes/chat.ts",
+          "startLine": 218,
+          "endLine": 218
+        },
+        "evidenceIds": [
+          "semgrep:837bc96ecaa799c3fa4e416f"
+        ]
+      },
+      {
+        "id": "semgrep:f3080f92001e2b2f29b5f964",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-79"
+        ],
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "source": {
+          "file": "routes/chat.ts",
+          "startLine": 228,
+          "endLine": 238
+        },
+        "evidenceIds": [
+          "semgrep:e85d156c4d43ea2f587a0619"
+        ]
+      },
+      {
+        "id": "semgrep:bfac48f140421187c8acb940",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-79"
+        ],
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "source": {
+          "file": "routes/chat.ts",
+          "startLine": 241,
+          "endLine": 241
+        },
+        "evidenceIds": [
+          "semgrep:e00bea3280aa8ee8da907bbe"
+        ]
+      },
+      {
+        "id": "semgrep:e9e9c5723252f7e06052341c",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-79"
+        ],
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "source": {
+          "file": "routes/chat.ts",
+          "startLine": 259,
+          "endLine": 259
+        },
+        "evidenceIds": [
+          "semgrep:338de5ad358eb0767014f14a"
+        ]
+      },
+      {
+        "id": "semgrep:811d131d69b2fade568b619d",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-79"
+        ],
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "source": {
+          "file": "routes/dataExport.ts",
+          "startLine": 108,
+          "endLine": 108
+        },
+        "evidenceIds": [
+          "semgrep:4fc8fe695043172a618b8125"
+        ]
+      },
+      {
+        "id": "semgrep:fd08c885d0a2a6ab004ac25e",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-89"
+        ],
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "source": {
+          "file": "routes/login.ts",
+          "startLine": 34,
+          "endLine": 34
+        },
+        "evidenceIds": [
+          "semgrep:ee826f2d74238f31271e0cb9"
+        ]
+      },
+      {
+        "id": "semgrep:acb0c4b5c7c3a78c49e5bd91",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-89"
+        ],
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "source": {
+          "file": "routes/search.ts",
+          "startLine": 23,
+          "endLine": 23
+        },
+        "evidenceIds": [
+          "semgrep:8162cc46fa25cc5d186131c1"
+        ]
+      },
+      {
+        "id": "semgrep:362354185f91ea8d2107eed2",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-79"
+        ],
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "source": {
+          "file": "routes/userProfile.ts",
+          "startLine": 101,
+          "endLine": 101
+        },
+        "evidenceIds": [
+          "semgrep:e80e1a4924d2bfa3866514b9"
+        ]
+      }
+    ],
+    "evidence": [
+      {
+        "id": "semgrep:8a23f6f3731cbd33c4df6088",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:17:53.867Z",
+        "kind": "static-analysis",
+        "summary": "Static analysis partial; signals are candidates requiring runtime verification.",
+        "facts": {
+          "observation": "static-analysis-run",
+          "status": "partial",
+          "diagnosticCodes": [
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "scan-error"
+          ],
+          "signalCount": 12,
+          "sourceDigest": "8c1c0d63bbe37b8b0d629c20",
+          "toolVersion": "1.180.0",
+          "runtimeVerified": false
+        }
+      },
+      {
+        "id": "semgrep:ad8f1fe95887ba20d9f4023b",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:17:53.867Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "data/static/codefixes/dbSchemaChallenge_1.ts",
+          "startLine": 5,
+          "endLine": 5
+        },
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-sql",
+          "cweIds": [
+            "CWE-89"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "data/static/codefixes/dbSchemaChallenge_1.ts",
+              "startLine": 5,
+              "endLine": 5
+            },
+            "kind": "query"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "data/static/codefixes/dbSchemaChallenge_1.ts",
+                "startLine": 3,
+                "endLine": 3,
+                "symbol": "query"
+              },
+              "kind": "request-query",
+              "parameterName": "q"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:d629774ebed5e4d57cadb659",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:17:53.867Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "data/static/codefixes/dbSchemaChallenge_3.ts",
+          "startLine": 11,
+          "endLine": 11
+        },
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-sql",
+          "cweIds": [
+            "CWE-89"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "data/static/codefixes/dbSchemaChallenge_3.ts",
+              "startLine": 11,
+              "endLine": 11
+            },
+            "kind": "query"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "data/static/codefixes/dbSchemaChallenge_3.ts",
+                "startLine": 5,
+                "endLine": 5,
+                "symbol": "query"
+              },
+              "kind": "request-query",
+              "parameterName": "q"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:388c4d71c0bf7b2d33b79b36",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:17:53.867Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "data/static/codefixes/unionSqlInjectionChallenge_1.ts",
+          "startLine": 6,
+          "endLine": 6
+        },
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-sql",
+          "cweIds": [
+            "CWE-89"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "data/static/codefixes/unionSqlInjectionChallenge_1.ts",
+              "startLine": 6,
+              "endLine": 6
+            },
+            "kind": "query"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "data/static/codefixes/unionSqlInjectionChallenge_1.ts",
+                "startLine": 3,
+                "endLine": 3,
+                "symbol": "query"
+              },
+              "kind": "request-query",
+              "parameterName": "q"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:538efbb5feb4052e67b32ab6",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:17:53.867Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "data/static/codefixes/unionSqlInjectionChallenge_3.ts",
+          "startLine": 10,
+          "endLine": 10
+        },
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-sql",
+          "cweIds": [
+            "CWE-89"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "data/static/codefixes/unionSqlInjectionChallenge_3.ts",
+              "startLine": 10,
+              "endLine": 10
+            },
+            "kind": "query"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "data/static/codefixes/unionSqlInjectionChallenge_3.ts",
+                "startLine": 3,
+                "endLine": 3,
+                "symbol": "query"
+              },
+              "kind": "request-query",
+              "parameterName": "q"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:837bc96ecaa799c3fa4e416f",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:17:53.867Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "routes/chat.ts",
+          "startLine": 218,
+          "endLine": 218
+        },
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "routes/chat.ts",
+              "startLine": 218,
+              "endLine": 218
+            },
+            "kind": "write"
+          },
+          "sources": [],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:e85d156c4d43ea2f587a0619",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:17:53.867Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "routes/chat.ts",
+          "startLine": 228,
+          "endLine": 238
+        },
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "routes/chat.ts",
+              "startLine": 228,
+              "endLine": 238
+            },
+            "kind": "write"
+          },
+          "sources": [],
+          "sourceResolution": "bounded-ast-def-use-partial",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:e00bea3280aa8ee8da907bbe",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:17:53.867Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "routes/chat.ts",
+          "startLine": 241,
+          "endLine": 241
+        },
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "routes/chat.ts",
+              "startLine": 241,
+              "endLine": 241
+            },
+            "kind": "write"
+          },
+          "sources": [],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:338de5ad358eb0767014f14a",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:17:53.867Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "routes/chat.ts",
+          "startLine": 259,
+          "endLine": 259
+        },
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "routes/chat.ts",
+              "startLine": 259,
+              "endLine": 259
+            },
+            "kind": "write"
+          },
+          "sources": [],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:4fc8fe695043172a618b8125",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:17:53.867Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "routes/dataExport.ts",
+          "startLine": 108,
+          "endLine": 108
+        },
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "routes/dataExport.ts",
+              "startLine": 108,
+              "endLine": 108
+            },
+            "kind": "send"
+          },
+          "sources": [],
+          "sourceResolution": "bounded-ast-def-use-partial",
+          "contextResolution": "syntax-only",
+          "conditions": [
+            {
+              "location": {
+                "file": "routes/dataExport.ts",
+                "startLine": 19,
+                "endLine": 19
+              },
+              "kind": "conditional",
+              "branch": "then"
+            }
+          ],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:ee826f2d74238f31271e0cb9",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:17:53.867Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "routes/login.ts",
+          "startLine": 34,
+          "endLine": 34
+        },
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-sql",
+          "cweIds": [
+            "CWE-89"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "routes/login.ts",
+              "startLine": 34,
+              "endLine": 34
+            },
+            "kind": "query"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "routes/login.ts",
+                "startLine": 34,
+                "endLine": 34,
+                "symbol": "body"
+              },
+              "kind": "request-body",
+              "parameterName": "password"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:8162cc46fa25cc5d186131c1",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:17:53.867Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "routes/search.ts",
+          "startLine": 23,
+          "endLine": 23
+        },
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-sql",
+          "cweIds": [
+            "CWE-89"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "routes/search.ts",
+              "startLine": 23,
+              "endLine": 23
+            },
+            "kind": "query"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "routes/search.ts",
+                "startLine": 21,
+                "endLine": 21,
+                "symbol": "query"
+              },
+              "kind": "request-query",
+              "parameterName": "q"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:e80e1a4924d2bfa3866514b9",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:17:53.867Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "routes/userProfile.ts",
+          "startLine": 101,
+          "endLine": 101
+        },
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "routes/userProfile.ts",
+              "startLine": 101,
+              "endLine": 101
+            },
+            "kind": "send"
+          },
+          "sources": [],
+          "sourceResolution": "bounded-ast-def-use-partial",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      }
+    ]
+  },
+  "model": {
+    "schemaVersion": 1,
+    "project": {
+      "id": "juice-shop",
+      "name": "juice-shop",
+      "mode": "code-aware",
+      "repositoryPath": "/tmp/agento-realworld-2026-10-19/repos/juice-shop",
+      "baseUrl": "http://127.0.0.1:1",
+      "allowedOrigins": [
+        "http://127.0.0.1:1"
+      ],
+      "languages": [
+        "javascript",
+        "python",
+        "typescript"
+      ]
+    },
+    "identities": [],
+    "components": [
+      {
+        "id": "express:1de530c637562227d5a36ba0",
+        "projectId": "juice-shop",
+        "name": "juice-shop",
+        "kind": "service"
+      }
+    ],
+    "endpoints": [
+      {
+        "id": "model:endpoint:4587dc006d19175bcce4a7d2061c6e09",
+        "componentId": "express:1de530c637562227d5a36ba0",
+        "componentIds": [
+          "express:1de530c637562227d5a36ba0"
+        ],
+        "origin": "http://127.0.0.1:1",
+        "method": "GET",
+        "path": "/metrics",
+        "aliases": [
+          "express:8e6d4ab7d35032a6cddba26b"
+        ],
+        "observations": [
+          {
+            "source": "source",
+            "origin": "http://127.0.0.1:1",
+            "endpoint": {
+              "id": "express:8e6d4ab7d35032a6cddba26b",
+              "componentId": "express:1de530c637562227d5a36ba0",
+              "method": "GET",
+              "path": "/metrics",
+              "parameters": [],
+              "authentication": "unknown",
+              "roles": [],
+              "evidenceIds": [
+                "express:3c031e23efd1e179205eed8d"
+              ]
+            }
+          }
+        ],
+        "parameters": [],
+        "authentication": "unknown",
+        "roles": [],
+        "evidenceIds": [
+          "express:3c031e23efd1e179205eed8d"
+        ]
+      }
+    ],
+    "resources": [],
+    "signals": [
+      {
+        "id": "semgrep:362354185f91ea8d2107eed2",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-79"
+        ],
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "source": {
+          "file": "routes/userProfile.ts",
+          "startLine": 101,
+          "endLine": 101
+        },
+        "evidenceIds": [
+          "semgrep:e80e1a4924d2bfa3866514b9"
+        ]
+      },
+      {
+        "id": "semgrep:3d7930e975ee3360b55dabdd",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-89"
+        ],
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "source": {
+          "file": "data/static/codefixes/unionSqlInjectionChallenge_3.ts",
+          "startLine": 10,
+          "endLine": 10
+        },
+        "evidenceIds": [
+          "semgrep:538efbb5feb4052e67b32ab6"
+        ]
+      },
+      {
+        "id": "semgrep:5faf2e4a807d6c4be45920cf",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-89"
+        ],
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "source": {
+          "file": "data/static/codefixes/dbSchemaChallenge_1.ts",
+          "startLine": 5,
+          "endLine": 5
+        },
+        "evidenceIds": [
+          "semgrep:ad8f1fe95887ba20d9f4023b"
+        ]
+      },
+      {
+        "id": "semgrep:811d131d69b2fade568b619d",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-79"
+        ],
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "source": {
+          "file": "routes/dataExport.ts",
+          "startLine": 108,
+          "endLine": 108
+        },
+        "evidenceIds": [
+          "semgrep:4fc8fe695043172a618b8125"
+        ]
+      },
+      {
+        "id": "semgrep:8a922addafe3d7c114aa9c6e",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-89"
+        ],
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "source": {
+          "file": "data/static/codefixes/dbSchemaChallenge_3.ts",
+          "startLine": 11,
+          "endLine": 11
+        },
+        "evidenceIds": [
+          "semgrep:d629774ebed5e4d57cadb659"
+        ]
+      },
+      {
+        "id": "semgrep:a252829731021a99b7c568e8",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-79"
+        ],
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "source": {
+          "file": "routes/chat.ts",
+          "startLine": 218,
+          "endLine": 218
+        },
+        "evidenceIds": [
+          "semgrep:837bc96ecaa799c3fa4e416f"
+        ]
+      },
+      {
+        "id": "semgrep:acb0c4b5c7c3a78c49e5bd91",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-89"
+        ],
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "source": {
+          "file": "routes/search.ts",
+          "startLine": 23,
+          "endLine": 23
+        },
+        "evidenceIds": [
+          "semgrep:8162cc46fa25cc5d186131c1"
+        ]
+      },
+      {
+        "id": "semgrep:bfac48f140421187c8acb940",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-79"
+        ],
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "source": {
+          "file": "routes/chat.ts",
+          "startLine": 241,
+          "endLine": 241
+        },
+        "evidenceIds": [
+          "semgrep:e00bea3280aa8ee8da907bbe"
+        ]
+      },
+      {
+        "id": "semgrep:e6fd91e561a914ec74c787aa",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-89"
+        ],
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "source": {
+          "file": "data/static/codefixes/unionSqlInjectionChallenge_1.ts",
+          "startLine": 6,
+          "endLine": 6
+        },
+        "evidenceIds": [
+          "semgrep:388c4d71c0bf7b2d33b79b36"
+        ]
+      },
+      {
+        "id": "semgrep:e9e9c5723252f7e06052341c",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-79"
+        ],
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "source": {
+          "file": "routes/chat.ts",
+          "startLine": 259,
+          "endLine": 259
+        },
+        "evidenceIds": [
+          "semgrep:338de5ad358eb0767014f14a"
+        ]
+      },
+      {
+        "id": "semgrep:f3080f92001e2b2f29b5f964",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-79"
+        ],
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "source": {
+          "file": "routes/chat.ts",
+          "startLine": 228,
+          "endLine": 238
+        },
+        "evidenceIds": [
+          "semgrep:e85d156c4d43ea2f587a0619"
+        ]
+      },
+      {
+        "id": "semgrep:fd08c885d0a2a6ab004ac25e",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-89"
+        ],
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "source": {
+          "file": "routes/login.ts",
+          "startLine": 34,
+          "endLine": 34
+        },
+        "evidenceIds": [
+          "semgrep:ee826f2d74238f31271e0cb9"
+        ]
+      }
+    ],
+    "evidence": [
+      {
+        "id": "express:3c031e23efd1e179205eed8d",
+        "projectId": "juice-shop",
+        "producerId": "express-framework-adapter",
+        "capturedAt": "2026-10-19T15:17:53.865Z",
+        "kind": "source-location",
+        "source": {
+          "file": "server.ts",
+          "startLine": 759,
+          "endLine": 759
+        },
+        "endpointId": "express:8e6d4ab7d35032a6cddba26b",
+        "summary": "Express source observation: route.",
+        "facts": {
+          "observation": "route",
+          "method": "GET",
+          "path": "/metrics",
+          "handlers": [
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "server.ts",
+                "startLine": 759,
+                "endLine": 759
+              },
+              "package": "./lib/utils"
+            }
+          ],
+          "mounts": [],
+          "bodyUsed": false,
+          "conditional": false,
+          "runtimeVerified": false
+        }
+      },
+      {
+        "id": "semgrep:338de5ad358eb0767014f14a",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:17:53.867Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "routes/chat.ts",
+          "startLine": 259,
+          "endLine": 259
+        },
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "routes/chat.ts",
+              "startLine": 259,
+              "endLine": 259
+            },
+            "kind": "write"
+          },
+          "sources": [],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:388c4d71c0bf7b2d33b79b36",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:17:53.867Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "data/static/codefixes/unionSqlInjectionChallenge_1.ts",
+          "startLine": 6,
+          "endLine": 6
+        },
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-sql",
+          "cweIds": [
+            "CWE-89"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "data/static/codefixes/unionSqlInjectionChallenge_1.ts",
+              "startLine": 6,
+              "endLine": 6
+            },
+            "kind": "query"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "data/static/codefixes/unionSqlInjectionChallenge_1.ts",
+                "startLine": 3,
+                "endLine": 3,
+                "symbol": "query"
+              },
+              "kind": "request-query",
+              "parameterName": "q"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:4fc8fe695043172a618b8125",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:17:53.867Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "routes/dataExport.ts",
+          "startLine": 108,
+          "endLine": 108
+        },
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "routes/dataExport.ts",
+              "startLine": 108,
+              "endLine": 108
+            },
+            "kind": "send"
+          },
+          "sources": [],
+          "sourceResolution": "bounded-ast-def-use-partial",
+          "contextResolution": "syntax-only",
+          "conditions": [
+            {
+              "location": {
+                "file": "routes/dataExport.ts",
+                "startLine": 19,
+                "endLine": 19
+              },
+              "kind": "conditional",
+              "branch": "then"
+            }
+          ],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:538efbb5feb4052e67b32ab6",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:17:53.867Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "data/static/codefixes/unionSqlInjectionChallenge_3.ts",
+          "startLine": 10,
+          "endLine": 10
+        },
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-sql",
+          "cweIds": [
+            "CWE-89"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "data/static/codefixes/unionSqlInjectionChallenge_3.ts",
+              "startLine": 10,
+              "endLine": 10
+            },
+            "kind": "query"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "data/static/codefixes/unionSqlInjectionChallenge_3.ts",
+                "startLine": 3,
+                "endLine": 3,
+                "symbol": "query"
+              },
+              "kind": "request-query",
+              "parameterName": "q"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:8162cc46fa25cc5d186131c1",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:17:53.867Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "routes/search.ts",
+          "startLine": 23,
+          "endLine": 23
+        },
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-sql",
+          "cweIds": [
+            "CWE-89"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "routes/search.ts",
+              "startLine": 23,
+              "endLine": 23
+            },
+            "kind": "query"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "routes/search.ts",
+                "startLine": 21,
+                "endLine": 21,
+                "symbol": "query"
+              },
+              "kind": "request-query",
+              "parameterName": "q"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:837bc96ecaa799c3fa4e416f",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:17:53.867Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "routes/chat.ts",
+          "startLine": 218,
+          "endLine": 218
+        },
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "routes/chat.ts",
+              "startLine": 218,
+              "endLine": 218
+            },
+            "kind": "write"
+          },
+          "sources": [],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:8a23f6f3731cbd33c4df6088",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:17:53.867Z",
+        "kind": "static-analysis",
+        "summary": "Static analysis partial; signals are candidates requiring runtime verification.",
+        "facts": {
+          "observation": "static-analysis-run",
+          "status": "partial",
+          "diagnosticCodes": [
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "parse-failed",
+            "scan-error"
+          ],
+          "signalCount": 12,
+          "sourceDigest": "8c1c0d63bbe37b8b0d629c20",
+          "toolVersion": "1.180.0",
+          "runtimeVerified": false
+        }
+      },
+      {
+        "id": "semgrep:ad8f1fe95887ba20d9f4023b",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:17:53.867Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "data/static/codefixes/dbSchemaChallenge_1.ts",
+          "startLine": 5,
+          "endLine": 5
+        },
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-sql",
+          "cweIds": [
+            "CWE-89"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "data/static/codefixes/dbSchemaChallenge_1.ts",
+              "startLine": 5,
+              "endLine": 5
+            },
+            "kind": "query"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "data/static/codefixes/dbSchemaChallenge_1.ts",
+                "startLine": 3,
+                "endLine": 3,
+                "symbol": "query"
+              },
+              "kind": "request-query",
+              "parameterName": "q"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:d629774ebed5e4d57cadb659",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:17:53.867Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "data/static/codefixes/dbSchemaChallenge_3.ts",
+          "startLine": 11,
+          "endLine": 11
+        },
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-sql",
+          "cweIds": [
+            "CWE-89"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "data/static/codefixes/dbSchemaChallenge_3.ts",
+              "startLine": 11,
+              "endLine": 11
+            },
+            "kind": "query"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "data/static/codefixes/dbSchemaChallenge_3.ts",
+                "startLine": 5,
+                "endLine": 5,
+                "symbol": "query"
+              },
+              "kind": "request-query",
+              "parameterName": "q"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:e00bea3280aa8ee8da907bbe",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:17:53.867Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "routes/chat.ts",
+          "startLine": 241,
+          "endLine": 241
+        },
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "routes/chat.ts",
+              "startLine": 241,
+              "endLine": 241
+            },
+            "kind": "write"
+          },
+          "sources": [],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:e80e1a4924d2bfa3866514b9",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:17:53.867Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "routes/userProfile.ts",
+          "startLine": 101,
+          "endLine": 101
+        },
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "routes/userProfile.ts",
+              "startLine": 101,
+              "endLine": 101
+            },
+            "kind": "send"
+          },
+          "sources": [],
+          "sourceResolution": "bounded-ast-def-use-partial",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:e85d156c4d43ea2f587a0619",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:17:53.867Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "routes/chat.ts",
+          "startLine": 228,
+          "endLine": 238
+        },
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "routes/chat.ts",
+              "startLine": 228,
+              "endLine": 238
+            },
+            "kind": "write"
+          },
+          "sources": [],
+          "sourceResolution": "bounded-ast-def-use-partial",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:ee826f2d74238f31271e0cb9",
+        "projectId": "juice-shop",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:17:53.867Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "routes/login.ts",
+          "startLine": 34,
+          "endLine": 34
+        },
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-sql",
+          "cweIds": [
+            "CWE-89"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "routes/login.ts",
+              "startLine": 34,
+              "endLine": 34
+            },
+            "kind": "query"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "routes/login.ts",
+                "startLine": 34,
+                "endLine": 34,
+                "symbol": "body"
+              },
+              "kind": "request-body",
+              "parameterName": "password"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      }
+    ],
+    "endpointAliases": {
+      "express:8e6d4ab7d35032a6cddba26b": "model:endpoint:4587dc006d19175bcce4a7d2061c6e09",
+      "model:endpoint:4587dc006d19175bcce4a7d2061c6e09": "model:endpoint:4587dc006d19175bcce4a7d2061c6e09"
+    },
+    "parameters": [],
+    "authenticationRequirements": [
+      {
+        "endpointId": "model:endpoint:4587dc006d19175bcce4a7d2061c6e09",
+        "requirement": "unknown",
+        "roles": [],
+        "source": "source",
+        "evidenceIds": [
+          "express:3c031e23efd1e179205eed8d"
+        ]
+      }
+    ],
+    "userRoles": [],
+    "sourceHandlers": [
+      {
+        "endpointId": "model:endpoint:4587dc006d19175bcce4a7d2061c6e09",
+        "source": {
+          "file": "server.ts",
+          "startLine": 759,
+          "endLine": 759,
+          "symbol": "anonymous"
+        },
+        "evidenceIds": [
+          "express:3c031e23efd1e179205eed8d"
+        ]
+      }
+    ],
+    "resourceTypes": [],
+    "observedOwnership": [],
+    "dataFlows": [
+      {
+        "id": "model-fact:06171bae4c9ec3758b7346c43faf92b9be7203d0575b86616b2608ab00584f6b",
+        "kind": "data-flow",
+        "source": "source",
+        "endpointIds": [],
+        "evidenceIds": [
+          "semgrep:e00bea3280aa8ee8da907bbe"
+        ],
+        "details": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "routes/chat.ts",
+              "startLine": 241,
+              "endLine": 241
+            },
+            "kind": "write"
+          },
+          "sources": [],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": [],
+          "sourceLocation": {
+            "file": "routes/chat.ts",
+            "startLine": 241,
+            "endLine": 241
+          }
+        }
+      },
+      {
+        "id": "model-fact:2ffa4cbbad3aacd3a54bce5cd4db188ff60c3c104685b412311ae2a026861b85",
+        "kind": "data-flow",
+        "source": "source",
+        "endpointIds": [],
+        "evidenceIds": [
+          "semgrep:ad8f1fe95887ba20d9f4023b"
+        ],
+        "details": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-sql",
+          "cweIds": [
+            "CWE-89"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "data/static/codefixes/dbSchemaChallenge_1.ts",
+              "startLine": 5,
+              "endLine": 5
+            },
+            "kind": "query"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "data/static/codefixes/dbSchemaChallenge_1.ts",
+                "startLine": 3,
+                "endLine": 3,
+                "symbol": "query"
+              },
+              "kind": "request-query",
+              "parameterName": "q"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": [],
+          "sourceLocation": {
+            "file": "data/static/codefixes/dbSchemaChallenge_1.ts",
+            "startLine": 5,
+            "endLine": 5
+          }
+        }
+      },
+      {
+        "id": "model-fact:483b95710a9c00b5d3ade3173c19e88189fc3aac9e8d8988aa4e50ef39b4d903",
+        "kind": "data-flow",
+        "source": "source",
+        "endpointIds": [],
+        "evidenceIds": [
+          "semgrep:d629774ebed5e4d57cadb659"
+        ],
+        "details": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-sql",
+          "cweIds": [
+            "CWE-89"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "data/static/codefixes/dbSchemaChallenge_3.ts",
+              "startLine": 11,
+              "endLine": 11
+            },
+            "kind": "query"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "data/static/codefixes/dbSchemaChallenge_3.ts",
+                "startLine": 5,
+                "endLine": 5,
+                "symbol": "query"
+              },
+              "kind": "request-query",
+              "parameterName": "q"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": [],
+          "sourceLocation": {
+            "file": "data/static/codefixes/dbSchemaChallenge_3.ts",
+            "startLine": 11,
+            "endLine": 11
+          }
+        }
+      },
+      {
+        "id": "model-fact:48a7f4aece88ccebda85bd8c45922acebcd1c84f9959d16c1d484d87b0a65532",
+        "kind": "data-flow",
+        "source": "source",
+        "endpointIds": [],
+        "evidenceIds": [
+          "semgrep:388c4d71c0bf7b2d33b79b36"
+        ],
+        "details": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-sql",
+          "cweIds": [
+            "CWE-89"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "data/static/codefixes/unionSqlInjectionChallenge_1.ts",
+              "startLine": 6,
+              "endLine": 6
+            },
+            "kind": "query"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "data/static/codefixes/unionSqlInjectionChallenge_1.ts",
+                "startLine": 3,
+                "endLine": 3,
+                "symbol": "query"
+              },
+              "kind": "request-query",
+              "parameterName": "q"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": [],
+          "sourceLocation": {
+            "file": "data/static/codefixes/unionSqlInjectionChallenge_1.ts",
+            "startLine": 6,
+            "endLine": 6
+          }
+        }
+      },
+      {
+        "id": "model-fact:5c49af24afed97513552a873b638870ba4240b20dd0acacc8099b97dcdcb26af",
+        "kind": "data-flow",
+        "source": "source",
+        "endpointIds": [],
+        "evidenceIds": [
+          "semgrep:e85d156c4d43ea2f587a0619"
+        ],
+        "details": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "routes/chat.ts",
+              "startLine": 228,
+              "endLine": 238
+            },
+            "kind": "write"
+          },
+          "sources": [],
+          "sourceResolution": "bounded-ast-def-use-partial",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": [],
+          "sourceLocation": {
+            "file": "routes/chat.ts",
+            "startLine": 228,
+            "endLine": 238
+          }
+        }
+      },
+      {
+        "id": "model-fact:7f8c84434d01dba6feca1592867b1cf3f3b87fec8f86666c945e2368a9115d19",
+        "kind": "data-flow",
+        "source": "source",
+        "endpointIds": [],
+        "evidenceIds": [
+          "semgrep:8162cc46fa25cc5d186131c1"
+        ],
+        "details": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-sql",
+          "cweIds": [
+            "CWE-89"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "routes/search.ts",
+              "startLine": 23,
+              "endLine": 23
+            },
+            "kind": "query"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "routes/search.ts",
+                "startLine": 21,
+                "endLine": 21,
+                "symbol": "query"
+              },
+              "kind": "request-query",
+              "parameterName": "q"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": [],
+          "sourceLocation": {
+            "file": "routes/search.ts",
+            "startLine": 23,
+            "endLine": 23
+          }
+        }
+      },
+      {
+        "id": "model-fact:96acfc9a04778ddf78f378a27fa1a4997d4ff0f6a0bf71616598bd002e33a986",
+        "kind": "data-flow",
+        "source": "source",
+        "endpointIds": [],
+        "evidenceIds": [
+          "semgrep:e80e1a4924d2bfa3866514b9"
+        ],
+        "details": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "routes/userProfile.ts",
+              "startLine": 101,
+              "endLine": 101
+            },
+            "kind": "send"
+          },
+          "sources": [],
+          "sourceResolution": "bounded-ast-def-use-partial",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": [],
+          "sourceLocation": {
+            "file": "routes/userProfile.ts",
+            "startLine": 101,
+            "endLine": 101
+          }
+        }
+      },
+      {
+        "id": "model-fact:b024a34658990b3ea25bb793d8a8c2b3db5a0244d46869bd4fe9474b65f112e4",
+        "kind": "data-flow",
+        "source": "source",
+        "endpointIds": [],
+        "evidenceIds": [
+          "semgrep:338de5ad358eb0767014f14a"
+        ],
+        "details": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "routes/chat.ts",
+              "startLine": 259,
+              "endLine": 259
+            },
+            "kind": "write"
+          },
+          "sources": [],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": [],
+          "sourceLocation": {
+            "file": "routes/chat.ts",
+            "startLine": 259,
+            "endLine": 259
+          }
+        }
+      },
+      {
+        "id": "model-fact:c7e34a9d264e8198e3d826e64031a368edc862e25ed4daa2c9db9b3f506841b6",
+        "kind": "data-flow",
+        "source": "source",
+        "endpointIds": [],
+        "evidenceIds": [
+          "semgrep:538efbb5feb4052e67b32ab6"
+        ],
+        "details": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-sql",
+          "cweIds": [
+            "CWE-89"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "data/static/codefixes/unionSqlInjectionChallenge_3.ts",
+              "startLine": 10,
+              "endLine": 10
+            },
+            "kind": "query"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "data/static/codefixes/unionSqlInjectionChallenge_3.ts",
+                "startLine": 3,
+                "endLine": 3,
+                "symbol": "query"
+              },
+              "kind": "request-query",
+              "parameterName": "q"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": [],
+          "sourceLocation": {
+            "file": "data/static/codefixes/unionSqlInjectionChallenge_3.ts",
+            "startLine": 10,
+            "endLine": 10
+          }
+        }
+      },
+      {
+        "id": "model-fact:de228b39a105c4d0b658f7cf319af94c88edecc4e8dff7743fa0b50b9f5e2c3c",
+        "kind": "data-flow",
+        "source": "source",
+        "endpointIds": [],
+        "evidenceIds": [
+          "semgrep:4fc8fe695043172a618b8125"
+        ],
+        "details": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "routes/dataExport.ts",
+              "startLine": 108,
+              "endLine": 108
+            },
+            "kind": "send"
+          },
+          "sources": [],
+          "sourceResolution": "bounded-ast-def-use-partial",
+          "contextResolution": "syntax-only",
+          "conditions": [
+            {
+              "location": {
+                "file": "routes/dataExport.ts",
+                "startLine": 19,
+                "endLine": 19
+              },
+              "kind": "conditional",
+              "branch": "then"
+            }
+          ],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": [],
+          "sourceLocation": {
+            "file": "routes/dataExport.ts",
+            "startLine": 108,
+            "endLine": 108
+          }
+        }
+      },
+      {
+        "id": "model-fact:e36147d97dc84e9750aa00d9b168b30c9f227eeae4aab5f031f82b1e4dfa733a",
+        "kind": "data-flow",
+        "source": "source",
+        "endpointIds": [],
+        "evidenceIds": [
+          "semgrep:837bc96ecaa799c3fa4e416f"
+        ],
+        "details": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "routes/chat.ts",
+              "startLine": 218,
+              "endLine": 218
+            },
+            "kind": "write"
+          },
+          "sources": [],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": [],
+          "sourceLocation": {
+            "file": "routes/chat.ts",
+            "startLine": 218,
+            "endLine": 218
+          }
+        }
+      },
+      {
+        "id": "model-fact:fd5fabafb2e3993b232ce4d3f9b59f6632cde60ac56bceaad28b9fa6d5e6f077",
+        "kind": "data-flow",
+        "source": "source",
+        "endpointIds": [],
+        "evidenceIds": [
+          "semgrep:ee826f2d74238f31271e0cb9"
+        ],
+        "details": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-sql",
+          "cweIds": [
+            "CWE-89"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "routes/login.ts",
+              "startLine": 34,
+              "endLine": 34
+            },
+            "kind": "query"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "routes/login.ts",
+                "startLine": 34,
+                "endLine": 34,
+                "symbol": "body"
+              },
+              "kind": "request-body",
+              "parameterName": "password"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": [],
+          "sourceLocation": {
+            "file": "routes/login.ts",
+            "startLine": 34,
+            "endLine": 34
+          }
+        }
+      }
+    ],
+    "databaseOperations": [],
+    "cookies": [],
+    "corsConfigurations": [],
+    "runtimeObservations": [],
+    "diagnostics": []
+  },
+  "hypotheses": {
+    "hypotheses": [],
+    "diagnostics": [],
+    "review": "disabled",
+    "usage": {
+      "modelCalls": 0,
+      "tokens": {
+        "inputTokens": 0,
+        "outputTokens": 0
+      }
+    }
+  },
+  "planning": [],
+  "referenceRoutes": [
+    {
+      "method": "GET",
+      "path": "/rest/products/search",
+      "source": "server.ts",
+      "sourceLine": 630,
+      "extracted": false
+    },
+    {
+      "method": "GET",
+      "path": "/rest/basket/:id",
+      "source": "server.ts",
+      "sourceLine": 631,
+      "extracted": false
+    },
+    {
+      "method": "GET",
+      "path": "/metrics",
+      "source": "server.ts",
+      "sourceLine": 704,
+      "extracted": true
+    }
+  ],
+  "invariants": {
+    "uniqueEvidenceIds": true,
+    "evidenceProjectBindings": true,
+    "endpointEvidenceLinks": true,
+    "signalEvidenceLinks": true,
+    "hypothesisEvidenceLinks": true,
+    "hypothesisStates": true,
+    "sourceUnchanged": true
+  },
+  "durationMs": 11847
+}

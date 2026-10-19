@@ -1,0 +1,90 @@
+[
+  {
+    "package": "plugins/tools/semgrep",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  1 passed (1)",
+      "Tests  3 passed (3)"
+    ]
+  },
+  {
+    "package": "plugins/tools/e2e-browser",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  4 passed (4)",
+      "Tests  53 passed (53)"
+    ]
+  },
+  {
+    "package": "packages/runtime",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  2 passed (2)",
+      "Tests  7 passed (7)"
+    ]
+  },
+  {
+    "package": "plugins/cwe",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  1 passed (1)",
+      "Tests  2 passed (2)"
+    ]
+  },
+  {
+    "package": "packages/hypothesis-engine",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  1 passed (1)",
+      "Tests  2 passed (2)"
+    ]
+  },
+  {
+    "package": "packages/policy-engine",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  1 passed (1)",
+      "Tests  7 passed (7)"
+    ]
+  },
+  {
+    "package": "packages/verifier",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  1 passed (1)",
+      "Tests  2 passed (2)"
+    ]
+  },
+  {
+    "package": "packages/a01",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  1 passed (1)",
+      "Tests  3 passed (3)"
+    ]
+  },
+  {
+    "package": "packages/a02",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  1 passed (1)",
+      "Tests  3 passed (3)"
+    ]
+  },
+  {
+    "package": "packages/a05",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  1 passed (1)",
+      "Tests  3 passed (3)"
+    ]
+  },
+  {
+    "package": "packages/retest",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  1 passed (1)",
+      "Tests  9 passed (9)"
+    ]
+  }
+]

@@ -1,0 +1,455 @@
+{
+  "discovery": {
+    "repositoryPath": "/tmp/agento-realworld-2026-10-19/repos/nodegoat",
+    "name": "owasp-nodejs-goat",
+    "languages": [
+      "javascript"
+    ],
+    "frameworks": [
+      "express"
+    ],
+    "dependencies": [
+      {
+        "name": "bcrypt-nodejs",
+        "version": "0.0.3",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "body-parser",
+        "version": "^1.15.1",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "consolidate",
+        "version": "^0.14.1",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "csurf",
+        "version": "^1.8.3",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "dont-sniff-mimetype",
+        "version": "^1.0.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "express",
+        "version": "^4.13.4",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "express-session",
+        "version": "^1.13.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "forever",
+        "version": "^2.0.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "helmet",
+        "version": "^2.0.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "marked",
+        "version": "0.3.5",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "mongodb",
+        "version": "^2.1.18",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "needle",
+        "version": "2.2.4",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "node-esapi",
+        "version": "0.0.1",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "serve-favicon",
+        "version": "^2.3.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "swig",
+        "version": "^1.4.2",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "underscore",
+        "version": "^1.8.3",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "async",
+        "version": "^2.0.0-rc.4",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "cross-env",
+        "version": "^7.0.2",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "cypress",
+        "version": "^3.3.1",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "grunt",
+        "version": "^1.0.3",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "grunt-cli",
+        "version": "^1.2.0",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "grunt-concurrent",
+        "version": "^2.3.0",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "grunt-contrib-jshint",
+        "version": "^3.0.0",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "grunt-contrib-watch",
+        "version": "^1.0.0",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "grunt-env",
+        "version": "latest",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "grunt-if",
+        "version": "[remote reference]",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "grunt-jsbeautifier",
+        "version": "^0.2.12",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "grunt-mocha-test",
+        "version": "^0.12.7",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "grunt-npm-install",
+        "version": "^0.3.0",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "grunt-retire",
+        "version": "^0.3.12",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "jshint",
+        "version": "2.12.0",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "mocha",
+        "version": "^2.4.5",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "nodemon",
+        "version": "^1.19.1",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "selenium-webdriver",
+        "version": "^2.53.2",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "should",
+        "version": "^8.3.1",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "zaproxy",
+        "version": "^0.2.0",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      }
+    ],
+    "databases": [
+      "mongodb"
+    ],
+    "orms": [],
+    "authentication": [
+      "session"
+    ],
+    "authenticationPackages": [
+      "express-session"
+    ],
+    "middleware": [
+      {
+        "kind": "session",
+        "name": "express-session",
+        "file": "package.json",
+        "basis": "dependency"
+      },
+      {
+        "kind": "session",
+        "name": "express-session",
+        "file": "server.js",
+        "basis": "import",
+        "line": 6
+      }
+    ],
+    "structure": {
+      "manifests": [
+        {
+          "file": "package.json",
+          "directory": ".",
+          "name": "owasp-nodejs-goat",
+          "workspacePatterns": []
+        }
+      ],
+      "directories": [
+        "app",
+        "app/assets",
+        "app/assets/images",
+        "app/assets/js",
+        "app/assets/js/chart",
+        "app/assets/js/tour",
+        "app/data",
+        "app/routes",
+        "app/views",
+        "app/views/tutorial",
+        "artifacts",
+        "artifacts/cert",
+        "config",
+        "config/env",
+        "test",
+        "test/e2e",
+        "test/e2e/fixtures",
+        "test/e2e/fixtures/users",
+        "test/e2e/integration",
+        "test/e2e/plugins",
+        "test/e2e/support",
+        "test/security"
+      ],
+      "sourceDirectories": [
+        "app"
+      ],
+      "testDirectories": [
+        "test"
+      ],
+      "staticDirectories": [
+        "app/assets"
+      ],
+      "sourceFileCount": 44
+    },
+    "expressAdapterAvailable": true,
+    "availableAdapterIds": [
+      "express-framework-adapter"
+    ],
+    "supportedCodeAwareMode": true,
+    "mode": "code-aware",
+    "fallbackReasons": [],
+    "diagnostics": []
+  },
+  "project": {
+    "id": "nodegoat",
+    "name": "nodegoat",
+    "mode": "code-aware",
+    "repositoryPath": "/tmp/agento-realworld-2026-10-19/repos/nodegoat",
+    "baseUrl": "http://127.0.0.1:1",
+    "allowedOrigins": [
+      "http://127.0.0.1:1"
+    ],
+    "languages": [
+      "javascript"
+    ]
+  },
+  "supports": false,
+  "framework": {
+    "components": [],
+    "endpoints": [],
+    "resources": [],
+    "signals": [],
+    "evidence": [],
+    "diagnostics": [
+      {
+        "code": "unresolved-route",
+        "source": {
+          "file": "app/routes/tutorial.js",
+          "startLine": 31,
+          "endLine": 36
+        },
+        "message": "Computed or regular-expression route path was not resolved."
+      }
+    ]
+  },
+  "analysis": {
+    "status": "completed",
+    "diagnostics": [],
+    "signals": [],
+    "evidence": [
+      {
+        "id": "semgrep:71c2abe271012e7271fb12c3",
+        "projectId": "nodegoat",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:17:44.128Z",
+        "kind": "static-analysis",
+        "summary": "Static analysis completed; signals are candidates requiring runtime verification.",
+        "facts": {
+          "observation": "static-analysis-run",
+          "status": "completed",
+          "diagnosticCodes": [],
+          "signalCount": 0,
+          "sourceDigest": "ec7a19b034402ce7ddb90f76",
+          "toolVersion": "1.180.0",
+          "runtimeVerified": false
+        }
+      }
+    ]
+  },
+  "model": {
+    "schemaVersion": 1,
+    "project": {
+      "id": "nodegoat",
+      "name": "nodegoat",
+      "mode": "code-aware",
+      "repositoryPath": "/tmp/agento-realworld-2026-10-19/repos/nodegoat",
+      "baseUrl": "http://127.0.0.1:1",
+      "allowedOrigins": [
+        "http://127.0.0.1:1"
+      ],
+      "languages": [
+        "javascript"
+      ]
+    },
+    "identities": [],
+    "components": [],
+    "endpoints": [],
+    "resources": [],
+    "signals": [],
+    "evidence": [
+      {
+        "id": "semgrep:71c2abe271012e7271fb12c3",
+        "projectId": "nodegoat",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:17:44.128Z",
+        "kind": "static-analysis",
+        "summary": "Static analysis completed; signals are candidates requiring runtime verification.",
+        "facts": {
+          "observation": "static-analysis-run",
+          "status": "completed",
+          "diagnosticCodes": [],
+          "signalCount": 0,
+          "sourceDigest": "ec7a19b034402ce7ddb90f76",
+          "toolVersion": "1.180.0",
+          "runtimeVerified": false
+        }
+      }
+    ],
+    "endpointAliases": {},
+    "parameters": [],
+    "authenticationRequirements": [],
+    "userRoles": [],
+    "sourceHandlers": [],
+    "resourceTypes": [],
+    "observedOwnership": [],
+    "dataFlows": [],
+    "databaseOperations": [],
+    "cookies": [],
+    "corsConfigurations": [],
+    "runtimeObservations": [],
+    "diagnostics": []
+  },
+  "hypotheses": {
+    "hypotheses": [],
+    "diagnostics": [],
+    "review": "disabled",
+    "usage": {
+      "modelCalls": 0,
+      "tokens": {
+        "inputTokens": 0,
+        "outputTokens": 0
+      }
+    }
+  },
+  "planning": [],
+  "referenceRoutes": [
+    {
+      "method": "GET",
+      "path": "/login",
+      "source": "app/routes/index.js",
+      "sourceLine": 33,
+      "extracted": false
+    },
+    {
+      "method": "GET",
+      "path": "/allocations/:userId",
+      "source": "app/routes/index.js",
+      "sourceLine": 63,
+      "extracted": false
+    }
+  ],
+  "invariants": {
+    "uniqueEvidenceIds": true,
+    "evidenceProjectBindings": true,
+    "endpointEvidenceLinks": true,
+    "signalEvidenceLinks": true,
+    "hypothesisEvidenceLinks": true,
+    "hypothesisStates": true,
+    "sourceUnchanged": true
+  },
+  "durationMs": 2565
+}

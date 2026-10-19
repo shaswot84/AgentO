@@ -6,6 +6,10 @@ source and runtime proof, and compares the two injection cases with native tool
 baselines. This measures the selected demo behaviors; it does not establish
 accuracy on unfamiliar applications.
 
+Separate [external project tests](realworld-testing.md) cover seven pinned
+GitHub repositories. They expose source extraction gaps and include a live Flask
+runtime test. Those results are not part of the controlled accuracy scores below.
+
 The [recorded results](evaluation/summary.md) contain the measured numbers and
 per-run timings. The [machine-readable record](evaluation/results.json) includes
 case observations, immutable proof bundles, tool versions, and source hashes.

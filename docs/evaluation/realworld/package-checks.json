@@ -1,0 +1,194 @@
+[
+  {
+    "package": "packages/core",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  1 passed (1)",
+      "Tests  19 passed (19)"
+    ]
+  },
+  {
+    "package": "packages/discovery",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  1 passed (1)",
+      "Tests  23 passed (23)"
+    ]
+  },
+  {
+    "package": "plugins/frameworks/express",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  1 passed (1)",
+      "Tests  31 passed (31)"
+    ]
+  },
+  {
+    "package": "plugins/tools/semgrep",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  2 passed | 1 skipped (3)",
+      "Tests  31 passed | 3 skipped (34)"
+    ]
+  },
+  {
+    "package": "packages/workflow",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  1 passed (1)",
+      "Tests  56 passed (56)"
+    ]
+  },
+  {
+    "package": "plugins/models/openai",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  1 passed | 1 skipped (2)",
+      "Tests  54 passed | 1 skipped (55)"
+    ]
+  },
+  {
+    "package": "plugins/tools/e2e-browser",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  6 passed | 6 skipped (12)",
+      "Tests  61 passed | 55 skipped (116)"
+    ]
+  },
+  {
+    "package": "packages/runtime",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  5 passed | 2 skipped (7)",
+      "Tests  69 passed | 7 skipped (76)"
+    ]
+  },
+  {
+    "package": "packages/security-model",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  4 passed (4)",
+      "Tests  72 passed (72)"
+    ]
+  },
+  {
+    "package": "plugins/cwe",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  3 passed | 1 skipped (4)",
+      "Tests  103 passed | 2 skipped (105)"
+    ]
+  },
+  {
+    "package": "packages/hypothesis-engine",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  4 passed | 1 skipped (5)",
+      "Tests  54 passed | 2 skipped (56)"
+    ]
+  },
+  {
+    "package": "packages/test-planner",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  3 passed (3)",
+      "Tests  69 passed (69)"
+    ]
+  },
+  {
+    "package": "packages/capability-registry",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  4 passed (4)",
+      "Tests  75 passed (75)"
+    ]
+  },
+  {
+    "package": "packages/policy-engine",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  3 passed | 1 skipped (4)",
+      "Tests  75 passed | 7 skipped (82)"
+    ]
+  },
+  {
+    "package": "plugins/tools/security-scanners",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  6 passed (6)",
+      "Tests  65 passed | 4 skipped (69)"
+    ]
+  },
+  {
+    "package": "packages/evidence",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  6 passed (6)",
+      "Tests  58 passed (58)"
+    ]
+  },
+  {
+    "package": "packages/verifier",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  2 passed | 1 skipped (3)",
+      "Tests  53 passed | 2 skipped (55)"
+    ]
+  },
+  {
+    "package": "packages/a02",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  2 passed | 1 skipped (3)",
+      "Tests  22 passed | 3 skipped (25)"
+    ]
+  },
+  {
+    "package": "packages/a05",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  1 passed | 1 skipped (2)",
+      "Tests  15 passed | 3 skipped (18)"
+    ]
+  },
+  {
+    "package": "packages/a01",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  1 passed | 1 skipped (2)",
+      "Tests  28 passed | 3 skipped (31)"
+    ]
+  },
+  {
+    "package": "packages/reporting",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  3 passed (3)",
+      "Tests  35 passed (35)"
+    ]
+  },
+  {
+    "package": "plugins/remediation",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  2 passed (2)",
+      "Tests  33 passed (33)"
+    ]
+  },
+  {
+    "package": "packages/retest",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  2 passed | 1 skipped (3)",
+      "Tests  42 passed | 9 skipped (51)"
+    ]
+  },
+  {
+    "package": "apps/frontend",
+    "exitCode": 0,
+    "summary": [
+      "Test Files  6 passed | 2 skipped (8)",
+      "Tests  99 passed | 3 skipped (102)"
+    ]
+  }
+]

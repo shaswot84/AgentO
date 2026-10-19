@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "cases": [
+    {
+      "id": "nodegoat",
+      "repository": "https://github.com/OWASP/NodeGoat.git",
+      "revision": "c5cb68a7084e4ae7dcc60e6a98768720a81841e8",
+      "sourceRoot": ".",
+      "kind": "security-training-application",
+      "routes": [
+        { "method": "GET", "path": "/login", "file": "app/routes/index.js", "contains": "app.get(\"/login\", sessionHandler.displayLoginPage)" },
+        { "method": "GET", "path": "/allocations/:userId", "file": "app/routes/index.js", "contains": "app.get(\"/allocations/:userId\"" }
+      ]
+    },
+    {
+      "id": "realworld-express",
+      "repository": "https://github.com/gothinkster/node-express-realworld-example-app.git",
+      "revision": "30b68e1e881462b2f4164ea09ab4c4f5699c7b0b",
+      "sourceRoot": ".",
+      "kind": "reference-api",
+      "routes": [
+        { "method": "GET", "path": "/", "file": "src/main.ts", "contains": "app.get('/'" },
+        { "method": "GET", "path": "/api/user", "file": "src/app/routes/auth/auth.controller.ts", "contains": "router.get('/user'" },
+        { "method": "POST", "path": "/api/users/login", "file": "src/app/routes/auth/auth.controller.ts", "contains": "router.post('/users/login'" }
+      ]
+    },
+    {
+      "id": "juice-shop",
+      "repository": "https://github.com/juice-shop/juice-shop.git",
+      "revision": "399fba76194305a312693eee44f4df64bdf0c3ce",
+      "sourceRoot": ".",
+      "kind": "security-training-application",
+      "routes": [
+        { "method": "GET", "path": "/rest/products/search", "file": "server.ts", "contains": "app.get('/rest/products/search'" },
+        { "method": "GET", "path": "/rest/basket/:id", "file": "server.ts", "contains": "app.get('/rest/basket/:id'" },
+        { "method": "GET", "path": "/metrics", "file": "server.ts", "contains": "app.get('/metrics'" }
+      ]
+    },
+    {
+      "id": "nodebb",
+      "repository": "https://github.com/NodeBB/NodeBB.git",
+      "revision": "387099ddb7ddc55b27e7568395223f634279ab08",
+      "sourceRoot": ".",
+      "kind": "forum-application",
+      "routes": [
+        { "method": "GET", "path": "/api/config", "file": "src/routes/api.js", "contains": "router.get('/config'" },
+        { "method": "GET", "path": "/login", "file": "src/routes/index.js", "contains": "setupPageRoute(app, '/login'" }
+      ]
+    },
+    {
+      "id": "express-boilerplate",
+      "repository": "https://github.com/hagopj13/node-express-boilerplate.git",
+      "revision": "179ae84efec61b14206d0305d941daed6c6d07f9",
+      "sourceRoot": ".",
+      "kind": "application-starter",
+      "routes": [
+        { "method": "POST", "path": "/v1/auth/login", "file": "src/routes/v1/auth.route.js", "contains": "router.post('/login'" },
+        { "method": "POST", "path": "/v1/auth/register", "file": "src/routes/v1/auth.route.js", "contains": "router.post('/register'" }
+      ]
+    },
+    {
+      "id": "hackathon-starter",
+      "repository": "https://github.com/sahat/hackathon-starter.git",
+      "revision": "d320edb22ea0c42d7cb17f3a7837f1ce5163e234",
+      "sourceRoot": ".",
+      "kind": "application-starter",
+      "routes": [
+        { "method": "GET", "path": "/login", "file": "app.js", "contains": "app.get('/login'" },
+        { "method": "GET", "path": "/account", "file": "app.js", "contains": "app.get('/account'" },
+        { "method": "POST", "path": "/signup", "file": "app.js", "contains": "app.post('/signup'" }
+      ]
+    },
+    {
+      "id": "flask",
+      "repository": "https://github.com/pallets/flask.git",
+      "revision": "d086db856be187255b8ec61ef409357393020f32",
+      "sourceRoot": "examples/tutorial",
+      "kind": "unsupported-stack-control",
+      "routes": []
+    }
+  ]
+}

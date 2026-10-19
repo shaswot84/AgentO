@@ -1,0 +1,4955 @@
+{
+  "discovery": {
+    "repositoryPath": "/tmp/agento-realworld-2026-10-19/repos/nodebb",
+    "name": "nodebb",
+    "languages": [
+      "javascript",
+      "typescript"
+    ],
+    "frameworks": [
+      "express"
+    ],
+    "dependencies": [
+      {
+        "name": "@adactive/bootstrap-tagsinput",
+        "version": "0.8.2",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "@fontsource-utils/scss",
+        "version": "0.2.4",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "@fontsource/inter",
+        "version": "5.3.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "@fontsource/poppins",
+        "version": "5.3.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "@fortawesome/fontawesome-free",
+        "version": "7.3.1",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "@isaacs/ttlcache",
+        "version": "2.1.5",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "@json2csv/node",
+        "version": "7.0.8",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "@misskey-dev/node-http-message-signatures",
+        "version": "^0.0.10",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "@nodebb/spider-detector",
+        "version": "2.0.3",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "@popperjs/core",
+        "version": "2.11.8",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "@socket.io/redis-adapter",
+        "version": "8.3.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "@textcomplete/contenteditable",
+        "version": "0.1.13",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "@textcomplete/core",
+        "version": "0.1.13",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "@textcomplete/textarea",
+        "version": "0.1.13",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "@xmldom/xmldom",
+        "version": "^0.9.10",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "ace-builds",
+        "version": "1.44.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "archiver",
+        "version": "8.0.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "async",
+        "version": "3.2.6",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "autoprefixer",
+        "version": "10.6.1",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "bcryptjs",
+        "version": "3.0.3",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "benchpressjs",
+        "version": "2.5.5",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "body-parser",
+        "version": "2.3.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "bootbox",
+        "version": "6.0.4",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "bootstrap",
+        "version": "5.3.8",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "bootswatch",
+        "version": "5.3.8",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "chalk",
+        "version": "6.0.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "chart.js",
+        "version": "4.5.1",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "cli-graph",
+        "version": "3.2.2",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "clipboard",
+        "version": "2.0.11",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "commander",
+        "version": "15.0.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "compare-versions",
+        "version": "6.1.1",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "compression",
+        "version": "1.8.2",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "connect-flash",
+        "version": "0.1.1",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "connect-mongo",
+        "version": "6.0.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "connect-pg-simple",
+        "version": "10.0.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "connect-redis",
+        "version": "10.0.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "cookie-parser",
+        "version": "1.4.7",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "cron",
+        "version": "4.4.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "cronstrue",
+        "version": "3.27.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "cropperjs",
+        "version": "1.6.3",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "csrf-sync",
+        "version": "4.2.1",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "csv-parse",
+        "version": "7.0.2",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "daemon",
+        "version": "1.1.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "diff",
+        "version": "9.0.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "esbuild",
+        "version": "0.28.2",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "express",
+        "version": "4.22.3",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "express-session",
+        "version": "1.19.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "express-useragent",
+        "version": "2.2.3",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "fetch-cookie",
+        "version": "3.2.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "file-loader",
+        "version": "6.2.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "file-type",
+        "version": "22.1.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "fs-extra",
+        "version": "11.4.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "graceful-fs",
+        "version": "4.2.11",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "helmet",
+        "version": "8.3.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "html-to-text",
+        "version": "10.0.1",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "imagesloaded",
+        "version": "5.0.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "ipaddr.js",
+        "version": "2.5.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "jquery",
+        "version": "3.7.1",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "jquery-deserialize",
+        "version": "2.0.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "jquery-form",
+        "version": "4.3.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "jquery-serializeobject",
+        "version": "1.0.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "jquery-ui",
+        "version": "1.14.2",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "jsesc",
+        "version": "3.1.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "jsonwebtoken",
+        "version": "9.0.3",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "lodash",
+        "version": "4.18.1",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "logrotate-stream",
+        "version": "0.2.9",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "lru-cache",
+        "version": "11.5.2",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "mime",
+        "version": "4.1.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "minimizer-webpack-plugin",
+        "version": "5.10.1",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "mkdirp",
+        "version": "3.0.1",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "mongodb",
+        "version": "7.6.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "morgan",
+        "version": "1.12.1",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "mousetrap",
+        "version": "1.6.5",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "multer",
+        "version": "2.4.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "nconf",
+        "version": "0.13.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "nodebb-plugin-2factor",
+        "version": "8.0.12",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "nodebb-plugin-composer-default",
+        "version": "11.0.16",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "nodebb-plugin-dbsearch",
+        "version": "7.0.3",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "nodebb-plugin-emoji",
+        "version": "6.0.19",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "nodebb-plugin-emoji-android",
+        "version": "4.1.1",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "nodebb-plugin-link-preview",
+        "version": "2.2.9",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "nodebb-plugin-markdown",
+        "version": "13.2.13",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "nodebb-plugin-mentions",
+        "version": "5.0.5",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "nodebb-plugin-spam-be-gone",
+        "version": "2.3.14",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "nodebb-plugin-web-push",
+        "version": "0.9.6",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "nodebb-rewards-essentials",
+        "version": "1.0.3",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "nodebb-theme-harmony",
+        "version": "3.3.13",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "nodebb-theme-lavender",
+        "version": "8.1.2",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "nodebb-theme-peace",
+        "version": "3.1.4",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "nodebb-theme-persona",
+        "version": "15.3.8",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "nodebb-widget-essentials",
+        "version": "8.0.10",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "nodemailer",
+        "version": "10.0.11",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "nprogress",
+        "version": "0.2.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "passport",
+        "version": "0.7.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "passport-http-bearer",
+        "version": "1.0.1",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "passport-local",
+        "version": "1.0.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "pg",
+        "version": "8.23.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "pg-cursor",
+        "version": "2.22.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "postcss",
+        "version": "8.5.28",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "pretty",
+        "version": "^2.0.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "progress-webpack-plugin",
+        "version": "1.0.16",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "prompt",
+        "version": "1.3.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "proxy-addr",
+        "version": "2.0.8",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "qs",
+        "version": "6.16.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "redis",
+        "version": "5.12.1",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "rimraf",
+        "version": "6.1.3",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "rss",
+        "version": "1.2.2",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "rtlcss",
+        "version": "4.3.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "sanitize-html",
+        "version": "2.17.7",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "sass",
+        "version": "1.104.1",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "satori",
+        "version": "0.33.4",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "sbd",
+        "version": "^1.0.19",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "semver",
+        "version": "7.8.5",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "serve-favicon",
+        "version": "2.5.1",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "sharp",
+        "version": "0.35.4",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "sitemap",
+        "version": "9.0.1",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "socket.io",
+        "version": "4.8.3",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "socket.io-client",
+        "version": "4.8.3",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "sortablejs",
+        "version": "1.15.7",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "spdx-license-list",
+        "version": "6.12.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "textcomplete",
+        "version": "0.18.2",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "textcomplete.contenteditable",
+        "version": "0.1.1",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "timeago",
+        "version": "1.6.7",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "tinycon",
+        "version": "0.6.8",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "toobusy-js",
+        "version": "0.5.1",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "tough-cookie",
+        "version": "6.0.2",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "undici",
+        "version": "8.10.2",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "validator",
+        "version": "13.15.35",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "wawoff2",
+        "version": "2.0.1",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "webpack",
+        "version": "5.111.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "webpack-merge",
+        "version": "6.0.1",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "winston",
+        "version": "3.19.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "workerpool",
+        "version": "10.0.3",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "xml",
+        "version": "1.0.1",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "yargs",
+        "version": "18.1.0",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "zxcvbn",
+        "version": "4.4.2",
+        "kind": "dependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "@apidevtools/swagger-parser",
+        "version": "13.0.0",
+        "kind": "devDependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "@commitlint/cli",
+        "version": "21.2.2",
+        "kind": "devDependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "@commitlint/config-angular",
+        "version": "21.2.2",
+        "kind": "devDependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "@eslint/js",
+        "version": "10.0.1",
+        "kind": "devDependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "@stylistic/eslint-plugin",
+        "version": "5.10.0",
+        "kind": "devDependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "ajv",
+        "version": "8.20.0",
+        "kind": "devDependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "coveralls",
+        "version": "3.1.1",
+        "kind": "devDependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "eslint-config-nodebb",
+        "version": "2.0.3",
+        "kind": "devDependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "globals",
+        "version": "17.12.0",
+        "kind": "devDependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "grunt",
+        "version": "1.6.3",
+        "kind": "devDependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "grunt-contrib-watch",
+        "version": "1.1.0",
+        "kind": "devDependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "husky",
+        "version": "8.0.3",
+        "kind": "devDependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "jsdom",
+        "version": "30.0.1",
+        "kind": "devDependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "lint-staged",
+        "version": "17.5.1",
+        "kind": "devDependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "mocha",
+        "version": "12.0.1",
+        "kind": "devDependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "mocha-lcov-reporter",
+        "version": "1.3.0",
+        "kind": "devDependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "mockdate",
+        "version": "3.0.5",
+        "kind": "devDependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "nyc",
+        "version": "18.0.0",
+        "kind": "devDependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "smtp-server",
+        "version": "3.19.13",
+        "kind": "devDependencies",
+        "manifest": "install/package.json"
+      },
+      {
+        "name": "sass-embedded",
+        "version": "1.104.1",
+        "kind": "optionalDependencies",
+        "manifest": "install/package.json"
+      }
+    ],
+    "databases": [
+      "mongodb",
+      "postgresql",
+      "redis"
+    ],
+    "orms": [],
+    "authentication": [
+      "jwt",
+      "passport",
+      "session"
+    ],
+    "authenticationPackages": [
+      "express-session",
+      "jsonwebtoken",
+      "passport",
+      "passport-local"
+    ],
+    "middleware": [
+      {
+        "kind": "cookie",
+        "name": "cookie-parser",
+        "file": "install/package.json",
+        "basis": "dependency"
+      },
+      {
+        "kind": "session",
+        "name": "express-session",
+        "file": "install/package.json",
+        "basis": "dependency"
+      },
+      {
+        "kind": "session",
+        "name": "express-session",
+        "file": "install/web.js",
+        "basis": "import",
+        "line": 5
+      },
+      {
+        "kind": "cors",
+        "name": "custom-cors",
+        "file": "src/controllers/well-known.js",
+        "basis": "header",
+        "line": 41
+      },
+      {
+        "kind": "session",
+        "name": "express-session",
+        "file": "src/database/postgres.js",
+        "basis": "import",
+        "line": 7
+      },
+      {
+        "kind": "cookie",
+        "name": "cookie-parser",
+        "file": "src/socket.io/index.js",
+        "basis": "import",
+        "line": 7
+      },
+      {
+        "kind": "cookie",
+        "name": "cookie-parser",
+        "file": "src/webserver.js",
+        "basis": "import",
+        "line": 12
+      },
+      {
+        "kind": "session",
+        "name": "express-session",
+        "file": "src/webserver.js",
+        "basis": "import",
+        "line": 13
+      }
+    ],
+    "structure": {
+      "manifests": [
+        {
+          "file": "install/package.json",
+          "directory": "install",
+          "name": "nodebb",
+          "workspacePatterns": []
+        },
+        {
+          "file": "test/mocks/plugin_modules/@nodebb/another-thing/package.json",
+          "directory": "test/mocks/plugin_modules/@nodebb/another-thing",
+          "workspacePatterns": []
+        },
+        {
+          "file": "test/mocks/plugin_modules/@nodebb/nodebb-plugin-abc/package.json",
+          "directory": "test/mocks/plugin_modules/@nodebb/nodebb-plugin-abc",
+          "workspacePatterns": []
+        },
+        {
+          "file": "test/mocks/plugin_modules/nodebb-plugin-xyz/package.json",
+          "directory": "test/mocks/plugin_modules/nodebb-plugin-xyz",
+          "workspacePatterns": []
+        },
+        {
+          "file": "test/mocks/plugin_modules/something-else/package.json",
+          "directory": "test/mocks/plugin_modules/something-else",
+          "workspacePatterns": []
+        }
+      ],
+      "directories": [
+        "install",
+        "install/data",
+        "install/docker",
+        "logs",
+        "public",
+        "public/images",
+        "public/images/themes",
+        "public/images/touch",
+        "public/language",
+        "public/language/ar",
+        "public/language/ar/admin",
+        "public/language/ar/admin/advanced",
+        "public/language/ar/admin/appearance",
+        "public/language/ar/admin/development",
+        "public/language/ar/admin/extend",
+        "public/language/ar/admin/manage",
+        "public/language/ar/admin/settings",
+        "public/language/ar/themes",
+        "public/language/az",
+        "public/language/az/admin",
+        "public/language/az/admin/advanced",
+        "public/language/az/admin/appearance",
+        "public/language/az/admin/development",
+        "public/language/az/admin/extend",
+        "public/language/az/admin/manage",
+        "public/language/az/admin/settings",
+        "public/language/az/themes",
+        "public/language/bg",
+        "public/language/bg/admin",
+        "public/language/bg/admin/advanced",
+        "public/language/bg/admin/appearance",
+        "public/language/bg/admin/development",
+        "public/language/bg/admin/extend",
+        "public/language/bg/admin/manage",
+        "public/language/bg/admin/settings",
+        "public/language/bg/themes",
+        "public/language/bn",
+        "public/language/bn/admin",
+        "public/language/bn/admin/advanced",
+        "public/language/bn/admin/appearance",
+        "public/language/bn/admin/development",
+        "public/language/bn/admin/extend",
+        "public/language/bn/admin/manage",
+        "public/language/bn/admin/settings",
+        "public/language/bn/themes",
+        "public/language/cs",
+        "public/language/cs/admin",
+        "public/language/cs/admin/advanced",
+        "public/language/cs/admin/appearance",
+        "public/language/cs/admin/development",
+        "public/language/cs/admin/extend",
+        "public/language/cs/admin/manage",
+        "public/language/cs/admin/settings",
+        "public/language/cs/themes",
+        "public/language/da",
+        "public/language/da/admin",
+        "public/language/da/admin/advanced",
+        "public/language/da/admin/appearance",
+        "public/language/da/admin/development",
+        "public/language/da/admin/extend",
+        "public/language/da/admin/manage",
+        "public/language/da/admin/settings",
+        "public/language/da/themes",
+        "public/language/de",
+        "public/language/de/admin",
+        "public/language/de/admin/advanced",
+        "public/language/de/admin/appearance",
+        "public/language/de/admin/development",
+        "public/language/de/admin/extend",
+        "public/language/de/admin/manage",
+        "public/language/de/admin/settings",
+        "public/language/de/themes",
+        "public/language/el",
+        "public/language/el/admin",
+        "public/language/el/admin/advanced",
+        "public/language/el/admin/appearance",
+        "public/language/el/admin/development",
+        "public/language/el/admin/extend",
+        "public/language/el/admin/manage",
+        "public/language/el/admin/settings",
+        "public/language/el/themes",
+        "public/language/en-GB",
+        "public/language/en-GB/admin",
+        "public/language/en-GB/admin/advanced",
+        "public/language/en-GB/admin/appearance",
+        "public/language/en-GB/admin/development",
+        "public/language/en-GB/admin/extend",
+        "public/language/en-GB/admin/manage",
+        "public/language/en-GB/admin/settings",
+        "public/language/en-GB/themes",
+        "public/language/en-US",
+        "public/language/en-US/admin",
+        "public/language/en-US/admin/advanced",
+        "public/language/en-US/admin/appearance",
+        "public/language/en-US/admin/development",
+        "public/language/en-US/admin/extend",
+        "public/language/en-US/admin/manage",
+        "public/language/en-US/admin/settings",
+        "public/language/en-US/themes",
+        "public/language/en-x-pirate",
+        "public/language/en-x-pirate/admin",
+        "public/language/en-x-pirate/admin/advanced",
+        "public/language/en-x-pirate/admin/appearance",
+        "public/language/en-x-pirate/admin/development",
+        "public/language/en-x-pirate/admin/extend",
+        "public/language/en-x-pirate/admin/manage",
+        "public/language/en-x-pirate/admin/settings",
+        "public/language/en-x-pirate/themes",
+        "public/language/es",
+        "public/language/es/admin",
+        "public/language/es/admin/advanced",
+        "public/language/es/admin/appearance",
+        "public/language/es/admin/development",
+        "public/language/es/admin/extend",
+        "public/language/es/admin/manage",
+        "public/language/es/admin/settings",
+        "public/language/es/themes",
+        "public/language/et",
+        "public/language/et/admin",
+        "public/language/et/admin/advanced",
+        "public/language/et/admin/appearance",
+        "public/language/et/admin/development",
+        "public/language/et/admin/extend",
+        "public/language/et/admin/manage",
+        "public/language/et/admin/settings",
+        "public/language/et/themes",
+        "public/language/fa-IR",
+        "public/language/fa-IR/admin",
+        "public/language/fa-IR/admin/advanced",
+        "public/language/fa-IR/admin/appearance",
+        "public/language/fa-IR/admin/development",
+        "public/language/fa-IR/admin/extend",
+        "public/language/fa-IR/admin/manage",
+        "public/language/fa-IR/admin/settings",
+        "public/language/fa-IR/themes",
+        "public/language/fi",
+        "public/language/fi/admin",
+        "public/language/fi/admin/advanced",
+        "public/language/fi/admin/appearance",
+        "public/language/fi/admin/development",
+        "public/language/fi/admin/extend",
+        "public/language/fi/admin/manage",
+        "public/language/fi/admin/settings",
+        "public/language/fi/themes",
+        "public/language/fr",
+        "public/language/fr/admin",
+        "public/language/fr/admin/advanced",
+        "public/language/fr/admin/appearance",
+        "public/language/fr/admin/development",
+        "public/language/fr/admin/extend",
+        "public/language/fr/admin/manage",
+        "public/language/fr/admin/settings",
+        "public/language/fr/themes",
+        "public/language/gl",
+        "public/language/gl/admin",
+        "public/language/gl/admin/advanced",
+        "public/language/gl/admin/appearance",
+        "public/language/gl/admin/development",
+        "public/language/gl/admin/extend",
+        "public/language/gl/admin/manage",
+        "public/language/gl/admin/settings",
+        "public/language/gl/themes",
+        "public/language/he",
+        "public/language/he/admin",
+        "public/language/he/admin/advanced",
+        "public/language/he/admin/appearance",
+        "public/language/he/admin/development",
+        "public/language/he/admin/extend",
+        "public/language/he/admin/manage",
+        "public/language/he/admin/settings",
+        "public/language/he/themes",
+        "public/language/hr",
+        "public/language/hr/admin",
+        "public/language/hr/admin/advanced",
+        "public/language/hr/admin/appearance",
+        "public/language/hr/admin/development",
+        "public/language/hr/admin/extend",
+        "public/language/hr/admin/manage",
+        "public/language/hr/admin/settings",
+        "public/language/hr/themes",
+        "public/language/hu",
+        "public/language/hu/admin",
+        "public/language/hu/admin/advanced",
+        "public/language/hu/admin/appearance",
+        "public/language/hu/admin/development",
+        "public/language/hu/admin/extend",
+        "public/language/hu/admin/manage",
+        "public/language/hu/admin/settings",
+        "public/language/hu/themes",
+        "public/language/hy",
+        "public/language/hy/admin",
+        "public/language/hy/admin/advanced",
+        "public/language/hy/admin/appearance",
+        "public/language/hy/admin/development",
+        "public/language/hy/admin/extend",
+        "public/language/hy/admin/manage",
+        "public/language/hy/admin/settings",
+        "public/language/hy/themes",
+        "public/language/id",
+        "public/language/id/admin",
+        "public/language/id/admin/advanced",
+        "public/language/id/admin/appearance",
+        "public/language/id/admin/development",
+        "public/language/id/admin/extend",
+        "public/language/id/admin/manage",
+        "public/language/id/admin/settings",
+        "public/language/id/themes",
+        "public/language/it",
+        "public/language/it/admin",
+        "public/language/it/admin/advanced",
+        "public/language/it/admin/appearance",
+        "public/language/it/admin/development",
+        "public/language/it/admin/extend",
+        "public/language/it/admin/manage",
+        "public/language/it/admin/settings",
+        "public/language/it/themes",
+        "public/language/ja",
+        "public/language/ja/admin",
+        "public/language/ja/admin/advanced",
+        "public/language/ja/admin/appearance",
+        "public/language/ja/admin/development",
+        "public/language/ja/admin/extend",
+        "public/language/ja/admin/manage",
+        "public/language/ja/admin/settings",
+        "public/language/ja/themes",
+        "public/language/ko",
+        "public/language/ko/admin",
+        "public/language/ko/admin/advanced",
+        "public/language/ko/admin/appearance",
+        "public/language/ko/admin/development",
+        "public/language/ko/admin/extend",
+        "public/language/ko/admin/manage",
+        "public/language/ko/admin/settings",
+        "public/language/ko/themes",
+        "public/language/lt",
+        "public/language/lt/admin",
+        "public/language/lt/admin/advanced",
+        "public/language/lt/admin/appearance",
+        "public/language/lt/admin/development",
+        "public/language/lt/admin/extend",
+        "public/language/lt/admin/manage",
+        "public/language/lt/admin/settings",
+        "public/language/lt/themes",
+        "public/language/lv",
+        "public/language/lv/admin",
+        "public/language/lv/admin/advanced",
+        "public/language/lv/admin/appearance",
+        "public/language/lv/admin/development",
+        "public/language/lv/admin/extend",
+        "public/language/lv/admin/manage",
+        "public/language/lv/admin/settings",
+        "public/language/lv/themes",
+        "public/language/ms",
+        "public/language/ms/admin",
+        "public/language/ms/admin/advanced",
+        "public/language/ms/admin/appearance",
+        "public/language/ms/admin/development",
+        "public/language/ms/admin/extend",
+        "public/language/ms/admin/manage",
+        "public/language/ms/admin/settings",
+        "public/language/ms/themes",
+        "public/language/my",
+        "public/language/my/admin",
+        "public/language/my/admin/advanced",
+        "public/language/my/admin/appearance",
+        "public/language/my/admin/development",
+        "public/language/my/admin/extend",
+        "public/language/my/admin/manage",
+        "public/language/my/admin/settings",
+        "public/language/my/themes",
+        "public/language/nb",
+        "public/language/nb/admin",
+        "public/language/nb/admin/advanced",
+        "public/language/nb/admin/appearance",
+        "public/language/nb/admin/development",
+        "public/language/nb/admin/extend",
+        "public/language/nb/admin/manage",
+        "public/language/nb/admin/settings",
+        "public/language/nb/themes",
+        "public/language/nl",
+        "public/language/nl/admin",
+        "public/language/nl/admin/advanced",
+        "public/language/nl/admin/appearance",
+        "public/language/nl/admin/development",
+        "public/language/nl/admin/extend",
+        "public/language/nl/admin/manage",
+        "public/language/nl/admin/settings",
+        "public/language/nl/themes",
+        "public/language/nn-NO",
+        "public/language/nn-NO/admin",
+        "public/language/nn-NO/admin/advanced",
+        "public/language/nn-NO/admin/appearance",
+        "public/language/nn-NO/admin/development",
+        "public/language/nn-NO/admin/extend",
+        "public/language/nn-NO/admin/manage",
+        "public/language/nn-NO/admin/settings",
+        "public/language/nn-NO/themes",
+        "public/language/pl",
+        "public/language/pl/admin",
+        "public/language/pl/admin/advanced",
+        "public/language/pl/admin/appearance",
+        "public/language/pl/admin/development",
+        "public/language/pl/admin/extend",
+        "public/language/pl/admin/manage",
+        "public/language/pl/admin/settings",
+        "public/language/pl/themes",
+        "public/language/pt-BR",
+        "public/language/pt-BR/admin",
+        "public/language/pt-BR/admin/advanced",
+        "public/language/pt-BR/admin/appearance",
+        "public/language/pt-BR/admin/development",
+        "public/language/pt-BR/admin/extend",
+        "public/language/pt-BR/admin/manage",
+        "public/language/pt-BR/admin/settings",
+        "public/language/pt-BR/themes",
+        "public/language/pt-PT",
+        "public/language/pt-PT/admin",
+        "public/language/pt-PT/admin/advanced",
+        "public/language/pt-PT/admin/appearance",
+        "public/language/pt-PT/admin/development",
+        "public/language/pt-PT/admin/extend",
+        "public/language/pt-PT/admin/manage",
+        "public/language/pt-PT/admin/settings",
+        "public/language/pt-PT/themes",
+        "public/language/ro",
+        "public/language/ro/admin",
+        "public/language/ro/admin/advanced",
+        "public/language/ro/admin/appearance",
+        "public/language/ro/admin/development",
+        "public/language/ro/admin/extend",
+        "public/language/ro/admin/manage",
+        "public/language/ro/admin/settings",
+        "public/language/ro/themes",
+        "public/language/ru",
+        "public/language/ru/admin",
+        "public/language/ru/admin/advanced",
+        "public/language/ru/admin/appearance",
+        "public/language/ru/admin/development",
+        "public/language/ru/admin/extend",
+        "public/language/ru/admin/manage",
+        "public/language/ru/admin/settings",
+        "public/language/ru/themes",
+        "public/language/rw",
+        "public/language/rw/admin",
+        "public/language/rw/admin/advanced",
+        "public/language/rw/admin/appearance",
+        "public/language/rw/admin/development",
+        "public/language/rw/admin/extend",
+        "public/language/rw/admin/manage",
+        "public/language/rw/admin/settings",
+        "public/language/rw/themes",
+        "public/language/sc",
+        "public/language/sc/admin",
+        "public/language/sc/admin/advanced",
+        "public/language/sc/admin/appearance",
+        "public/language/sc/admin/development",
+        "public/language/sc/admin/extend",
+        "public/language/sc/admin/manage",
+        "public/language/sc/admin/settings",
+        "public/language/sc/themes",
+        "public/language/sk",
+        "public/language/sk/admin",
+        "public/language/sk/admin/advanced",
+        "public/language/sk/admin/appearance",
+        "public/language/sk/admin/development",
+        "public/language/sk/admin/extend",
+        "public/language/sk/admin/manage",
+        "public/language/sk/admin/settings",
+        "public/language/sk/themes",
+        "public/language/sl",
+        "public/language/sl/admin",
+        "public/language/sl/admin/advanced",
+        "public/language/sl/admin/appearance",
+        "public/language/sl/admin/development",
+        "public/language/sl/admin/extend",
+        "public/language/sl/admin/manage",
+        "public/language/sl/admin/settings",
+        "public/language/sl/themes",
+        "public/language/sq-AL",
+        "public/language/sq-AL/admin",
+        "public/language/sq-AL/admin/advanced",
+        "public/language/sq-AL/admin/appearance",
+        "public/language/sq-AL/admin/development",
+        "public/language/sq-AL/admin/extend",
+        "public/language/sq-AL/admin/manage",
+        "public/language/sq-AL/admin/settings",
+        "public/language/sq-AL/themes",
+        "public/language/sr",
+        "public/language/sr/admin",
+        "public/language/sr/admin/advanced",
+        "public/language/sr/admin/appearance",
+        "public/language/sr/admin/development",
+        "public/language/sr/admin/extend",
+        "public/language/sr/admin/manage",
+        "public/language/sr/admin/settings",
+        "public/language/sr/themes",
+        "public/language/sv",
+        "public/language/sv/admin",
+        "public/language/sv/admin/advanced",
+        "public/language/sv/admin/appearance",
+        "public/language/sv/admin/development",
+        "public/language/sv/admin/extend",
+        "public/language/sv/admin/manage",
+        "public/language/sv/admin/settings",
+        "public/language/sv/themes",
+        "public/language/th",
+        "public/language/th/admin",
+        "public/language/th/admin/advanced",
+        "public/language/th/admin/appearance",
+        "public/language/th/admin/development",
+        "public/language/th/admin/extend",
+        "public/language/th/admin/manage",
+        "public/language/th/admin/settings",
+        "public/language/th/themes",
+        "public/language/tr",
+        "public/language/tr/admin",
+        "public/language/tr/admin/advanced",
+        "public/language/tr/admin/appearance",
+        "public/language/tr/admin/development",
+        "public/language/tr/admin/extend",
+        "public/language/tr/admin/manage",
+        "public/language/tr/admin/settings",
+        "public/language/tr/themes",
+        "public/language/uk",
+        "public/language/uk/admin",
+        "public/language/uk/admin/advanced",
+        "public/language/uk/admin/appearance",
+        "public/language/uk/admin/development",
+        "public/language/uk/admin/extend",
+        "public/language/uk/admin/manage",
+        "public/language/uk/admin/settings",
+        "public/language/uk/themes",
+        "public/language/ur",
+        "public/language/ur/admin",
+        "public/language/ur/admin/advanced",
+        "public/language/ur/admin/appearance",
+        "public/language/ur/admin/development",
+        "public/language/ur/admin/extend",
+        "public/language/ur/admin/manage",
+        "public/language/ur/admin/settings",
+        "public/language/ur/themes",
+        "public/language/vi",
+        "public/language/vi/admin",
+        "public/language/vi/admin/advanced",
+        "public/language/vi/admin/appearance",
+        "public/language/vi/admin/development",
+        "public/language/vi/admin/extend",
+        "public/language/vi/admin/manage",
+        "public/language/vi/admin/settings",
+        "public/language/vi/themes",
+        "public/language/zh-CN",
+        "public/language/zh-CN/admin",
+        "public/language/zh-CN/admin/advanced",
+        "public/language/zh-CN/admin/appearance",
+        "public/language/zh-CN/admin/development",
+        "public/language/zh-CN/admin/extend",
+        "public/language/zh-CN/admin/manage",
+        "public/language/zh-CN/admin/settings",
+        "public/language/zh-CN/themes",
+        "public/language/zh-TW",
+        "public/language/zh-TW/admin",
+        "public/language/zh-TW/admin/advanced",
+        "public/language/zh-TW/admin/appearance",
+        "public/language/zh-TW/admin/development",
+        "public/language/zh-TW/admin/extend",
+        "public/language/zh-TW/admin/manage",
+        "public/language/zh-TW/admin/settings",
+        "public/language/zh-TW/themes",
+        "public/openapi",
+        "public/openapi/components",
+        "public/openapi/components/responses",
+        "public/openapi/components/schemas",
+        "public/openapi/components/schemas/admin",
+        "public/openapi/read",
+        "public/openapi/read/admin",
+        "public/openapi/read/admin/advanced",
+        "public/openapi/read/admin/advanced/cache",
+        "public/openapi/read/admin/advanced/errors",
+        "public/openapi/read/admin/appearance",
+        "public/openapi/read/admin/category",
+        "public/openapi/read/admin/dashboard",
+        "public/openapi/read/admin/development",
+        "public/openapi/read/admin/extend",
+        "public/openapi/read/admin/federation",
+        "public/openapi/read/admin/groups",
+        "public/openapi/read/admin/groups/groupname",
+        "public/openapi/read/admin/manage",
+        "public/openapi/read/admin/manage/categories",
+        "public/openapi/read/admin/manage/categories/category_id",
+        "public/openapi/read/admin/manage/groups",
+        "public/openapi/read/admin/manage/privileges",
+        "public/openapi/read/admin/manage/users",
+        "public/openapi/read/admin/settings",
+        "public/openapi/read/admin/upload",
+        "public/openapi/read/admin/users",
+        "public/openapi/read/categories",
+        "public/openapi/read/categories/cid",
+        "public/openapi/read/category",
+        "public/openapi/read/chats",
+        "public/openapi/read/confirm",
+        "public/openapi/read/email",
+        "public/openapi/read/email/unsubscribe",
+        "public/openapi/read/flags",
+        "public/openapi/read/groups",
+        "public/openapi/read/groups/slug",
+        "public/openapi/read/intents",
+        "public/openapi/read/message",
+        "public/openapi/read/post",
+        "public/openapi/read/recent",
+        "public/openapi/read/recent/posts",
+        "public/openapi/read/register",
+        "public/openapi/read/reset",
+        "public/openapi/read/tags",
+        "public/openapi/read/topic",
+        "public/openapi/read/topic/pagination",
+        "public/openapi/read/topic/teaser",
+        "public/openapi/read/topic/thumb",
+        "public/openapi/read/uid",
+        "public/openapi/read/unread",
+        "public/openapi/read/user",
+        "public/openapi/read/user/email",
+        "public/openapi/read/user/uid",
+        "public/openapi/read/user/uid/userslug",
+        "public/openapi/read/user/uid/userslug/export",
+        "public/openapi/read/user/username",
+        "public/openapi/read/user/userslug",
+        "public/openapi/read/user/userslug/chats",
+        "public/openapi/read/user/userslug/edit",
+        "public/openapi/read/user/userslug/session",
+        "public/openapi/write",
+        "public/openapi/write/admin",
+        "public/openapi/write/admin/activitypub",
+        "public/openapi/write/admin/activitypub/blocklists",
+        "public/openapi/write/admin/activitypub/blocklists/url",
+        "public/openapi/write/admin/activitypub/hashtags",
+        "public/openapi/write/admin/activitypub/relays",
+        "public/openapi/write/admin/activitypub/rules",
+        "public/openapi/write/admin/analytics",
+        "public/openapi/write/admin/chats",
+        "public/openapi/write/admin/plugins",
+        "public/openapi/write/admin/plugins/pluginId",
+        "public/openapi/write/admin/settings",
+        "public/openapi/write/admin/tokens",
+        "public/openapi/write/admin/tokens/token",
+        "public/openapi/write/admin/users",
+        "public/openapi/write/categories",
+        "public/openapi/write/categories/cid",
+        "public/openapi/write/categories/cid/follow",
+        "public/openapi/write/categories/cid/moderator",
+        "public/openapi/write/categories/cid/privileges",
+        "public/openapi/write/categories/cid/privileges/privilege",
+        "public/openapi/write/categories/cid/watch",
+        "public/openapi/write/chats",
+        "public/openapi/write/chats/roomId",
+        "public/openapi/write/chats/roomId/messages",
+        "public/openapi/write/chats/roomId/messages/mid",
+        "public/openapi/write/chats/roomId/owners",
+        "public/openapi/write/chats/roomId/users",
+        "public/openapi/write/files",
+        "public/openapi/write/flags",
+        "public/openapi/write/flags/flagId",
+        "public/openapi/write/flags/flagId/notes",
+        "public/openapi/write/groups",
+        "public/openapi/write/groups/slug",
+        "public/openapi/write/groups/slug/invites",
+        "public/openapi/write/groups/slug/membership",
+        "public/openapi/write/groups/slug/ownership",
+        "public/openapi/write/groups/slug/pending",
+        "public/openapi/write/intents",
+        "public/openapi/write/intents/query",
+        "public/openapi/write/notifications",
+        "public/openapi/write/notifications/nid",
+        "public/openapi/write/posts",
+        "public/openapi/write/posts/pid",
+        "public/openapi/write/posts/pid/diffs",
+        "public/openapi/write/posts/queue",
+        "public/openapi/write/search",
+        "public/openapi/write/search/chats",
+        "public/openapi/write/search/chats/roomId",
+        "public/openapi/write/tags",
+        "public/openapi/write/tags/tag",
+        "public/openapi/write/topics",
+        "public/openapi/write/topics/tid",
+        "public/openapi/write/topics/tid/events",
+        "public/openapi/write/topics/tid/thumbs",
+        "public/openapi/write/users",
+        "public/openapi/write/users/reauth",
+        "public/openapi/write/users/uid",
+        "public/openapi/write/users/uid/emails",
+        "public/openapi/write/users/uid/emails/email",
+        "public/openapi/write/users/uid/exports",
+        "public/openapi/write/users/uid/invites",
+        "public/openapi/write/users/uid/sessions",
+        "public/openapi/write/users/uid/status",
+        "public/openapi/write/users/uid/tokens",
+        "public/scss",
+        "public/scss/admin",
+        "public/scss/admin/appearance",
+        "public/scss/admin/extend",
+        "public/scss/admin/general",
+        "public/scss/admin/manage",
+        "public/scss/admin/modules",
+        "public/scss/admin/settings",
+        "public/scss/fontawesome",
+        "public/scss/modules",
+        "public/scss/skins",
+        "public/src",
+        "public/src/admin",
+        "public/src/admin/advanced",
+        "public/src/admin/appearance",
+        "public/src/admin/dashboard",
+        "public/src/admin/extend",
+        "public/src/admin/federation",
+        "public/src/admin/manage",
+        "public/src/admin/manage/users",
+        "public/src/admin/modules",
+        "public/src/admin/settings",
+        "public/src/client",
+        "public/src/client/account",
+        "public/src/client/account/edit",
+        "public/src/client/category",
+        "public/src/client/chats",
+        "public/src/client/flags",
+        "public/src/client/groups",
+        "public/src/client/header",
+        "public/src/client/topic",
+        "public/src/installer",
+        "public/src/modules",
+        "public/src/modules/accounts",
+        "public/src/modules/settings",
+        "public/uploads",
+        "public/uploads/category",
+        "public/uploads/files",
+        "public/uploads/profile",
+        "public/uploads/sounds",
+        "public/uploads/system",
+        "src",
+        "src/activitypub",
+        "src/admin",
+        "src/api",
+        "src/cache",
+        "src/categories",
+        "src/cli",
+        "src/controllers",
+        "src/controllers/accounts",
+        "src/controllers/activitypub",
+        "src/controllers/admin",
+        "src/controllers/write",
+        "src/database",
+        "src/database/mongo",
+        "src/database/mongo/sorted",
+        "src/database/postgres",
+        "src/database/postgres/sorted",
+        "src/database/redis",
+        "src/database/redis/sorted",
+        "src/groups",
+        "src/messaging",
+        "src/meta",
+        "src/middleware",
+        "src/navigation",
+        "src/plugins",
+        "src/posts",
+        "src/privileges",
+        "src/rewards",
+        "src/routes",
+        "src/routes/write",
+        "src/socket.io",
+        "src/socket.io/admin",
+        "src/socket.io/categories",
+        "src/socket.io/posts",
+        "src/socket.io/topics",
+        "src/socket.io/user",
+        "src/topics",
+        "src/upgrades",
+        "src/upgrades/1.0.0",
+        "src/upgrades/1.1.0",
+        "src/upgrades/1.1.1",
+        "src/upgrades/1.10.0",
+        "src/upgrades/1.10.2",
+        "src/upgrades/1.11.0",
+        "src/upgrades/1.11.1",
+        "src/upgrades/1.12.0",
+        "src/upgrades/1.12.1",
+        "src/upgrades/1.12.3",
+        "src/upgrades/1.13.0",
+        "src/upgrades/1.13.3",
+        "src/upgrades/1.13.4",
+        "src/upgrades/1.14.0",
+        "src/upgrades/1.14.1",
+        "src/upgrades/1.15.0",
+        "src/upgrades/1.15.4",
+        "src/upgrades/1.16.0",
+        "src/upgrades/1.17.0",
+        "src/upgrades/1.18.0",
+        "src/upgrades/1.18.4",
+        "src/upgrades/1.19.0",
+        "src/upgrades/1.19.2",
+        "src/upgrades/1.19.3",
+        "src/upgrades/1.2.0",
+        "src/upgrades/1.3.0",
+        "src/upgrades/1.4.0",
+        "src/upgrades/1.4.4",
+        "src/upgrades/1.4.6",
+        "src/upgrades/1.5.0",
+        "src/upgrades/1.5.1",
+        "src/upgrades/1.5.2",
+        "src/upgrades/1.6.0",
+        "src/upgrades/1.6.2",
+        "src/upgrades/1.7.0",
+        "src/upgrades/1.7.1",
+        "src/upgrades/1.7.3",
+        "src/upgrades/1.7.4",
+        "src/upgrades/1.7.6",
+        "src/upgrades/1.8.0",
+        "src/upgrades/1.8.1",
+        "src/upgrades/1.9.0",
+        "src/upgrades/2.8.7",
+        "src/upgrades/3.0.0",
+        "src/upgrades/3.1.0",
+        "src/upgrades/3.11.0",
+        "src/upgrades/3.12.0",
+        "src/upgrades/3.2.0",
+        "src/upgrades/3.3.0",
+        "src/upgrades/3.5.0",
+        "src/upgrades/3.6.0",
+        "src/upgrades/3.7.0",
+        "src/upgrades/3.8.0",
+        "src/upgrades/3.8.2",
+        "src/upgrades/3.8.3",
+        "src/upgrades/3.8.4",
+        "src/upgrades/4.0.0",
+        "src/upgrades/4.10.0",
+        "src/upgrades/4.11.0",
+        "src/upgrades/4.12.0",
+        "src/upgrades/4.13.0",
+        "src/upgrades/4.14.0",
+        "src/upgrades/4.14.3",
+        "src/upgrades/4.14.4",
+        "src/upgrades/4.15.0",
+        "src/upgrades/4.15.1",
+        "src/upgrades/4.15.2",
+        "src/upgrades/4.3.0",
+        "src/upgrades/4.3.2",
+        "src/upgrades/4.5.0",
+        "src/upgrades/4.7.1",
+        "src/upgrades/4.8.1",
+        "src/upgrades/4.9.0",
+        "src/upgrades/4.9.2",
+        "src/user",
+        "src/user/jobs",
+        "src/views",
+        "src/views/admin",
+        "src/views/admin/advanced",
+        "src/views/admin/appearance",
+        "src/views/admin/dashboard",
+        "src/views/admin/development",
+        "src/views/admin/extend",
+        "src/views/admin/federation",
+        "src/views/admin/manage",
+        "src/views/admin/manage/users",
+        "src/views/admin/partials",
+        "src/views/admin/partials/activitypub",
+        "src/views/admin/partials/activitypub/blocklists",
+        "src/views/admin/partials/activitypub/hashtags",
+        "src/views/admin/partials/appearance",
+        "src/views/admin/partials/appearance/skins",
+        "src/views/admin/partials/categories",
+        "src/views/admin/partials/category",
+        "src/views/admin/partials/dashboard",
+        "src/views/admin/partials/groups",
+        "src/views/admin/partials/plugins",
+        "src/views/admin/partials/privileges",
+        "src/views/admin/partials/quick_actions",
+        "src/views/admin/partials/rewards",
+        "src/views/admin/partials/settings",
+        "src/views/admin/partials/widgets",
+        "src/views/admin/settings",
+        "src/views/emails",
+        "src/views/emails/partials",
+        "src/views/flags",
+        "src/views/groups",
+        "src/views/install",
+        "src/views/modals",
+        "src/views/modals/intents",
+        "src/views/partials",
+        "src/views/partials/category",
+        "src/views/partials/chats",
+        "src/views/partials/data",
+        "src/views/partials/feed",
+        "src/views/partials/flags",
+        "src/views/partials/footer",
+        "src/views/partials/groups",
+        "src/views/partials/noscript",
+        "src/views/partials/registration-queue",
+        "src/views/partials/search",
+        "src/views/partials/tags",
+        "src/views/partials/topic",
+        "src/views/partials/users",
+        "src/widgets",
+        "test",
+        "test/activitypub",
+        "test/api",
+        "test/database",
+        "test/files",
+        "test/helpers",
+        "test/mocks",
+        "test/mocks/plugin_modules",
+        "test/mocks/plugin_modules/@nodebb",
+        "test/mocks/plugin_modules/@nodebb/another-thing",
+        "test/mocks/plugin_modules/@nodebb/nodebb-plugin-abc",
+        "test/mocks/plugin_modules/nodebb-plugin-xyz",
+        "test/mocks/plugin_modules/something-else",
+        "test/posts",
+        "test/topics",
+        "test/user",
+        "types",
+        "types/database"
+      ],
+      "sourceDirectories": [
+        "public/src",
+        "public/src/client",
+        "src"
+      ],
+      "testDirectories": [
+        "test"
+      ],
+      "staticDirectories": [
+        "public"
+      ],
+      "sourceFileCount": 951
+    },
+    "expressAdapterAvailable": true,
+    "availableAdapterIds": [
+      "express-framework-adapter"
+    ],
+    "supportedCodeAwareMode": true,
+    "mode": "code-aware",
+    "fallbackReasons": [],
+    "diagnostics": []
+  },
+  "project": {
+    "id": "nodebb",
+    "name": "nodebb",
+    "mode": "code-aware",
+    "repositoryPath": "/tmp/agento-realworld-2026-10-19/repos/nodebb",
+    "baseUrl": "http://127.0.0.1:1",
+    "allowedOrigins": [
+      "http://127.0.0.1:1"
+    ],
+    "languages": [
+      "javascript",
+      "typescript"
+    ]
+  },
+  "supports": true,
+  "framework": {
+    "components": [
+      {
+        "id": "express:89250a81a4f3ab9e3b956c9d",
+        "projectId": "nodebb",
+        "name": "nodebb",
+        "kind": "service"
+      }
+    ],
+    "endpoints": [
+      {
+        "id": "express:8ce5a16280f59e8d22be1fb2",
+        "componentId": "express:89250a81a4f3ab9e3b956c9d",
+        "method": "GET",
+        "path": "/",
+        "parameters": [
+          {
+            "name": "host",
+            "location": "header",
+            "required": false
+          }
+        ],
+        "authentication": "unknown",
+        "roles": [],
+        "handler": {
+          "file": "install/web.js",
+          "startLine": 152,
+          "endLine": 179,
+          "symbol": "welcome"
+        },
+        "evidenceIds": [
+          "express:0c649052db14ed953bbf150b",
+          "express:710ce77b7fb8f80cc145aba7"
+        ]
+      },
+      {
+        "id": "express:8984529b060f13246c0bcd2b",
+        "componentId": "express:89250a81a4f3ab9e3b956c9d",
+        "method": "POST",
+        "path": "/",
+        "parameters": [
+          {
+            "name": "admin:email",
+            "location": "body",
+            "required": false
+          },
+          {
+            "name": "admin:password",
+            "location": "body",
+            "required": false
+          },
+          {
+            "name": "admin:username",
+            "location": "body",
+            "required": false
+          },
+          {
+            "name": "database",
+            "location": "body",
+            "required": false
+          },
+          {
+            "name": "url",
+            "location": "body",
+            "required": false
+          },
+          {
+            "name": "host",
+            "location": "header",
+            "required": false
+          }
+        ],
+        "authentication": "unknown",
+        "roles": [],
+        "handler": {
+          "file": "install/web.js",
+          "startLine": 181,
+          "endLine": 226,
+          "symbol": "install"
+        },
+        "evidenceIds": [
+          "express:08ed2a8aa67592871c96c499",
+          "express:feffaba2fa467550367d4c75"
+        ]
+      },
+      {
+        "id": "express:0822b07578e2583408f2afed",
+        "componentId": "express:89250a81a4f3ab9e3b956c9d",
+        "method": "GET",
+        "path": "/testdb",
+        "parameters": [],
+        "authentication": "unknown",
+        "roles": [],
+        "handler": {
+          "file": "install/web.js",
+          "startLine": 124,
+          "endLine": 146,
+          "symbol": "testDatabase"
+        },
+        "evidenceIds": [
+          "express:4d1bfbb38cf413e049ccbc80",
+          "express:2d203e967023791fb9027b8e"
+        ]
+      },
+      {
+        "id": "express:192405d0cb92db6ee47bbac6",
+        "componentId": "express:89250a81a4f3ab9e3b956c9d",
+        "method": "GET",
+        "path": "/ping",
+        "parameters": [],
+        "authentication": "unknown",
+        "roles": [],
+        "handler": {
+          "file": "install/web.js",
+          "startLine": 148,
+          "endLine": 150,
+          "symbol": "ping"
+        },
+        "evidenceIds": [
+          "express:9ae8dc1d81e70ed142d36f45",
+          "express:e53d54360c6d243f088603b6"
+        ]
+      },
+      {
+        "id": "express:2f7282515b0b92296b12c001",
+        "componentId": "express:89250a81a4f3ab9e3b956c9d",
+        "method": "GET",
+        "path": "/sping",
+        "parameters": [],
+        "authentication": "unknown",
+        "roles": [],
+        "handler": {
+          "file": "install/web.js",
+          "startLine": 148,
+          "endLine": 150,
+          "symbol": "ping"
+        },
+        "evidenceIds": [
+          "express:9d9cb017d0866774994207f6",
+          "express:0f8b501e128c4ed605a7f7c4"
+        ]
+      }
+    ],
+    "resources": [],
+    "signals": [],
+    "evidence": [
+      {
+        "id": "express:0c649052db14ed953bbf150b",
+        "projectId": "nodebb",
+        "producerId": "express-framework-adapter",
+        "capturedAt": "2026-10-19T15:18:11.640Z",
+        "kind": "configuration",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 81,
+          "endLine": 85
+        },
+        "endpointId": "express:8ce5a16280f59e8d22be1fb2",
+        "summary": "Express source observation: session.",
+        "facts": {
+          "observation": "session",
+          "options": {
+            "secret": "[REDACTED]",
+            "resave": false,
+            "saveUninitialized": false
+          },
+          "conditions": [],
+          "runtimeVerified": false
+        }
+      },
+      {
+        "id": "express:710ce77b7fb8f80cc145aba7",
+        "projectId": "nodebb",
+        "producerId": "express-framework-adapter",
+        "capturedAt": "2026-10-19T15:18:11.640Z",
+        "kind": "source-location",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 117,
+          "endLine": 117
+        },
+        "endpointId": "express:8ce5a16280f59e8d22be1fb2",
+        "summary": "Express source observation: route.",
+        "facts": {
+          "observation": "route",
+          "method": "GET",
+          "path": "/",
+          "handlers": [
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 67,
+                "endLine": 67
+              },
+              "package": "express"
+            },
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 77,
+                "endLine": 79
+              },
+              "package": "body-parser"
+            },
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 81,
+                "endLine": 85
+              },
+              "package": "express-session"
+            },
+            {
+              "name": "csrfSynchronisedProtection",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 117,
+                "endLine": 117
+              },
+              "package": "../src/middleware/csrf"
+            },
+            {
+              "name": "welcome",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 152,
+                "endLine": 179
+              }
+            }
+          ],
+          "mounts": [],
+          "bodyUsed": true,
+          "conditional": false,
+          "runtimeVerified": false
+        }
+      },
+      {
+        "id": "express:08ed2a8aa67592871c96c499",
+        "projectId": "nodebb",
+        "producerId": "express-framework-adapter",
+        "capturedAt": "2026-10-19T15:18:11.640Z",
+        "kind": "configuration",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 81,
+          "endLine": 85
+        },
+        "endpointId": "express:8984529b060f13246c0bcd2b",
+        "summary": "Express source observation: session.",
+        "facts": {
+          "observation": "session",
+          "options": {
+            "secret": "[REDACTED]",
+            "resave": false,
+            "saveUninitialized": false
+          },
+          "conditions": [],
+          "runtimeVerified": false
+        }
+      },
+      {
+        "id": "express:feffaba2fa467550367d4c75",
+        "projectId": "nodebb",
+        "producerId": "express-framework-adapter",
+        "capturedAt": "2026-10-19T15:18:11.640Z",
+        "kind": "source-location",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 118,
+          "endLine": 118
+        },
+        "endpointId": "express:8984529b060f13246c0bcd2b",
+        "summary": "Express source observation: route.",
+        "facts": {
+          "observation": "route",
+          "method": "POST",
+          "path": "/",
+          "handlers": [
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 67,
+                "endLine": 67
+              },
+              "package": "express"
+            },
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 77,
+                "endLine": 79
+              },
+              "package": "body-parser"
+            },
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 81,
+                "endLine": 85
+              },
+              "package": "express-session"
+            },
+            {
+              "name": "csrfSynchronisedProtection",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 118,
+                "endLine": 118
+              },
+              "package": "../src/middleware/csrf"
+            },
+            {
+              "name": "install",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 181,
+                "endLine": 226
+              }
+            }
+          ],
+          "mounts": [],
+          "bodyUsed": true,
+          "conditional": false,
+          "runtimeVerified": false
+        }
+      },
+      {
+        "id": "express:4d1bfbb38cf413e049ccbc80",
+        "projectId": "nodebb",
+        "producerId": "express-framework-adapter",
+        "capturedAt": "2026-10-19T15:18:11.640Z",
+        "kind": "configuration",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 81,
+          "endLine": 85
+        },
+        "endpointId": "express:0822b07578e2583408f2afed",
+        "summary": "Express source observation: session.",
+        "facts": {
+          "observation": "session",
+          "options": {
+            "secret": "[REDACTED]",
+            "resave": false,
+            "saveUninitialized": false
+          },
+          "conditions": [],
+          "runtimeVerified": false
+        }
+      },
+      {
+        "id": "express:2d203e967023791fb9027b8e",
+        "projectId": "nodebb",
+        "producerId": "express-framework-adapter",
+        "capturedAt": "2026-10-19T15:18:11.640Z",
+        "kind": "source-location",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 119,
+          "endLine": 119
+        },
+        "endpointId": "express:0822b07578e2583408f2afed",
+        "summary": "Express source observation: route.",
+        "facts": {
+          "observation": "route",
+          "method": "GET",
+          "path": "/testdb",
+          "handlers": [
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 67,
+                "endLine": 67
+              },
+              "package": "express"
+            },
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 77,
+                "endLine": 79
+              },
+              "package": "body-parser"
+            },
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 81,
+                "endLine": 85
+              },
+              "package": "express-session"
+            },
+            {
+              "name": "testDatabase",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 124,
+                "endLine": 146
+              }
+            }
+          ],
+          "mounts": [],
+          "bodyUsed": false,
+          "conditional": false,
+          "runtimeVerified": false
+        }
+      },
+      {
+        "id": "express:9ae8dc1d81e70ed142d36f45",
+        "projectId": "nodebb",
+        "producerId": "express-framework-adapter",
+        "capturedAt": "2026-10-19T15:18:11.640Z",
+        "kind": "configuration",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 81,
+          "endLine": 85
+        },
+        "endpointId": "express:192405d0cb92db6ee47bbac6",
+        "summary": "Express source observation: session.",
+        "facts": {
+          "observation": "session",
+          "options": {
+            "secret": "[REDACTED]",
+            "resave": false,
+            "saveUninitialized": false
+          },
+          "conditions": [],
+          "runtimeVerified": false
+        }
+      },
+      {
+        "id": "express:e53d54360c6d243f088603b6",
+        "projectId": "nodebb",
+        "producerId": "express-framework-adapter",
+        "capturedAt": "2026-10-19T15:18:11.640Z",
+        "kind": "source-location",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 120,
+          "endLine": 120
+        },
+        "endpointId": "express:192405d0cb92db6ee47bbac6",
+        "summary": "Express source observation: route.",
+        "facts": {
+          "observation": "route",
+          "method": "GET",
+          "path": "/ping",
+          "handlers": [
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 67,
+                "endLine": 67
+              },
+              "package": "express"
+            },
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 77,
+                "endLine": 79
+              },
+              "package": "body-parser"
+            },
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 81,
+                "endLine": 85
+              },
+              "package": "express-session"
+            },
+            {
+              "name": "ping",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 148,
+                "endLine": 150
+              }
+            }
+          ],
+          "mounts": [],
+          "bodyUsed": false,
+          "conditional": false,
+          "runtimeVerified": false
+        }
+      },
+      {
+        "id": "express:9d9cb017d0866774994207f6",
+        "projectId": "nodebb",
+        "producerId": "express-framework-adapter",
+        "capturedAt": "2026-10-19T15:18:11.640Z",
+        "kind": "configuration",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 81,
+          "endLine": 85
+        },
+        "endpointId": "express:2f7282515b0b92296b12c001",
+        "summary": "Express source observation: session.",
+        "facts": {
+          "observation": "session",
+          "options": {
+            "secret": "[REDACTED]",
+            "resave": false,
+            "saveUninitialized": false
+          },
+          "conditions": [],
+          "runtimeVerified": false
+        }
+      },
+      {
+        "id": "express:0f8b501e128c4ed605a7f7c4",
+        "projectId": "nodebb",
+        "producerId": "express-framework-adapter",
+        "capturedAt": "2026-10-19T15:18:11.640Z",
+        "kind": "source-location",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 121,
+          "endLine": 121
+        },
+        "endpointId": "express:2f7282515b0b92296b12c001",
+        "summary": "Express source observation: route.",
+        "facts": {
+          "observation": "route",
+          "method": "GET",
+          "path": "/sping",
+          "handlers": [
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 67,
+                "endLine": 67
+              },
+              "package": "express"
+            },
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 77,
+                "endLine": 79
+              },
+              "package": "body-parser"
+            },
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 81,
+                "endLine": 85
+              },
+              "package": "express-session"
+            },
+            {
+              "name": "ping",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 148,
+                "endLine": 150
+              }
+            }
+          ],
+          "mounts": [],
+          "bodyUsed": false,
+          "conditional": false,
+          "runtimeVerified": false
+        }
+      }
+    ],
+    "diagnostics": [
+      {
+        "code": "unresolved-route",
+        "source": {
+          "file": "src/routes/index.js",
+          "startLine": 135,
+          "endLine": 135
+        },
+        "message": "Computed or regular-expression route path was not resolved."
+      },
+      {
+        "code": "unresolved-route",
+        "source": {
+          "file": "src/routes/index.js",
+          "startLine": 140,
+          "endLine": 140
+        },
+        "message": "Computed or regular-expression route path was not resolved."
+      },
+      {
+        "code": "unresolved-route",
+        "source": {
+          "file": "src/routes/index.js",
+          "startLine": 141,
+          "endLine": 141
+        },
+        "message": "Computed or regular-expression route path was not resolved."
+      },
+      {
+        "code": "unresolved-handler",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 77,
+          "endLine": 79
+        },
+        "message": "Handler or middleware could not be resolved."
+      },
+      {
+        "code": "unresolved-handler",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 117,
+          "endLine": 117
+        },
+        "message": "Handler or middleware could not be resolved."
+      },
+      {
+        "code": "unresolved-handler",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 77,
+          "endLine": 79
+        },
+        "message": "Handler or middleware could not be resolved."
+      },
+      {
+        "code": "unresolved-handler",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 118,
+          "endLine": 118
+        },
+        "message": "Handler or middleware could not be resolved."
+      },
+      {
+        "code": "unresolved-handler",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 77,
+          "endLine": 79
+        },
+        "message": "Handler or middleware could not be resolved."
+      },
+      {
+        "code": "unresolved-handler",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 77,
+          "endLine": 79
+        },
+        "message": "Handler or middleware could not be resolved."
+      },
+      {
+        "code": "unresolved-handler",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 77,
+          "endLine": 79
+        },
+        "message": "Handler or middleware could not be resolved."
+      }
+    ]
+  },
+  "analysis": {
+    "status": "completed",
+    "diagnostics": [],
+    "signals": [
+      {
+        "id": "semgrep:17f74a0dd178795a7f186e3a",
+        "projectId": "nodebb",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-89"
+        ],
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "source": {
+          "file": "src/activitypub/helpers.js",
+          "startLine": 334,
+          "endLine": 334
+        },
+        "evidenceIds": [
+          "semgrep:d989efb2d769f143f7bb4409"
+        ]
+      },
+      {
+        "id": "semgrep:523f71cbc1ed974d3d18cd8f",
+        "projectId": "nodebb",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-89"
+        ],
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "source": {
+          "file": "src/controllers/admin/categories.js",
+          "startLine": 187,
+          "endLine": 187
+        },
+        "evidenceIds": [
+          "semgrep:735bdcf3106f891906884589"
+        ]
+      },
+      {
+        "id": "semgrep:229d43585ffb4d819b7685f2",
+        "projectId": "nodebb",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-79"
+        ],
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "source": {
+          "file": "src/controllers/admin/groups.js",
+          "startLine": 105,
+          "endLine": 105
+        },
+        "evidenceIds": [
+          "semgrep:a73d2ddbaf0b60c11f7234f0"
+        ]
+      },
+      {
+        "id": "semgrep:188e4bd9440371e1134b1a20",
+        "projectId": "nodebb",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-89"
+        ],
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "source": {
+          "file": "src/controllers/write/intents.js",
+          "startLine": 34,
+          "endLine": 34
+        },
+        "evidenceIds": [
+          "semgrep:1c81a4a183e3f79cd39f7c56"
+        ]
+      },
+      {
+        "id": "semgrep:7925b2f58b708dc64a1b95a9",
+        "projectId": "nodebb",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-79"
+        ],
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "source": {
+          "file": "src/routes/debug.js",
+          "startLine": 31,
+          "endLine": 31
+        },
+        "evidenceIds": [
+          "semgrep:0c066d57b58c8e999db1e615"
+        ]
+      }
+    ],
+    "evidence": [
+      {
+        "id": "semgrep:3f2615c5ea224bb927fb74c1",
+        "projectId": "nodebb",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:18:11.655Z",
+        "kind": "static-analysis",
+        "summary": "Static analysis completed; signals are candidates requiring runtime verification.",
+        "facts": {
+          "observation": "static-analysis-run",
+          "status": "completed",
+          "diagnosticCodes": [],
+          "signalCount": 5,
+          "sourceDigest": "cc34d0c14596d53f3a23bf54",
+          "toolVersion": "1.180.0",
+          "runtimeVerified": false
+        }
+      },
+      {
+        "id": "semgrep:d989efb2d769f143f7bb4409",
+        "projectId": "nodebb",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:18:11.655Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "src/activitypub/helpers.js",
+          "startLine": 334,
+          "endLine": 334
+        },
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-sql",
+          "cweIds": [
+            "CWE-89"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/activitypub/helpers.js",
+              "startLine": 334,
+              "endLine": 334
+            },
+            "kind": "query"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "src/activitypub/helpers.js",
+                "startLine": 286,
+                "endLine": 286,
+                "symbol": "query"
+              },
+              "kind": "request-query"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use-partial",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:735bdcf3106f891906884589",
+        "projectId": "nodebb",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:18:11.655Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "src/controllers/admin/categories.js",
+          "startLine": 187,
+          "endLine": 187
+        },
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-sql",
+          "cweIds": [
+            "CWE-89"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/controllers/admin/categories.js",
+              "startLine": 187,
+              "endLine": 187
+            },
+            "kind": "query"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "src/controllers/admin/categories.js",
+                "startLine": 185,
+                "endLine": 185,
+                "symbol": "body"
+              },
+              "kind": "request-body"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [
+            {
+              "location": {
+                "file": "src/controllers/admin/categories.js",
+                "startLine": 186,
+                "endLine": 186
+              },
+              "kind": "conditional",
+              "branch": "then"
+            }
+          ],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:a73d2ddbaf0b60c11f7234f0",
+        "projectId": "nodebb",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:18:11.655Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "src/controllers/admin/groups.js",
+          "startLine": 105,
+          "endLine": 105
+        },
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/controllers/admin/groups.js",
+              "startLine": 105,
+              "endLine": 105
+            },
+            "kind": "end"
+          },
+          "sources": [],
+          "sourceResolution": "bounded-ast-def-use-partial",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:1c81a4a183e3f79cd39f7c56",
+        "projectId": "nodebb",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:18:11.655Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "src/controllers/write/intents.js",
+          "startLine": 34,
+          "endLine": 34
+        },
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-sql",
+          "cweIds": [
+            "CWE-89"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/controllers/write/intents.js",
+              "startLine": 34,
+              "endLine": 34
+            },
+            "kind": "query"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "src/controllers/write/intents.js",
+                "startLine": 32,
+                "endLine": 32,
+                "symbol": "params"
+              },
+              "kind": "request-params"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:0c066d57b58c8e999db1e615",
+        "projectId": "nodebb",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:18:11.655Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "src/routes/debug.js",
+          "startLine": 31,
+          "endLine": 31
+        },
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/routes/debug.js",
+              "startLine": 31,
+              "endLine": 31
+            },
+            "kind": "send"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "src/routes/debug.js",
+                "startLine": 19,
+                "endLine": 19,
+                "symbol": "params"
+              },
+              "kind": "request-params"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "html",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      }
+    ]
+  },
+  "model": {
+    "schemaVersion": 1,
+    "project": {
+      "id": "nodebb",
+      "name": "nodebb",
+      "mode": "code-aware",
+      "repositoryPath": "/tmp/agento-realworld-2026-10-19/repos/nodebb",
+      "baseUrl": "http://127.0.0.1:1",
+      "allowedOrigins": [
+        "http://127.0.0.1:1"
+      ],
+      "languages": [
+        "javascript",
+        "typescript"
+      ]
+    },
+    "identities": [],
+    "components": [
+      {
+        "id": "express:89250a81a4f3ab9e3b956c9d",
+        "projectId": "nodebb",
+        "name": "nodebb",
+        "kind": "service"
+      }
+    ],
+    "endpoints": [
+      {
+        "id": "model:endpoint:0d8349a567626168ade5e56f451d08db",
+        "componentId": "express:89250a81a4f3ab9e3b956c9d",
+        "componentIds": [
+          "express:89250a81a4f3ab9e3b956c9d"
+        ],
+        "origin": "http://127.0.0.1:1",
+        "method": "GET",
+        "path": "/",
+        "aliases": [
+          "express:8ce5a16280f59e8d22be1fb2"
+        ],
+        "observations": [
+          {
+            "source": "source",
+            "origin": "http://127.0.0.1:1",
+            "endpoint": {
+              "id": "express:8ce5a16280f59e8d22be1fb2",
+              "componentId": "express:89250a81a4f3ab9e3b956c9d",
+              "method": "GET",
+              "path": "/",
+              "parameters": [
+                {
+                  "name": "host",
+                  "location": "header",
+                  "required": false
+                }
+              ],
+              "authentication": "unknown",
+              "roles": [],
+              "handler": {
+                "file": "install/web.js",
+                "startLine": 152,
+                "endLine": 179,
+                "symbol": "welcome"
+              },
+              "evidenceIds": [
+                "express:0c649052db14ed953bbf150b",
+                "express:710ce77b7fb8f80cc145aba7"
+              ]
+            }
+          }
+        ],
+        "parameters": [
+          {
+            "name": "host",
+            "location": "header",
+            "required": false
+          }
+        ],
+        "authentication": "unknown",
+        "roles": [],
+        "handler": {
+          "file": "install/web.js",
+          "startLine": 152,
+          "endLine": 179,
+          "symbol": "welcome"
+        },
+        "evidenceIds": [
+          "express:0c649052db14ed953bbf150b",
+          "express:710ce77b7fb8f80cc145aba7"
+        ]
+      },
+      {
+        "id": "model:endpoint:3644509225dd5b5d048858fc3e6bce75",
+        "componentId": "express:89250a81a4f3ab9e3b956c9d",
+        "componentIds": [
+          "express:89250a81a4f3ab9e3b956c9d"
+        ],
+        "origin": "http://127.0.0.1:1",
+        "method": "GET",
+        "path": "/ping",
+        "aliases": [
+          "express:192405d0cb92db6ee47bbac6"
+        ],
+        "observations": [
+          {
+            "source": "source",
+            "origin": "http://127.0.0.1:1",
+            "endpoint": {
+              "id": "express:192405d0cb92db6ee47bbac6",
+              "componentId": "express:89250a81a4f3ab9e3b956c9d",
+              "method": "GET",
+              "path": "/ping",
+              "parameters": [],
+              "authentication": "unknown",
+              "roles": [],
+              "handler": {
+                "file": "install/web.js",
+                "startLine": 148,
+                "endLine": 150,
+                "symbol": "ping"
+              },
+              "evidenceIds": [
+                "express:9ae8dc1d81e70ed142d36f45",
+                "express:e53d54360c6d243f088603b6"
+              ]
+            }
+          }
+        ],
+        "parameters": [],
+        "authentication": "unknown",
+        "roles": [],
+        "handler": {
+          "file": "install/web.js",
+          "startLine": 148,
+          "endLine": 150,
+          "symbol": "ping"
+        },
+        "evidenceIds": [
+          "express:9ae8dc1d81e70ed142d36f45",
+          "express:e53d54360c6d243f088603b6"
+        ]
+      },
+      {
+        "id": "model:endpoint:6284c9088dfcf2f7648c0051dd21b30f",
+        "componentId": "express:89250a81a4f3ab9e3b956c9d",
+        "componentIds": [
+          "express:89250a81a4f3ab9e3b956c9d"
+        ],
+        "origin": "http://127.0.0.1:1",
+        "method": "GET",
+        "path": "/sping",
+        "aliases": [
+          "express:2f7282515b0b92296b12c001"
+        ],
+        "observations": [
+          {
+            "source": "source",
+            "origin": "http://127.0.0.1:1",
+            "endpoint": {
+              "id": "express:2f7282515b0b92296b12c001",
+              "componentId": "express:89250a81a4f3ab9e3b956c9d",
+              "method": "GET",
+              "path": "/sping",
+              "parameters": [],
+              "authentication": "unknown",
+              "roles": [],
+              "handler": {
+                "file": "install/web.js",
+                "startLine": 148,
+                "endLine": 150,
+                "symbol": "ping"
+              },
+              "evidenceIds": [
+                "express:9d9cb017d0866774994207f6",
+                "express:0f8b501e128c4ed605a7f7c4"
+              ]
+            }
+          }
+        ],
+        "parameters": [],
+        "authentication": "unknown",
+        "roles": [],
+        "handler": {
+          "file": "install/web.js",
+          "startLine": 148,
+          "endLine": 150,
+          "symbol": "ping"
+        },
+        "evidenceIds": [
+          "express:0f8b501e128c4ed605a7f7c4",
+          "express:9d9cb017d0866774994207f6"
+        ]
+      },
+      {
+        "id": "model:endpoint:4f489c7ce3eabc2185813b92a91d7dee",
+        "componentId": "express:89250a81a4f3ab9e3b956c9d",
+        "componentIds": [
+          "express:89250a81a4f3ab9e3b956c9d"
+        ],
+        "origin": "http://127.0.0.1:1",
+        "method": "GET",
+        "path": "/testdb",
+        "aliases": [
+          "express:0822b07578e2583408f2afed"
+        ],
+        "observations": [
+          {
+            "source": "source",
+            "origin": "http://127.0.0.1:1",
+            "endpoint": {
+              "id": "express:0822b07578e2583408f2afed",
+              "componentId": "express:89250a81a4f3ab9e3b956c9d",
+              "method": "GET",
+              "path": "/testdb",
+              "parameters": [],
+              "authentication": "unknown",
+              "roles": [],
+              "handler": {
+                "file": "install/web.js",
+                "startLine": 124,
+                "endLine": 146,
+                "symbol": "testDatabase"
+              },
+              "evidenceIds": [
+                "express:4d1bfbb38cf413e049ccbc80",
+                "express:2d203e967023791fb9027b8e"
+              ]
+            }
+          }
+        ],
+        "parameters": [],
+        "authentication": "unknown",
+        "roles": [],
+        "handler": {
+          "file": "install/web.js",
+          "startLine": 124,
+          "endLine": 146,
+          "symbol": "testDatabase"
+        },
+        "evidenceIds": [
+          "express:2d203e967023791fb9027b8e",
+          "express:4d1bfbb38cf413e049ccbc80"
+        ]
+      },
+      {
+        "id": "model:endpoint:c1783f1bd2e2c96d996efc6f6ab81f34",
+        "componentId": "express:89250a81a4f3ab9e3b956c9d",
+        "componentIds": [
+          "express:89250a81a4f3ab9e3b956c9d"
+        ],
+        "origin": "http://127.0.0.1:1",
+        "method": "POST",
+        "path": "/",
+        "aliases": [
+          "express:8984529b060f13246c0bcd2b"
+        ],
+        "observations": [
+          {
+            "source": "source",
+            "origin": "http://127.0.0.1:1",
+            "endpoint": {
+              "id": "express:8984529b060f13246c0bcd2b",
+              "componentId": "express:89250a81a4f3ab9e3b956c9d",
+              "method": "POST",
+              "path": "/",
+              "parameters": [
+                {
+                  "name": "admin:email",
+                  "location": "body",
+                  "required": false
+                },
+                {
+                  "name": "admin:password",
+                  "location": "body",
+                  "required": false
+                },
+                {
+                  "name": "admin:username",
+                  "location": "body",
+                  "required": false
+                },
+                {
+                  "name": "database",
+                  "location": "body",
+                  "required": false
+                },
+                {
+                  "name": "url",
+                  "location": "body",
+                  "required": false
+                },
+                {
+                  "name": "host",
+                  "location": "header",
+                  "required": false
+                }
+              ],
+              "authentication": "unknown",
+              "roles": [],
+              "handler": {
+                "file": "install/web.js",
+                "startLine": 181,
+                "endLine": 226,
+                "symbol": "install"
+              },
+              "evidenceIds": [
+                "express:08ed2a8aa67592871c96c499",
+                "express:feffaba2fa467550367d4c75"
+              ]
+            }
+          }
+        ],
+        "parameters": [
+          {
+            "name": "admin:email",
+            "location": "body",
+            "required": false
+          },
+          {
+            "name": "admin:password",
+            "location": "body",
+            "required": false
+          },
+          {
+            "name": "admin:username",
+            "location": "body",
+            "required": false
+          },
+          {
+            "name": "database",
+            "location": "body",
+            "required": false
+          },
+          {
+            "name": "url",
+            "location": "body",
+            "required": false
+          },
+          {
+            "name": "host",
+            "location": "header",
+            "required": false
+          }
+        ],
+        "authentication": "unknown",
+        "roles": [],
+        "handler": {
+          "file": "install/web.js",
+          "startLine": 181,
+          "endLine": 226,
+          "symbol": "install"
+        },
+        "evidenceIds": [
+          "express:08ed2a8aa67592871c96c499",
+          "express:feffaba2fa467550367d4c75"
+        ]
+      }
+    ],
+    "resources": [],
+    "signals": [
+      {
+        "id": "semgrep:17f74a0dd178795a7f186e3a",
+        "projectId": "nodebb",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-89"
+        ],
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "source": {
+          "file": "src/activitypub/helpers.js",
+          "startLine": 334,
+          "endLine": 334
+        },
+        "evidenceIds": [
+          "semgrep:d989efb2d769f143f7bb4409"
+        ]
+      },
+      {
+        "id": "semgrep:188e4bd9440371e1134b1a20",
+        "projectId": "nodebb",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-89"
+        ],
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "source": {
+          "file": "src/controllers/write/intents.js",
+          "startLine": 34,
+          "endLine": 34
+        },
+        "evidenceIds": [
+          "semgrep:1c81a4a183e3f79cd39f7c56"
+        ]
+      },
+      {
+        "id": "semgrep:229d43585ffb4d819b7685f2",
+        "projectId": "nodebb",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-79"
+        ],
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "source": {
+          "file": "src/controllers/admin/groups.js",
+          "startLine": 105,
+          "endLine": 105
+        },
+        "evidenceIds": [
+          "semgrep:a73d2ddbaf0b60c11f7234f0"
+        ]
+      },
+      {
+        "id": "semgrep:523f71cbc1ed974d3d18cd8f",
+        "projectId": "nodebb",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-89"
+        ],
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "source": {
+          "file": "src/controllers/admin/categories.js",
+          "startLine": 187,
+          "endLine": 187
+        },
+        "evidenceIds": [
+          "semgrep:735bdcf3106f891906884589"
+        ]
+      },
+      {
+        "id": "semgrep:7925b2f58b708dc64a1b95a9",
+        "projectId": "nodebb",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-79"
+        ],
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "source": {
+          "file": "src/routes/debug.js",
+          "startLine": 31,
+          "endLine": 31
+        },
+        "evidenceIds": [
+          "semgrep:0c066d57b58c8e999db1e615"
+        ]
+      }
+    ],
+    "evidence": [
+      {
+        "id": "express:08ed2a8aa67592871c96c499",
+        "projectId": "nodebb",
+        "producerId": "express-framework-adapter",
+        "capturedAt": "2026-10-19T15:18:11.640Z",
+        "kind": "configuration",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 81,
+          "endLine": 85
+        },
+        "endpointId": "express:8984529b060f13246c0bcd2b",
+        "summary": "Express source observation: session.",
+        "facts": {
+          "observation": "session",
+          "options": {
+            "secret": "[REDACTED]",
+            "resave": false,
+            "saveUninitialized": false
+          },
+          "conditions": [],
+          "runtimeVerified": false
+        }
+      },
+      {
+        "id": "express:0c649052db14ed953bbf150b",
+        "projectId": "nodebb",
+        "producerId": "express-framework-adapter",
+        "capturedAt": "2026-10-19T15:18:11.640Z",
+        "kind": "configuration",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 81,
+          "endLine": 85
+        },
+        "endpointId": "express:8ce5a16280f59e8d22be1fb2",
+        "summary": "Express source observation: session.",
+        "facts": {
+          "observation": "session",
+          "options": {
+            "secret": "[REDACTED]",
+            "resave": false,
+            "saveUninitialized": false
+          },
+          "conditions": [],
+          "runtimeVerified": false
+        }
+      },
+      {
+        "id": "express:0f8b501e128c4ed605a7f7c4",
+        "projectId": "nodebb",
+        "producerId": "express-framework-adapter",
+        "capturedAt": "2026-10-19T15:18:11.640Z",
+        "kind": "source-location",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 121,
+          "endLine": 121
+        },
+        "endpointId": "express:2f7282515b0b92296b12c001",
+        "summary": "Express source observation: route.",
+        "facts": {
+          "observation": "route",
+          "method": "GET",
+          "path": "/sping",
+          "handlers": [
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 67,
+                "endLine": 67
+              },
+              "package": "express"
+            },
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 77,
+                "endLine": 79
+              },
+              "package": "body-parser"
+            },
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 81,
+                "endLine": 85
+              },
+              "package": "express-session"
+            },
+            {
+              "name": "ping",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 148,
+                "endLine": 150
+              }
+            }
+          ],
+          "mounts": [],
+          "bodyUsed": false,
+          "conditional": false,
+          "runtimeVerified": false
+        }
+      },
+      {
+        "id": "express:2d203e967023791fb9027b8e",
+        "projectId": "nodebb",
+        "producerId": "express-framework-adapter",
+        "capturedAt": "2026-10-19T15:18:11.640Z",
+        "kind": "source-location",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 119,
+          "endLine": 119
+        },
+        "endpointId": "express:0822b07578e2583408f2afed",
+        "summary": "Express source observation: route.",
+        "facts": {
+          "observation": "route",
+          "method": "GET",
+          "path": "/testdb",
+          "handlers": [
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 67,
+                "endLine": 67
+              },
+              "package": "express"
+            },
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 77,
+                "endLine": 79
+              },
+              "package": "body-parser"
+            },
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 81,
+                "endLine": 85
+              },
+              "package": "express-session"
+            },
+            {
+              "name": "testDatabase",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 124,
+                "endLine": 146
+              }
+            }
+          ],
+          "mounts": [],
+          "bodyUsed": false,
+          "conditional": false,
+          "runtimeVerified": false
+        }
+      },
+      {
+        "id": "express:4d1bfbb38cf413e049ccbc80",
+        "projectId": "nodebb",
+        "producerId": "express-framework-adapter",
+        "capturedAt": "2026-10-19T15:18:11.640Z",
+        "kind": "configuration",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 81,
+          "endLine": 85
+        },
+        "endpointId": "express:0822b07578e2583408f2afed",
+        "summary": "Express source observation: session.",
+        "facts": {
+          "observation": "session",
+          "options": {
+            "secret": "[REDACTED]",
+            "resave": false,
+            "saveUninitialized": false
+          },
+          "conditions": [],
+          "runtimeVerified": false
+        }
+      },
+      {
+        "id": "express:710ce77b7fb8f80cc145aba7",
+        "projectId": "nodebb",
+        "producerId": "express-framework-adapter",
+        "capturedAt": "2026-10-19T15:18:11.640Z",
+        "kind": "source-location",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 117,
+          "endLine": 117
+        },
+        "endpointId": "express:8ce5a16280f59e8d22be1fb2",
+        "summary": "Express source observation: route.",
+        "facts": {
+          "observation": "route",
+          "method": "GET",
+          "path": "/",
+          "handlers": [
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 67,
+                "endLine": 67
+              },
+              "package": "express"
+            },
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 77,
+                "endLine": 79
+              },
+              "package": "body-parser"
+            },
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 81,
+                "endLine": 85
+              },
+              "package": "express-session"
+            },
+            {
+              "name": "csrfSynchronisedProtection",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 117,
+                "endLine": 117
+              },
+              "package": "../src/middleware/csrf"
+            },
+            {
+              "name": "welcome",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 152,
+                "endLine": 179
+              }
+            }
+          ],
+          "mounts": [],
+          "bodyUsed": true,
+          "conditional": false,
+          "runtimeVerified": false
+        }
+      },
+      {
+        "id": "express:9ae8dc1d81e70ed142d36f45",
+        "projectId": "nodebb",
+        "producerId": "express-framework-adapter",
+        "capturedAt": "2026-10-19T15:18:11.640Z",
+        "kind": "configuration",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 81,
+          "endLine": 85
+        },
+        "endpointId": "express:192405d0cb92db6ee47bbac6",
+        "summary": "Express source observation: session.",
+        "facts": {
+          "observation": "session",
+          "options": {
+            "secret": "[REDACTED]",
+            "resave": false,
+            "saveUninitialized": false
+          },
+          "conditions": [],
+          "runtimeVerified": false
+        }
+      },
+      {
+        "id": "express:9d9cb017d0866774994207f6",
+        "projectId": "nodebb",
+        "producerId": "express-framework-adapter",
+        "capturedAt": "2026-10-19T15:18:11.640Z",
+        "kind": "configuration",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 81,
+          "endLine": 85
+        },
+        "endpointId": "express:2f7282515b0b92296b12c001",
+        "summary": "Express source observation: session.",
+        "facts": {
+          "observation": "session",
+          "options": {
+            "secret": "[REDACTED]",
+            "resave": false,
+            "saveUninitialized": false
+          },
+          "conditions": [],
+          "runtimeVerified": false
+        }
+      },
+      {
+        "id": "express:e53d54360c6d243f088603b6",
+        "projectId": "nodebb",
+        "producerId": "express-framework-adapter",
+        "capturedAt": "2026-10-19T15:18:11.640Z",
+        "kind": "source-location",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 120,
+          "endLine": 120
+        },
+        "endpointId": "express:192405d0cb92db6ee47bbac6",
+        "summary": "Express source observation: route.",
+        "facts": {
+          "observation": "route",
+          "method": "GET",
+          "path": "/ping",
+          "handlers": [
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 67,
+                "endLine": 67
+              },
+              "package": "express"
+            },
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 77,
+                "endLine": 79
+              },
+              "package": "body-parser"
+            },
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 81,
+                "endLine": 85
+              },
+              "package": "express-session"
+            },
+            {
+              "name": "ping",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 148,
+                "endLine": 150
+              }
+            }
+          ],
+          "mounts": [],
+          "bodyUsed": false,
+          "conditional": false,
+          "runtimeVerified": false
+        }
+      },
+      {
+        "id": "express:feffaba2fa467550367d4c75",
+        "projectId": "nodebb",
+        "producerId": "express-framework-adapter",
+        "capturedAt": "2026-10-19T15:18:11.640Z",
+        "kind": "source-location",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 118,
+          "endLine": 118
+        },
+        "endpointId": "express:8984529b060f13246c0bcd2b",
+        "summary": "Express source observation: route.",
+        "facts": {
+          "observation": "route",
+          "method": "POST",
+          "path": "/",
+          "handlers": [
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 67,
+                "endLine": 67
+              },
+              "package": "express"
+            },
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 77,
+                "endLine": 79
+              },
+              "package": "body-parser"
+            },
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 81,
+                "endLine": 85
+              },
+              "package": "express-session"
+            },
+            {
+              "name": "csrfSynchronisedProtection",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 118,
+                "endLine": 118
+              },
+              "package": "../src/middleware/csrf"
+            },
+            {
+              "name": "install",
+              "source": {
+                "file": "install/web.js",
+                "startLine": 181,
+                "endLine": 226
+              }
+            }
+          ],
+          "mounts": [],
+          "bodyUsed": true,
+          "conditional": false,
+          "runtimeVerified": false
+        }
+      },
+      {
+        "id": "semgrep:0c066d57b58c8e999db1e615",
+        "projectId": "nodebb",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:18:11.655Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "src/routes/debug.js",
+          "startLine": 31,
+          "endLine": 31
+        },
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/routes/debug.js",
+              "startLine": 31,
+              "endLine": 31
+            },
+            "kind": "send"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "src/routes/debug.js",
+                "startLine": 19,
+                "endLine": 19,
+                "symbol": "params"
+              },
+              "kind": "request-params"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "html",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:1c81a4a183e3f79cd39f7c56",
+        "projectId": "nodebb",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:18:11.655Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "src/controllers/write/intents.js",
+          "startLine": 34,
+          "endLine": 34
+        },
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-sql",
+          "cweIds": [
+            "CWE-89"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/controllers/write/intents.js",
+              "startLine": 34,
+              "endLine": 34
+            },
+            "kind": "query"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "src/controllers/write/intents.js",
+                "startLine": 32,
+                "endLine": 32,
+                "symbol": "params"
+              },
+              "kind": "request-params"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:3f2615c5ea224bb927fb74c1",
+        "projectId": "nodebb",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:18:11.655Z",
+        "kind": "static-analysis",
+        "summary": "Static analysis completed; signals are candidates requiring runtime verification.",
+        "facts": {
+          "observation": "static-analysis-run",
+          "status": "completed",
+          "diagnosticCodes": [],
+          "signalCount": 5,
+          "sourceDigest": "cc34d0c14596d53f3a23bf54",
+          "toolVersion": "1.180.0",
+          "runtimeVerified": false
+        }
+      },
+      {
+        "id": "semgrep:735bdcf3106f891906884589",
+        "projectId": "nodebb",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:18:11.655Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "src/controllers/admin/categories.js",
+          "startLine": 187,
+          "endLine": 187
+        },
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-sql",
+          "cweIds": [
+            "CWE-89"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/controllers/admin/categories.js",
+              "startLine": 187,
+              "endLine": 187
+            },
+            "kind": "query"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "src/controllers/admin/categories.js",
+                "startLine": 185,
+                "endLine": 185,
+                "symbol": "body"
+              },
+              "kind": "request-body"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [
+            {
+              "location": {
+                "file": "src/controllers/admin/categories.js",
+                "startLine": 186,
+                "endLine": 186
+              },
+              "kind": "conditional",
+              "branch": "then"
+            }
+          ],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:a73d2ddbaf0b60c11f7234f0",
+        "projectId": "nodebb",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:18:11.655Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "src/controllers/admin/groups.js",
+          "startLine": 105,
+          "endLine": 105
+        },
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/controllers/admin/groups.js",
+              "startLine": 105,
+              "endLine": 105
+            },
+            "kind": "end"
+          },
+          "sources": [],
+          "sourceResolution": "bounded-ast-def-use-partial",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:d989efb2d769f143f7bb4409",
+        "projectId": "nodebb",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:18:11.655Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "src/activitypub/helpers.js",
+          "startLine": 334,
+          "endLine": 334
+        },
+        "summary": "Static candidate: request input may reach SQL statement text.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-sql",
+          "cweIds": [
+            "CWE-89"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/activitypub/helpers.js",
+              "startLine": 334,
+              "endLine": 334
+            },
+            "kind": "query"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "src/activitypub/helpers.js",
+                "startLine": 286,
+                "endLine": 286,
+                "symbol": "query"
+              },
+              "kind": "request-query"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use-partial",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      }
+    ],
+    "endpointAliases": {
+      "express:8ce5a16280f59e8d22be1fb2": "model:endpoint:0d8349a567626168ade5e56f451d08db",
+      "model:endpoint:0d8349a567626168ade5e56f451d08db": "model:endpoint:0d8349a567626168ade5e56f451d08db",
+      "express:192405d0cb92db6ee47bbac6": "model:endpoint:3644509225dd5b5d048858fc3e6bce75",
+      "model:endpoint:3644509225dd5b5d048858fc3e6bce75": "model:endpoint:3644509225dd5b5d048858fc3e6bce75",
+      "express:2f7282515b0b92296b12c001": "model:endpoint:6284c9088dfcf2f7648c0051dd21b30f",
+      "model:endpoint:6284c9088dfcf2f7648c0051dd21b30f": "model:endpoint:6284c9088dfcf2f7648c0051dd21b30f",
+      "express:0822b07578e2583408f2afed": "model:endpoint:4f489c7ce3eabc2185813b92a91d7dee",
+      "model:endpoint:4f489c7ce3eabc2185813b92a91d7dee": "model:endpoint:4f489c7ce3eabc2185813b92a91d7dee",
+      "express:8984529b060f13246c0bcd2b": "model:endpoint:c1783f1bd2e2c96d996efc6f6ab81f34",
+      "model:endpoint:c1783f1bd2e2c96d996efc6f6ab81f34": "model:endpoint:c1783f1bd2e2c96d996efc6f6ab81f34"
+    },
+    "parameters": [
+      {
+        "endpointId": "model:endpoint:0d8349a567626168ade5e56f451d08db",
+        "name": "host",
+        "location": "header",
+        "required": false,
+        "evidenceIds": [
+          "express:0c649052db14ed953bbf150b",
+          "express:710ce77b7fb8f80cc145aba7"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:c1783f1bd2e2c96d996efc6f6ab81f34",
+        "name": "admin:email",
+        "location": "body",
+        "required": false,
+        "evidenceIds": [
+          "express:08ed2a8aa67592871c96c499",
+          "express:feffaba2fa467550367d4c75"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:c1783f1bd2e2c96d996efc6f6ab81f34",
+        "name": "admin:password",
+        "location": "body",
+        "required": false,
+        "evidenceIds": [
+          "express:08ed2a8aa67592871c96c499",
+          "express:feffaba2fa467550367d4c75"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:c1783f1bd2e2c96d996efc6f6ab81f34",
+        "name": "admin:username",
+        "location": "body",
+        "required": false,
+        "evidenceIds": [
+          "express:08ed2a8aa67592871c96c499",
+          "express:feffaba2fa467550367d4c75"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:c1783f1bd2e2c96d996efc6f6ab81f34",
+        "name": "database",
+        "location": "body",
+        "required": false,
+        "evidenceIds": [
+          "express:08ed2a8aa67592871c96c499",
+          "express:feffaba2fa467550367d4c75"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:c1783f1bd2e2c96d996efc6f6ab81f34",
+        "name": "url",
+        "location": "body",
+        "required": false,
+        "evidenceIds": [
+          "express:08ed2a8aa67592871c96c499",
+          "express:feffaba2fa467550367d4c75"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:c1783f1bd2e2c96d996efc6f6ab81f34",
+        "name": "host",
+        "location": "header",
+        "required": false,
+        "evidenceIds": [
+          "express:08ed2a8aa67592871c96c499",
+          "express:feffaba2fa467550367d4c75"
+        ]
+      }
+    ],
+    "authenticationRequirements": [
+      {
+        "endpointId": "model:endpoint:0d8349a567626168ade5e56f451d08db",
+        "requirement": "unknown",
+        "roles": [],
+        "source": "source",
+        "evidenceIds": [
+          "express:0c649052db14ed953bbf150b",
+          "express:710ce77b7fb8f80cc145aba7"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:3644509225dd5b5d048858fc3e6bce75",
+        "requirement": "unknown",
+        "roles": [],
+        "source": "source",
+        "evidenceIds": [
+          "express:9ae8dc1d81e70ed142d36f45",
+          "express:e53d54360c6d243f088603b6"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:4f489c7ce3eabc2185813b92a91d7dee",
+        "requirement": "unknown",
+        "roles": [],
+        "source": "source",
+        "evidenceIds": [
+          "express:4d1bfbb38cf413e049ccbc80",
+          "express:2d203e967023791fb9027b8e"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:6284c9088dfcf2f7648c0051dd21b30f",
+        "requirement": "unknown",
+        "roles": [],
+        "source": "source",
+        "evidenceIds": [
+          "express:9d9cb017d0866774994207f6",
+          "express:0f8b501e128c4ed605a7f7c4"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:c1783f1bd2e2c96d996efc6f6ab81f34",
+        "requirement": "unknown",
+        "roles": [],
+        "source": "source",
+        "evidenceIds": [
+          "express:08ed2a8aa67592871c96c499",
+          "express:feffaba2fa467550367d4c75"
+        ]
+      }
+    ],
+    "userRoles": [],
+    "sourceHandlers": [
+      {
+        "endpointId": "model:endpoint:0d8349a567626168ade5e56f451d08db",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 117,
+          "endLine": 117,
+          "symbol": "csrfSynchronisedProtection"
+        },
+        "evidenceIds": [
+          "express:710ce77b7fb8f80cc145aba7"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:0d8349a567626168ade5e56f451d08db",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 152,
+          "endLine": 179,
+          "symbol": "welcome"
+        },
+        "evidenceIds": [
+          "express:0c649052db14ed953bbf150b",
+          "express:710ce77b7fb8f80cc145aba7"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:0d8349a567626168ade5e56f451d08db",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 67,
+          "endLine": 67,
+          "symbol": "anonymous"
+        },
+        "evidenceIds": [
+          "express:710ce77b7fb8f80cc145aba7"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:0d8349a567626168ade5e56f451d08db",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 77,
+          "endLine": 79,
+          "symbol": "anonymous"
+        },
+        "evidenceIds": [
+          "express:710ce77b7fb8f80cc145aba7"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:0d8349a567626168ade5e56f451d08db",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 81,
+          "endLine": 85,
+          "symbol": "anonymous"
+        },
+        "evidenceIds": [
+          "express:710ce77b7fb8f80cc145aba7"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:3644509225dd5b5d048858fc3e6bce75",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 148,
+          "endLine": 150,
+          "symbol": "ping"
+        },
+        "evidenceIds": [
+          "express:9ae8dc1d81e70ed142d36f45",
+          "express:e53d54360c6d243f088603b6"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:3644509225dd5b5d048858fc3e6bce75",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 67,
+          "endLine": 67,
+          "symbol": "anonymous"
+        },
+        "evidenceIds": [
+          "express:e53d54360c6d243f088603b6"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:3644509225dd5b5d048858fc3e6bce75",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 77,
+          "endLine": 79,
+          "symbol": "anonymous"
+        },
+        "evidenceIds": [
+          "express:e53d54360c6d243f088603b6"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:3644509225dd5b5d048858fc3e6bce75",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 81,
+          "endLine": 85,
+          "symbol": "anonymous"
+        },
+        "evidenceIds": [
+          "express:e53d54360c6d243f088603b6"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:4f489c7ce3eabc2185813b92a91d7dee",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 124,
+          "endLine": 146,
+          "symbol": "testDatabase"
+        },
+        "evidenceIds": [
+          "express:2d203e967023791fb9027b8e",
+          "express:4d1bfbb38cf413e049ccbc80"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:4f489c7ce3eabc2185813b92a91d7dee",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 67,
+          "endLine": 67,
+          "symbol": "anonymous"
+        },
+        "evidenceIds": [
+          "express:2d203e967023791fb9027b8e"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:4f489c7ce3eabc2185813b92a91d7dee",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 77,
+          "endLine": 79,
+          "symbol": "anonymous"
+        },
+        "evidenceIds": [
+          "express:2d203e967023791fb9027b8e"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:4f489c7ce3eabc2185813b92a91d7dee",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 81,
+          "endLine": 85,
+          "symbol": "anonymous"
+        },
+        "evidenceIds": [
+          "express:2d203e967023791fb9027b8e"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:6284c9088dfcf2f7648c0051dd21b30f",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 148,
+          "endLine": 150,
+          "symbol": "ping"
+        },
+        "evidenceIds": [
+          "express:0f8b501e128c4ed605a7f7c4",
+          "express:9d9cb017d0866774994207f6"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:6284c9088dfcf2f7648c0051dd21b30f",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 67,
+          "endLine": 67,
+          "symbol": "anonymous"
+        },
+        "evidenceIds": [
+          "express:0f8b501e128c4ed605a7f7c4"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:6284c9088dfcf2f7648c0051dd21b30f",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 77,
+          "endLine": 79,
+          "symbol": "anonymous"
+        },
+        "evidenceIds": [
+          "express:0f8b501e128c4ed605a7f7c4"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:6284c9088dfcf2f7648c0051dd21b30f",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 81,
+          "endLine": 85,
+          "symbol": "anonymous"
+        },
+        "evidenceIds": [
+          "express:0f8b501e128c4ed605a7f7c4"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:c1783f1bd2e2c96d996efc6f6ab81f34",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 118,
+          "endLine": 118,
+          "symbol": "csrfSynchronisedProtection"
+        },
+        "evidenceIds": [
+          "express:feffaba2fa467550367d4c75"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:c1783f1bd2e2c96d996efc6f6ab81f34",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 181,
+          "endLine": 226,
+          "symbol": "install"
+        },
+        "evidenceIds": [
+          "express:08ed2a8aa67592871c96c499",
+          "express:feffaba2fa467550367d4c75"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:c1783f1bd2e2c96d996efc6f6ab81f34",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 67,
+          "endLine": 67,
+          "symbol": "anonymous"
+        },
+        "evidenceIds": [
+          "express:feffaba2fa467550367d4c75"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:c1783f1bd2e2c96d996efc6f6ab81f34",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 77,
+          "endLine": 79,
+          "symbol": "anonymous"
+        },
+        "evidenceIds": [
+          "express:feffaba2fa467550367d4c75"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:c1783f1bd2e2c96d996efc6f6ab81f34",
+        "source": {
+          "file": "install/web.js",
+          "startLine": 81,
+          "endLine": 85,
+          "symbol": "anonymous"
+        },
+        "evidenceIds": [
+          "express:feffaba2fa467550367d4c75"
+        ]
+      }
+    ],
+    "resourceTypes": [],
+    "observedOwnership": [],
+    "dataFlows": [
+      {
+        "id": "model-fact:19e4abc2c0ffcceb44eafde04615e0fc621197c81d90453c7c70d6ff0f2c1d9f",
+        "kind": "data-flow",
+        "source": "source",
+        "endpointIds": [],
+        "evidenceIds": [
+          "semgrep:0c066d57b58c8e999db1e615"
+        ],
+        "details": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/routes/debug.js",
+              "startLine": 31,
+              "endLine": 31
+            },
+            "kind": "send"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "src/routes/debug.js",
+                "startLine": 19,
+                "endLine": 19,
+                "symbol": "params"
+              },
+              "kind": "request-params"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "html",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": [],
+          "sourceLocation": {
+            "file": "src/routes/debug.js",
+            "startLine": 31,
+            "endLine": 31
+          }
+        }
+      },
+      {
+        "id": "model-fact:348aed63ede2461168f5a4ac3fcc86960f20aee5c651303ac473197c8164c023",
+        "kind": "data-flow",
+        "source": "source",
+        "endpointIds": [],
+        "evidenceIds": [
+          "semgrep:1c81a4a183e3f79cd39f7c56"
+        ],
+        "details": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-sql",
+          "cweIds": [
+            "CWE-89"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/controllers/write/intents.js",
+              "startLine": 34,
+              "endLine": 34
+            },
+            "kind": "query"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "src/controllers/write/intents.js",
+                "startLine": 32,
+                "endLine": 32,
+                "symbol": "params"
+              },
+              "kind": "request-params"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": [],
+          "sourceLocation": {
+            "file": "src/controllers/write/intents.js",
+            "startLine": 34,
+            "endLine": 34
+          }
+        }
+      },
+      {
+        "id": "model-fact:3cf3e7a9bc289d8e0db98b2d17b8973ec0a3b98c36144d48b6f2b4e8fd52ad5a",
+        "kind": "data-flow",
+        "source": "source",
+        "endpointIds": [],
+        "evidenceIds": [
+          "semgrep:a73d2ddbaf0b60c11f7234f0"
+        ],
+        "details": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/controllers/admin/groups.js",
+              "startLine": 105,
+              "endLine": 105
+            },
+            "kind": "end"
+          },
+          "sources": [],
+          "sourceResolution": "bounded-ast-def-use-partial",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": [],
+          "sourceLocation": {
+            "file": "src/controllers/admin/groups.js",
+            "startLine": 105,
+            "endLine": 105
+          }
+        }
+      },
+      {
+        "id": "model-fact:9dc8c3f1f4e2bb6809b23ce37adb0b693714c771aa87b0bf3765affae76c6374",
+        "kind": "data-flow",
+        "source": "source",
+        "endpointIds": [],
+        "evidenceIds": [
+          "semgrep:735bdcf3106f891906884589"
+        ],
+        "details": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-sql",
+          "cweIds": [
+            "CWE-89"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/controllers/admin/categories.js",
+              "startLine": 187,
+              "endLine": 187
+            },
+            "kind": "query"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "src/controllers/admin/categories.js",
+                "startLine": 185,
+                "endLine": 185,
+                "symbol": "body"
+              },
+              "kind": "request-body"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [
+            {
+              "location": {
+                "file": "src/controllers/admin/categories.js",
+                "startLine": 186,
+                "endLine": 186
+              },
+              "kind": "conditional",
+              "branch": "then"
+            }
+          ],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": [],
+          "sourceLocation": {
+            "file": "src/controllers/admin/categories.js",
+            "startLine": 187,
+            "endLine": 187
+          }
+        }
+      },
+      {
+        "id": "model-fact:c93bbf455a14499877578f8fb7c7eb855c2aabf356456e78d98f000a200bdfa1",
+        "kind": "data-flow",
+        "source": "source",
+        "endpointIds": [],
+        "evidenceIds": [
+          "semgrep:d989efb2d769f143f7bb4409"
+        ],
+        "details": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-sql",
+          "cweIds": [
+            "CWE-89"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/activitypub/helpers.js",
+              "startLine": 334,
+              "endLine": 334
+            },
+            "kind": "query"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "src/activitypub/helpers.js",
+                "startLine": 286,
+                "endLine": 286,
+                "symbol": "query"
+              },
+              "kind": "request-query"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use-partial",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": [],
+          "sourceLocation": {
+            "file": "src/activitypub/helpers.js",
+            "startLine": 334,
+            "endLine": 334
+          }
+        }
+      }
+    ],
+    "databaseOperations": [],
+    "cookies": [
+      {
+        "id": "model-fact:35952cf6eb0e2ad5c034561f5021d2c764ecefdaac275bc0be2fcd092648c292",
+        "kind": "cookie",
+        "source": "source",
+        "endpointIds": [
+          "model:endpoint:c1783f1bd2e2c96d996efc6f6ab81f34"
+        ],
+        "evidenceIds": [
+          "express:08ed2a8aa67592871c96c499"
+        ],
+        "details": {
+          "observation": "session",
+          "options": {
+            "secret": "[REDACTED]",
+            "resave": false,
+            "saveUninitialized": false
+          },
+          "conditions": [],
+          "runtimeVerified": false,
+          "sourceLocation": {
+            "file": "install/web.js",
+            "startLine": 81,
+            "endLine": 85
+          }
+        }
+      },
+      {
+        "id": "model-fact:3adf5c181ece67fc40a1ce9a6f6786744526204772dc8a41e2ee616518acf79d",
+        "kind": "cookie",
+        "source": "source",
+        "endpointIds": [
+          "model:endpoint:0d8349a567626168ade5e56f451d08db"
+        ],
+        "evidenceIds": [
+          "express:0c649052db14ed953bbf150b"
+        ],
+        "details": {
+          "observation": "session",
+          "options": {
+            "secret": "[REDACTED]",
+            "resave": false,
+            "saveUninitialized": false
+          },
+          "conditions": [],
+          "runtimeVerified": false,
+          "sourceLocation": {
+            "file": "install/web.js",
+            "startLine": 81,
+            "endLine": 85
+          }
+        }
+      },
+      {
+        "id": "model-fact:56b1b6c75758ede27be9c6b5116cfef871a7e005e1c2d5fcf75ef1b9bef99066",
+        "kind": "cookie",
+        "source": "source",
+        "endpointIds": [
+          "model:endpoint:6284c9088dfcf2f7648c0051dd21b30f"
+        ],
+        "evidenceIds": [
+          "express:9d9cb017d0866774994207f6"
+        ],
+        "details": {
+          "observation": "session",
+          "options": {
+            "secret": "[REDACTED]",
+            "resave": false,
+            "saveUninitialized": false
+          },
+          "conditions": [],
+          "runtimeVerified": false,
+          "sourceLocation": {
+            "file": "install/web.js",
+            "startLine": 81,
+            "endLine": 85
+          }
+        }
+      },
+      {
+        "id": "model-fact:71b4214108b60c38fd6b0a419d18cecd17442067f6276c6162b74278c491c713",
+        "kind": "cookie",
+        "source": "source",
+        "endpointIds": [
+          "model:endpoint:3644509225dd5b5d048858fc3e6bce75"
+        ],
+        "evidenceIds": [
+          "express:9ae8dc1d81e70ed142d36f45"
+        ],
+        "details": {
+          "observation": "session",
+          "options": {
+            "secret": "[REDACTED]",
+            "resave": false,
+            "saveUninitialized": false
+          },
+          "conditions": [],
+          "runtimeVerified": false,
+          "sourceLocation": {
+            "file": "install/web.js",
+            "startLine": 81,
+            "endLine": 85
+          }
+        }
+      },
+      {
+        "id": "model-fact:b5328c0be065777307c4cd81a802cf99b07f42129dfe335d8309dcf4d0aae8ee",
+        "kind": "cookie",
+        "source": "source",
+        "endpointIds": [
+          "model:endpoint:4f489c7ce3eabc2185813b92a91d7dee"
+        ],
+        "evidenceIds": [
+          "express:4d1bfbb38cf413e049ccbc80"
+        ],
+        "details": {
+          "observation": "session",
+          "options": {
+            "secret": "[REDACTED]",
+            "resave": false,
+            "saveUninitialized": false
+          },
+          "conditions": [],
+          "runtimeVerified": false,
+          "sourceLocation": {
+            "file": "install/web.js",
+            "startLine": 81,
+            "endLine": 85
+          }
+        }
+      }
+    ],
+    "corsConfigurations": [],
+    "runtimeObservations": [],
+    "diagnostics": []
+  },
+  "hypotheses": {
+    "hypotheses": [],
+    "diagnostics": [],
+    "review": "disabled",
+    "usage": {
+      "modelCalls": 0,
+      "tokens": {
+        "inputTokens": 0,
+        "outputTokens": 0
+      }
+    }
+  },
+  "planning": [],
+  "referenceRoutes": [
+    {
+      "method": "GET",
+      "path": "/api/config",
+      "source": "src/routes/api.js",
+      "sourceLine": 13,
+      "extracted": false
+    },
+    {
+      "method": "GET",
+      "path": "/login",
+      "source": "src/routes/index.js",
+      "sourceLine": 32,
+      "extracted": false
+    }
+  ],
+  "invariants": {
+    "uniqueEvidenceIds": true,
+    "evidenceProjectBindings": true,
+    "endpointEvidenceLinks": true,
+    "signalEvidenceLinks": true,
+    "hypothesisEvidenceLinks": true,
+    "hypothesisStates": true,
+    "sourceUnchanged": true
+  },
+  "durationMs": 23682
+}

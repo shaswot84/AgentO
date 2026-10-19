@@ -1,0 +1,906 @@
+{
+  "discovery": {
+    "repositoryPath": "/tmp/agento-realworld-2026-10-19/repos/realworld-express",
+    "name": "@api/source",
+    "languages": [
+      "javascript",
+      "typescript"
+    ],
+    "frameworks": [
+      "express"
+    ],
+    "dependencies": [
+      {
+        "name": "@ngneat/falso",
+        "version": "^7.1.1",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@prisma/client",
+        "version": "^4.16.1",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "axios",
+        "version": "^1.0.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "bcryptjs",
+        "version": "^2.4.3",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "body-parser",
+        "version": "^1.20.2",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "cors",
+        "version": "^2.8.5",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "express",
+        "version": "~4.18.1",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "express-jwt",
+        "version": "^8.4.1",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "jsonwebtoken",
+        "version": "^9.0.2",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "slugify",
+        "version": "^1.6.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "tslib",
+        "version": "^2.3.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@nx/esbuild",
+        "version": "17.2.6",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@nx/eslint",
+        "version": "17.2.6",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@nx/eslint-plugin",
+        "version": "17.2.6",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@nx/jest",
+        "version": "17.2.6",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@nx/js",
+        "version": "17.2.6",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@nx/node",
+        "version": "17.2.6",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@nx/workspace",
+        "version": "17.2.6",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@swc-node/register",
+        "version": "~1.6.7",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@swc/core",
+        "version": "~1.3.85",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/bcryptjs",
+        "version": "^2.4.6",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/cors",
+        "version": "^2.8.17",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/express",
+        "version": "~4.17.13",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/jest",
+        "version": "^29.4.0",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@types/node",
+        "version": "18.16.9",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@typescript-eslint/eslint-plugin",
+        "version": "^6.9.1",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "@typescript-eslint/parser",
+        "version": "^6.9.1",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "esbuild",
+        "version": "^0.19.2",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "eslint",
+        "version": "~8.48.0",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "eslint-config-prettier",
+        "version": "^9.0.0",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "jest",
+        "version": "^29.4.1",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "jest-environment-node",
+        "version": "^29.4.1",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "jest-mock-extended",
+        "version": "^3.0.5",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "nx",
+        "version": "17.2.6",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "prettier",
+        "version": "^2.6.2",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "prisma",
+        "version": "^4.16.1",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "ts-jest",
+        "version": "^29.1.0",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "ts-node",
+        "version": "10.9.1",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "typescript",
+        "version": "~5.2.2",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      }
+    ],
+    "databases": [],
+    "orms": [
+      "@prisma/client"
+    ],
+    "authentication": [
+      "jwt"
+    ],
+    "authenticationPackages": [
+      "express-jwt",
+      "jsonwebtoken"
+    ],
+    "middleware": [
+      {
+        "kind": "cors",
+        "name": "cors",
+        "file": "package.json",
+        "basis": "dependency"
+      },
+      {
+        "kind": "cors",
+        "name": "cors",
+        "file": "src/main.ts",
+        "basis": "import",
+        "line": 2
+      }
+    ],
+    "structure": {
+      "manifests": [
+        {
+          "file": "package.json",
+          "directory": ".",
+          "name": "@api/source",
+          "workspacePatterns": []
+        }
+      ],
+      "directories": [
+        "e2e",
+        "e2e/src",
+        "e2e/src/server",
+        "e2e/src/support",
+        "src",
+        "src/app",
+        "src/app/models",
+        "src/app/routes",
+        "src/app/routes/article",
+        "src/app/routes/auth",
+        "src/app/routes/profile",
+        "src/app/routes/tag",
+        "src/assets",
+        "src/assets/images",
+        "src/prisma",
+        "src/prisma/migrations",
+        "src/prisma/migrations/20210924225358_initial",
+        "src/prisma/migrations/20211001143221_implicit_tags",
+        "src/prisma/migrations/20211105153605_api_url",
+        "src/prisma/migrations/20211221184529_deprecated_preview",
+        "src/tests",
+        "src/tests/services",
+        "src/tests/utils"
+      ],
+      "sourceDirectories": [
+        "e2e/src",
+        "e2e/src/server",
+        "src",
+        "src/app"
+      ],
+      "testDirectories": [
+        "src/tests"
+      ],
+      "staticDirectories": [
+        "src/assets"
+      ],
+      "sourceFileCount": 39
+    },
+    "expressAdapterAvailable": true,
+    "availableAdapterIds": [
+      "express-framework-adapter"
+    ],
+    "supportedCodeAwareMode": true,
+    "mode": "code-aware",
+    "fallbackReasons": [],
+    "diagnostics": []
+  },
+  "project": {
+    "id": "realworld-express",
+    "name": "realworld-express",
+    "mode": "code-aware",
+    "repositoryPath": "/tmp/agento-realworld-2026-10-19/repos/realworld-express",
+    "baseUrl": "http://127.0.0.1:1",
+    "allowedOrigins": [
+      "http://127.0.0.1:1"
+    ],
+    "languages": [
+      "javascript",
+      "typescript"
+    ]
+  },
+  "supports": true,
+  "framework": {
+    "components": [
+      {
+        "id": "express:244b16d01cd58f58444a626f",
+        "projectId": "realworld-express",
+        "name": "realworld-express",
+        "kind": "service"
+      }
+    ],
+    "endpoints": [
+      {
+        "id": "express:cc27f8cb675ca06ba5a95ffe",
+        "componentId": "express:244b16d01cd58f58444a626f",
+        "method": "GET",
+        "path": "/",
+        "parameters": [],
+        "authentication": "unknown",
+        "roles": [],
+        "handler": {
+          "file": "src/main.ts",
+          "startLine": 21,
+          "endLine": 23,
+          "symbol": "anonymous"
+        },
+        "evidenceIds": [
+          "express:07d2047f770cd3e93daea715",
+          "express:04826b0151a8bf8b3f8b81e1"
+        ]
+      }
+    ],
+    "resources": [],
+    "signals": [],
+    "evidence": [
+      {
+        "id": "express:07d2047f770cd3e93daea715",
+        "projectId": "realworld-express",
+        "producerId": "express-framework-adapter",
+        "capturedAt": "2026-10-19T15:17:47.663Z",
+        "kind": "configuration",
+        "source": {
+          "file": "src/main.ts",
+          "startLine": 13,
+          "endLine": 13
+        },
+        "endpointId": "express:cc27f8cb675ca06ba5a95ffe",
+        "summary": "Express source observation: cors.",
+        "facts": {
+          "observation": "cors",
+          "options": {
+            "kind": "dynamic"
+          },
+          "conditions": [],
+          "runtimeVerified": false
+        }
+      },
+      {
+        "id": "express:04826b0151a8bf8b3f8b81e1",
+        "projectId": "realworld-express",
+        "producerId": "express-framework-adapter",
+        "capturedAt": "2026-10-19T15:17:47.663Z",
+        "kind": "source-location",
+        "source": {
+          "file": "src/main.ts",
+          "startLine": 21,
+          "endLine": 23
+        },
+        "endpointId": "express:cc27f8cb675ca06ba5a95ffe",
+        "summary": "Express source observation: route.",
+        "facts": {
+          "observation": "route",
+          "method": "GET",
+          "path": "/",
+          "handlers": [
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "src/main.ts",
+                "startLine": 13,
+                "endLine": 13
+              },
+              "package": "cors"
+            },
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "src/main.ts",
+                "startLine": 14,
+                "endLine": 14
+              },
+              "package": "body-parser"
+            },
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "src/main.ts",
+                "startLine": 15,
+                "endLine": 15
+              },
+              "package": "body-parser"
+            },
+            {
+              "name": "routes",
+              "source": {
+                "file": "src/app/routes/routes.ts",
+                "startLine": 13,
+                "endLine": 13
+              },
+              "package": "./app/routes/routes"
+            },
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "src/main.ts",
+                "startLine": 19,
+                "endLine": 19
+              },
+              "package": "express"
+            },
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "src/main.ts",
+                "startLine": 21,
+                "endLine": 23
+              }
+            }
+          ],
+          "mounts": [],
+          "bodyUsed": false,
+          "conditional": false,
+          "runtimeVerified": false
+        }
+      }
+    ],
+    "diagnostics": [
+      {
+        "code": "unresolved-handler",
+        "source": {
+          "file": "src/main.ts",
+          "startLine": 14,
+          "endLine": 14
+        },
+        "message": "Handler or middleware could not be resolved."
+      },
+      {
+        "code": "unresolved-handler",
+        "source": {
+          "file": "src/main.ts",
+          "startLine": 15,
+          "endLine": 15
+        },
+        "message": "Handler or middleware could not be resolved."
+      },
+      {
+        "code": "unresolved-handler",
+        "source": {
+          "file": "src/main.ts",
+          "startLine": 16,
+          "endLine": 16
+        },
+        "message": "Handler or middleware could not be resolved."
+      }
+    ]
+  },
+  "analysis": {
+    "status": "completed",
+    "diagnostics": [],
+    "signals": [],
+    "evidence": [
+      {
+        "id": "semgrep:e8049dcc302b598bcfb40de9",
+        "projectId": "realworld-express",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:17:47.667Z",
+        "kind": "static-analysis",
+        "summary": "Static analysis completed; signals are candidates requiring runtime verification.",
+        "facts": {
+          "observation": "static-analysis-run",
+          "status": "completed",
+          "diagnosticCodes": [],
+          "signalCount": 0,
+          "sourceDigest": "af5bc28f2b8db5ce9b72d41d",
+          "toolVersion": "1.180.0",
+          "runtimeVerified": false
+        }
+      }
+    ]
+  },
+  "model": {
+    "schemaVersion": 1,
+    "project": {
+      "id": "realworld-express",
+      "name": "realworld-express",
+      "mode": "code-aware",
+      "repositoryPath": "/tmp/agento-realworld-2026-10-19/repos/realworld-express",
+      "baseUrl": "http://127.0.0.1:1",
+      "allowedOrigins": [
+        "http://127.0.0.1:1"
+      ],
+      "languages": [
+        "javascript",
+        "typescript"
+      ]
+    },
+    "identities": [],
+    "components": [
+      {
+        "id": "express:244b16d01cd58f58444a626f",
+        "projectId": "realworld-express",
+        "name": "realworld-express",
+        "kind": "service"
+      }
+    ],
+    "endpoints": [
+      {
+        "id": "model:endpoint:76716b0587dc6051e3d050546107a002",
+        "componentId": "express:244b16d01cd58f58444a626f",
+        "componentIds": [
+          "express:244b16d01cd58f58444a626f"
+        ],
+        "origin": "http://127.0.0.1:1",
+        "method": "GET",
+        "path": "/",
+        "aliases": [
+          "express:cc27f8cb675ca06ba5a95ffe"
+        ],
+        "observations": [
+          {
+            "source": "source",
+            "origin": "http://127.0.0.1:1",
+            "endpoint": {
+              "id": "express:cc27f8cb675ca06ba5a95ffe",
+              "componentId": "express:244b16d01cd58f58444a626f",
+              "method": "GET",
+              "path": "/",
+              "parameters": [],
+              "authentication": "unknown",
+              "roles": [],
+              "handler": {
+                "file": "src/main.ts",
+                "startLine": 21,
+                "endLine": 23,
+                "symbol": "anonymous"
+              },
+              "evidenceIds": [
+                "express:07d2047f770cd3e93daea715",
+                "express:04826b0151a8bf8b3f8b81e1"
+              ]
+            }
+          }
+        ],
+        "parameters": [],
+        "authentication": "unknown",
+        "roles": [],
+        "handler": {
+          "file": "src/main.ts",
+          "startLine": 21,
+          "endLine": 23,
+          "symbol": "anonymous"
+        },
+        "evidenceIds": [
+          "express:04826b0151a8bf8b3f8b81e1",
+          "express:07d2047f770cd3e93daea715"
+        ]
+      }
+    ],
+    "resources": [],
+    "signals": [],
+    "evidence": [
+      {
+        "id": "express:04826b0151a8bf8b3f8b81e1",
+        "projectId": "realworld-express",
+        "producerId": "express-framework-adapter",
+        "capturedAt": "2026-10-19T15:17:47.663Z",
+        "kind": "source-location",
+        "source": {
+          "file": "src/main.ts",
+          "startLine": 21,
+          "endLine": 23
+        },
+        "endpointId": "express:cc27f8cb675ca06ba5a95ffe",
+        "summary": "Express source observation: route.",
+        "facts": {
+          "observation": "route",
+          "method": "GET",
+          "path": "/",
+          "handlers": [
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "src/main.ts",
+                "startLine": 13,
+                "endLine": 13
+              },
+              "package": "cors"
+            },
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "src/main.ts",
+                "startLine": 14,
+                "endLine": 14
+              },
+              "package": "body-parser"
+            },
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "src/main.ts",
+                "startLine": 15,
+                "endLine": 15
+              },
+              "package": "body-parser"
+            },
+            {
+              "name": "routes",
+              "source": {
+                "file": "src/app/routes/routes.ts",
+                "startLine": 13,
+                "endLine": 13
+              },
+              "package": "./app/routes/routes"
+            },
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "src/main.ts",
+                "startLine": 19,
+                "endLine": 19
+              },
+              "package": "express"
+            },
+            {
+              "name": "anonymous",
+              "source": {
+                "file": "src/main.ts",
+                "startLine": 21,
+                "endLine": 23
+              }
+            }
+          ],
+          "mounts": [],
+          "bodyUsed": false,
+          "conditional": false,
+          "runtimeVerified": false
+        }
+      },
+      {
+        "id": "express:07d2047f770cd3e93daea715",
+        "projectId": "realworld-express",
+        "producerId": "express-framework-adapter",
+        "capturedAt": "2026-10-19T15:17:47.663Z",
+        "kind": "configuration",
+        "source": {
+          "file": "src/main.ts",
+          "startLine": 13,
+          "endLine": 13
+        },
+        "endpointId": "express:cc27f8cb675ca06ba5a95ffe",
+        "summary": "Express source observation: cors.",
+        "facts": {
+          "observation": "cors",
+          "options": {
+            "kind": "dynamic"
+          },
+          "conditions": [],
+          "runtimeVerified": false
+        }
+      },
+      {
+        "id": "semgrep:e8049dcc302b598bcfb40de9",
+        "projectId": "realworld-express",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:17:47.667Z",
+        "kind": "static-analysis",
+        "summary": "Static analysis completed; signals are candidates requiring runtime verification.",
+        "facts": {
+          "observation": "static-analysis-run",
+          "status": "completed",
+          "diagnosticCodes": [],
+          "signalCount": 0,
+          "sourceDigest": "af5bc28f2b8db5ce9b72d41d",
+          "toolVersion": "1.180.0",
+          "runtimeVerified": false
+        }
+      }
+    ],
+    "endpointAliases": {
+      "express:cc27f8cb675ca06ba5a95ffe": "model:endpoint:76716b0587dc6051e3d050546107a002",
+      "model:endpoint:76716b0587dc6051e3d050546107a002": "model:endpoint:76716b0587dc6051e3d050546107a002"
+    },
+    "parameters": [],
+    "authenticationRequirements": [
+      {
+        "endpointId": "model:endpoint:76716b0587dc6051e3d050546107a002",
+        "requirement": "unknown",
+        "roles": [],
+        "source": "source",
+        "evidenceIds": [
+          "express:07d2047f770cd3e93daea715",
+          "express:04826b0151a8bf8b3f8b81e1"
+        ]
+      }
+    ],
+    "userRoles": [],
+    "sourceHandlers": [
+      {
+        "endpointId": "model:endpoint:76716b0587dc6051e3d050546107a002",
+        "source": {
+          "file": "src/app/routes/routes.ts",
+          "startLine": 13,
+          "endLine": 13,
+          "symbol": "routes"
+        },
+        "evidenceIds": [
+          "express:04826b0151a8bf8b3f8b81e1"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:76716b0587dc6051e3d050546107a002",
+        "source": {
+          "file": "src/main.ts",
+          "startLine": 13,
+          "endLine": 13,
+          "symbol": "anonymous"
+        },
+        "evidenceIds": [
+          "express:04826b0151a8bf8b3f8b81e1"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:76716b0587dc6051e3d050546107a002",
+        "source": {
+          "file": "src/main.ts",
+          "startLine": 14,
+          "endLine": 14,
+          "symbol": "anonymous"
+        },
+        "evidenceIds": [
+          "express:04826b0151a8bf8b3f8b81e1"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:76716b0587dc6051e3d050546107a002",
+        "source": {
+          "file": "src/main.ts",
+          "startLine": 15,
+          "endLine": 15,
+          "symbol": "anonymous"
+        },
+        "evidenceIds": [
+          "express:04826b0151a8bf8b3f8b81e1"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:76716b0587dc6051e3d050546107a002",
+        "source": {
+          "file": "src/main.ts",
+          "startLine": 19,
+          "endLine": 19,
+          "symbol": "anonymous"
+        },
+        "evidenceIds": [
+          "express:04826b0151a8bf8b3f8b81e1"
+        ]
+      },
+      {
+        "endpointId": "model:endpoint:76716b0587dc6051e3d050546107a002",
+        "source": {
+          "file": "src/main.ts",
+          "startLine": 21,
+          "endLine": 23,
+          "symbol": "anonymous"
+        },
+        "evidenceIds": [
+          "express:04826b0151a8bf8b3f8b81e1",
+          "express:07d2047f770cd3e93daea715"
+        ]
+      }
+    ],
+    "resourceTypes": [],
+    "observedOwnership": [],
+    "dataFlows": [],
+    "databaseOperations": [],
+    "cookies": [],
+    "corsConfigurations": [
+      {
+        "id": "model-fact:f7d75655161e68123576e9542142a37c8c64b3cf943654e5df5868a037381dba",
+        "kind": "cors",
+        "source": "source",
+        "endpointIds": [
+          "model:endpoint:76716b0587dc6051e3d050546107a002"
+        ],
+        "evidenceIds": [
+          "express:07d2047f770cd3e93daea715"
+        ],
+        "details": {
+          "observation": "cors",
+          "options": {
+            "kind": "dynamic"
+          },
+          "conditions": [],
+          "runtimeVerified": false,
+          "sourceLocation": {
+            "file": "src/main.ts",
+            "startLine": 13,
+            "endLine": 13
+          }
+        }
+      }
+    ],
+    "runtimeObservations": [],
+    "diagnostics": []
+  },
+  "hypotheses": {
+    "hypotheses": [],
+    "diagnostics": [],
+    "review": "disabled",
+    "usage": {
+      "modelCalls": 0,
+      "tokens": {
+        "inputTokens": 0,
+        "outputTokens": 0
+      }
+    }
+  },
+  "planning": [],
+  "referenceRoutes": [
+    {
+      "method": "GET",
+      "path": "/",
+      "source": "src/main.ts",
+      "sourceLine": 21,
+      "extracted": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/user",
+      "source": "src/app/routes/auth/auth.controller.ts",
+      "sourceLine": 45,
+      "extracted": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/users/login",
+      "source": "src/app/routes/auth/auth.controller.ts",
+      "sourceLine": 30,
+      "extracted": false
+    }
+  ],
+  "invariants": {
+    "uniqueEvidenceIds": true,
+    "evidenceProjectBindings": true,
+    "endpointEvidenceLinks": true,
+    "signalEvidenceLinks": true,
+    "hypothesisEvidenceLinks": true,
+    "hypothesisStates": true,
+    "sourceUnchanged": true
+  },
+  "durationMs": 2477
+}

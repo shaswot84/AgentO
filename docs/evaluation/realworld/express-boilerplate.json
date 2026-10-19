@@ -1,0 +1,1848 @@
+{
+  "discovery": {
+    "repositoryPath": "/tmp/agento-realworld-2026-10-19/repos/express-boilerplate",
+    "name": "create-nodejs-express-app",
+    "languages": [
+      "javascript"
+    ],
+    "frameworks": [
+      "express"
+    ],
+    "dependencies": [
+      {
+        "name": "bcryptjs",
+        "version": "^2.4.3",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "compression",
+        "version": "^1.7.4",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "cors",
+        "version": "^2.8.5",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "cross-env",
+        "version": "^7.0.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "dotenv",
+        "version": "^10.0.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "express",
+        "version": "^4.17.1",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "express-mongo-sanitize",
+        "version": "^2.0.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "express-rate-limit",
+        "version": "^5.0.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "helmet",
+        "version": "^4.1.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "http-status",
+        "version": "^1.4.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "joi",
+        "version": "^17.3.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "jsonwebtoken",
+        "version": "^8.5.1",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "moment",
+        "version": "^2.24.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "mongoose",
+        "version": "^5.7.7",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "morgan",
+        "version": "^1.9.1",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "nodemailer",
+        "version": "^6.3.1",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "passport",
+        "version": "^0.4.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "passport-jwt",
+        "version": "^4.0.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "pm2",
+        "version": "^5.1.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "swagger-jsdoc",
+        "version": "^6.0.8",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "swagger-ui-express",
+        "version": "^4.1.6",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "validator",
+        "version": "^13.0.0",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "winston",
+        "version": "^3.2.1",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "xss-clean",
+        "version": "^0.1.1",
+        "kind": "dependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "coveralls",
+        "version": "^3.0.7",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "eslint",
+        "version": "^7.0.0",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "eslint-config-airbnb-base",
+        "version": "^14.0.0",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "eslint-config-prettier",
+        "version": "^8.1.0",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "eslint-plugin-import",
+        "version": "^2.18.2",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "eslint-plugin-jest",
+        "version": "^24.0.1",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "eslint-plugin-prettier",
+        "version": "^3.1.1",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "eslint-plugin-security",
+        "version": "^1.4.0",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "faker",
+        "version": "^5.1.0",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "husky",
+        "version": "7.0.4",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "jest",
+        "version": "^26.0.1",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "lint-staged",
+        "version": "^11.0.0",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "node-mocks-http",
+        "version": "^1.8.0",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "nodemon",
+        "version": "^2.0.0",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "prettier",
+        "version": "^2.0.5",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      },
+      {
+        "name": "supertest",
+        "version": "^6.0.1",
+        "kind": "devDependencies",
+        "manifest": "package.json"
+      }
+    ],
+    "databases": [
+      "mongodb"
+    ],
+    "orms": [
+      "mongoose"
+    ],
+    "authentication": [
+      "jwt",
+      "passport"
+    ],
+    "authenticationPackages": [
+      "jsonwebtoken",
+      "passport",
+      "passport-jwt"
+    ],
+    "middleware": [
+      {
+        "kind": "cors",
+        "name": "cors",
+        "file": "package.json",
+        "basis": "dependency"
+      },
+      {
+        "kind": "cors",
+        "name": "cors",
+        "file": "src/app.js",
+        "basis": "import",
+        "line": 6
+      }
+    ],
+    "structure": {
+      "manifests": [
+        {
+          "file": "package.json",
+          "directory": ".",
+          "name": "create-nodejs-express-app",
+          "workspacePatterns": []
+        }
+      ],
+      "directories": [
+        "bin",
+        "src",
+        "src/config",
+        "src/controllers",
+        "src/docs",
+        "src/middlewares",
+        "src/models",
+        "src/models/plugins",
+        "src/routes",
+        "src/routes/v1",
+        "src/services",
+        "src/utils",
+        "src/validations",
+        "tests",
+        "tests/fixtures",
+        "tests/integration",
+        "tests/unit",
+        "tests/unit/middlewares",
+        "tests/unit/models",
+        "tests/unit/models/plugins",
+        "tests/utils"
+      ],
+      "sourceDirectories": [
+        "src"
+      ],
+      "testDirectories": [
+        "tests"
+      ],
+      "staticDirectories": [],
+      "sourceFileCount": 50
+    },
+    "expressAdapterAvailable": true,
+    "availableAdapterIds": [
+      "express-framework-adapter"
+    ],
+    "supportedCodeAwareMode": true,
+    "mode": "code-aware",
+    "fallbackReasons": [],
+    "diagnostics": []
+  },
+  "project": {
+    "id": "express-boilerplate",
+    "name": "express-boilerplate",
+    "mode": "code-aware",
+    "repositoryPath": "/tmp/agento-realworld-2026-10-19/repos/express-boilerplate",
+    "baseUrl": "http://127.0.0.1:1",
+    "allowedOrigins": [
+      "http://127.0.0.1:1"
+    ],
+    "languages": [
+      "javascript"
+    ]
+  },
+  "supports": false,
+  "framework": {
+    "components": [],
+    "endpoints": [],
+    "resources": [],
+    "signals": [],
+    "evidence": [],
+    "diagnostics": [
+      {
+        "code": "conditional-registration",
+        "source": {
+          "file": "src/app.js",
+          "startLine": 20,
+          "endLine": 20
+        },
+        "message": "Route or middleware registration is conditional; runtime availability is unknown."
+      },
+      {
+        "code": "conditional-registration",
+        "source": {
+          "file": "src/app.js",
+          "startLine": 21,
+          "endLine": 21
+        },
+        "message": "Route or middleware registration is conditional; runtime availability is unknown."
+      },
+      {
+        "code": "unresolved-route",
+        "source": {
+          "file": "src/app.js",
+          "startLine": 42,
+          "endLine": 42
+        },
+        "message": "Computed or regular-expression route path was not resolved."
+      },
+      {
+        "code": "conditional-registration",
+        "source": {
+          "file": "src/app.js",
+          "startLine": 50,
+          "endLine": 50
+        },
+        "message": "Route or middleware registration is conditional; runtime availability is unknown."
+      },
+      {
+        "code": "unresolved-route",
+        "source": {
+          "file": "src/routes/v1/index.js",
+          "startLine": 29,
+          "endLine": 29
+        },
+        "message": "Computed or regular-expression route path was not resolved."
+      },
+      {
+        "code": "unresolved-route",
+        "source": {
+          "file": "src/routes/v1/index.js",
+          "startLine": 35,
+          "endLine": 35
+        },
+        "message": "Computed or regular-expression route path was not resolved."
+      }
+    ]
+  },
+  "analysis": {
+    "status": "completed",
+    "diagnostics": [],
+    "signals": [
+      {
+        "id": "semgrep:882299000b269952cd3cd609",
+        "projectId": "express-boilerplate",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-79"
+        ],
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "source": {
+          "file": "src/controllers/auth.controller.js",
+          "startLine": 8,
+          "endLine": 8
+        },
+        "evidenceIds": [
+          "semgrep:87b4036ea4587102c8887ec9"
+        ]
+      },
+      {
+        "id": "semgrep:cf3836a1388d836cb1db9dda",
+        "projectId": "express-boilerplate",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-79"
+        ],
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "source": {
+          "file": "src/controllers/auth.controller.js",
+          "startLine": 15,
+          "endLine": 15
+        },
+        "evidenceIds": [
+          "semgrep:dea3497ebd2d04d4c211697f"
+        ]
+      },
+      {
+        "id": "semgrep:87224e742908986d7ab10ca8",
+        "projectId": "express-boilerplate",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-79"
+        ],
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "source": {
+          "file": "src/controllers/auth.controller.js",
+          "startLine": 25,
+          "endLine": 25
+        },
+        "evidenceIds": [
+          "semgrep:fbfffad5150d3b382da6de91"
+        ]
+      },
+      {
+        "id": "semgrep:98b048e9262b3133bc4b0555",
+        "projectId": "express-boilerplate",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-79"
+        ],
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "source": {
+          "file": "src/controllers/user.controller.js",
+          "startLine": 9,
+          "endLine": 9
+        },
+        "evidenceIds": [
+          "semgrep:9385c9b2912f9117b0af7de2"
+        ]
+      },
+      {
+        "id": "semgrep:ba9a5375f88b9aec78aed69b",
+        "projectId": "express-boilerplate",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-79"
+        ],
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "source": {
+          "file": "src/controllers/user.controller.js",
+          "startLine": 16,
+          "endLine": 16
+        },
+        "evidenceIds": [
+          "semgrep:7ca5f06420e1d04ad7c4f27e"
+        ]
+      },
+      {
+        "id": "semgrep:18a8b0c1769a393c22400975",
+        "projectId": "express-boilerplate",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-79"
+        ],
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "source": {
+          "file": "src/controllers/user.controller.js",
+          "startLine": 24,
+          "endLine": 24
+        },
+        "evidenceIds": [
+          "semgrep:83121cc71f9a1c3970ecccd2"
+        ]
+      },
+      {
+        "id": "semgrep:3f4fa4e8623a2ab3485bdb1b",
+        "projectId": "express-boilerplate",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-79"
+        ],
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "source": {
+          "file": "src/controllers/user.controller.js",
+          "startLine": 29,
+          "endLine": 29
+        },
+        "evidenceIds": [
+          "semgrep:a04befc92da8d6a3db1088d6"
+        ]
+      }
+    ],
+    "evidence": [
+      {
+        "id": "semgrep:606fb91f62040766cb3f33c7",
+        "projectId": "express-boilerplate",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:18:29.263Z",
+        "kind": "static-analysis",
+        "summary": "Static analysis completed; signals are candidates requiring runtime verification.",
+        "facts": {
+          "observation": "static-analysis-run",
+          "status": "completed",
+          "diagnosticCodes": [],
+          "signalCount": 7,
+          "sourceDigest": "aaf95ee30116c19df96dee6a",
+          "toolVersion": "1.180.0",
+          "runtimeVerified": false
+        }
+      },
+      {
+        "id": "semgrep:87b4036ea4587102c8887ec9",
+        "projectId": "express-boilerplate",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:18:29.263Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "src/controllers/auth.controller.js",
+          "startLine": 8,
+          "endLine": 8
+        },
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/controllers/auth.controller.js",
+              "startLine": 8,
+              "endLine": 8
+            },
+            "kind": "send"
+          },
+          "sources": [],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:dea3497ebd2d04d4c211697f",
+        "projectId": "express-boilerplate",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:18:29.263Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "src/controllers/auth.controller.js",
+          "startLine": 15,
+          "endLine": 15
+        },
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/controllers/auth.controller.js",
+              "startLine": 15,
+              "endLine": 15
+            },
+            "kind": "send"
+          },
+          "sources": [],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:fbfffad5150d3b382da6de91",
+        "projectId": "express-boilerplate",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:18:29.263Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "src/controllers/auth.controller.js",
+          "startLine": 25,
+          "endLine": 25
+        },
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/controllers/auth.controller.js",
+              "startLine": 25,
+              "endLine": 25
+            },
+            "kind": "send"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "src/controllers/auth.controller.js",
+                "startLine": 24,
+                "endLine": 24,
+                "symbol": "body"
+              },
+              "kind": "request-body",
+              "parameterName": "refreshToken"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:9385c9b2912f9117b0af7de2",
+        "projectId": "express-boilerplate",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:18:29.263Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "src/controllers/user.controller.js",
+          "startLine": 9,
+          "endLine": 9
+        },
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/controllers/user.controller.js",
+              "startLine": 9,
+              "endLine": 9
+            },
+            "kind": "send"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "src/controllers/user.controller.js",
+                "startLine": 8,
+                "endLine": 8,
+                "symbol": "body"
+              },
+              "kind": "request-body"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:7ca5f06420e1d04ad7c4f27e",
+        "projectId": "express-boilerplate",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:18:29.263Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "src/controllers/user.controller.js",
+          "startLine": 16,
+          "endLine": 16
+        },
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/controllers/user.controller.js",
+              "startLine": 16,
+              "endLine": 16
+            },
+            "kind": "send"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "src/controllers/user.controller.js",
+                "startLine": 13,
+                "endLine": 13,
+                "symbol": "query"
+              },
+              "kind": "request-query"
+            },
+            {
+              "location": {
+                "file": "src/controllers/user.controller.js",
+                "startLine": 14,
+                "endLine": 14,
+                "symbol": "query"
+              },
+              "kind": "request-query"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:83121cc71f9a1c3970ecccd2",
+        "projectId": "express-boilerplate",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:18:29.263Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "src/controllers/user.controller.js",
+          "startLine": 24,
+          "endLine": 24
+        },
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/controllers/user.controller.js",
+              "startLine": 24,
+              "endLine": 24
+            },
+            "kind": "send"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "src/controllers/user.controller.js",
+                "startLine": 20,
+                "endLine": 20,
+                "symbol": "params"
+              },
+              "kind": "request-params",
+              "parameterName": "userId"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:a04befc92da8d6a3db1088d6",
+        "projectId": "express-boilerplate",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:18:29.263Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "src/controllers/user.controller.js",
+          "startLine": 29,
+          "endLine": 29
+        },
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/controllers/user.controller.js",
+              "startLine": 29,
+              "endLine": 29
+            },
+            "kind": "send"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "src/controllers/user.controller.js",
+                "startLine": 28,
+                "endLine": 28,
+                "symbol": "params"
+              },
+              "kind": "request-params",
+              "parameterName": "userId"
+            },
+            {
+              "location": {
+                "file": "src/controllers/user.controller.js",
+                "startLine": 28,
+                "endLine": 28,
+                "symbol": "body"
+              },
+              "kind": "request-body"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      }
+    ]
+  },
+  "model": {
+    "schemaVersion": 1,
+    "project": {
+      "id": "express-boilerplate",
+      "name": "express-boilerplate",
+      "mode": "code-aware",
+      "repositoryPath": "/tmp/agento-realworld-2026-10-19/repos/express-boilerplate",
+      "baseUrl": "http://127.0.0.1:1",
+      "allowedOrigins": [
+        "http://127.0.0.1:1"
+      ],
+      "languages": [
+        "javascript"
+      ]
+    },
+    "identities": [],
+    "components": [],
+    "endpoints": [],
+    "resources": [],
+    "signals": [
+      {
+        "id": "semgrep:18a8b0c1769a393c22400975",
+        "projectId": "express-boilerplate",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-79"
+        ],
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "source": {
+          "file": "src/controllers/user.controller.js",
+          "startLine": 24,
+          "endLine": 24
+        },
+        "evidenceIds": [
+          "semgrep:83121cc71f9a1c3970ecccd2"
+        ]
+      },
+      {
+        "id": "semgrep:3f4fa4e8623a2ab3485bdb1b",
+        "projectId": "express-boilerplate",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-79"
+        ],
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "source": {
+          "file": "src/controllers/user.controller.js",
+          "startLine": 29,
+          "endLine": 29
+        },
+        "evidenceIds": [
+          "semgrep:a04befc92da8d6a3db1088d6"
+        ]
+      },
+      {
+        "id": "semgrep:87224e742908986d7ab10ca8",
+        "projectId": "express-boilerplate",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-79"
+        ],
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "source": {
+          "file": "src/controllers/auth.controller.js",
+          "startLine": 25,
+          "endLine": 25
+        },
+        "evidenceIds": [
+          "semgrep:fbfffad5150d3b382da6de91"
+        ]
+      },
+      {
+        "id": "semgrep:882299000b269952cd3cd609",
+        "projectId": "express-boilerplate",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-79"
+        ],
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "source": {
+          "file": "src/controllers/auth.controller.js",
+          "startLine": 8,
+          "endLine": 8
+        },
+        "evidenceIds": [
+          "semgrep:87b4036ea4587102c8887ec9"
+        ]
+      },
+      {
+        "id": "semgrep:98b048e9262b3133bc4b0555",
+        "projectId": "express-boilerplate",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-79"
+        ],
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "source": {
+          "file": "src/controllers/user.controller.js",
+          "startLine": 9,
+          "endLine": 9
+        },
+        "evidenceIds": [
+          "semgrep:9385c9b2912f9117b0af7de2"
+        ]
+      },
+      {
+        "id": "semgrep:ba9a5375f88b9aec78aed69b",
+        "projectId": "express-boilerplate",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-79"
+        ],
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "source": {
+          "file": "src/controllers/user.controller.js",
+          "startLine": 16,
+          "endLine": 16
+        },
+        "evidenceIds": [
+          "semgrep:7ca5f06420e1d04ad7c4f27e"
+        ]
+      },
+      {
+        "id": "semgrep:cf3836a1388d836cb1db9dda",
+        "projectId": "express-boilerplate",
+        "producerId": "semgrep-adapter",
+        "cweIds": [
+          "CWE-79"
+        ],
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "source": {
+          "file": "src/controllers/auth.controller.js",
+          "startLine": 15,
+          "endLine": 15
+        },
+        "evidenceIds": [
+          "semgrep:dea3497ebd2d04d4c211697f"
+        ]
+      }
+    ],
+    "evidence": [
+      {
+        "id": "semgrep:606fb91f62040766cb3f33c7",
+        "projectId": "express-boilerplate",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:18:29.263Z",
+        "kind": "static-analysis",
+        "summary": "Static analysis completed; signals are candidates requiring runtime verification.",
+        "facts": {
+          "observation": "static-analysis-run",
+          "status": "completed",
+          "diagnosticCodes": [],
+          "signalCount": 7,
+          "sourceDigest": "aaf95ee30116c19df96dee6a",
+          "toolVersion": "1.180.0",
+          "runtimeVerified": false
+        }
+      },
+      {
+        "id": "semgrep:7ca5f06420e1d04ad7c4f27e",
+        "projectId": "express-boilerplate",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:18:29.263Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "src/controllers/user.controller.js",
+          "startLine": 16,
+          "endLine": 16
+        },
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/controllers/user.controller.js",
+              "startLine": 16,
+              "endLine": 16
+            },
+            "kind": "send"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "src/controllers/user.controller.js",
+                "startLine": 13,
+                "endLine": 13,
+                "symbol": "query"
+              },
+              "kind": "request-query"
+            },
+            {
+              "location": {
+                "file": "src/controllers/user.controller.js",
+                "startLine": 14,
+                "endLine": 14,
+                "symbol": "query"
+              },
+              "kind": "request-query"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:83121cc71f9a1c3970ecccd2",
+        "projectId": "express-boilerplate",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:18:29.263Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "src/controllers/user.controller.js",
+          "startLine": 24,
+          "endLine": 24
+        },
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/controllers/user.controller.js",
+              "startLine": 24,
+              "endLine": 24
+            },
+            "kind": "send"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "src/controllers/user.controller.js",
+                "startLine": 20,
+                "endLine": 20,
+                "symbol": "params"
+              },
+              "kind": "request-params",
+              "parameterName": "userId"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:87b4036ea4587102c8887ec9",
+        "projectId": "express-boilerplate",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:18:29.263Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "src/controllers/auth.controller.js",
+          "startLine": 8,
+          "endLine": 8
+        },
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/controllers/auth.controller.js",
+              "startLine": 8,
+              "endLine": 8
+            },
+            "kind": "send"
+          },
+          "sources": [],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:9385c9b2912f9117b0af7de2",
+        "projectId": "express-boilerplate",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:18:29.263Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "src/controllers/user.controller.js",
+          "startLine": 9,
+          "endLine": 9
+        },
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/controllers/user.controller.js",
+              "startLine": 9,
+              "endLine": 9
+            },
+            "kind": "send"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "src/controllers/user.controller.js",
+                "startLine": 8,
+                "endLine": 8,
+                "symbol": "body"
+              },
+              "kind": "request-body"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:a04befc92da8d6a3db1088d6",
+        "projectId": "express-boilerplate",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:18:29.263Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "src/controllers/user.controller.js",
+          "startLine": 29,
+          "endLine": 29
+        },
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/controllers/user.controller.js",
+              "startLine": 29,
+              "endLine": 29
+            },
+            "kind": "send"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "src/controllers/user.controller.js",
+                "startLine": 28,
+                "endLine": 28,
+                "symbol": "params"
+              },
+              "kind": "request-params",
+              "parameterName": "userId"
+            },
+            {
+              "location": {
+                "file": "src/controllers/user.controller.js",
+                "startLine": 28,
+                "endLine": 28,
+                "symbol": "body"
+              },
+              "kind": "request-body"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:dea3497ebd2d04d4c211697f",
+        "projectId": "express-boilerplate",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:18:29.263Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "src/controllers/auth.controller.js",
+          "startLine": 15,
+          "endLine": 15
+        },
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/controllers/auth.controller.js",
+              "startLine": 15,
+              "endLine": 15
+            },
+            "kind": "send"
+          },
+          "sources": [],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      },
+      {
+        "id": "semgrep:fbfffad5150d3b382da6de91",
+        "projectId": "express-boilerplate",
+        "producerId": "semgrep-adapter",
+        "capturedAt": "2026-10-19T15:18:29.263Z",
+        "kind": "static-analysis",
+        "source": {
+          "file": "src/controllers/auth.controller.js",
+          "startLine": 25,
+          "endLine": 25
+        },
+        "summary": "Static candidate: request input may reach an HTML response.",
+        "facts": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/controllers/auth.controller.js",
+              "startLine": 25,
+              "endLine": 25
+            },
+            "kind": "send"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "src/controllers/auth.controller.js",
+                "startLine": 24,
+                "endLine": 24,
+                "symbol": "body"
+              },
+              "kind": "request-body",
+              "parameterName": "refreshToken"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": []
+        }
+      }
+    ],
+    "endpointAliases": {},
+    "parameters": [],
+    "authenticationRequirements": [],
+    "userRoles": [],
+    "sourceHandlers": [],
+    "resourceTypes": [],
+    "observedOwnership": [],
+    "dataFlows": [
+      {
+        "id": "model-fact:188540035b520f4702ceec67e724960b89c275e8113f1ef4946831ca2320bd4b",
+        "kind": "data-flow",
+        "source": "source",
+        "endpointIds": [],
+        "evidenceIds": [
+          "semgrep:7ca5f06420e1d04ad7c4f27e"
+        ],
+        "details": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/controllers/user.controller.js",
+              "startLine": 16,
+              "endLine": 16
+            },
+            "kind": "send"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "src/controllers/user.controller.js",
+                "startLine": 13,
+                "endLine": 13,
+                "symbol": "query"
+              },
+              "kind": "request-query"
+            },
+            {
+              "location": {
+                "file": "src/controllers/user.controller.js",
+                "startLine": 14,
+                "endLine": 14,
+                "symbol": "query"
+              },
+              "kind": "request-query"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": [],
+          "sourceLocation": {
+            "file": "src/controllers/user.controller.js",
+            "startLine": 16,
+            "endLine": 16
+          }
+        }
+      },
+      {
+        "id": "model-fact:330717ff45d7205144f2c792235e3efb2a9a23739129a74a783c010358a01cf4",
+        "kind": "data-flow",
+        "source": "source",
+        "endpointIds": [],
+        "evidenceIds": [
+          "semgrep:a04befc92da8d6a3db1088d6"
+        ],
+        "details": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/controllers/user.controller.js",
+              "startLine": 29,
+              "endLine": 29
+            },
+            "kind": "send"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "src/controllers/user.controller.js",
+                "startLine": 28,
+                "endLine": 28,
+                "symbol": "params"
+              },
+              "kind": "request-params",
+              "parameterName": "userId"
+            },
+            {
+              "location": {
+                "file": "src/controllers/user.controller.js",
+                "startLine": 28,
+                "endLine": 28,
+                "symbol": "body"
+              },
+              "kind": "request-body"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": [],
+          "sourceLocation": {
+            "file": "src/controllers/user.controller.js",
+            "startLine": 29,
+            "endLine": 29
+          }
+        }
+      },
+      {
+        "id": "model-fact:7dadca5d3173753822c162e3ebec3d94036ac4e9226c623b70f3987c4070e6dd",
+        "kind": "data-flow",
+        "source": "source",
+        "endpointIds": [],
+        "evidenceIds": [
+          "semgrep:83121cc71f9a1c3970ecccd2"
+        ],
+        "details": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/controllers/user.controller.js",
+              "startLine": 24,
+              "endLine": 24
+            },
+            "kind": "send"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "src/controllers/user.controller.js",
+                "startLine": 20,
+                "endLine": 20,
+                "symbol": "params"
+              },
+              "kind": "request-params",
+              "parameterName": "userId"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": [],
+          "sourceLocation": {
+            "file": "src/controllers/user.controller.js",
+            "startLine": 24,
+            "endLine": 24
+          }
+        }
+      },
+      {
+        "id": "model-fact:a3f3d3f5b279db66a7f2524461bb084c26947250008aa7c918d5c8d2c5c60a86",
+        "kind": "data-flow",
+        "source": "source",
+        "endpointIds": [],
+        "evidenceIds": [
+          "semgrep:fbfffad5150d3b382da6de91"
+        ],
+        "details": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/controllers/auth.controller.js",
+              "startLine": 25,
+              "endLine": 25
+            },
+            "kind": "send"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "src/controllers/auth.controller.js",
+                "startLine": 24,
+                "endLine": 24,
+                "symbol": "body"
+              },
+              "kind": "request-body",
+              "parameterName": "refreshToken"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": [],
+          "sourceLocation": {
+            "file": "src/controllers/auth.controller.js",
+            "startLine": 25,
+            "endLine": 25
+          }
+        }
+      },
+      {
+        "id": "model-fact:c549213e70f78cc564d40d0147ff8dcac6e0ac79e52218ce02cf4b5387c1f542",
+        "kind": "data-flow",
+        "source": "source",
+        "endpointIds": [],
+        "evidenceIds": [
+          "semgrep:dea3497ebd2d04d4c211697f"
+        ],
+        "details": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/controllers/auth.controller.js",
+              "startLine": 15,
+              "endLine": 15
+            },
+            "kind": "send"
+          },
+          "sources": [],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": [],
+          "sourceLocation": {
+            "file": "src/controllers/auth.controller.js",
+            "startLine": 15,
+            "endLine": 15
+          }
+        }
+      },
+      {
+        "id": "model-fact:c8ff42c8973bb50e0d23219c1fd0dca0a80059bae489ef777cdf625310869a0c",
+        "kind": "data-flow",
+        "source": "source",
+        "endpointIds": [],
+        "evidenceIds": [
+          "semgrep:9385c9b2912f9117b0af7de2"
+        ],
+        "details": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/controllers/user.controller.js",
+              "startLine": 9,
+              "endLine": 9
+            },
+            "kind": "send"
+          },
+          "sources": [
+            {
+              "location": {
+                "file": "src/controllers/user.controller.js",
+                "startLine": 8,
+                "endLine": 8,
+                "symbol": "body"
+              },
+              "kind": "request-body"
+            }
+          ],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": [],
+          "sourceLocation": {
+            "file": "src/controllers/user.controller.js",
+            "startLine": 9,
+            "endLine": 9
+          }
+        }
+      },
+      {
+        "id": "model-fact:fafd5612d81164410e53046d8e04194b605af011d7e46f869af7ce907ee32ede",
+        "kind": "data-flow",
+        "source": "source",
+        "endpointIds": [],
+        "evidenceIds": [
+          "semgrep:87b4036ea4587102c8887ec9"
+        ],
+        "details": {
+          "observation": "static-candidate",
+          "ruleId": "agento.express.request-to-html",
+          "cweIds": [
+            "CWE-79"
+          ],
+          "runtimeVerified": false,
+          "requiresRuntimeVerification": true,
+          "sink": {
+            "location": {
+              "file": "src/controllers/auth.controller.js",
+              "startLine": 8,
+              "endLine": 8
+            },
+            "kind": "send"
+          },
+          "sources": [],
+          "sourceResolution": "bounded-ast-def-use",
+          "contextResolution": "syntax-only",
+          "conditions": [],
+          "responseFormat": "unknown",
+          "sanitizerAssumptions": [
+            "DOMPurify.sanitize",
+            "sanitizeHtml",
+            "escapeHtml"
+          ],
+          "endpointIds": [],
+          "sourceLocation": {
+            "file": "src/controllers/auth.controller.js",
+            "startLine": 8,
+            "endLine": 8
+          }
+        }
+      }
+    ],
+    "databaseOperations": [],
+    "cookies": [],
+    "corsConfigurations": [],
+    "runtimeObservations": [],
+    "diagnostics": []
+  },
+  "hypotheses": {
+    "hypotheses": [],
+    "diagnostics": [],
+    "review": "disabled",
+    "usage": {
+      "modelCalls": 0,
+      "tokens": {
+        "inputTokens": 0,
+        "outputTokens": 0
+      }
+    }
+  },
+  "planning": [],
+  "referenceRoutes": [
+    {
+      "method": "POST",
+      "path": "/v1/auth/login",
+      "source": "src/routes/v1/auth.route.js",
+      "sourceLine": 10,
+      "extracted": false
+    },
+    {
+      "method": "POST",
+      "path": "/v1/auth/register",
+      "source": "src/routes/v1/auth.route.js",
+      "sourceLine": 9,
+      "extracted": false
+    }
+  ],
+  "invariants": {
+    "uniqueEvidenceIds": true,
+    "evidenceProjectBindings": true,
+    "endpointEvidenceLinks": true,
+    "signalEvidenceLinks": true,
+    "hypothesisEvidenceLinks": true,
+    "hypothesisStates": true,
+    "sourceUnchanged": true
+  },
+  "durationMs": 2609
+}

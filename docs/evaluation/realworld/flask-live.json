@@ -1,0 +1,570 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-19T15:19:45.943Z",
+  "repository": "https://github.com/pallets/flask.git",
+  "revision": "d086db856be187255b8ec61ef409357393020f32",
+  "flaskVersion": "3.1.2",
+  "nodeVersion": "v22.23.2",
+  "status": "completed",
+  "scope": "standalone-black-box-primitives-and-rules",
+  "sourcePipelineUsed": false,
+  "verificationJudgeUsed": false,
+  "modelCalls": 0,
+  "checks": {
+    "httpStatus": [
+      200,
+      200,
+      302
+    ],
+    "explicitScopeEscapeDenied": true,
+    "anonymousBrowser": "COMPLETED",
+    "isolatedAuthorizationStatus": {
+      "owner": 200,
+      "secondUser": 403,
+      "anonymous": 302
+    },
+    "ownerMarkerDisclosedToSecondUser": false,
+    "cookieHttpOnly": true,
+    "ruleVerdicts": [
+      {
+        "cweId": "CWE-639",
+        "status": "REJECTED",
+        "confidence": "medium",
+        "summary": "The forbidden identity was denied resource access.",
+        "evidenceIds": [
+          "probe:4c1a97e7-c89f-4284-a9be-5cfc61e58b2a"
+        ],
+        "limitations": []
+      },
+      {
+        "cweId": "CWE-1004",
+        "status": "REJECTED",
+        "confidence": "medium",
+        "summary": "Observed sensitive cookies carry the HttpOnly attribute.",
+        "evidenceIds": [
+          "probe:7c3ae3d3-5830-4f41-b9d3-cfb7933889d7"
+        ],
+        "limitations": []
+      },
+      {
+        "cweId": "CWE-942",
+        "status": "REJECTED",
+        "confidence": "medium",
+        "summary": "Observed responses do not grant the declared untrusted origins access.",
+        "evidenceIds": [
+          "probe:68d72e76-e8db-4d81-903d-4a2647a8f7c9"
+        ],
+        "limitations": []
+      }
+    ],
+    "secureCookieAssessed": false
+  },
+  "httpResponses": [
+    {
+      "responseId": "http:5928b253-e4f6-411b-8b97-2ff10d9afa75",
+      "url": "http://127.0.0.1:35613/",
+      "method": "GET",
+      "status": 200,
+      "body": {
+        "sha256": "a3acc45d86ed0e2642eee6538c23c41a97345b6f0df1d4bb2a037def470b7984",
+        "byteLength": 650,
+        "truncated": false
+      },
+      "timings": {
+        "startedAt": "2026-10-19T15:19:43.832Z",
+        "firstByteMs": 24.86786600000005,
+        "durationMs": 28.62213399999996
+      }
+    },
+    {
+      "responseId": "http:84f1524a-aeac-433c-92d8-161490a3d128",
+      "url": "http://127.0.0.1:35613/auth/login",
+      "method": "GET",
+      "status": 200,
+      "body": {
+        "sha256": "f5212eeac1512864431e47afb7a5c1775a538c97fc3a722b28f03f39eddbdef2",
+        "byteLength": 627,
+        "truncated": false
+      },
+      "timings": {
+        "startedAt": "2026-10-19T15:19:43.863Z",
+        "firstByteMs": 6.8279549999999745,
+        "durationMs": 7.493657000000098
+      }
+    },
+    {
+      "responseId": "http:778d8321-08d4-4192-8202-52dde3fb5620",
+      "url": "http://127.0.0.1:35613/create",
+      "method": "GET",
+      "status": 302,
+      "body": {
+        "sha256": "bdd3acd38b235f3e79f97834c1bada34fe87489f5cc3c530dab5bc47404e0a87",
+        "byteLength": 209,
+        "truncated": false
+      },
+      "timings": {
+        "startedAt": "2026-10-19T15:19:43.871Z",
+        "firstByteMs": 3.1678730000000996,
+        "durationMs": 4.60678299999995
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "id": "browser-evidence:e240f1e5-177a-4466-947c-0cb8aa097468",
+      "projectId": "flask-live",
+      "kind": "http-request",
+      "producerId": "tester-army-e2e-adapter",
+      "capturedAt": "2026-10-19T15:19:43.879Z",
+      "summary": "Observed browser request.",
+      "facts": {
+        "url": "http://127.0.0.1:35613/auth/login",
+        "origin": "http://127.0.0.1:35613",
+        "personaId": "anonymous",
+        "timestamp": "2026-10-19T15:19:44.054Z",
+        "targetId": "upstream-flask",
+        "initiatingPage": "about:blank",
+        "method": "GET",
+        "resourceType": "document",
+        "blocked": false
+      },
+      "endpointId": "browser-endpoint:be9284ec-b6a1-4732-b42d-c5e6ff67ec27:0",
+      "identityId": "anonymous",
+      "schemaVersion": 1,
+      "provenance": {
+        "probeId": "tester-army-e2e-adapter",
+        "capabilityIds": [
+          "browser-controller"
+        ],
+        "environment": {
+          "id": "default",
+          "baseUrl": "http://127.0.0.1:35613",
+          "targetUrl": "http://127.0.0.1:35613"
+        }
+      },
+      "digest": "52392b9a47a1c8b62c091c604463193b54d2a11b9ec39d0068c0f8f8991317f4"
+    },
+    {
+      "id": "browser-evidence:66330cfb-ed2a-4b76-9ad5-db56a033a4da",
+      "projectId": "flask-live",
+      "kind": "http-response",
+      "producerId": "tester-army-e2e-adapter",
+      "capturedAt": "2026-10-19T15:19:43.879Z",
+      "summary": "Observed browser response status.",
+      "facts": {
+        "url": "http://127.0.0.1:35613/auth/login",
+        "origin": "http://127.0.0.1:35613",
+        "personaId": "anonymous",
+        "timestamp": "2026-10-19T15:19:44.054Z",
+        "targetId": "upstream-flask",
+        "initiatingPage": "about:blank",
+        "method": "GET",
+        "status": 200,
+        "headers": {
+          "content-type": "text/html"
+        },
+        "requestEvidenceId": "browser-evidence:e240f1e5-177a-4466-947c-0cb8aa097468"
+      },
+      "endpointId": "browser-endpoint:be9284ec-b6a1-4732-b42d-c5e6ff67ec27:0",
+      "identityId": "anonymous",
+      "schemaVersion": 1,
+      "provenance": {
+        "probeId": "tester-army-e2e-adapter",
+        "capabilityIds": [
+          "browser-controller"
+        ],
+        "environment": {
+          "id": "default",
+          "baseUrl": "http://127.0.0.1:35613",
+          "targetUrl": "http://127.0.0.1:35613"
+        }
+      },
+      "digest": "b210dc7a7c92d5f19258a9b5d7050af3516ba054a01176cab4c0c05194b8e2a9"
+    },
+    {
+      "id": "browser-evidence:cb66d3e6-5484-485b-a05c-0ef42f6a134f",
+      "projectId": "flask-live",
+      "kind": "http-request",
+      "producerId": "tester-army-e2e-adapter",
+      "capturedAt": "2026-10-19T15:19:43.879Z",
+      "summary": "Observed browser request.",
+      "facts": {
+        "url": "http://127.0.0.1:35613/static/style.css",
+        "origin": "http://127.0.0.1:35613",
+        "personaId": "anonymous",
+        "timestamp": "2026-10-19T15:19:44.100Z",
+        "targetId": "upstream-flask",
+        "initiatingPage": "http://127.0.0.1:35613/auth/login",
+        "method": "GET",
+        "resourceType": "stylesheet",
+        "blocked": false
+      },
+      "endpointId": "browser-endpoint:be9284ec-b6a1-4732-b42d-c5e6ff67ec27:1",
+      "identityId": "anonymous",
+      "schemaVersion": 1,
+      "provenance": {
+        "probeId": "tester-army-e2e-adapter",
+        "capabilityIds": [
+          "browser-controller"
+        ],
+        "environment": {
+          "id": "default",
+          "baseUrl": "http://127.0.0.1:35613",
+          "targetUrl": "http://127.0.0.1:35613"
+        }
+      },
+      "digest": "6f3495a7ad4be32c9511ca8aa1dbfeadc9b2fff7453bf39b6b0e7ce75cceb9d8"
+    },
+    {
+      "id": "browser-evidence:2b7edd33-129b-4484-a1c8-173a12251a4f",
+      "projectId": "flask-live",
+      "kind": "http-response",
+      "producerId": "tester-army-e2e-adapter",
+      "capturedAt": "2026-10-19T15:19:43.879Z",
+      "summary": "Observed browser response status.",
+      "facts": {
+        "url": "http://127.0.0.1:35613/static/style.css",
+        "origin": "http://127.0.0.1:35613",
+        "personaId": "anonymous",
+        "timestamp": "2026-10-19T15:19:44.100Z",
+        "targetId": "upstream-flask",
+        "initiatingPage": "http://127.0.0.1:35613/auth/login",
+        "method": "GET",
+        "status": 200,
+        "headers": {
+          "content-type": "text/css"
+        },
+        "requestEvidenceId": "browser-evidence:cb66d3e6-5484-485b-a05c-0ef42f6a134f"
+      },
+      "endpointId": "browser-endpoint:be9284ec-b6a1-4732-b42d-c5e6ff67ec27:1",
+      "identityId": "anonymous",
+      "schemaVersion": 1,
+      "provenance": {
+        "probeId": "tester-army-e2e-adapter",
+        "capabilityIds": [
+          "browser-controller"
+        ],
+        "environment": {
+          "id": "default",
+          "baseUrl": "http://127.0.0.1:35613",
+          "targetUrl": "http://127.0.0.1:35613"
+        }
+      },
+      "digest": "daa3f5bbcb45408367bb495206f1a036e7c39f0527db56e452e68758bf42fa1c"
+    },
+    {
+      "id": "browser-evidence:085bdf28-afc0-48cf-b2dc-ec28a079be01",
+      "projectId": "flask-live",
+      "kind": "browser-observation",
+      "producerId": "tester-army-e2e-adapter",
+      "capturedAt": "2026-10-19T15:19:43.879Z",
+      "summary": "Browser workflow completed; observations carry no vulnerability verdict.",
+      "facts": {
+        "outcome": "COMPLETED",
+        "executedActions": 2,
+        "networkRecordCount": 2,
+        "blockedCount": 0,
+        "droppedCount": 0,
+        "diagnosticCodes": [],
+        "url": "http://127.0.0.1:35613/auth/login"
+      },
+      "identityId": "anonymous",
+      "schemaVersion": 1,
+      "provenance": {
+        "probeId": "tester-army-e2e-adapter",
+        "capabilityIds": [
+          "browser-controller"
+        ],
+        "environment": {
+          "id": "default",
+          "baseUrl": "http://127.0.0.1:35613",
+          "targetUrl": "http://127.0.0.1:35613"
+        }
+      },
+      "digest": "eb26694e992bbaff3e88d24d363b15b0586f2edb2ad175558b2eae08ceed1787"
+    },
+    {
+      "id": "probe:4c1a97e7-c89f-4284-a9be-5cfc61e58b2a",
+      "projectId": "flask-live",
+      "kind": "configuration",
+      "producerId": "probe:authorization",
+      "capturedAt": "2026-10-19T15:19:45.614Z",
+      "summary": "Normalized security probe observations.",
+      "facts": {
+        "observation": "security-probe",
+        "schemaVersion": 1,
+        "probe": {
+          "id": "probe:4c1a97e7-c89f-4284-a9be-5cfc61e58b2a",
+          "probeId": "authorization",
+          "projectId": "flask-live",
+          "capturedAt": "2026-10-19T15:19:45.614Z",
+          "outcome": "COMPLETED",
+          "diagnostics": [],
+          "resourceId": "seeded-post-1",
+          "ownerIdentityId": "alice",
+          "attackerIdentityId": "bob",
+          "owner": {
+            "responseId": "http:e9c98fb8-8a0e-4c1f-8d03-1cdcc21a479f",
+            "method": "GET",
+            "status": 200,
+            "url": "http://127.0.0.1:35613/1/update",
+            "body": {
+              "sha256": "12032ae1895edf346c18856a91b21b32fefc5a268b3f930414f0eb6a871b0653",
+              "byteLength": 861,
+              "truncated": false
+            },
+            "timings": {
+              "startedAt": "2026-10-19T15:19:44.865Z",
+              "firstByteMs": 8.673588999999993,
+              "durationMs": 9.218564000000015
+            }
+          },
+          "attacker": {
+            "responseId": "http:1d71377d-f720-48e0-8666-e545bc4d9c28",
+            "method": "GET",
+            "status": 403,
+            "url": "http://127.0.0.1:35613/1/update",
+            "body": {
+              "sha256": "c47a2202d244b6bc9d7557e13b2235a5510e2403190a31b95f3443b6cbb2f68b",
+              "byteLength": 213,
+              "truncated": false
+            },
+            "timings": {
+              "startedAt": "2026-10-19T15:19:45.606Z",
+              "firstByteMs": 3.4274430000000393,
+              "durationMs": 3.9194680000000517
+            }
+          },
+          "anonymous": {
+            "responseId": "http:fc8f6b72-52be-40b1-9731-9e6bd5e7b19f",
+            "method": "GET",
+            "status": 302,
+            "url": "http://127.0.0.1:35613/1/update",
+            "body": {
+              "sha256": "bdd3acd38b235f3e79f97834c1bada34fe87489f5cc3c530dab5bc47404e0a87",
+              "byteLength": 209,
+              "truncated": false
+            },
+            "timings": {
+              "startedAt": "2026-10-19T15:19:45.610Z",
+              "firstByteMs": 2.512149000000136,
+              "durationMs": 3.2597670000000107
+            }
+          },
+          "attackerComparison": {
+            "statusDelta": 203,
+            "bodyEqual": false,
+            "byteLengthDelta": -648,
+            "durationDeltaMs": -5.299095999999963,
+            "ownerMarkersMatch": false
+          },
+          "anonymousComparison": {
+            "statusDelta": 102,
+            "bodyEqual": false,
+            "byteLengthDelta": -652,
+            "durationDeltaMs": -5.958797000000004,
+            "ownerMarkersMatch": false
+          }
+        }
+      },
+      "schemaVersion": 1,
+      "provenance": {
+        "probeId": "authorization",
+        "capabilityIds": [
+          "probe:authorization"
+        ],
+        "environment": {
+          "id": "default",
+          "baseUrl": "http://127.0.0.1:35613",
+          "targetUrl": "http://127.0.0.1:35613"
+        }
+      },
+      "digest": "281375a65271f869cbc81c3ece9e44edbefc4c417c01f4a83704a0bf12b20ff8"
+    },
+    {
+      "id": "probe:7c3ae3d3-5830-4f41-b9d3-cfb7933889d7",
+      "projectId": "flask-live",
+      "kind": "configuration",
+      "producerId": "probe:cookie-security",
+      "capturedAt": "2026-10-19T15:19:45.927Z",
+      "summary": "Normalized security probe observations.",
+      "facts": {
+        "observation": "security-probe",
+        "schemaVersion": 1,
+        "probe": {
+          "id": "probe:7c3ae3d3-5830-4f41-b9d3-cfb7933889d7",
+          "probeId": "cookie-security",
+          "projectId": "flask-live",
+          "capturedAt": "2026-10-19T15:19:45.927Z",
+          "outcome": "COMPLETED",
+          "diagnostics": [],
+          "observations": [
+            {
+              "identityId": null,
+              "context": "anonymous",
+              "response": {
+                "responseId": "http:7c90daf4-8795-4c0d-b919-03333363a1d8",
+                "method": "GET",
+                "status": 200,
+                "url": "http://127.0.0.1:35613/",
+                "body": {
+                  "sha256": "a3acc45d86ed0e2642eee6538c23c41a97345b6f0df1d4bb2a037def470b7984",
+                  "byteLength": 650,
+                  "truncated": false
+                },
+                "timings": {
+                  "startedAt": "2026-10-19T15:19:45.621Z",
+                  "firstByteMs": 3.1752480000000105,
+                  "durationMs": 3.5603329999999005
+                }
+              },
+              "cookies": []
+            },
+            {
+              "identityId": "alice",
+              "context": "authenticated",
+              "response": {
+                "responseId": "http:696890c2-11ef-4bb5-ab0a-2450ffd48bc8",
+                "method": "GET",
+                "status": 200,
+                "url": "http://127.0.0.1:35613/",
+                "body": {
+                  "sha256": "07bbe0d2e642d58dda6d853a1ad63c4711818fd9de409e374372018ae3a6a7d1",
+                  "byteLength": 744,
+                  "truncated": false
+                },
+                "timings": {
+                  "startedAt": "2026-10-19T15:19:45.924Z",
+                  "firstByteMs": 1.5908049999998184,
+                  "durationMs": 1.7585299999996096
+                }
+              },
+              "cookies": [
+                {
+                  "name": "session",
+                  "value": "[REDACTED]",
+                  "domain": "127.0.0.1",
+                  "path": "/",
+                  "hostOnly": true,
+                  "httpOnly": true,
+                  "secure": false,
+                  "sameSite": "Lax",
+                  "expiresAt": null,
+                  "maxAge": null,
+                  "partitioned": false,
+                  "source": "jar",
+                  "sessionId": "runtime-auth:6a868524-3cc1-4c69-be86-4a75d6b3fbdd"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "schemaVersion": 1,
+      "provenance": {
+        "probeId": "cookie-security",
+        "capabilityIds": [
+          "probe:cookie-security"
+        ],
+        "environment": {
+          "id": "default",
+          "baseUrl": "http://127.0.0.1:35613",
+          "targetUrl": "http://127.0.0.1:35613"
+        }
+      },
+      "digest": "503c483c36074fe165b75815dfd3a831c15c830545875532d22adbe1edbef00b"
+    },
+    {
+      "id": "probe:68d72e76-e8db-4d81-903d-4a2647a8f7c9",
+      "projectId": "flask-live",
+      "kind": "configuration",
+      "producerId": "probe:cross-origin",
+      "capturedAt": "2026-10-19T15:19:45.932Z",
+      "summary": "Normalized security probe observations.",
+      "facts": {
+        "observation": "security-probe",
+        "schemaVersion": 1,
+        "probe": {
+          "id": "probe:68d72e76-e8db-4d81-903d-4a2647a8f7c9",
+          "probeId": "cross-origin",
+          "projectId": "flask-live",
+          "capturedAt": "2026-10-19T15:19:45.932Z",
+          "outcome": "COMPLETED",
+          "diagnostics": [],
+          "observations": [
+            {
+              "requestedOrigin": "https://unapproved.invalid",
+              "identityId": null,
+              "credentialMode": "omit",
+              "preflight": {
+                "response": {
+                  "responseId": "http:289efa41-c576-462f-a573-715601352a0b",
+                  "method": "OPTIONS",
+                  "status": 200,
+                  "url": "http://127.0.0.1:35613/",
+                  "body": {
+                    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                    "byteLength": 0,
+                    "truncated": false
+                  },
+                  "timings": {
+                    "startedAt": "2026-10-19T15:19:45.928Z",
+                    "firstByteMs": 1.5314430000003085,
+                    "durationMs": 1.672338000000309
+                  }
+                },
+                "cors": {
+                  "allowOrigin": [],
+                  "allowCredentials": [],
+                  "allowMethods": [],
+                  "allowHeaders": [],
+                  "exposeHeaders": [],
+                  "maxAge": []
+                }
+              },
+              "actual": {
+                "response": {
+                  "responseId": "http:162af91d-a4f7-4517-b46d-7b6f33f7651b",
+                  "method": "GET",
+                  "status": 200,
+                  "url": "http://127.0.0.1:35613/",
+                  "body": {
+                    "sha256": "a3acc45d86ed0e2642eee6538c23c41a97345b6f0df1d4bb2a037def470b7984",
+                    "byteLength": 650,
+                    "truncated": false
+                  },
+                  "timings": {
+                    "startedAt": "2026-10-19T15:19:45.930Z",
+                    "firstByteMs": 1.769651999999951,
+                    "durationMs": 2.046962999999778
+                  }
+                },
+                "cors": {
+                  "allowOrigin": [],
+                  "allowCredentials": [],
+                  "allowMethods": [],
+                  "allowHeaders": [],
+                  "exposeHeaders": [],
+                  "maxAge": []
+                }
+              }
+            }
+          ]
+        }
+      },
+      "schemaVersion": 1,
+      "provenance": {
+        "probeId": "cross-origin",
+        "capabilityIds": [
+          "probe:cross-origin"
+        ],
+        "environment": {
+          "id": "default",
+          "baseUrl": "http://127.0.0.1:35613",
+          "targetUrl": "http://127.0.0.1:35613"
+        }
+      },
+      "digest": "9c4c846ebefb912197fc59da3b08706601d1cfd1d39561fef7c6cda2aa7508cb"
+    }
+  ]
+}

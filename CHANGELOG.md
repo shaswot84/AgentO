@@ -8,6 +8,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Compatibility work scope**: Defined source selection, route extraction, coverage checks, and external application tests. Set measurable completion rules.
+
+- **External project checks**: Added source checks for seven public projects. Record source versions, route gaps, tool results, and proof links. Keep incomplete checks visible. Added local Flask browser, access, cookie, and CORS checks. Added test results and repeat instructions.
+
 - **Security evaluation**: Added repeatable checks for seven security rules in vulnerable and fixed demo modes. Compare injection results with static and runtime tool results. Record correct and incorrect results, test counts, requests, time, and model use.
 - **Evaluation report and checks**: Added measured results, source hashes, and stored proof. Added commands to repeat the checks and verify saved results. Added tests for missing results, changed scores, damaged proof, and changed source. Document test limits.
 
