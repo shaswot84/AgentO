@@ -1,6 +1,6 @@
 import type { ExecutionGuard } from '@agento/core';
 import { CapabilityRegistry } from '@agento/runtime';
-import type { AuthenticationManager, CapabilityCatalog, HttpRequest, RequestExecutor, ScannerRequest, SQLScanner, XSSScanner } from '@agento/runtime';
+import type { AuthenticationManager, CapabilityCatalog, HttpRequest, RequestExecutor, ScannerRequest, SecurityScannerPort, SecurityScannerRequest, SQLScanner, XSSScanner } from '@agento/runtime';
 import type { CapabilityResolution } from '@agento/capability-registry';
 import { PolicyError } from './contracts.js';
 
@@ -38,6 +38,14 @@ export function bindCapabilities(resolution: CapabilityResolution, host: Binding
         guard.assertActive();
         // The executor is already guarded. The ambient tool binding adds this scanner's restrictions.
         return scanner.scan({ ...input, project: { ...input.project, allowedOrigins: [...host.allowedOrigins] },
+          signal: input.signal ? AbortSignal.any([input.signal, host.signal]) : host.signal });
+      }) });
+    } else if (id === 'security-scanner') {
+      const scanner = source as SecurityScannerPort;
+      port = Object.freeze({ run: (input: SecurityScannerRequest) => host.tool(toolId, async () => {
+        guard.assertActive();
+        return scanner.run({ ...input, project: { ...input.project, allowedOrigins: [...host.allowedOrigins] },
+          executor: executor(input.executor, guard, host.signal),
           signal: input.signal ? AbortSignal.any([input.signal, host.signal]) : host.signal });
       }) });
     } else if (Object.hasOwn(reads, id)) port = guardedMethods(source, guard, reads[id]!);

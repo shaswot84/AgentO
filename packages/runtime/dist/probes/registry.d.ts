@@ -1,5 +1,5 @@
 import type { AuthenticationManager, BrowserController, CookieAnalyzer, CookieInspector, HeaderAnalyzer, RequestExecutor, ResponseCollector } from '../contracts.js';
-import type { AuthorizationContext, AuthorizationEvidence, CookieSecurityContext, CookieSecurityEvidence, CrossOriginContext, CrossOriginEvidence, InjectionContext, ProbeMetadata, ResponseComparator, SecurityProbe, SQLInjectionEvidence, SQLScanner, XSSEvidence, XSSScanner } from './contracts.js';
+import type { AuthorizationContext, AuthorizationEvidence, CookieSecurityContext, CookieSecurityEvidence, CrossOriginContext, CrossOriginEvidence, InjectionContext, ProbeMetadata, ResponseComparator, SecurityProbe, SecurityScannerPort, SQLInjectionEvidence, SQLScanner, XSSEvidence, XSSScanner } from './contracts.js';
 /** Extend through declaration merging when adding capabilities or probe families. */
 export interface CapabilityCatalog {
     'request-executor': RequestExecutor;
@@ -12,6 +12,7 @@ export interface CapabilityCatalog {
     'response-comparator': ResponseComparator;
     'xss-scanner': XSSScanner;
     'sql-scanner': SQLScanner;
+    'security-scanner': SecurityScannerPort;
 }
 export declare class CapabilityRegistry {
     private readonly entries;

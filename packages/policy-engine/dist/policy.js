@@ -232,7 +232,7 @@ export class PolicyEngine {
                 return invalid('selection-unavailable', origin);
             const toolIds = [...new Set(selected.map(item => item.selectedToolId))].sort();
             let active = plan.risk === 'active' || selection.risk === 'active' || !!selection.probeId
-                || selected.some(item => ['request-executor', 'browser-controller', 'authentication-manager', 'xss-scanner', 'sql-scanner'].includes(item.capability))
+                || selected.some(item => ['request-executor', 'browser-controller', 'authentication-manager', 'xss-scanner', 'sql-scanner', 'security-scanner'].includes(item.capability))
                 || !!plan.request && !['GET', 'HEAD', 'OPTIONS'].includes(plan.request.method);
             for (const item of selected) {
                 const rule = this.config.tools[item.selectedToolId], candidate = item.candidates.find((candidate) => candidate.toolId === item.selectedToolId);

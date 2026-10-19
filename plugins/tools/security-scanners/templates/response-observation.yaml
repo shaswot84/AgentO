@@ -1,0 +1,15 @@
+id: agento-response-observation
+info:
+  name: AgentO scoped response observation
+  author: agento
+  severity: info
+  description: Records an HTTP response. This template does not establish a vulnerability.
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+    redirects: false
+    matchers:
+      - type: dsl
+        dsl:
+          - "status_code >= 200 && status_code <= 599"

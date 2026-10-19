@@ -52,7 +52,7 @@ function parameter(value: unknown): boolean {
 export function isProbeEvidence(value: unknown): value is NormalizedProbeEvidence {
   if (!object(value) || !string(value.id) || !string(value.projectId) || !timestamp(value.capturedAt)
     || !['COMPLETED', 'PARTIAL'].includes(value.outcome as string) || !Array.isArray(value.diagnostics)
-    || !value.diagnostics.every(item => ['scanner-unavailable', 'browser-unavailable', 'response-truncated'].includes(item))
+    || !value.diagnostics.every(item => ['scanner-unavailable', 'scanner-failed', 'scanner-skipped', 'browser-unavailable', 'response-truncated'].includes(item))
     || value.outcome === 'COMPLETED' && value.diagnostics.length > 0) return false;
   switch (value.probeId) {
     case 'cookie-security': return Array.isArray(value.observations) && value.observations.every(item => object(item)

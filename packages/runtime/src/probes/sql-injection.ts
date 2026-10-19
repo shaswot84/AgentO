@@ -39,6 +39,7 @@ export class SQLInjectionProbe implements SecurityProbe<InjectionContext, SQLInj
         if (context.capabilities.has('sql-scanner')) {
           const result = await scan({ ...context, request: prepared }, executor, `agento-${randomUUID()}`,
             value => context.capabilities.get('sql-scanner').scan(value));
+          if (result.diagnostic === 'scanner-failed' || result.diagnostic === 'scanner-skipped') diagnostics.push(result.diagnostic);
           if (!['error', 'boolean', 'time'].includes(result.technique)
             || ![null, 'SQLite', 'PostgreSQL', 'MySQL', 'SQLServer', 'Oracle'].includes(result.dbmsFingerprint)
             || ![true, false, null].includes(result.observedDifference)) throw new RuntimeError('invalid-request');

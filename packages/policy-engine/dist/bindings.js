@@ -41,6 +41,15 @@ export function bindCapabilities(resolution, host) {
                         signal: input.signal ? AbortSignal.any([input.signal, host.signal]) : host.signal });
                 }) });
         }
+        else if (id === 'security-scanner') {
+            const scanner = source;
+            port = Object.freeze({ run: (input) => host.tool(toolId, async () => {
+                    guard.assertActive();
+                    return scanner.run({ ...input, project: { ...input.project, allowedOrigins: [...host.allowedOrigins] },
+                        executor: executor(input.executor, guard, host.signal),
+                        signal: input.signal ? AbortSignal.any([input.signal, host.signal]) : host.signal });
+                }) });
+        }
         else if (Object.hasOwn(reads, id))
             port = guardedMethods(source, guard, reads[id]);
         else

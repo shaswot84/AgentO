@@ -231,10 +231,15 @@ receive a private executor limited to eight additional requests to the approved
 endpoint and method; its capability is revoked after `scan()` returns. They must
 honor the abort signal and exact project origins if using their own transport.
 No external injection scanner is bundled here. Missing optional scanners produce
-`PARTIAL` coverage with `scanner-unavailable`, and unsupported browser collection
-or truncated responses add explicit diagnostics. Present adapters that fail throw
-sanitized errors rather than returning successful empty evidence. Tests inject
-scanner fakes; they do not claim live scanner verification.
+`PARTIAL` coverage with `scanner-unavailable`. Registered adapters can report
+`scanner-failed` or `scanner-skipped` without stopping the probe's other
+observations. Unsupported browser collection and truncated responses have
+separate diagnostics. Unexpected adapter errors propagate as sanitized runtime
+errors. Runtime tests inject scanner fakes.
+
+The generic `security-scanner` port accepts private host input and returns core
+results. See the [native scanner adapters](../../plugins/tools/security-scanners/README.md)
+for installation, policy-bound execution, native verification, and tool limits.
 
 Evidence retains response IDs, digests, lengths and timings, with query values
 redacted and raw bodies/headers omitted. URL paths, cookie metadata and observed

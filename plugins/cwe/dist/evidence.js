@@ -55,7 +55,7 @@ function parameter(value) {
 export function isProbeEvidence(value) {
     if (!object(value) || !string(value.id) || !string(value.projectId) || !timestamp(value.capturedAt)
         || !['COMPLETED', 'PARTIAL'].includes(value.outcome) || !Array.isArray(value.diagnostics)
-        || !value.diagnostics.every(item => ['scanner-unavailable', 'browser-unavailable', 'response-truncated'].includes(item))
+        || !value.diagnostics.every(item => ['scanner-unavailable', 'scanner-failed', 'scanner-skipped', 'browser-unavailable', 'response-truncated'].includes(item))
         || value.outcome === 'COMPLETED' && value.diagnostics.length > 0)
         return false;
     switch (value.probeId) {

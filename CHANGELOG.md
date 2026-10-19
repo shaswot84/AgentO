@@ -8,6 +8,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Security tool adapters (`plugins/tools/security-scanners`)**: Added Nuclei, ZAP, Dalfox, and sqlmap adapters. Use common result and evidence formats. Keep raw tool data private. Limit targets, requests, process time, and output size. Stop redirects and access outside the selected endpoint.
+- **Scanner use and tests**: Added tool registration and policy controls. Report failed and disabled scanners in probe data. Keep scanner reports separate from verified findings. Added process tests, local HTTP tests, native tool tests, and setup instructions.
+
 - **Execution policy (`packages/policy-engine`)**: Added checks for approved targets and tools. Check HTTP methods and redirect destinations. Limit request rates and counts. Set test risk and severity. Require approval for tests with higher risk. Use each approval once. Record decisions without private request data.
 - **Runtime policy controls**: Check HTTP and browser requests before target access. Apply the same checks to login sessions and scanner requests. Stop access when a test ends. Added unit tests and local HTTP and browser tests. Added setup and use instructions.
 

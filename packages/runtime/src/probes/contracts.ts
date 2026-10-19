@@ -1,4 +1,4 @@
-import type { Project } from '@agento/core';
+import type { CWEId, Project, SecurityTestResult } from '@agento/core';
 import type {
   AuthSession, CookieEvidence, HeaderEvidence, HttpRequest, HttpResponse,
   HttpResponseEvidence, RequestExecutor, TestIdentity,
@@ -27,7 +27,7 @@ export interface ProbeEvidence {
   readonly capturedAt: string;
   /** Collection coverage, independent of any security judgment. */
   readonly outcome: 'COMPLETED' | 'PARTIAL';
-  readonly diagnostics: readonly ('scanner-unavailable' | 'browser-unavailable' | 'response-truncated')[];
+  readonly diagnostics: readonly ('scanner-unavailable' | 'scanner-failed' | 'scanner-skipped' | 'browser-unavailable' | 'response-truncated')[];
 }
 export interface CookieSecurityContext extends ProbeContext {
   readonly request: HttpRequest;
@@ -114,9 +114,24 @@ export interface ScannerRequest {
   readonly maxRequests: number;
   readonly signal?: AbortSignal;
 }
+/** Private host input for a general scanner. The executor must carry execution policy. */
+export interface SecurityScannerRequest {
+  readonly project: Project;
+  readonly planId: string;
+  readonly cweId: CWEId;
+  readonly request: HttpRequest;
+  readonly parameter?: InjectionPoint;
+  readonly executor: RequestExecutor;
+  readonly maxRequests: number;
+  readonly signal?: AbortSignal;
+}
+export interface SecurityScannerPort {
+  run(request: SecurityScannerRequest): Promise<SecurityTestResult>;
+}
 /** Objective adapter ports. A scanner's finding/verdict output is not accepted here. */
 export interface XSSScanner {
   scan(request: ScannerRequest): Promise<{
+    readonly diagnostic?: 'scanner-failed' | 'scanner-skipped';
     readonly executionConfirmed: boolean | null;
     readonly domSinkReached: boolean | null;
   }>;
@@ -124,6 +139,7 @@ export interface XSSScanner {
 export type DatabaseFingerprint = 'SQLite' | 'PostgreSQL' | 'MySQL' | 'SQLServer' | 'Oracle';
 export interface SQLScanner {
   scan(request: ScannerRequest): Promise<{
+    readonly diagnostic?: 'scanner-failed' | 'scanner-skipped';
     readonly technique: 'error' | 'boolean' | 'time';
     readonly dbmsFingerprint: DatabaseFingerprint | null;
     readonly observedDifference: boolean | null;

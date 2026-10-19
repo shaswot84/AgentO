@@ -6,7 +6,7 @@ import { freeze, RuntimeError } from '../safety.js';
 import type {
   AuthorizationContext, AuthorizationEvidence, CookieSecurityContext, CookieSecurityEvidence,
   CrossOriginContext, CrossOriginEvidence, InjectionContext, ProbeMetadata, ResponseComparator,
-  SecurityProbe, SQLInjectionEvidence, SQLScanner, XSSEvidence, XSSScanner,
+  SecurityProbe, SecurityScannerPort, SQLInjectionEvidence, SQLScanner, XSSEvidence, XSSScanner,
 } from './contracts.js';
 
 /** Extend through declaration merging when adding capabilities or probe families. */
@@ -21,6 +21,7 @@ export interface CapabilityCatalog {
   'response-comparator': ResponseComparator;
   'xss-scanner': XSSScanner;
   'sql-scanner': SQLScanner;
+  'security-scanner': SecurityScannerPort;
 }
 export class CapabilityRegistry {
   private readonly entries = new Map<keyof CapabilityCatalog, unknown>();

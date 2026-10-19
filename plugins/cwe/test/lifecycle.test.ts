@@ -84,6 +84,10 @@ describe('application model candidates and declarative probe plans', () => {
   });
 });
 describe('core evidence bridge', () => {
+  it.each(['scanner-failed', 'scanner-skipped'] as const)('preserves incomplete scanner coverage: %s', diagnostic => {
+    const probe = { ...sql(), outcome: 'PARTIAL' as const, diagnostics: [diagnostic] };
+    expect(fromCoreEvidence(toCoreEvidence(probe))).toEqual(probe);
+  });
   it.each([cookies(), cors(), authorization(), xss(), sql()])('round trips only normalized public observations', probe => {
     expect(fromCoreEvidence(toCoreEvidence(probe, 'order'))).toEqual(probe);
   });

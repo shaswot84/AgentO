@@ -121,6 +121,12 @@ through asynchronous calls, while counting an outgoing exchange once. Optional
 tools are checked too. Disable or remove an unsupported optional port before
 resolution if it is not needed.
 
+The generic `security-scanner` port returns core results from private host input.
+Its policy binding wraps the supplied executor with the selected tool's guard.
+It checks the same targets, methods, request budgets, cancellation, and approval
+requirements. See the [native scanner adapters](../../plugins/tools/security-scanners/README.md)
+for registration and supported execution modes.
+
 Browser controllers and authentication managers must implement `withGuard()` and
 return a fresh binding. Missing support causes `guard-unsupported` before the
 callback runs. The provided `WorkflowBrowserController`,

@@ -71,6 +71,7 @@ AgentO/
 │   │   └── openai/    # Optional bounded structured-generation provider
 │   └── tools/
 │       ├── semgrep/   # Normalized static XSS/SQLi candidates and source/sink evidence
+│       ├── security-scanners/ # Scoped Nuclei, ZAP, Dalfox, and sqlmap adapters
 │       └── e2e-browser/ # Portable target profiles, persona workflows, and browser evidence
 ├── demo-apps/
 │   ├── demo-app-01/   # Controlled e-commerce target app (dual-mode: vulnerable / fixed)
@@ -94,6 +95,7 @@ AgentO/
 - **`plugins/models/openai`**: Optional structured-generation provider with explicit model selection, backend API-key resolution, bounded transport, and sanitized results. See [provider setup](plugins/models/openai/README.md).
 - **`plugins/frameworks/express`**: Implements the core framework adapter for read-only JS/TS route extraction, mounted middleware, request inputs, session/cookie/CORS configuration, and database observations. Recognizes all 19 declared demo routes and integrates with discovery through explicit adapter registration. See [adapter setup, verification, and boundaries](plugins/frameworks/express/README.md).
 - **`plugins/tools/semgrep`**: Implements the core static analyzer with bundled JS/TS taint rules for XSS and SQL injection candidates, normalized source/sink evidence, bounded AST context, and optional precomputed Express endpoint association. Static signals require runtime verification. See [installation, CLI, integration, and limitations](plugins/tools/semgrep/README.md).
+- **`plugins/tools/security-scanners`**: Runs Nuclei, ZAP, Dalfox, and sqlmap through scoped executor ports. Returns immutable results and redacted candidate evidence, with policy bindings, tool replacement, and isolated failures. See [native tool setup, supported modes, and limits](plugins/tools/security-scanners/README.md).
 - **`plugins/tools/e2e-browser`**: Runs portable browser workflows through TesterArmy e2e and Chromium. Target profiles configure personas, authentication, origins, and workflow hints; recipes or bounded iterative planners drive the browser. Verified against a storefront and a distinct JWT SPA, with isolated saved sessions and normalized evidence. See [setup, examples, and compatibility](plugins/tools/e2e-browser/README.md).
 - **`demo-apps/demo-app-01`**: A fully functional Node.js + TypeScript + Express + SQLite e-commerce application equipped with both vulnerable and patched implementations of each target CWE for reproducible validation.
 - **`demo-apps/demo-app-02`**: A Fastify + JWT + PostgreSQL + Redis + Drizzle ORM microservice built to verify Project Discovery robustness against multi-language, multi-manifest, and non-Express stacks with automatic black-box fallback.

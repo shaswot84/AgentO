@@ -43,6 +43,7 @@ export class XSSProbe implements SecurityProbe<InjectionContext, XSSEvidence> {
         let executionConfirmed: boolean | null = null, domSinkReached: boolean | null = null;
         if (context.capabilities.has('xss-scanner')) {
           const result = await scan(normalized, executor, canary, value => context.capabilities.get('xss-scanner').scan(value));
+          if (result.diagnostic === 'scanner-failed' || result.diagnostic === 'scanner-skipped') diagnostics.push(result.diagnostic);
           if (![true, false, null].includes(result.executionConfirmed) || ![true, false, null].includes(result.domSinkReached)) {
             throw new RuntimeError('invalid-request');
           }
