@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "target": "demo-app-01",
+  "description": "Controlled paired modes of the same Express source. Labels describe the selected behavior only.",
+  "cases": [
+    { "id": "order-owner", "slice": "a01", "cweId": "CWE-639", "path": "/api/orders/:id", "source": "src/routes/orders.ts", "label": "A second customer must not read Alice's order." },
+    { "id": "admin-role", "slice": "a01", "cweId": "CWE-862", "path": "/api/admin/users", "source": "src/middleware/auth.ts", "label": "A customer must not read the administrator user list." },
+    { "id": "cookie-httponly", "slice": "a02", "cweId": "CWE-1004", "path": "/api/auth/me", "source": "src/middleware/auth.ts", "label": "The sensitive auth_token cookie must have HttpOnly." },
+    { "id": "cookie-secure", "slice": "a02", "cweId": "CWE-614", "path": "/api/auth/me", "source": "src/middleware/auth.ts", "label": "The sensitive auth_token cookie must have Secure over HTTPS." },
+    { "id": "cors-origin", "slice": "a02", "cweId": "CWE-942", "path": "/api/auth/me", "source": "src/middleware/cors.ts", "label": "An untrusted origin must not receive a reflected credentialed CORS policy." },
+    { "id": "reflected-script", "slice": "a05", "cweId": "CWE-79", "path": "/search", "source": "src/routes/search.ts", "label": "A query value must not execute JavaScript in the HTML response." },
+    { "id": "sql-query", "slice": "a05", "cweId": "CWE-89", "path": "/api/search", "source": "src/routes/search.ts", "label": "A query value must not alter SQL result selection." }
+  ],
+  "labels": { "vulnerable": true, "fixed": false },
+  "baselineCaseIds": ["reflected-script", "sql-query"]
+}

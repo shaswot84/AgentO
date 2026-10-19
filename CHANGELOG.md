@@ -8,6 +8,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Security evaluation**: Added repeatable checks for seven security rules in vulnerable and fixed demo modes. Compare injection results with static and runtime tool results. Record correct and incorrect results, test counts, requests, time, and model use.
+- **Evaluation report and checks**: Added measured results, source hashes, and stored proof. Added commands to repeat the checks and verify saved results. Added tests for missing results, changed scores, damaged proof, and changed source. Document test limits.
+
 - **Fix verification (`packages/retest`)**: Apply source patches in temporary copies. Run security and normal-use tests. Repeat the original probe. Record before and after proof with verified, failed, or inconclusive fix states. Keep the original finding fixed.
 - **Fix reports and checks**: Add fix states and proof links to JSON and Markdown reports. Check source hashes, patch paths, original test data, and stored evidence. Add tests for seven repairs, failed repairs, crashes, cleanup, and private data. Accept stored runtime probe records in repair generation.
 
