@@ -54,6 +54,7 @@ AgentO/
 ├── apps/
 │   └── frontend/      # Application context, hypotheses, test plans, and evidence
 ├── packages/
+│   ├── a01/           # Access control assessment with isolated user sessions
 │   ├── a02/           # Complete cookie and CORS assessment with shared runtime proof
 │   ├── a05/           # Targeted injection assessment with source and runtime proof
 │   ├── core/          # Tool-independent contracts, domain types, and orchestrator
@@ -87,6 +88,7 @@ AgentO/
 
 - **`apps/frontend`**: React + TypeScript workspace for discovery, application models, browser workflows, source scans, hypotheses, test plans, and finding evidence. Plans show readiness, missing inputs, and rule coverage. Results are saved locally; demo examples are labelled synthetic. Runtime test execution remains unconfigured. See [frontend setup and boundaries](apps/frontend/README.md).
 - **`packages/core`**: Contains the decoupled domain model (`Project`, `Endpoint`, `Identity`, `Evidence`, `Finding`), provider interfaces, and the core pipeline orchestrator.
+- **`packages/a01`**: Tests selected resources as an owner, a forbidden second user, and an anonymous client. Uses isolated browser logins, declared access policies, private content comparisons, stored proof, and verification for CWE-639 and CWE-862. Provides an API and JSON-report CLI. See [access control setup and limits](packages/a01/README.md).
 - **`packages/a02`**: Runs discovery, hypotheses, planning, guarded cookie/CORS probes, retained evidence, and verification for CWE-1004, CWE-614, and CWE-942. Both cookie rules share one collection. Provides an API and JSON-report CLI. See [assessment setup and usage](packages/a02/README.md).
 - **`packages/a05`**: Connects Semgrep input locations to targeted XSS and SQL probes, Dalfox/sqlmap adapters, browser execution proof, retained evidence, and verification. Provides an API and private JSON-report CLI. See [injection assessment setup and limits](packages/a05/README.md).
 - **`packages/evidence`**: Stores immutable, redacted observations with probe, capability, and target provenance. Supports a local append-only journal and portable finding proof bundles. See [evidence setup, retention, and integrity limits](packages/evidence/README.md).

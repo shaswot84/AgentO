@@ -8,6 +8,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Access control tests (`packages/a01`)**: Added source checks and tests for access to private objects and protected routes. Use separate browser logins and cookie stores for each user. Compare owner, second user, and anonymous responses. Require private content matches before confirmation.
+- **Access control command and proof**: Added a JSON scan command with account values from environment variables. Added stored proof, policy checks, and tests for failed logins and request limits. Added setup instructions. Keep passwords, cookie values, and private content markers out of reports.
+
 - **Injection Assessment (`packages/a05`)**: Added source checks and targeted runtime tests for XSS and SQL injection. Added a JSON report command. Each result links source records to stored test evidence. Added tests with native tools and vulnerable and fixed demo modes.
 - **Injection Proof**: Added browser checks for random script markers. Added controlled SQL result comparisons and input names in static source records. Kept full response hashes. Added request limits and tests for incomplete proof, denied execution, and private data.
 

@@ -1,0 +1,47 @@
+{
+  "name": "@agento/a01",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Source-grounded authorization assessment with isolated browser logins and retained differential proof",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": "^22.22.3 || >=24.8.0"
+  },
+  "scripts": {
+    "build": "node node_modules/typescript/bin/tsc -p tsconfig.build.json",
+    "typecheck": "node node_modules/typescript/bin/tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:integration": "AGENTO_A01_INTEGRATION=1 vitest run test/demo.integration.test.ts",
+    "check": "npm run typecheck && npm run build && npm test",
+    "scan": "node dist/cli.js"
+  },
+  "dependencies": {
+    "@agento/core": "file:../core",
+    "@agento/cwe": "file:../../plugins/cwe",
+    "@agento/discovery": "file:../discovery",
+    "@agento/evidence": "file:../evidence",
+    "@agento/framework-express": "file:../../plugins/frameworks/express",
+    "@agento/hypothesis-engine": "file:../hypothesis-engine",
+    "@agento/security-model": "file:../security-model",
+    "@agento/test-planner": "file:../test-planner",
+    "@agento/capability-registry": "file:../capability-registry",
+    "@agento/policy-engine": "file:../policy-engine",
+    "@agento/runtime": "file:../runtime",
+    "@agento/verifier": "file:../verifier",
+    "@agento/tool-e2e-browser": "file:../../plugins/tools/e2e-browser"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.3"
+  }
+}

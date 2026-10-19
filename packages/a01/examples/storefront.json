@@ -1,0 +1,60 @@
+{
+  "project": {
+    "id": "storefront-a01",
+    "name": "Storefront access control assessment",
+    "mode": "code-aware",
+    "repositoryPath": "../../../demo-apps/demo-app-01",
+    "baseUrl": "http://127.0.0.1:3000",
+    "allowedOrigins": ["http://127.0.0.1:3000"],
+    "languages": ["typescript"]
+  },
+  "targets": [
+    {
+      "path": "/api/orders/:id",
+      "cweId": "CWE-639",
+      "resourceId": "alice-order",
+      "ownerIdentityId": "alice",
+      "attackerIdentityId": "bob",
+      "attackerIsUnauthorized": true,
+      "anonymousIsUnauthorized": true,
+      "pathValues": {"id": "102"},
+      "ownerMarkers": ["CyberSec Hoodie", "124 Alice Way, Wonderland Apt 4B"]
+    },
+    {
+      "path": "/api/admin/users",
+      "cweId": "CWE-862",
+      "resourceId": "admin-users",
+      "ownerIdentityId": "admin",
+      "attackerIdentityId": "bob",
+      "attackerIsUnauthorized": true,
+      "anonymousIsUnauthorized": true,
+      "ownerMarkers": ["admin@agento.local", "System Administrator"]
+    }
+  ],
+  "accounts": [
+    {"id": "alice", "label": "Alice", "roles": ["customer"], "usernameEnv": "AGENTO_ALICE_USERNAME", "passwordEnv": "AGENTO_ALICE_PASSWORD", "expectedIdentity": "alice", "expectedRole": "customer"},
+    {"id": "bob", "label": "Bob", "roles": ["customer"], "usernameEnv": "AGENTO_BOB_USERNAME", "passwordEnv": "AGENTO_BOB_PASSWORD", "expectedIdentity": "bob", "expectedRole": "customer"},
+    {"id": "admin", "label": "Admin", "roles": ["admin"], "usernameEnv": "AGENTO_ADMIN_USERNAME", "passwordEnv": "AGENTO_ADMIN_PASSWORD", "expectedIdentity": "admin", "expectedRole": "admin"}
+  ],
+  "login": {
+    "loginUrl": "/login.html",
+    "usernameSelector": "#username",
+    "passwordSelector": "#password",
+    "submitSelector": "#login-form button[type=submit]",
+    "response": {"url": "/api/auth/login", "method": "POST", "status": 200},
+    "successUrl": "/",
+    "verificationUrl": "/api/auth/me",
+    "identityPath": ["user", "username"],
+    "rolePath": ["user", "role"]
+  },
+  "policy": {
+    "allowedOrigins": ["http://127.0.0.1:3000"],
+    "allowedMethods": ["GET", "POST"],
+    "maxRequestsPerExecution": 100,
+    "rateLimit": {"maxRequests": 300, "windowMs": 60000},
+    "tools": {"a01-http": {}, "a01-auth": {}},
+    "approval": {"risks": [], "severities": []}
+  },
+  "evidenceDirectory": "/tmp/agento-a01-proof",
+  "output": "/tmp/agento-a01-report.json"
+}
