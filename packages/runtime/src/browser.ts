@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import type { AnalysisContext, BrowserContextCookie, BrowserWorkflowRuntimeDriver, TargetApplicationProfile } from '@agento/core';
+import type { AnalysisContext, BrowserContextCookie, BrowserWorkflowRuntimeDriver, ExecutionGuard, TargetApplicationProfile } from '@agento/core';
 import type { BrowserController, BrowserSession, CookieInspector, NetworkEvidence, NetworkObserver, RuntimeCookie, TestIdentity } from './contracts.js';
 import { cookieEvidence } from './cookies.js';
 import { evidenceUrl, freeze, limit, RuntimeError, RuntimeScope } from './safety.js';
@@ -29,6 +29,10 @@ export class WorkflowBrowserController implements BrowserController {
     const origins = declared.origins.filter(origin => configured.origins.includes(origin) && narrowed.origins.includes(origin));
     this.scope = new RuntimeScope(this.context.project.baseUrl, origins);
     this.maximum = limit(options.maxNetworkRecords ?? 500, 10_000);
+  }
+  withGuard(guard: ExecutionGuard): WorkflowBrowserController {
+    if (!this.options.driver.withGuard) throw new RuntimeError('unsupported-capability');
+    return new WorkflowBrowserController({ ...this.options, driver: this.options.driver.withGuard(guard) });
   }
   async withSession<T>(identity: TestIdentity, execute: (session: BrowserSession) => Promise<T>): Promise<T> {
     const registered = this.context.identities.find(item => item.id === identity.id);

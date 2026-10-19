@@ -13,6 +13,7 @@ import type { BrowserAction, BrowserRuntime, BrowserRuntimeRequest, BrowserSessi
 /** e2e owns Chromium and context isolation; AgentO owns execution and evidence above its live surface. */
 export class E2EWebRuntime implements BrowserRuntime {
   async start(request: BrowserRuntimeRequest): Promise<BrowserSession> {
+    request.executionGuard?.assertActive();
     // An explicit headers object makes e2e create contexts with serviceWorkers: 'block'.
     const engine = web({ browser: 'chromium', headers: {} });
     const attemptId = randomUUID();
@@ -52,10 +53,15 @@ export class E2EWebRuntime implements BrowserRuntime {
             const client = await context.newCDPSession(page);
             client.on('Fetch.requestPaused', event => {
               const work = async () => {
-                try { request.assertUrl(event.request.url); }
+                try {
+                  request.executionGuard?.assertActive();
+                  request.executionGuard?.assertRequest({ url: event.request.url, method: event.request.method });
+                  request.assertUrl(event.request.url);
+                }
                 catch {
                   request.onNetwork({ url: event.request.url, method: event.request.method,
-                    resourceType: event.resourceType.toLowerCase(), status: null, blocked: true, blockedReason: 'origin-scope' });
+                    resourceType: event.resourceType.toLowerCase(), status: null, blocked: true,
+                    blockedReason: request.executionGuard ? 'policy-denied' : 'origin-scope' });
                   await client.send('Fetch.failRequest', { requestId: event.requestId, errorReason: 'BlockedByClient' });
                   return;
                 }
@@ -101,6 +107,9 @@ export class E2EWebRuntime implements BrowserRuntime {
             await route.abort('blockedbyclient'); return;
           }
           await guardPage(page);
+          // In policy mode Chromium gates each real exchange, including redirect hops.
+          // Avoid route.fetch(), which uses a separate client outside that gate.
+          if (request.executionGuard) { await route.continue(); return; }
           const response = await route.fetch({ maxRedirects: 0, timeout: Math.min(10_000, request.timeoutMs) });
           try {
             const location = response.headers().location;
@@ -153,6 +162,7 @@ class LiveSession implements BrowserSession {
     readonly close: () => Promise<void>) {}
 
   async perform(action: BrowserAction): Promise<void> {
+    this.request.executionGuard?.assertActive();
     if (this.request.signal.aborted) throw new BrowserError('timeout');
     const response = 'response' in action && action.response
       ? this.page.waitForResponse(item => matchesResponse(item, action.response!, this.request.assertUrl)) : undefined;

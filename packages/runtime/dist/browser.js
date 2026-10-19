@@ -23,6 +23,11 @@ export class WorkflowBrowserController {
         this.scope = new RuntimeScope(this.context.project.baseUrl, origins);
         this.maximum = limit(options.maxNetworkRecords ?? 500, 10_000);
     }
+    withGuard(guard) {
+        if (!this.options.driver.withGuard)
+            throw new RuntimeError('unsupported-capability');
+        return new WorkflowBrowserController({ ...this.options, driver: this.options.driver.withGuard(guard) });
+    }
     async withSession(identity, execute) {
         const registered = this.context.identities.find(item => item.id === identity.id);
         if (!registered || registered.authentication !== identity.authentication

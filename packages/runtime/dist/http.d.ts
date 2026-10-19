@@ -1,3 +1,4 @@
+import type { ExecutionGuard } from '@agento/core';
 import type { HttpRequest, HttpResponse, HttpTransport, RequestExecutor, ResponseCollector, ResponseTimings, TransportRequest, TransportResponse } from './contracts.js';
 import { RuntimeScope } from './safety.js';
 export declare class NormalizedResponseCollector implements ResponseCollector {
@@ -34,8 +35,10 @@ export interface HttpExecutorOptions {
     readonly maxRequestBytes?: number;
     readonly transport?: HttpTransport;
     readonly collector?: ResponseCollector;
+    readonly executionGuard?: ExecutionGuard;
 }
 export declare class DeterministicRequestExecutor implements RequestExecutor {
+    private readonly options;
     readonly scope: RuntimeScope;
     private readonly timeoutMs;
     private readonly maxBodyBytes;
@@ -43,5 +46,6 @@ export declare class DeterministicRequestExecutor implements RequestExecutor {
     private readonly transport;
     private readonly collector;
     constructor(options: HttpExecutorOptions);
+    withGuard(guard: ExecutionGuard): DeterministicRequestExecutor;
     execute(request: HttpRequest): Promise<HttpResponse>;
 }

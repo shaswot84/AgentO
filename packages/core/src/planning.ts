@@ -1,5 +1,6 @@
 import type { BrowserAction, BrowserContextCookie, BrowserPageInspection, Persona, TargetApplicationProfile, WorkflowPlanner } from './browser.js';
 import type { AnalysisContext, JsonValue } from './domain.js';
+import type { ExecutionGuard } from './execution.js';
 import type { BrowserObservation, BrowserWorkflow, BrowserWorkflowDriver } from './contracts.js';
 
 export type WorkflowFailureCode = 'invalid-workflow' | 'scope-denied' | 'authentication-failed'
@@ -25,6 +26,8 @@ export interface BrowserWorkflowSession {
   replaceCookies?(cookies: readonly BrowserContextCookie[]): Promise<void>;
 }
 export interface BrowserWorkflowRuntimeDriver extends BrowserWorkflowDriver {
+  /** Return a fresh binding that gates authentication and every network exchange. */
+  withGuard?(guard: ExecutionGuard): BrowserWorkflowRuntimeDriver;
   runWorkflow(context: AnalysisContext, workflow: BrowserWorkflow,
     execute: (session: BrowserWorkflowSession) => Promise<void>, target?: TargetApplicationProfile): Promise<BrowserExecutionObservation>;
 }

@@ -1,0 +1,31 @@
+{
+  "name": "@agento/policy-engine",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Auditable policy decisions and guarded runtime capability bindings",
+  "type": "module",
+  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } },
+  "files": ["dist"],
+  "engines": { "node": "^22.22.3 || >=24.8.0" },
+  "scripts": {
+    "build": "node node_modules/typescript/bin/tsc -p tsconfig.build.json",
+    "typecheck": "node node_modules/typescript/bin/tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:integration": "AGENTO_POLICY_INTEGRATION=1 vitest run test/browser.live.test.ts",
+    "check": "npm run typecheck && npm run build && npm test"
+  },
+  "dependencies": {
+    "@agento/core": "file:../core",
+    "@agento/runtime": "file:../runtime",
+    "@agento/capability-registry": "file:../capability-registry"
+  },
+  "devDependencies": {
+    "@agento/tool-e2e-browser": "file:../../plugins/tools/e2e-browser",
+    "@agento/test-planner": "file:../test-planner",
+    "@agento/cwe": "file:../../plugins/cwe",
+    "@agento/security-model": "file:../security-model",
+    "@types/node": "^26.6.5",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.3"
+  }
+}

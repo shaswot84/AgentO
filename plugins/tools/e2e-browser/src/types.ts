@@ -1,5 +1,5 @@
 import type { AnalysisContext, BrowserAction, BrowserContextCookie, BrowserObservation, BrowserPageInspection, BrowserWorkflow,
-  Credentials, Persona, Project, ResponseExpectation, SessionVerification, TargetApplicationProfile, WorkflowPlanner } from '@agento/core';
+  Credentials, ExecutionGuard, Persona, Project, ResponseExpectation, SessionVerification, TargetApplicationProfile, WorkflowPlanner } from '@agento/core';
 export type { BrowserAction, Credentials, ResponseExpectation, SessionVerification } from '@agento/core';
 
 export interface FormAuthentication {
@@ -34,7 +34,7 @@ export interface NetworkRecord {
   readonly timestamp?: string;
   /** Only the explicit safe response-header allowlist is retained. */
   readonly headers?: Readonly<Record<string, string>>;
-  readonly blockedReason?: 'origin-scope' | 'popup-unsupported' | 'worker-unsupported' | 'websocket-unsupported';
+  readonly blockedReason?: 'origin-scope' | 'policy-denied' | 'popup-unsupported' | 'worker-unsupported' | 'websocket-unsupported';
 }
 export interface BrowserSnapshot { readonly url: string; readonly screenshotPath?: string }
 export interface BrowserSession {
@@ -48,6 +48,7 @@ export interface BrowserSession {
   close(): Promise<void>;
 }
 export interface BrowserRuntimeRequest {
+  readonly executionGuard?: ExecutionGuard;
   readonly project: Project;
   readonly signal: AbortSignal;
   readonly timeoutMs: number;
@@ -67,6 +68,7 @@ export interface WorkflowObservation extends BrowserObservation {
   readonly diagnostics: readonly BrowserDiagnostic[];
 }
 export interface TesterArmyE2EOptions {
+  readonly executionGuard?: ExecutionGuard;
   readonly target?: TargetApplicationProfile;
   readonly workflowPlanner?: WorkflowPlanner;
   readonly maxWorkflowActions?: number;

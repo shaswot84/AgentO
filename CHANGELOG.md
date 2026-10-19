@@ -8,6 +8,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Execution policy (`packages/policy-engine`)**: Added checks for approved targets and tools. Check HTTP methods and redirect destinations. Limit request rates and counts. Set test risk and severity. Require approval for tests with higher risk. Use each approval once. Record decisions without private request data.
+- **Runtime policy controls**: Check HTTP and browser requests before target access. Apply the same checks to login sessions and scanner requests. Stop access when a test ends. Added unit tests and local HTTP and browser tests. Added setup and use instructions.
+
 - **Capability registry (`packages/capability-registry`)**: Added tool data for capabilities, supported CWEs, protocols, and risk. Select available adapters for plans and probes. Permit several tools to supply the same capability. Use another tool if a check fails.
 - **Tool checks and tests**: Check executable files without starting them. Set time limits for adapter checks. Report missing tools with fixed error codes. Keep private paths and adapter data out of reports. Added tests for all seven CWEs, tool replacement, cancellation, and data protection. Added setup and use instructions.
 

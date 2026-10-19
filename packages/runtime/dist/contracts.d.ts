@@ -1,4 +1,4 @@
-import type { BrowserAction, BrowserPageInspection, BrowserWorkflowSession, Persona } from '@agento/core';
+import type { BrowserAction, BrowserPageInspection, BrowserWorkflowSession, ExecutionGuard, Persona } from '@agento/core';
 export type HttpHeaders = Readonly<Record<string, readonly string[]>>;
 export interface HttpRequest {
     readonly url: string;
@@ -143,6 +143,7 @@ export interface BrowserSession {
     importCookies(cookies: readonly RuntimeCookie[]): Promise<void>;
 }
 export interface BrowserController {
+    withGuard?(guard: ExecutionGuard): BrowserController;
     withSession<T>(identity: TestIdentity, execute: (session: BrowserSession) => Promise<T>): Promise<T>;
 }
 export interface AuthSession {
@@ -156,7 +157,9 @@ export interface AuthSession {
     close(): Promise<void>;
 }
 export interface AuthenticationManager {
+    withGuard?(guard: ExecutionGuard): AuthenticationManager;
     establishSession(identity: TestIdentity): Promise<AuthSession>;
+    close?(): Promise<void>;
 }
 export interface NetworkObserver {
     observe(session: BrowserSession | AuthSession): Promise<readonly NetworkEvidence[]>;

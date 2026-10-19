@@ -60,6 +60,7 @@ export class NodeHttpTransport {
     }
 }
 export class DeterministicRequestExecutor {
+    options;
     scope;
     timeoutMs;
     maxBodyBytes;
@@ -67,12 +68,22 @@ export class DeterministicRequestExecutor {
     transport;
     collector;
     constructor(options) {
+        this.options = options;
         this.scope = new RuntimeScope(options.baseUrl, options.allowedOrigins);
         this.timeoutMs = limit(options.timeoutMs ?? 15_000, 600_000);
         this.maxBodyBytes = limit(options.maxBodyBytes ?? 1_048_576, 16_777_216);
         this.maxRequestBytes = limit(options.maxRequestBytes ?? 1_048_576, 16_777_216);
         this.transport = options.transport ?? new NodeHttpTransport();
         this.collector = options.collector ?? new NormalizedResponseCollector();
+    }
+    withGuard(guard) {
+        const previous = this.options.executionGuard;
+        return new DeterministicRequestExecutor({ ...this.options, executionGuard: previous ? {
+                signal: previous.signal ? AbortSignal.any([previous.signal, ...(guard.signal ? [guard.signal] : [])]) : guard.signal ?? new AbortController().signal,
+                assertActive: () => { previous.assertActive(); guard.assertActive(); },
+                assertRequest: request => { previous.assertRequest(request); guard.assertRequest(request); },
+                assertRedirect: (from, to) => { previous.assertRedirect(from, to); guard.assertRedirect(from, to); },
+            } : guard });
     }
     async execute(request) {
         const url = this.scope.assert(request.url), method = request.method ?? 'GET';
@@ -99,10 +110,17 @@ export class DeterministicRequestExecutor {
         catch {
             throw new RuntimeError('invalid-request');
         }
+        // Policy failures retain their fixed codes and occur before the transport starts.
+        this.options.executionGuard?.assertActive();
+        if (request.signal?.aborted)
+            throw new RuntimeError('cancelled');
+        this.options.executionGuard?.assertRequest({ url, method });
         const controller = new AbortController();
         const cancel = () => controller.abort();
-        request.signal?.addEventListener('abort', cancel, { once: true });
-        if (request.signal?.aborted)
+        const sourceSignal = this.options.executionGuard?.signal
+            ? AbortSignal.any([this.options.executionGuard.signal, ...(request.signal ? [request.signal] : [])]) : request.signal;
+        sourceSignal?.addEventListener('abort', cancel, { once: true });
+        if (sourceSignal?.aborted)
             controller.abort();
         let timedOut = false;
         const timer = setTimeout(() => { timedOut = true; controller.abort(); }, this.timeoutMs);
@@ -116,6 +134,11 @@ export class DeterministicRequestExecutor {
             if (!Number.isInteger(response.status) || response.status < 100 || response.status > 599
                 || response.body.byteLength > this.maxBodyBytes || !Number.isFinite(response.firstByteMs) || response.firstByteMs < 0)
                 throw new Error();
+            if (response.status >= 300 && response.status < 400) {
+                const locations = Object.entries(response.headers).filter(([key]) => key.toLowerCase() === 'location').flatMap(([, values]) => values);
+                for (const location of locations)
+                    this.options.executionGuard?.assertRedirect(url, new URL(location, url).href);
+            }
             return this.collector.collect({ url, method }, response, { startedAt,
                 firstByteMs: response.firstByteMs, durationMs: performance.now() - started });
         }
@@ -124,7 +147,7 @@ export class DeterministicRequestExecutor {
         }
         finally {
             clearTimeout(timer);
-            request.signal?.removeEventListener('abort', cancel);
+            sourceSignal?.removeEventListener('abort', cancel);
         }
     }
 }

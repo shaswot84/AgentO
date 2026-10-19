@@ -1,7 +1,7 @@
 import { createHash, randomUUID } from 'node:crypto';
 import { BrowserWorkflowFailure, type AnalysisContext, type BrowserPageInspection, type BrowserWorkflow,
   type BrowserWorkflowRuntimeDriver, type BrowserWorkflowSession, type Endpoint, type Evidence, type Identity, type JsonValue,
-  type Persona, type Project, type SecurityTestPlan, type SecurityTestResult, type TargetApplicationProfile } from '@agento/core';
+  type ExecutionGuard, type Persona, type Project, type SecurityTestPlan, type SecurityTestResult, type TargetApplicationProfile } from '@agento/core';
 import { BrowserError, BrowserScope, redactUrl } from './policy.js';
 import { E2EWebRuntime } from './runtime.js';
 import { isStoredSession, MemorySessionStore } from './sessions.js';
@@ -59,6 +59,17 @@ export class TesterArmyE2EAdapter implements BrowserWorkflowRuntimeDriver {
         ? legacyWorkflowExecutor(this.options.workflowPlanner, this.options.target, workflow) : undefined;
       return this.run(context, workflow.identityId, actions, execute);
     });
+  }
+
+  withGuard(guard: ExecutionGuard): TesterArmyE2EAdapter {
+    const previous = this.options.executionGuard;
+    return new TesterArmyE2EAdapter({ ...this.options, sessionStore: this.store,
+      executionGuard: previous ? {
+        signal: previous.signal ? AbortSignal.any([previous.signal, ...(guard.signal ? [guard.signal] : [])]) : guard.signal ?? new AbortController().signal,
+        assertActive: () => { previous.assertActive(); guard.assertActive(); },
+        assertRequest: request => { previous.assertRequest(request); guard.assertRequest(request); },
+        assertRedirect: (from, to) => { previous.assertRedirect(from, to); guard.assertRedirect(from, to); },
+      } : guard });
   }
 
   /** Trusted workflow orchestration uses a guarded capability port, never raw browser objects. */
@@ -131,6 +142,10 @@ export class TesterArmyE2EAdapter implements BrowserWorkflowRuntimeDriver {
     const runId = randomUUID(), capturedAt = new Date().toISOString();
     const diagnostics: BrowserDiagnostic[] = [], records: NetworkRecord[] = [], secrets: string[] = [];
     const controller = new AbortController();
+    const policySignal = this.options.executionGuard?.signal;
+    const cancelPolicy = () => controller.abort();
+    policySignal?.addEventListener('abort', cancelPolicy, { once: true });
+    if (policySignal?.aborted) controller.abort();
     let session: BrowserSession | undefined, scope: BrowserScope | undefined, snapshot: BrowserSnapshot | undefined;
     let outcome: WorkflowObservation['outcome'] = 'COMPLETED', started = false, reused = false, authenticated = false, portActive = true;
     let sessionRef: string | undefined, blockedCount = 0, droppedCount = 0, executedActions = 0;
@@ -141,6 +156,7 @@ export class TesterArmyE2EAdapter implements BrowserWorkflowRuntimeDriver {
     const aborted = new Promise<never>((_, reject) => controller.signal.addEventListener('abort', () => reject(new BrowserError('timeout')), { once: true }));
     const bounded = <T>(work: Promise<T>) => Promise.race([work, aborted]);
     try {
+      this.options.executionGuard?.assertActive();
       const configuredScope = targetScope(context.project, this.options.target);
       scope = targetScope({ ...context.project, allowedOrigins: configuredScope.origins }, target);
       const identity = targetPersona(context.identities.find(item => item.id === identityId), identityId, target);
@@ -181,6 +197,7 @@ export class TesterArmyE2EAdapter implements BrowserWorkflowRuntimeDriver {
         if (controller.signal.aborted) throw new BrowserError('timeout');
         started = true;
         const live = await runtime.start({ project: context.project, signal: controller.signal, timeoutMs: this.timeoutMs,
+          ...(this.options.executionGuard ? { executionGuard: this.options.executionGuard } : {}),
           assertUrl: url => scope!.assert(url), onNetwork: record => {
             if (record.blocked) blockedCount++;
             if (records.length < this.maxNetworkRecords) records.push({ ...record, timestamp: record.timestamp ?? new Date().toISOString() }); else droppedCount++;
@@ -297,6 +314,7 @@ export class TesterArmyE2EAdapter implements BrowserWorkflowRuntimeDriver {
       const code = controller.signal.aborted ? 'timeout' : error instanceof BrowserWorkflowFailure ? error.code : 'browser-failed';
       diagnose(code); outcome = started ? 'FAILED' : 'SKIPPED';
     } finally {
+      policySignal?.removeEventListener('abort', cancelPolicy);
       portActive = false;
       if (session && !controller.signal.aborted) await bounded(session.captureState()).then(state => collectStateSecrets(state.data, secrets)).catch(() => undefined);
       if (controller.signal.aborted) { diagnose('timeout'); outcome = started ? 'FAILED' : 'SKIPPED'; }

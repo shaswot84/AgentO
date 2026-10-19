@@ -1,4 +1,4 @@
-import type { AnalysisContext, BrowserContextCookie, BrowserWorkflowRuntimeDriver, TargetApplicationProfile } from '@agento/core';
+import type { AnalysisContext, BrowserContextCookie, BrowserWorkflowRuntimeDriver, ExecutionGuard, TargetApplicationProfile } from '@agento/core';
 import type { BrowserController, BrowserSession, CookieInspector, NetworkEvidence, NetworkObserver, RuntimeCookie, TestIdentity } from './contracts.js';
 import { RuntimeScope } from './safety.js';
 export interface WorkflowBrowserOptions {
@@ -15,6 +15,7 @@ export declare class WorkflowBrowserController implements BrowserController {
     private readonly maximum;
     private readonly scope;
     constructor(options: WorkflowBrowserOptions);
+    withGuard(guard: ExecutionGuard): WorkflowBrowserController;
     withSession<T>(identity: TestIdentity, execute: (session: BrowserSession) => Promise<T>): Promise<T>;
 }
 export declare function fromBrowser(cookie: BrowserContextCookie, scope: RuntimeScope): RuntimeCookie;

@@ -26,6 +26,19 @@ export class RuntimeAuthenticationManager {
         this.maximum = limit(options.maxSessions ?? 20, 1000);
         this.networkMaximum = limit(options.maxNetworkRecords ?? 500, 10_000);
     }
+    withGuard(guard) {
+        if (!this.options.browser.withGuard)
+            throw new RuntimeError('unsupported-capability');
+        const browser = this.options.browser.withGuard(guard);
+        const previous = this.httpOptions.executionGuard;
+        return new RuntimeAuthenticationManager({ ...this.options, browser, http: { ...this.httpOptions,
+                executionGuard: previous ? {
+                    signal: previous.signal ? AbortSignal.any([previous.signal, ...(guard.signal ? [guard.signal] : [])]) : guard.signal ?? new AbortController().signal,
+                    assertActive: () => { previous.assertActive(); guard.assertActive(); },
+                    assertRequest: request => { previous.assertRequest(request); guard.assertRequest(request); },
+                    assertRedirect: (from, to) => { previous.assertRedirect(from, to); guard.assertRedirect(from, to); },
+                } : guard } });
+    }
     establishSession(identity) {
         if (this.disposed)
             return Promise.reject(new RuntimeError('session-closed'));

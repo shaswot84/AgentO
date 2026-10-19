@@ -1,3 +1,4 @@
+import type { ExecutionGuard } from '@agento/core';
 import type { AuthSession, AuthenticationManager, BrowserController, TestIdentity } from './contracts.js';
 import { type HttpExecutorOptions } from './http.js';
 export interface SessionManagerOptions {
@@ -22,6 +23,7 @@ export declare class RuntimeAuthenticationManager implements AuthenticationManag
     private readonly httpOptions;
     private disposed;
     constructor(options: SessionManagerOptions);
+    withGuard(guard: ExecutionGuard): RuntimeAuthenticationManager;
     establishSession(identity: TestIdentity): Promise<AuthSession>;
     private create;
     close(): Promise<void>;
