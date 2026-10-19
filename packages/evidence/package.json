@@ -1,0 +1,36 @@
+{
+  "name": "@agento/evidence",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Immutable, redacted security evidence with append-only local retention",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": "^22.22.3 || >=24.8.0"
+  },
+  "scripts": {
+    "build": "node node_modules/typescript/bin/tsc -p tsconfig.build.json",
+    "typecheck": "node node_modules/typescript/bin/tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "check": "npm run typecheck && npm run build && npm test"
+  },
+  "dependencies": {
+    "@agento/core": "file:../core"
+  },
+  "devDependencies": {
+    "@agento/runtime": "file:../runtime",
+    "@agento/cwe": "file:../../plugins/cwe",
+    "@types/node": "^26.6.5",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.3",
+    "@agento/security-scanners": "file:../../plugins/tools/security-scanners"
+  }
+}

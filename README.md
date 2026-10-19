@@ -57,6 +57,7 @@ AgentO/
 │   ├── core/          # Tool-independent contracts, domain types, and orchestrator
 │   ├── capability-registry/ # Adapter metadata, availability and capability selection
 │   ├── discovery/     # Repository metadata, stack detection, and mode selection
+│   ├── evidence/      # Immutable, redacted proof with local retention and export
 │   ├── hypothesis-engine/ # Evidence-grounded hypotheses and optional structured reasoning
 │   ├── policy-engine/ # Target and tool policy, approvals, request limits and audit
 │   ├── runtime/       # Scoped capabilities and reusable security investigations
@@ -83,6 +84,7 @@ AgentO/
 
 - **`apps/frontend`**: React + TypeScript workspace for discovery, application models, browser workflows, source scans, hypotheses, test plans, and finding evidence. Plans show readiness, missing inputs, and rule coverage. Results are saved locally; demo examples are labelled synthetic. Runtime test execution remains unconfigured. See [frontend setup and boundaries](apps/frontend/README.md).
 - **`packages/core`**: Contains the decoupled domain model (`Project`, `Endpoint`, `Identity`, `Evidence`, `Finding`), provider interfaces, and the core pipeline orchestrator.
+- **`packages/evidence`**: Stores immutable, redacted observations with probe, capability, and target provenance. Supports a local append-only journal and portable finding proof bundles. See [evidence setup, retention, and integrity limits](packages/evidence/README.md).
 - **`packages/discovery`**: Reads manifests and source syntax to identify languages, frameworks, dependencies, probable databases/authentication/middleware, and repository structure. It selects black-box mode when the stack is unsupported or a compatible Express adapter is unavailable. See [discovery usage and verification](packages/discovery/README.md).
 - **`packages/workflow`**: Chooses trusted recipes or optional semantic model proposals, validates current page references and credential permissions, and enforces finite planning budgets. Model input uses redacted page models; the browser executes approved actions. See [workflow registration and boundaries](packages/workflow/README.md).
 - **`packages/runtime`**: Provides scoped HTTP/browser capabilities and reusable cookie, cross-origin, authorization, XSS and SQL probes. Probes return immutable observations for later policy interpretation. See [runtime setup, usage, and boundaries](packages/runtime/README.md).

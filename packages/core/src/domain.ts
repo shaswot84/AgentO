@@ -68,9 +68,9 @@ export interface Resource {
 
 export type EvidenceKind = 'source-location' | 'static-analysis' | 'http-request' | 'http-response'
   | 'browser-observation' | 'identity-session' | 'resource-ownership' | 'scanner-output'
-  | 'screenshot' | 'configuration';
+  | 'screenshot' | 'configuration' | 'header' | 'cookie-security' | 'cross-origin' | 'authorization';
 
-/** Readonly contract. Persistence, runtime freezing, and redaction are later-phase responsibilities. */
+/** Core freezes evidence at ingestion. Dedicated retention and redaction use the EvidenceStore port. */
 export interface Evidence {
   readonly id: string;
   readonly projectId: string;

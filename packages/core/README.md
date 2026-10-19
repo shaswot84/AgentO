@@ -37,6 +37,7 @@ Import types and `AgentOOrchestrator` from `@agento/core`. `src/index.ts` export
 | `SecurityScanner` | Execute a structured plan and return normalized results |
 | `CWEPlugin` | Detect candidates, generate tests, and evaluate supplied evidence |
 | `TestPlanner` | Optionally generate structured plans with satisfied planning prerequisites |
+| `EvidenceStore` | Optionally redact and retain immutable evidence before downstream consumers |
 | `ReasoningModel` | Review hypotheses with structured, evidence-referenced output |
 | `RemediationProvider` | Suggest fixes and regression tests without applying changes |
 
@@ -53,7 +54,9 @@ request/response handling; core imports no model SDK.
 
 Evidence carries producer, timestamp, normalized facts, and optional source,
 endpoint, identity, and artifact references. Evidence and domain fields are
-readonly at compile time. Adapters must redact sensitive facts and keep raw tool
+readonly at compile time. The orchestrator also copies and deeply freezes evidence
+at ingestion, including nested facts, result evidence, and finding references.
+Adapters must redact sensitive facts and keep raw tool
 output and provider session objects private. `Identity.sessionRef` is an opaque
 adapter handle, never a credential.
 
@@ -89,6 +92,13 @@ the originating CWE plugin still evaluates results. The
 blocked drafts separately, and preserves rule plan IDs. Private request bindings
 require a host wrapper around its detailed `plan()` API.
 
+An optional `evidenceStore` provider captures framework, static, browser, and
+execution evidence before rules or models consume it. The
+[evidence package](../evidence/README.md) implements memory retention, central
+redaction, provenance, a local append-only journal, and portable proof bundles.
+Without this provider, evidence remains frozen for the run; adapters supply
+redaction and the host must arrange any persistence.
+
 The core checks hypothesis/plan/result/finding associations, evidence references,
 and duplicate IDs for evidence, hypotheses, plans, and findings. Evidence is
 appended without merging; conflicting IDs fail rather than overwrite provenance.
@@ -106,8 +116,8 @@ for its browser workflows and returns normalized evidence through these contract
 CWE detection rules live in [the independent rule package](../../plugins/cwe/README.md).
 That package implements the existing plugin lifecycle without changing this orchestrator.
 Repository discovery and mode selection
-are available in [the discovery package](../discovery/README.md). Endpoint merging, capability
-selection across multiple tools, cross-tool policy enforcement, runtime evidence
-immutability/storage/redaction, and substantive verification remain later phases.
+are available in [the discovery package](../discovery/README.md). Model assembly,
+capability selection, execution policy, and evidence retention live in their own
+packages. This skeleton does not automatically compose them into a production runner.
 The skeleton requires evidence for a confirmed finding, but the injected evaluator
 is responsible for the verdict; this phase does not prove vulnerability validity.

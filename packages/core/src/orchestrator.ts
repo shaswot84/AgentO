@@ -1,5 +1,5 @@
 import type {
-  BrowserWorkflowDriver, CWEPlugin, FrameworkAdapter, ReasoningModel,
+  BrowserWorkflowDriver, CWEPlugin, EvidenceCaptureContext, EvidenceStore, FrameworkAdapter, ReasoningModel,
   RemediationProvider, RemediationSuggestion, ScanRequest, SecurityScanner, StaticAnalyzer, TestPlanner,
 } from './contracts.js';
 import type {
@@ -15,6 +15,7 @@ export interface CoreProviders {
   readonly reasoning?: ReasoningModel;
   readonly testPlanner?: TestPlanner;
   readonly remediation?: RemediationProvider;
+  readonly evidenceStore?: EvidenceStore;
 }
 
 export interface ScanReport {
@@ -46,19 +47,23 @@ export class AgentOOrchestrator {
     if (request.suggestRemediation && !this.providers.remediation) {
       throw new Error('Remediation requested without a remediation provider');
     }
-    let context: AnalysisContext = {
+    let context: AnalysisContext = snapshot({
       project: request.project, identities: request.identities,
       components: [], endpoints: [], resources: [], signals: [], evidence: [],
-    };
+    });
     if (request.project.mode === 'code-aware') {
       if (this.providers.frameworkAdapter && await this.providers.frameworkAdapter.supports(request.project)) {
         const extracted = await this.providers.frameworkAdapter.extract(request.project);
-        context = { ...context, ...extracted };
+        context = snapshot({ ...context, ...extracted, evidence: this.capture(extracted.evidence, {
+          project: context.project, capabilityIds: this.providers.frameworkAdapter.capabilities,
+        }) });
       }
       if (this.providers.staticAnalyzer) {
         const analysis = await this.providers.staticAnalyzer.analyze(request.project);
-        context = { ...context, signals: [...context.signals, ...analysis.signals],
-          evidence: [...context.evidence, ...analysis.evidence] };
+        context = snapshot({ ...context, signals: [...context.signals, ...analysis.signals],
+          evidence: [...context.evidence, ...this.capture(analysis.evidence, {
+            project: context.project, capabilityIds: this.providers.staticAnalyzer.capabilities,
+          })] });
       }
     }
     for (const workflow of request.workflows ?? []) {
@@ -66,12 +71,14 @@ export class AgentOOrchestrator {
         throw new Error(`Unknown workflow identity: ${workflow.identityId}`);
       }
       const observation = await this.providers.browser!.observe(context, workflow);
-      context = { ...context,
+      context = snapshot({ ...context,
         endpoints: [...context.endpoints, ...observation.endpoints],
         resources: [...context.resources, ...observation.resources],
         signals: [...context.signals, ...observation.signals],
-        evidence: [...context.evidence, ...observation.evidence],
-      };
+        evidence: [...context.evidence, ...this.capture(observation.evidence, {
+          project: context.project, capabilityIds: this.providers.browser!.capabilities,
+        })],
+      });
     }
     validateEvidence(context);
     for (const signal of context.signals) {
@@ -116,15 +123,18 @@ export class AgentOOrchestrator {
           throw new Error('Plan references an unknown identity');
         }
         plans.push(plan);
-        const result = await this.execute(context, plan);
-        if (result.planId !== plan.id) throw new Error('Result does not match its plan');
+        const executed = await this.execute(context, plan);
+        if (executed.planId !== plan.id) throw new Error('Result does not match its plan');
+        const result = snapshot({ ...executed, evidence: this.capture(executed.evidence, {
+          project: context.project, capabilityIds: plan.requiredCapabilities, targetUrl: plan.targetUrl,
+        }) });
         if (results.some(existing => existing.id === result.id)) throw new Error(`Duplicate result: ${result.id}`);
         results.push(result);
         hypothesisResults.push(result);
-        context = { ...context, evidence: [...context.evidence, ...result.evidence] };
+        context = snapshot({ ...context, evidence: [...context.evidence, ...result.evidence] });
         validateEvidence(context);
       }
-      const finding = await plugin.evaluateEvidence(context, hypothesis, hypothesisResults);
+      const finding = snapshot(await plugin.evaluateEvidence(context, hypothesis, hypothesisResults));
       if (finding.hypothesisId !== hypothesis.id || finding.cweId !== hypothesis.cweId
         || finding.projectId !== request.project.id) throw new Error('Finding does not match its hypothesis');
       if (findings.some(existing => existing.id === finding.id)) throw new Error(`Duplicate finding: ${finding.id}`);
@@ -146,6 +156,10 @@ export class AgentOOrchestrator {
     return { context, hypotheses, plans, results, findings, remediation };
   }
 
+  private capture(evidence: readonly Evidence[], context: EvidenceCaptureContext): readonly Evidence[] {
+    return snapshot(this.providers.evidenceStore?.capture(evidence, context) ?? evidence);
+  }
+
   private async execute(context: AnalysisContext, plan: SecurityTestPlan): Promise<SecurityTestResult> {
     const provider = plan.executor === 'browser' ? this.providers.browser : this.providers.scanner;
     if (!provider || plan.requiredCapabilities.some(capability => !provider.capabilities.includes(capability))) {
@@ -165,6 +179,20 @@ export class AgentOOrchestrator {
       };
     }
   }
+}
+
+/** Snapshot provider-owned data so retained references cannot change an observation later. */
+function snapshot<T>(value: T): T {
+  const copy = structuredClone(value);
+  const seen = new WeakSet<object>();
+  function freeze(item: unknown): void {
+    if (!item || typeof item !== 'object' || seen.has(item)) return;
+    seen.add(item);
+    for (const child of Object.values(item)) freeze(child);
+    Object.freeze(item);
+  }
+  freeze(copy);
+  return copy;
 }
 
 function validateReferences(ids: readonly string[], evidence: readonly Evidence[]): void {

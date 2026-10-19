@@ -148,4 +148,23 @@ describe('Phase 2 orchestration with interface-only fakes', () => {
     expect(report.remediation).toEqual([]);
     expect(suggest).not.toHaveBeenCalled();
   });
+
+  it('freezes provider evidence and finding references without freezing provider-owned inputs', async () => {
+    const providers = fakeProviders();
+    const input = evidence('static-evidence', 'static-analysis', 'fake-static');
+    const nested = { value: [200] };
+    vi.spyOn(providers.staticAnalyzer!, 'analyze').mockResolvedValue({ signals: [], evidence: [{ ...input, facts: { nested } }] });
+    const detect = providers.plugins[0]!.detectCandidates;
+    vi.spyOn(providers.plugins[0]!, 'detectCandidates').mockImplementation(async context => {
+      expect(Object.isFrozen(context)).toBe(true); expect(Object.isFrozen(context.evidence)).toBe(true);
+      expect(Object.isFrozen(context.evidence[0]!.facts)).toBe(true);
+      expect(() => { (context.evidence as unknown as unknown[]).pop(); }).toThrow();
+      return detect(context);
+    });
+    const report = await new AgentOOrchestrator(providers).run(request);
+    nested.value[0] = 500;
+    expect(report.context.evidence.find(item => item.id === input.id)!.facts.nested).toEqual({ value: [200] });
+    expect(Object.isFrozen(report.findings[0]!.evidenceIds)).toBe(true);
+    expect(Object.isFrozen(report.results[0]!.evidence)).toBe(true);
+  });
 });

@@ -8,6 +8,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Evidence store (`packages/evidence`)**: Added fixed evidence records with probe, capability, time, and target data. Remove secret values before storage. Added memory storage, local file storage, and proof export. Check record hashes and finding links.
+- **Evidence controls and tests**: Freeze evidence when it enters the core. Stop changes to recorded facts. Reject repeated IDs and damaged files. Limit storage size. Added unit tests, adapter tests, and setup instructions. Removed a private document reference from demo instructions.
+
 - **Security tool adapters (`plugins/tools/security-scanners`)**: Added Nuclei, ZAP, Dalfox, and sqlmap adapters. Use common result and evidence formats. Keep raw tool data private. Limit targets, requests, process time, and output size. Stop redirects and access outside the selected endpoint.
 - **Scanner use and tests**: Added tool registration and policy controls. Report failed and disabled scanners in probe data. Keep scanner reports separate from verified findings. Added process tests, local HTTP tests, native tool tests, and setup instructions.
 

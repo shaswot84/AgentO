@@ -8,6 +8,21 @@ export interface ProviderMetadata {
   readonly capabilities: readonly string[];
 }
 
+/** Host attribution at the evidence boundary, independent of vendor objects. */
+export interface EvidenceCaptureContext {
+  readonly project: Project;
+  readonly capabilityIds: readonly string[];
+  readonly probeId?: string;
+  readonly targetUrl?: string;
+  readonly environmentId?: string;
+}
+
+/** Synchronous, append-only retention. Implementations must redact, copy, and deeply freeze records. */
+export interface EvidenceStore {
+  capture(evidence: readonly Evidence[], context: EvidenceCaptureContext): readonly Evidence[];
+  get(id: string): Evidence | undefined;
+}
+
 export interface StaticAnalysis {
   readonly signals: readonly SecuritySignal[];
   readonly evidence: readonly Evidence[];

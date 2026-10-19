@@ -200,7 +200,7 @@ AgentO requires comparing scanner signals and test executions against known-vuln
 
 ## 6. Exit Criteria Verification
 
-All Phase 1 exit criteria defined in `AgentO_Phased_Project_Plan.md` are fulfilled:
+All demo application exit criteria are fulfilled:
 
 - [x] **App runs locally**: Node.js + TypeScript + Express + SQLite setup.
 - [x] **Alice, Bob, and Admin can log in**: Seeded identities with distinct privileges and resources.
