@@ -5,6 +5,10 @@ observations. Capability modules contain no assessment logic; probes investigate
 behavior without producing vulnerability verdicts. Scanner implementations,
 application routes, and credentials are supplied by the host.
 
+The [capability registry](../capability-registry/README.md) selects available tool
+adapters and binds their ports for these probes. The runtime registry continues
+to hold one selected instance per capability.
+
 ## Setup
 
 Use Node.js 22.22.3 or later supported by the browser adapter. From the repository root:

@@ -104,6 +104,10 @@ execution providers. A URL with placeholders is a template, not a finished reque
 Plans contain no session handles, cookie values, resource keys, raw evidence or
 source bodies. Treat them as backend planning data, not sanitized public reports.
 
+Pass a ready plan to the [capability registry](../capability-registry/README.md)
+to select available adapter ports. Selection does not execute the plan or approve
+requests; the execution host must still enforce its policy and scope limits.
+
 The planner makes no network requests, establishes no sessions, collects no proof
 and produces no findings. It does not select vendor adapters, schedule execution
 or integrate the frontend. Unsupported methods, invalid associations and provider

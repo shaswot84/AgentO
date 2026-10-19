@@ -8,6 +8,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Capability registry (`packages/capability-registry`)**: Added tool data for capabilities, supported CWEs, protocols, and risk. Select available adapters for plans and probes. Permit several tools to supply the same capability. Use another tool if a check fails.
+- **Tool checks and tests**: Check executable files without starting them. Set time limits for adapter checks. Report missing tools with fixed error codes. Keep private paths and adapter data out of reports. Added tests for all seven CWEs, tool replacement, cancellation, and data protection. Added setup and use instructions.
+
 - **Investigation workspace**: Added views for hypotheses and test plans. Show evidence, test steps, missing inputs, required capabilities, and rule coverage. Keep planning status separate from test results.
 - **Local planning service**: Generate hypotheses and test drafts from saved application data. Save the results on the local device. Mark old results when the application data changes. Keep private plan inputs on the host.
 - **Scan planning stages**: Added hypothesis generation and test planning after source analysis. Show progress and errors. The planning stages do not send requests to the target.

@@ -55,6 +55,7 @@ AgentO/
 │   └── frontend/      # Application context, hypotheses, test plans, and evidence
 ├── packages/
 │   ├── core/          # Tool-independent contracts, domain types, and orchestrator
+│   ├── capability-registry/ # Adapter metadata, availability and capability selection
 │   ├── discovery/     # Repository metadata, stack detection, and mode selection
 │   ├── hypothesis-engine/ # Evidence-grounded hypotheses and optional structured reasoning
 │   ├── runtime/       # Scoped capabilities and reusable security investigations
@@ -87,6 +88,7 @@ AgentO/
 - **`plugins/cwe`**: Provides all seven CWE rules, independent registration, model-based candidates, declarative probe plans and evidence-linked verdicts. Rules interpret normalized observations and explicit application policy. See [rule setup, proof requirements and execution boundaries](plugins/cwe/README.md).
 - **`packages/hypothesis-engine`**: Grounds registered CWE candidates in relevant model observations, attaches concrete reasons and evidence references, and optionally reviews bounded context through a model provider. Results remain hypotheses requiring runtime verification. See [hypothesis generation and reasoning boundaries](packages/hypothesis-engine/README.md).
 - **`packages/test-planner`**: Converts hypotheses into ordered, tool-independent probe plans for all seven CWEs, with private input references, explicit prerequisites and structured verification criteria. See [planning setup and execution boundaries](packages/test-planner/README.md).
+- **`packages/capability-registry`**: Selects available adapter ports for plans and probes using protocol, CWE support and risk metadata. Supports multiple tools, stable fallback and bounded preflight checks. See [registration, selection and execution boundaries](packages/capability-registry/README.md).
 - **`plugins/models/openai`**: Optional structured-generation provider with explicit model selection, backend API-key resolution, bounded transport, and sanitized results. See [provider setup](plugins/models/openai/README.md).
 - **`plugins/frameworks/express`**: Implements the core framework adapter for read-only JS/TS route extraction, mounted middleware, request inputs, session/cookie/CORS configuration, and database observations. Recognizes all 19 declared demo routes and integrates with discovery through explicit adapter registration. See [adapter setup, verification, and boundaries](plugins/frameworks/express/README.md).
 - **`plugins/tools/semgrep`**: Implements the core static analyzer with bundled JS/TS taint rules for XSS and SQL injection candidates, normalized source/sink evidence, bounded AST context, and optional precomputed Express endpoint association. Static signals require runtime verification. See [installation, CLI, integration, and limitations](plugins/tools/semgrep/README.md).
