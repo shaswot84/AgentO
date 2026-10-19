@@ -8,6 +8,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Cookie and CORS assessment (`packages/a02`)**: Added source discovery, test plans, controlled test execution, stored evidence, and verified results for three CWEs. Use one cookie test for both cookie rules. Include evidence for each result.
+- **Assessment command and tests**: Added a JSON scan command and a cookie login adapter. Added a public export for the runtime cookie store. Keep passwords and cookie values private. Added tests for vulnerable and fixed applications, request limits, failed tests, and stored evidence. Added setup instructions.
+
 - **Verification judge (`packages/verifier`)**: Added checks for stored proof, test links, targets, and capabilities. Require runtime proof before confirmation. Reject model claims without valid evidence IDs. Keep conflicting observations unconfirmed.
 - **Verification integration and tests**: Added an optional core verification provider. Added unit tests and real demo tests over local HTTPS. Fixed demo tests return no confirmed findings. Added stored-proof replay tests and setup instructions.
 

@@ -124,6 +124,12 @@ public cookie observations contain `[REDACTED]` values. Bearer tokens,
 localStorage/sessionStorage authentication, and partitioned-cookie transfer are
 reported as unsupported, rather than being converted into HTTP cookie sessions.
 
+`SessionCookieJar` is also exported for trusted host login adapters. Use it with
+a `RuntimeScope`, update it from scoped responses, and use `header()` only inside
+the backend. `inspect()` returns redacted metadata; `privateCookies()` returns
+private transfer data. The jar does not authenticate an identity or approve a
+request. Hosts must still enforce execution policy and clear the jar on close.
+
 The HTTP jar deliberately narrows browser cookie behavior: cookies are bound to
 an exact response origin as well as their host/path, parent-domain cookies are
 observed but not forwarded, and Secure cookies require HTTPS. Browser transfer is

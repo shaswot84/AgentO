@@ -1,0 +1,29 @@
+{
+  "project": {
+    "id": "storefront-a02",
+    "name": "Storefront A02 assessment",
+    "mode": "code-aware",
+    "repositoryPath": "../../../demo-apps/demo-app-01",
+    "baseUrl": "https://127.0.0.1:3443",
+    "allowedOrigins": ["https://127.0.0.1:3443"],
+    "languages": ["typescript"]
+  },
+  "paths": ["/api/auth/me"],
+  "identities": [{ "id": "alice", "label": "Alice", "roles": ["customer"], "authentication": "session-cookie" }],
+  "sensitiveCookieNames": ["auth_token"],
+  "untrustedOrigins": ["https://unapproved.invalid"],
+  "login": {
+    "path": "/api/auth/login",
+    "identities": { "alice": { "username": "AGENTO_A02_USERNAME", "password": "AGENTO_A02_PASSWORD" } }
+  },
+  "policy": {
+    "allowedOrigins": ["https://127.0.0.1:3443"],
+    "allowedMethods": ["GET", "HEAD", "OPTIONS", "POST"],
+    "tools": { "a02-http": { "maxRequests": 20 }, "a02-auth": { "maxRequests": 20 } },
+    "rateLimit": { "maxRequests": 30, "windowMs": 60000 },
+    "maxRequestsPerExecution": 20,
+    "approval": { "risks": [], "severities": [] }
+  },
+  "evidenceDirectory": "/tmp/agento-a02-run-001/evidence",
+  "output": "/tmp/agento-a02-run-001/report.json"
+}

@@ -54,6 +54,7 @@ AgentO/
 ├── apps/
 │   └── frontend/      # Application context, hypotheses, test plans, and evidence
 ├── packages/
+│   ├── a02/           # Complete cookie and CORS assessment with shared runtime proof
 │   ├── core/          # Tool-independent contracts, domain types, and orchestrator
 │   ├── capability-registry/ # Adapter metadata, availability and capability selection
 │   ├── discovery/     # Repository metadata, stack detection, and mode selection
@@ -85,6 +86,7 @@ AgentO/
 
 - **`apps/frontend`**: React + TypeScript workspace for discovery, application models, browser workflows, source scans, hypotheses, test plans, and finding evidence. Plans show readiness, missing inputs, and rule coverage. Results are saved locally; demo examples are labelled synthetic. Runtime test execution remains unconfigured. See [frontend setup and boundaries](apps/frontend/README.md).
 - **`packages/core`**: Contains the decoupled domain model (`Project`, `Endpoint`, `Identity`, `Evidence`, `Finding`), provider interfaces, and the core pipeline orchestrator.
+- **`packages/a02`**: Runs discovery, hypotheses, planning, guarded cookie/CORS probes, retained evidence, and verification for CWE-1004, CWE-614, and CWE-942. Both cookie rules share one collection. Provides an API and JSON-report CLI. See [assessment setup and usage](packages/a02/README.md).
 - **`packages/evidence`**: Stores immutable, redacted observations with probe, capability, and target provenance. Supports a local append-only journal and portable finding proof bundles. See [evidence setup, retention, and integrity limits](packages/evidence/README.md).
 - **`packages/verifier`**: Checks retained runtime proof before accepting CWE verdicts. Binds completed tests to their hypothesis, target, environment, and capabilities. Validates citations for optional model explanations. See [judge setup and verification limits](packages/verifier/README.md).
 - **`packages/discovery`**: Reads manifests and source syntax to identify languages, frameworks, dependencies, probable databases/authentication/middleware, and repository structure. It selects black-box mode when the stack is unsupported or a compatible Express adapter is unavailable. See [discovery usage and verification](packages/discovery/README.md).
