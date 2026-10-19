@@ -1,6 +1,6 @@
 import type {
   BrowserWorkflowDriver, CWEPlugin, EvidenceCaptureContext, EvidenceStore, FrameworkAdapter, ReasoningModel,
-  RemediationProvider, RemediationSuggestion, ScanRequest, SecurityScanner, StaticAnalyzer, TestPlanner,
+  RemediationProvider, RemediationSuggestion, ScanRequest, SecurityScanner, StaticAnalyzer, TestPlanner, VerificationEngine,
 } from './contracts.js';
 import type {
   AnalysisContext, Evidence, Finding, SecurityHypothesis, SecurityTestPlan, SecurityTestResult,
@@ -16,6 +16,7 @@ export interface CoreProviders {
   readonly testPlanner?: TestPlanner;
   readonly remediation?: RemediationProvider;
   readonly evidenceStore?: EvidenceStore;
+  readonly verifier?: VerificationEngine;
 }
 
 export interface ScanReport {
@@ -27,7 +28,7 @@ export interface ScanReport {
   readonly remediation: readonly RemediationSuggestion[];
 }
 
-/** Minimal wiring skeleton. No discovery, tool registry, policy, or verification implementation. */
+/** Provider wiring; discovery, execution policy and verdict logic stay in injected packages. */
 export class AgentOOrchestrator {
   private readonly plugins: ReadonlyMap<string, CWEPlugin>;
 
@@ -134,7 +135,9 @@ export class AgentOOrchestrator {
         context = snapshot({ ...context, evidence: [...context.evidence, ...result.evidence] });
         validateEvidence(context);
       }
-      const finding = snapshot(await plugin.evaluateEvidence(context, hypothesis, hypothesisResults));
+      const finding = snapshot(this.providers.verifier
+        ? await this.providers.verifier.verify(context, hypothesis, generated, hypothesisResults)
+        : await plugin.evaluateEvidence(context, hypothesis, hypothesisResults));
       if (finding.hypothesisId !== hypothesis.id || finding.cweId !== hypothesis.cweId
         || finding.projectId !== request.project.id) throw new Error('Finding does not match its hypothesis');
       if (findings.some(existing => existing.id === finding.id)) throw new Error(`Duplicate finding: ${finding.id}`);

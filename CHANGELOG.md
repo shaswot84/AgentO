@@ -8,6 +8,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Verification judge (`packages/verifier`)**: Added checks for stored proof, test links, targets, and capabilities. Require runtime proof before confirmation. Reject model claims without valid evidence IDs. Keep conflicting observations unconfirmed.
+- **Verification integration and tests**: Added an optional core verification provider. Added unit tests and real demo tests over local HTTPS. Fixed demo tests return no confirmed findings. Added stored-proof replay tests and setup instructions.
+
 - **Evidence store (`packages/evidence`)**: Added fixed evidence records with probe, capability, time, and target data. Remove secret values before storage. Added memory storage, local file storage, and proof export. Check record hashes and finding links.
 - **Evidence controls and tests**: Freeze evidence when it enters the core. Stop changes to recorded facts. Reject repeated IDs and damaged files. Limit storage size. Added unit tests, adapter tests, and setup instructions. Removed a private document reference from demo instructions.
 

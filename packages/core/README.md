@@ -37,6 +37,7 @@ Import types and `AgentOOrchestrator` from `@agento/core`. `src/index.ts` export
 | `SecurityScanner` | Execute a structured plan and return normalized results |
 | `CWEPlugin` | Detect candidates, generate tests, and evaluate supplied evidence |
 | `TestPlanner` | Optionally generate structured plans with satisfied planning prerequisites |
+| `VerificationEngine` | Optionally gate final verdicts against retained runtime proof |
 | `EvidenceStore` | Optionally redact and retain immutable evidence before downstream consumers |
 | `ReasoningModel` | Review hypotheses with structured, evidence-referenced output |
 | `RemediationProvider` | Suggest fixes and regression tests without applying changes |
@@ -87,7 +88,7 @@ Other provider failures and malformed contract output reject the run, making
 configuration or contract errors explicit.
 
 An optional `testPlanner` provider replaces the plugin's test-generation step;
-the originating CWE plugin still evaluates results. The
+the originating CWE plugin evaluates results unless a verifier is supplied. The
 [test planner package](../test-planner/README.md) implements this port, exposes
 blocked drafts separately, and preserves rule plan IDs. Private request bindings
 require a host wrapper around its detailed `plan()` API.
@@ -98,6 +99,12 @@ execution evidence before rules or models consume it. The
 redaction, provenance, a local append-only journal, and portable proof bundles.
 Without this provider, evidence remains frozen for the run; adapters supply
 redaction and the host must arrange any persistence.
+
+An optional `verifier` provider replaces direct plugin evaluation before remediation.
+The [verification judge](../verifier/README.md) implements this port with the same
+configured CWE rules and evidence store. It checks proof lineage, runtime scope,
+record integrity, conflicts, and optional model citations. Core has no dependency
+on the judge implementation; omitting it preserves direct plugin evaluation.
 
 The core checks hypothesis/plan/result/finding associations, evidence references,
 and duplicate IDs for evidence, hypotheses, plans, and findings. Evidence is
@@ -120,4 +127,5 @@ are available in [the discovery package](../discovery/README.md). Model assembly
 capability selection, execution policy, and evidence retention live in their own
 packages. This skeleton does not automatically compose them into a production runner.
 The skeleton requires evidence for a confirmed finding, but the injected evaluator
-is responsible for the verdict; this phase does not prove vulnerability validity.
+is responsible for the verdict. Inject the verification judge to require retained,
+attributable runtime proof under the configured CWE rules.

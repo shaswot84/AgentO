@@ -78,6 +78,12 @@ export interface TestPlanner {
   generateTests(context: AnalysisContext, hypothesis: SecurityHypothesis): Promise<readonly SecurityTestPlan[]>;
 }
 
+/** Optional final evidence gate. Implementations must ground verdicts in retained runtime proof. */
+export interface VerificationEngine {
+  verify(context: AnalysisContext, hypothesis: SecurityHypothesis, plans: readonly SecurityTestPlan[],
+    results: readonly SecurityTestResult[]): Promise<Finding>;
+}
+
 /** Implementations return structured, evidence-referenced hypotheses, never executable prose. */
 export interface ReasoningModel extends ProviderMetadata {
   reviewHypotheses(context: AnalysisContext,

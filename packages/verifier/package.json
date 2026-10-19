@@ -1,0 +1,28 @@
+{
+  "name": "@agento/verifier",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Evidence-grounded deterministic verification of security hypotheses",
+  "type": "module",
+  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } },
+  "files": ["dist"],
+  "engines": { "node": "^22.22.3 || >=24.8.0" },
+  "scripts": {
+    "build": "node node_modules/typescript/bin/tsc -p tsconfig.build.json",
+    "typecheck": "node node_modules/typescript/bin/tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:integration": "AGENTO_VERIFIER_INTEGRATION=1 vitest run test/demo.integration.test.ts",
+    "check": "npm run typecheck && npm run build && npm test"
+  },
+  "dependencies": {
+    "@agento/core": "file:../core",
+    "@agento/cwe": "file:../../plugins/cwe",
+    "@agento/evidence": "file:../evidence"
+  },
+  "devDependencies": {
+    "@agento/runtime": "file:../runtime",
+    "@types/node": "^26.6.5",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.3"
+  }
+}

@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { AgentOOrchestrator } from '../src/index.js';
-import type { CoreProviders } from '../src/index.js';
+import type { CoreProviders, VerificationEngine } from '../src/index.js';
 import { evidence, fakePlugin, fakeProviders, project } from './fakes.js';
 
 const request = { project, identities: [{ id: 'alice', label: 'Alice', roles: ['customer'],
@@ -167,4 +167,30 @@ describe('Phase 2 orchestration with interface-only fakes', () => {
     expect(Object.isFrozen(report.findings[0]!.evidenceIds)).toBe(true);
     expect(Object.isFrozen(report.results[0]!.evidence)).toBe(true);
   });
+});
+
+it('delegates final verification before remediation and passes only the current hypothesis plans', async () => {
+  const providers = fakeProviders();
+  const plugin = providers.plugins[0]!;
+  const evaluate = plugin.evaluateEvidence.bind(plugin);
+  const direct = vi.spyOn(plugin, 'evaluateEvidence');
+  const suggest = vi.spyOn(providers.remediation!, 'suggest');
+  const verify = vi.fn<VerificationEngine['verify']>(async (context, hypothesis, plans, results) => {
+    expect(plans.every(plan => plan.hypothesisId === hypothesis.id)).toBe(true);
+    expect(results.every(result => plans.some(plan => plan.id === result.planId))).toBe(true);
+    expect(Object.isFrozen(context.evidence[0])).toBe(true);
+    return { ...await evaluate(context, hypothesis, results), status: 'NOT_REPRODUCED' as const, confidence: 'low' as const };
+  });
+  const report = await new AgentOOrchestrator({ ...providers, verifier: { verify } }).run({ ...request, suggestRemediation: true });
+  expect(verify).toHaveBeenCalledOnce(); expect(direct).not.toHaveBeenCalled();
+  expect(report.findings[0]!.status).toBe('NOT_REPRODUCED'); expect(suggest).not.toHaveBeenCalled();
+});
+
+it('checks the verifier output against the originating hypothesis', async () => {
+  const providers = fakeProviders();
+  const verify: VerificationEngine['verify'] = async (context, hypothesis, _plans, results) => ({
+    ...await providers.plugins[0]!.evaluateEvidence(context, hypothesis, results), hypothesisId: 'unrelated',
+  });
+  await expect(new AgentOOrchestrator({ ...providers, verifier: { verify } }).run(request))
+    .rejects.toThrow('Finding does not match its hypothesis');
 });
