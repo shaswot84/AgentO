@@ -277,6 +277,12 @@ export class TesterArmyE2EAdapter implements BrowserWorkflowRuntimeDriver {
             assertActive(); return freeze(records.map(record => ({ url: redactUrl(record.url, secrets),
               method: record.method, status: record.status, blocked: record.blocked })));
           },
+          readCanary: async marker => {
+            assertActive();
+            if (!/^agento-[a-f0-9]{32}$/.test(marker) || !session!.readCanary) throw new BrowserError('browser-failed');
+            const result = await bounded(session!.readCanary(marker)); assertActive();
+            return freeze({ executed: result.executed === true, elementPresent: result.elementPresent === true });
+          },
           readCookies: async () => {
             assertActive();
             if (!session!.readCookies) throw new BrowserError('browser-failed');

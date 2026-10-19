@@ -71,7 +71,9 @@ export class SourceContext {
       const property = member(node);
       if (property && ['query', 'body', 'params', 'headers', 'cookies'].includes(property.name)) {
         const source = { ...location(node), symbol: property.name };
-        inputs.set(JSON.stringify(source), { location: asFact(source), kind: `request-${property.name}` });
+        const selected = node.parent && member(node.parent);
+        inputs.set(JSON.stringify(source), { location: asFact(source), kind: `request-${property.name}`,
+          ...(selected && selected.base === node ? { parameterName: selected.name } : {}) });
         return;
       }
       if (ts.isCallExpression(node) && member(node.expression)?.name === 'get') {

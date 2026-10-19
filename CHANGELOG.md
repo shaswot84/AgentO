@@ -8,6 +8,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Injection Assessment (`packages/a05`)**: Added source checks and targeted runtime tests for XSS and SQL injection. Added a JSON report command. Each result links source records to stored test evidence. Added tests with native tools and vulnerable and fixed demo modes.
+- **Injection Proof**: Added browser checks for random script markers. Added controlled SQL result comparisons and input names in static source records. Kept full response hashes. Added request limits and tests for incomplete proof, denied execution, and private data.
+
 - **Cookie and CORS assessment (`packages/a02`)**: Added source discovery, test plans, controlled test execution, stored evidence, and verified results for three CWEs. Use one cookie test for both cookie rules. Include evidence for each result.
 - **Assessment command and tests**: Added a JSON scan command and a cookie login adapter. Added a public export for the runtime cookie store. Keep passwords and cookie values private. Added tests for vulnerable and fixed applications, request limits, failed tests, and stored evidence. Added setup instructions.
 

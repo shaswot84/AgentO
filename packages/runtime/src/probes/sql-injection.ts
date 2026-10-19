@@ -1,5 +1,6 @@
-import { randomUUID } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import { freeze, RuntimeError } from '../safety.js';
+import type { HttpResponse } from '../contracts.js';
 import type { DatabaseFingerprint, InjectionContext, SecurityProbe, SQLInjectionEvidence } from './contracts.js';
 import { available, base, check, metadata, mutate, publicComparison, publicResponse, sanitized, snapshot, text, validateInjection } from './shared.js';
 import { scan, withInjectionExecutor } from './injection.js';
@@ -16,13 +17,16 @@ export class SQLInjectionProbe implements SecurityProbe<InjectionContext, SQLInj
       const context = { ...snapshot(input), parameter: { ...input.parameter },
         ...(input.identity ? { identity: structuredClone(input.identity) } : {}) };
       check(context, this.supports(context));
+      if (context.sqlBooleanContext !== undefined && !['quoted-string', 'like-pattern'].includes(context.sqlBooleanContext)) throw new RuntimeError('invalid-request');
+      if (context.responseJsonPointer !== undefined && !/^\/(?:[A-Za-z0-9_-]+)(?:\/[A-Za-z0-9_-]+)*$/.test(context.responseJsonPointer)) throw new RuntimeError('invalid-request');
       const prepared = validateInjection(context), comparator = context.capabilities.get('response-comparator');
       return withInjectionExecutor(context, async executor => {
         const baseline = await executor.execute(prepared), observations: SQLInjectionEvidence['observations'][number][] = [];
+        const like = context.sqlBooleanContext === 'like-pattern';
         const variants = [
           { variant: 'syntax', technique: 'error', suffix: "'" },
-          { variant: 'boolean-true', technique: 'boolean', suffix: "' AND '1'='1" },
-          { variant: 'boolean-false', technique: 'boolean', suffix: "' AND '1'='2" },
+          { variant: 'boolean-true', technique: 'boolean', suffix: like ? "%' AND '1'='1' -- " : "' AND '1'='1" },
+          { variant: 'boolean-false', technique: 'boolean', suffix: like ? "%' AND '1'='2' -- " : "' AND '1'='2" },
         ] as const;
         const responses = [];
         for (const variant of variants) {
@@ -45,7 +49,9 @@ export class SQLInjectionProbe implements SecurityProbe<InjectionContext, SQLInj
             || ![true, false, null].includes(result.observedDifference)) throw new RuntimeError('invalid-request');
           scanner = { technique: result.technique, dbmsFingerprint: result.dbmsFingerprint, observedDifference: result.observedDifference };
         } else diagnostics.push('scanner-unavailable');
-        return freeze({ ...base(context, this.metadata().id, diagnostics), parameter: { ...context.parameter },
+        const projectedControls = context.responseJsonPointer ? projection(context.responseJsonPointer, baseline, responses[1]!, responses[2]!) : undefined;
+        return freeze({ ...base(context, this.metadata().id, diagnostics),
+          ...(projectedControls ? { projectedControls } : {}), parameter: { ...context.parameter },
           baseline: publicResponse(context, baseline), observations,
           booleanComparison: publicComparison(comparator.compare(responses[1]!, responses[2]!)), scanner });
       });
@@ -62,4 +68,22 @@ function indicators(body: string): { label: string; dbms: DatabaseFingerprint | 
     ['sql-syntax-error', /syntax error|unrecognized token|unterminated.*(?:quote|string)/i, null],
   ];
   return patterns.filter(([, pattern]) => pattern.test(body)).map(([label, , dbms]) => ({ label, dbms }));
+}
+
+function projection(pointer: string, ...responses: readonly HttpResponse[]): SQLInjectionEvidence['projectedControls'] {
+  const hashes = responses.map(response => {
+    if (response.body.truncated || response.status < 200 || response.status >= 300
+      || !(response.headers['content-type'] ?? []).some(type => /application\/(?:[a-z.+-]*\+)?json\b/i.test(type))) return null;
+    try {
+      let value: unknown = JSON.parse(text(response));
+      for (const segment of pointer.slice(1).split('/')) {
+        if (!value || typeof value !== 'object' || !Object.hasOwn(value, segment)) return null;
+        value = (value as Record<string, unknown>)[segment];
+      }
+      // Require structured result data; scalar reflections are not a database result set.
+      if (!value || typeof value !== 'object') return null;
+      return createHash('sha256').update(JSON.stringify(value)).digest('hex');
+    } catch { return null; }
+  });
+  return hashes.every(hash => hash !== null) ? { pointer, baseline: hashes[0]!, trueControl: hashes[1]!, falseControl: hashes[2]! } : undefined;
 }

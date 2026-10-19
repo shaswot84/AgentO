@@ -129,3 +129,12 @@ Callers must supply trusted observations and identity policy. Schema validation
 does not authenticate an imported JSON record or create cryptographic provenance.
 Persistence, execution scheduling and a broader verification judge are separate
 host responsibilities.
+
+### SQL responses with reflected inputs
+
+CWE-89 also accepts `projectedControls` from a trusted probe context with a declared
+JSON result pointer. A successful, complete baseline and true control must have
+matching result-field hashes, while the false control must differ. Original
+response hashes remain in the evidence. These fields do not promote scanner
+claims or generic error messages to proof. The host must select application result
+data; see the [injection assessment limits](../../packages/a05/README.md#proof-and-limits).

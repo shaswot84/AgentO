@@ -137,3 +137,22 @@ describe('cross-origin policy interpretation', () => {
     expect((await new CWE942Plugin().evaluate([nullItem], scope)).status).toBe('CONFIRMED');
   });
 });
+
+describe('declared SQL result projection', () => {
+  it('requires a controlled result change even when full bodies reflect input', async () => {
+    const item = sql({ projectedControls: { pointer: '/results', baseline: 'a'.repeat(64), trueControl: 'a'.repeat(64), falseControl: 'b'.repeat(64) } });
+    const observations = item.observations.map(record => ({ ...record, errorIndicators: [], dbmsFingerprint: null,
+      response: response({ body: { ...response().body, sha256: record.variant === 'boolean-true' ? 'c'.repeat(64) : 'd'.repeat(64) } }),
+      comparison: { ...record.comparison, bodyEqual: false } }));
+    expect((await new CWE89Plugin().evaluate([{ ...item, observations }], scope)).status).toBe('CONFIRMED');
+    const inconclusive = { ...item, observations, projectedControls: { ...item.projectedControls!, trueControl: 'e'.repeat(64) } };
+    expect((await new CWE89Plugin().evaluate([inconclusive], scope)).status).toBe('NOT_REPRODUCED');
+    expect((await new CWE89Plugin().evaluate([{ ...inconclusive, projectedControls: { ...inconclusive.projectedControls, pointer: 'malformed' } }], scope)).status).toBe('NOT_REPRODUCED');
+  });
+  it('keeps failed or truncated result controls inconclusive', async () => {
+    const item = sql({ projectedControls: { pointer: '/results', baseline: 'a'.repeat(64), trueControl: 'a'.repeat(64), falseControl: 'b'.repeat(64) } });
+    const observations = item.observations.map(record => ({ ...record, errorIndicators: [], dbmsFingerprint: null,
+      response: response({ status: 500, body: { ...response().body, truncated: true } }) }));
+    expect((await new CWE89Plugin().evaluate([{ ...item, observations }], scope)).status).toBe('NOT_REPRODUCED');
+  });
+});

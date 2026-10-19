@@ -271,3 +271,18 @@ body/time limits, failed connections, rejected login, and isolated authenticated
 browser/HTTP sessions for all three personas. Probe checks run all five families
 against the storefront's vulnerable and fixed behavior, including browser-based
 owner discovery, session transfer, inert XSS visibility and differential SQL markers.
+
+### Targeted injection proof
+
+XSS collection can use the optional `BrowserSession.readCanary` operation to read
+a random execution marker and parsed canary element. The probe injects a bounded
+script that sets `window.name`; reflected text alone remains insufficient. The
+port accepts marker tokens, never caller-supplied code, and expires with the session.
+
+SQL contexts may declare `sqlBooleanContext: 'like-pattern'` and a trusted
+`responseJsonPointer` to a structured JSON result field. The probe retains field
+hashes separately from original response hashes. Failed, missing, scalar or
+truncated fields cannot supply projected controls. `maxScannerRequests` defaults
+to 8 for direct probe callers and accepts 1–512; execution policy may impose lower
+limits. Scanner requests cannot change unrelated query inputs. See the
+[A05 host guide](../a05/README.md) for the complete assessment and proof limits.

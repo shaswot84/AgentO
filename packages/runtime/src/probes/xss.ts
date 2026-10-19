@@ -21,17 +21,20 @@ export class XSSProbe implements SecurityProbe<InjectionContext, XSSEvidence> {
       const prepared = validateInjection(context);
       const normalized = { ...context, request: prepared };
       const canary = `agento-${randomUUID().replaceAll('-', '')}`;
-      const payload = `${canary}<agento-canary data-marker="${canary}"></agento-canary>`;
+      const payload = `${canary}<agento-canary id="${canary}" data-marker="${canary}"></agento-canary><script>window.name="${canary}"</script>`;
       const injectedRequest = mutate(context, prepared, () => payload);
       return withInjectionExecutor(context, async (executor, session) => {
         const baseline = await executor.execute(prepared), injected = await executor.execute(injectedRequest);
         const body = text(injected), diagnostics: XSSEvidence['diagnostics'][number][] = [];
         if (baseline.body.truncated || injected.body.truncated) diagnostics.push('response-truncated');
         let browser: XSSEvidence['browser'] = null;
+        let browserProof: { executed: boolean; elementPresent: boolean } | null = null;
         if (context.parameter.location === 'query' && prepared.method === 'GET') {
           const observe = async (page: import('../contracts.js').BrowserSession) => {
             await page.perform({ action: 'navigate', url: injectedRequest.url });
             const result = await page.inspect();
+            if (page.readCanary) browserProof = await page.readCanary(canary);
+            else diagnostics.push('browser-unavailable');
             return { url: evidenceUrl(result.url), canaryVisible: (result.visibleTextSummary ?? '').includes(canary) };
           };
           if (session) browser = await session.withBrowser(observe);
@@ -49,6 +52,10 @@ export class XSSProbe implements SecurityProbe<InjectionContext, XSSEvidence> {
           }
           executionConfirmed = result.executionConfirmed; domSinkReached = result.domSinkReached;
         } else diagnostics.push('scanner-unavailable');
+        if (browserProof) {
+          const observed = browserProof as { executed: boolean; elementPresent: boolean };
+          executionConfirmed = observed.executed; domSinkReached = observed.elementPresent;
+        }
         const reflected = body.includes(payload);
         return freeze({ ...base(context, this.metadata().id, diagnostics), parameter: { ...context.parameter },
           baseline: publicResponse(context, baseline), injected: publicResponse(context, injected), canary,

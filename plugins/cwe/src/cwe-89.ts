@@ -34,6 +34,16 @@ export class CWE89Plugin extends EvidenceCWEPlugin<'sql-injection'> {
       && yes.response.body.sha256 === evidence.baseline.body.sha256 && no.response.body.sha256 !== yes.response.body.sha256) {
       return confirmed('The true control preserves the baseline while the false control changes the response.');
     }
+    const projected = evidence.projectedControls;
+    if (projected && yes && no && [yes, no].every(item => item.technique === 'boolean' && successful(item.response) && complete(item.response))
+      && projected.baseline === projected.trueControl && projected.falseControl !== projected.trueControl) {
+      return confirmed('The declared JSON result field matches the baseline for the true control and differs for the false control.');
+    }
+    if (projected && evidence.outcome === 'COMPLETED' && syntax && yes && no
+      && evidence.observations.every(item => successful(item.response) && complete(item.response) && item.errorIndicators.length === 0)
+      && projected.baseline === projected.trueControl && projected.baseline === projected.falseControl) {
+      return rejected('Completed checks did not change the declared JSON result field or produce database errors.');
+    }
     if (evidence.outcome === 'COMPLETED' && syntax && yes && no && evidence.observations.every(item =>
       successful(item.response) && complete(item.response) && item.errorIndicators.length === 0
       && item.comparison.bodyEqual === true && item.response.body.sha256 === evidence.baseline.body.sha256)

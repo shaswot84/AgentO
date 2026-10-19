@@ -64,6 +64,12 @@ export class WorkflowBrowserController implements BrowserController {
               return freeze(records.map(record => ({ sessionId: id, identityId: identity.id, source: 'browser' as const,
                 url: evidenceUrl(record.url), method: record.method, status: record.status, blocked: record.blocked })));
             },
+            readCanary: async marker => {
+              assertActive();
+              if (!/^agento-[a-f0-9]{32}$/.test(marker) || !port.readCanary) throw new RuntimeError('unsupported-capability');
+              const result = await port.readCanary(marker); assertActive();
+              return freeze({ executed: result.executed === true, elementPresent: result.elementPresent === true });
+            },
             cookies: async () => freeze((await read()).map(cookie => cookieEvidence(cookie, 'browser', { sessionId: id }))),
             transferCookies: read,
             importCookies: async cookies => {

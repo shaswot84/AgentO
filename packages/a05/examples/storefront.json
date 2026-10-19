@@ -1,0 +1,27 @@
+{
+  "project": {
+    "id": "storefront-injection",
+    "name": "Local storefront injection assessment",
+    "repositoryPath": "../../../demo-apps/demo-app-01",
+    "baseUrl": "http://127.0.0.1:3000",
+    "allowedOrigins": ["http://127.0.0.1:3000"],
+    "mode": "code-aware",
+    "languages": ["typescript"]
+  },
+  "targets": [
+    { "path": "/search", "cweId": "CWE-79", "inputs": { "q": "SecureKey" } },
+    { "path": "/api/search", "cweId": "CWE-89", "inputs": { "q": "SecureKey" }, "sqlBooleanContext": "like-pattern", "responseJsonPointer": "/results" }
+  ],
+  "allowAnonymous": true,
+  "maxScannerRequests": 128,
+  "policy": {
+    "allowedOrigins": ["http://127.0.0.1:3000"],
+    "allowedMethods": ["GET"],
+    "tools": { "a05-http": {}, "a05-browser": {}, "dalfox-adapter": {}, "sqlmap-adapter": {} },
+    "approval": { "risks": [], "severities": [] },
+    "rateLimit": { "maxRequests": 400, "windowMs": 60000 },
+    "maxRequestsPerExecution": 180
+  },
+  "evidenceDirectory": "./private-a05-evidence",
+  "output": "./private-a05-report.json"
+}

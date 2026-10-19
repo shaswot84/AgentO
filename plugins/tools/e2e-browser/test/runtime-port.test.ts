@@ -151,3 +151,20 @@ describe('private runtime cookie transfer', () => {
     expect(result.outcome).toBe('FAILED'); expect(writes).toBe(0);
   });
 });
+
+describe('bounded browser canary reads', () => {
+  it('validates marker tokens, projects booleans and revokes the port after execution', async () => {
+    const runtime = fakeRuntime(), original = runtime.start.getMockImplementation()!, read = vi.fn(async () => ({ executed: true, elementPresent: true, private: 'hidden' }));
+    runtime.start.mockImplementation(async request => ({ ...await original(request), readCanary: read }));
+    let escaped: BrowserWorkflowSession | undefined;
+    const result = await new TesterArmyE2EAdapter({ runtime }).runWorkflow(context, { ...workflow, identityId: 'anonymous' }, async port => {
+      escaped = port;
+      await expect(port.readCanary!('arbitrary-code')).rejects.toMatchObject({ code: 'browser-failed' });
+      expect(await port.readCanary!(`agento-${'a'.repeat(32)}`)).toEqual({ executed: true, elementPresent: true });
+      expect(read).toHaveBeenCalledOnce();
+    });
+    expect(result.outcome).toBe('COMPLETED');
+    await expect(escaped!.readCanary!(`agento-${'a'.repeat(32)}`)).rejects.toMatchObject({ code: 'timeout' });
+    expect(read).toHaveBeenCalledOnce();
+  });
+});

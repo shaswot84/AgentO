@@ -72,6 +72,7 @@ export function isProbeEvidence(value: unknown): value is NormalizedProbeEvidenc
       && (value.browser === null || object(value.browser) && httpUrl(value.browser.url) && bool(value.browser.canaryVisible))
       && tri(value.executionConfirmed) && tri(value.domSinkReached);
     case 'sql-injection': return parameter(value.parameter) && response(value.baseline) && comparison(value.booleanComparison)
+      && (value.projectedControls === undefined || projected(value.projectedControls))
       && Array.isArray(value.observations) && value.observations.every(item => object(item)
         && ['syntax', 'boolean-true', 'boolean-false'].includes(item.variant as string)
         && ['error', 'boolean'].includes(item.technique as string) && response(item.response)
@@ -80,6 +81,10 @@ export function isProbeEvidence(value: unknown): value is NormalizedProbeEvidenc
         && fingerprint(value.scanner.dbmsFingerprint) && tri(value.scanner.observedDifference));
     default: return false;
   }
+}
+function projected(value: unknown): boolean {
+  return object(value) && typeof value.pointer === 'string' && /^\/(?:[A-Za-z0-9_-]+)(?:\/[A-Za-z0-9_-]+)*$/.test(value.pointer)
+    && ['baseline', 'trueControl', 'falseControl'].every(key => typeof value[key] === 'string' && /^[a-f0-9]{64}$/.test(value[key] as string));
 }
 function fingerprint(value: unknown): boolean { return [null, 'SQLite', 'PostgreSQL', 'MySQL', 'SQLServer', 'Oracle'].includes(value as string | null); }
 
@@ -126,7 +131,7 @@ function project(value: NormalizedProbeEvidence): JsonValue {
         canaryVisible: browser.canaryVisible as boolean, url: new URL(browser.url as string).origin + new URL(browser.url as string).pathname,
       } };
   }
-  return { ...injection, booleanComparison: publicComparison(item.booleanComparison),
+  return { ...injection, ...(item.projectedControls ? { projectedControls: pick(item.projectedControls, ['pointer', 'baseline', 'trueControl', 'falseControl']) } : {}), booleanComparison: publicComparison(item.booleanComparison),
     scanner: item.scanner === null ? null : pick(item.scanner, ['technique', 'dbmsFingerprint', 'observedDifference']),
     observations: (item.observations as RecordValue[]).map(observation => ({
       ...pick(observation, ['variant', 'technique', 'errorIndicators', 'dbmsFingerprint']),

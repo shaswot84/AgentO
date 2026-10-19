@@ -24,6 +24,8 @@ export interface BrowserWorkflowSession {
   /** Optional trusted backend operations; raw values must never reach a model or public evidence. */
   readCookies?(): Promise<readonly BrowserContextCookie[]>;
   replaceCookies?(cookies: readonly BrowserContextCookie[]): Promise<void>;
+  /** Read only a random canary marker. No caller-supplied code is evaluated. */
+  readCanary?(marker: string): Promise<{ readonly executed: boolean; readonly elementPresent: boolean }>;
 }
 export interface BrowserWorkflowRuntimeDriver extends BrowserWorkflowDriver {
   /** Return a fresh binding that gates authentication and every network exchange. */

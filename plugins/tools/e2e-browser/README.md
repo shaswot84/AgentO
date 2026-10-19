@@ -230,3 +230,9 @@ Defaults: 60 seconds, 500 network records, and at most 100 workflow actions.
 bounded validation. Nonterminating planners, timeouts, and truncated observations
 fail explicitly. Calls on one adapter are serialized. The frontend remains a
 separate client with scan fixtures; this package is a backend capability.
+
+The trusted runtime port also offers `readCanary(marker)`. It checks a bounded
+random token against `window.name` and a parsed canary element, returns only two
+booleans, and accepts no caller-supplied JavaScript. Marker reads obey the active
+workflow lifetime and are revoked after the callback. The XSS probe uses this port
+for independent browser proof; see the [injection host](../../../packages/a05/README.md).

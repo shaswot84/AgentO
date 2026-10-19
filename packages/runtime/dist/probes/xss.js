@@ -21,7 +21,7 @@ export class XSSProbe {
             const prepared = validateInjection(context);
             const normalized = { ...context, request: prepared };
             const canary = `agento-${randomUUID().replaceAll('-', '')}`;
-            const payload = `${canary}<agento-canary data-marker="${canary}"></agento-canary>`;
+            const payload = `${canary}<agento-canary id="${canary}" data-marker="${canary}"></agento-canary><script>window.name="${canary}"</script>`;
             const injectedRequest = mutate(context, prepared, () => payload);
             return withInjectionExecutor(context, async (executor, session) => {
                 const baseline = await executor.execute(prepared), injected = await executor.execute(injectedRequest);
@@ -29,10 +29,15 @@ export class XSSProbe {
                 if (baseline.body.truncated || injected.body.truncated)
                     diagnostics.push('response-truncated');
                 let browser = null;
+                let browserProof = null;
                 if (context.parameter.location === 'query' && prepared.method === 'GET') {
                     const observe = async (page) => {
                         await page.perform({ action: 'navigate', url: injectedRequest.url });
                         const result = await page.inspect();
+                        if (page.readCanary)
+                            browserProof = await page.readCanary(canary);
+                        else
+                            diagnostics.push('browser-unavailable');
                         return { url: evidenceUrl(result.url), canaryVisible: (result.visibleTextSummary ?? '').includes(canary) };
                     };
                     if (session)
@@ -58,6 +63,11 @@ export class XSSProbe {
                 }
                 else
                     diagnostics.push('scanner-unavailable');
+                if (browserProof) {
+                    const observed = browserProof;
+                    executionConfirmed = observed.executed;
+                    domSinkReached = observed.elementPresent;
+                }
                 const reflected = body.includes(payload);
                 return freeze({ ...base(context, this.metadata().id, diagnostics), parameter: { ...context.parameter },
                     baseline: publicResponse(context, baseline), injected: publicResponse(context, injected), canary,

@@ -84,6 +84,8 @@ export class NormalizedResponseComparator implements ResponseComparator {
   }
 }
 export function validateInjection(context: InjectionContext): HttpRequest {
+  const maximum = context.maxScannerRequests ?? 8;
+  if (!Number.isSafeInteger(maximum) || maximum < 1 || maximum > 512) throw new RuntimeError('invalid-request');
   const prepared = request(context, context.request, true);
   const point = context.parameter;
   if (!point || !point.name || point.name.length > 128 || /[\r\n]/.test(point.name)) throw new RuntimeError('invalid-request');

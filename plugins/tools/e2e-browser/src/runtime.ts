@@ -291,6 +291,12 @@ class LiveSession implements BrowserSession {
         ...(control.href ? { href: redactUrl(control.href, privateValues) } : {}) })) };
   }
 
+  async readCanary(marker: string): Promise<{ executed: boolean; elementPresent: boolean }> {
+    if (!/^agento-[a-f0-9]{32}$/.test(marker)) throw new BrowserError('invalid-workflow');
+    return this.page.evaluate(token => ({ executed: window.name === token,
+      elementPresent: document.getElementById(token)?.tagName.toLowerCase() === 'agento-canary' }), marker);
+  }
+
   async readCookies(): Promise<readonly BrowserContextCookie[]> {
     return this.context.cookies();
   }

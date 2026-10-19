@@ -40,6 +40,8 @@ export interface BrowserSnapshot { readonly url: string; readonly screenshotPath
 export interface BrowserSession {
   readCookies?(): Promise<readonly BrowserContextCookie[]>;
   replaceCookies?(cookies: readonly BrowserContextCookie[]): Promise<void>;
+  /** Read only a random canary marker. No caller-supplied code is evaluated. */
+  readCanary?(marker: string): Promise<{ readonly executed: boolean; readonly elementPresent: boolean }>;
   perform(action: BrowserAction): Promise<void>;
   inspect(): Promise<BrowserPageInspection>;
   verify(verification: SessionVerification): Promise<boolean>;

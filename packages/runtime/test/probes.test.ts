@@ -291,3 +291,50 @@ describe('injection investigations', () => {
     expect(state.execute).toHaveBeenCalledTimes(1);
   });
 });
+
+describe('controlled injection proof', () => {
+  it('uses browser execution observations ahead of scanner claims', async () => {
+    const state = setup(); let current = '';
+    state.capabilities.register('browser-controller', { withSession: async (identity, execute) => execute({
+      id: 'page', identityId: identity.id, perform: async action => { if (action.action === 'navigate') current = action.url; },
+      inspect: async () => ({ url: current, controls: [] }), readCanary: async marker => {
+        expect(new URL(current).searchParams.get('q')).toContain(`window.name="${marker}"`);
+        return { executed: false, elementPresent: false };
+      }, network: () => [], cookies: async () => [], transferCookies: async () => [], importCookies: async () => {},
+    }) });
+    state.capabilities.register('xss-scanner', { scan: async () => ({ executionConfirmed: true, domSinkReached: true }) });
+    const proof = await new XSSProbe().execute({ ...state, request, parameter: point,
+      anonymousIdentity: { id: 'anonymous', label: 'Anonymous', roles: [], authentication: 'anonymous' } });
+    expect(proof.executionConfirmed).toBe(false); expect(proof.domSinkReached).toBe(false); expect(proof.outcome).toBe('COMPLETED');
+  });
+  it('rejects mutation of an unrelated query input before scanner traffic', async () => {
+    const state = setup();
+    state.capabilities.register('sql-scanner', { scan: async input => {
+      await expect(input.executor.execute({ url: `${origin}/search?q=changed&keep=2` })).rejects.toThrow('scope-denied');
+      return { technique: 'boolean', dbmsFingerprint: null, observedDifference: null };
+    } });
+    await new SQLInjectionProbe().execute({ ...state, request, parameter: point });
+    expect(state.execute).toHaveBeenCalledTimes(4);
+  });
+  it('hashes only a declared structured JSON field while retaining raw exchange hashes', async () => {
+    const state = setup(vi.fn(async input => {
+      const q = new URL(input.url).searchParams.get('q')!;
+      return response(JSON.stringify({ reflected: q, results: q.includes("'1'='2") ? [] : [{ id: 1 }] }), 200, { 'content-type': ['application/json'] });
+    }));
+    const proof = await new SQLInjectionProbe().execute({ ...state, request, parameter: point, sqlBooleanContext: 'like-pattern', responseJsonPointer: '/results' });
+    expect(proof.projectedControls?.trueControl).toBe(proof.projectedControls?.baseline);
+    expect(proof.projectedControls?.falseControl).not.toBe(proof.projectedControls?.baseline);
+    expect(proof.observations[1]!.response.body.sha256).not.toBe(proof.baseline.body.sha256);
+    expect(JSON.stringify(proof)).not.toContain('reflected');
+  });
+  it.each(['/missing', '/reflected'])('does not project missing or scalar fields %s', async pointer => {
+    const state = setup(vi.fn(async input => response(JSON.stringify({ reflected: new URL(input.url).searchParams.get('q') }), 200, { 'content-type': ['application/json'] })));
+    const proof = await new SQLInjectionProbe().execute({ ...state, request, parameter: point, responseJsonPointer: pointer });
+    expect(proof.projectedControls).toBeUndefined();
+  });
+  it.each([0, 513, 1.5])('rejects scanner request bounds %s', async maximum => {
+    const state = setup(); state.capabilities.register('sql-scanner', { scan: async () => ({ technique: 'boolean', dbmsFingerprint: null, observedDifference: null }) });
+    await expect(new SQLInjectionProbe().execute({ ...state, request, parameter: point, maxScannerRequests: maximum })).rejects.toThrow('invalid-request');
+    expect(state.execute).not.toHaveBeenCalled();
+  });
+});

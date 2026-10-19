@@ -76,6 +76,7 @@ export function isProbeEvidence(value) {
             && (value.browser === null || object(value.browser) && httpUrl(value.browser.url) && bool(value.browser.canaryVisible))
             && tri(value.executionConfirmed) && tri(value.domSinkReached);
         case 'sql-injection': return parameter(value.parameter) && response(value.baseline) && comparison(value.booleanComparison)
+            && (value.projectedControls === undefined || projected(value.projectedControls))
             && Array.isArray(value.observations) && value.observations.every(item => object(item)
             && ['syntax', 'boolean-true', 'boolean-false'].includes(item.variant)
             && ['error', 'boolean'].includes(item.technique) && response(item.response)
@@ -84,6 +85,10 @@ export function isProbeEvidence(value) {
                 && fingerprint(value.scanner.dbmsFingerprint) && tri(value.scanner.observedDifference));
         default: return false;
     }
+}
+function projected(value) {
+    return object(value) && typeof value.pointer === 'string' && /^\/(?:[A-Za-z0-9_-]+)(?:\/[A-Za-z0-9_-]+)*$/.test(value.pointer)
+        && ['baseline', 'trueControl', 'falseControl'].every(key => typeof value[key] === 'string' && /^[a-f0-9]{64}$/.test(value[key]));
 }
 function fingerprint(value) { return [null, 'SQLite', 'PostgreSQL', 'MySQL', 'SQLServer', 'Oracle'].includes(value); }
 /** Each nested object has its own public schema; extra adapter fields are never copied. */
@@ -135,7 +140,7 @@ function project(value) {
                 canaryVisible: browser.canaryVisible, url: new URL(browser.url).origin + new URL(browser.url).pathname,
             } };
     }
-    return { ...injection, booleanComparison: publicComparison(item.booleanComparison),
+    return { ...injection, ...(item.projectedControls ? { projectedControls: pick(item.projectedControls, ['pointer', 'baseline', 'trueControl', 'falseControl']) } : {}), booleanComparison: publicComparison(item.booleanComparison),
         scanner: item.scanner === null ? null : pick(item.scanner, ['technique', 'dbmsFingerprint', 'observedDifference']),
         observations: item.observations.map(observation => ({
             ...pick(observation, ['variant', 'technique', 'errorIndicators', 'dbmsFingerprint']),

@@ -102,6 +102,8 @@ export interface BrowserSession {
   transferCookies(): Promise<readonly RuntimeCookie[]>;
   /** Replace the private context jar before subsequent page actions. */
   importCookies(cookies: readonly RuntimeCookie[]): Promise<void>;
+  /** Read only a random canary marker. No caller-supplied code is evaluated. */
+  readCanary?(marker: string): Promise<{ readonly executed: boolean; readonly elementPresent: boolean }>;
 }
 export interface BrowserController {
   withGuard?(guard: ExecutionGuard): BrowserController;

@@ -165,3 +165,8 @@ script. The three integration tests run the installed tool against the real demo
 checks source/sink lines and Express endpoints through core orchestration, scans
 unsafe/fixed-only JS/TS controls, proves target modules never execute, and verifies
 the standalone CLI. Verified with Semgrep CE 1.180.0.
+
+For direct property access such as `req.query.q`, source evidence includes
+`parameterName` beside its request source kind. The targeted injection host uses
+that attribution with model parameters to avoid testing unrelated route inputs.
+Unresolved names remain absent; the adapter does not guess a parameter.

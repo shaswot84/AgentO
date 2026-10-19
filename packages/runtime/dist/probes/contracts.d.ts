@@ -104,6 +104,10 @@ export interface InjectionContext extends ProbeContext {
     readonly identity?: TestIdentity;
     /** A registered anonymous persona for optional browser observation without authentication. */
     readonly anonymousIdentity?: TestIdentity;
+    /** Trusted host limits and response shape; never supplied by a model. */
+    readonly maxScannerRequests?: number;
+    readonly sqlBooleanContext?: 'quoted-string' | 'like-pattern';
+    readonly responseJsonPointer?: string;
 }
 export interface ScannerRequest {
     readonly project: Project;
@@ -174,5 +178,12 @@ export interface SQLInjectionEvidence extends ProbeEvidence {
         readonly dbmsFingerprint: DatabaseFingerprint | null;
     }[];
     readonly booleanComparison: ResponseComparison;
+    /** Hashes of a declared JSON result field, separate from complete response hashes. */
+    readonly projectedControls?: {
+        readonly pointer: string;
+        readonly baseline: string;
+        readonly trueControl: string;
+        readonly falseControl: string;
+    };
     readonly scanner: Awaited<ReturnType<SQLScanner['scan']>> | null;
 }
