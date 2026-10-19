@@ -8,6 +8,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Code repair suggestions (`plugins/remediation`)**: Added repair explanations, code patches, and tests for seven CWEs in the Express demo. Check source hashes and stored evidence before patch generation. Keep findings and evidence fixed. Do not apply code changes during generation.
+- **Repair checks and instructions**: Added tests in separate local Git branches. Security tests fail before each patch and pass after it. Normal application tests pass before and after each patch. Added source limits, private data checks, setup instructions, and core and report integration tests.
+
 - **Security reports (`packages/reporting`)**: Added JSON and Markdown reports. Show finding states, source locations, test steps, and stored proof. Link report statements to fixed evidence records. Include supplied repair suggestions and test instructions. Show when no repair test has run.
 - **Report checks**: Check evidence hashes and links. Reject missing proof and records from another project. Remove private values from report text. Keep stored facts fixed. Added tests for seven CWEs, failed tests, private data, and report output. Added setup instructions and example reports.
 
