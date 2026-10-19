@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-19T10:02:00Z",
+  "project": {
+    "id": "synthetic-example",
+    "name": "Synthetic report example (not a live scan)",
+    "baseUrl": "https://example.invalid"
+  },
+  "summary": {
+    "total": 1,
+    "byStatus": {
+      "HYPOTHESIS": 1,
+      "LIKELY": 0,
+      "CONFIRMED": 0,
+      "NOT_REPRODUCED": 0,
+      "REJECTED": 0
+    },
+    "confirmedBySeverity": {
+      "info": 0,
+      "low": 0,
+      "medium": 0,
+      "high": 0,
+      "critical": 0
+    }
+  },
+  "findings": [
+    {
+      "id": "hypothesis:example:ownership",
+      "hypothesisId": "example:ownership",
+      "title": "CWE-639 hypothesis",
+      "cweId": "CWE-639",
+      "owaspCategory": "A01:2025",
+      "status": "HYPOTHESIS",
+      "severity": null,
+      "confidence": null,
+      "assessment": {
+        "text": "A caller-selected order identifier needs an ownership check. Runtime verification is pending.",
+        "evidenceIds": [
+          "example:source"
+        ]
+      },
+      "rootCause": null,
+      "endpoint": {
+        "id": "orders",
+        "method": "GET",
+        "path": "/api/orders/:id",
+        "evidenceIds": [
+          "example:source"
+        ]
+      },
+      "source": {
+        "location": {
+          "file": "src/routes/orders.ts",
+          "startLine": 24,
+          "endLine": 28
+        },
+        "evidenceIds": [
+          "example:source"
+        ]
+      },
+      "evidenceIds": [
+        "example:source"
+      ],
+      "staticEvidenceIds": [
+        "example:source"
+      ],
+      "runtimeEvidenceIds": [],
+      "otherEvidenceIds": [],
+      "contextEvidenceIds": [],
+      "testPlans": [
+        {
+          "id": "example:authorization-plan",
+          "executor": "browser",
+          "risk": "active",
+          "targetUrl": "https://example.invalid/api/orders/:id",
+          "requiredCapabilities": [
+            "authentication-manager",
+            "request-executor",
+            "response-comparator"
+          ],
+          "identityIds": [
+            "owner",
+            "second-user"
+          ],
+          "steps": [
+            {
+              "id": "baseline",
+              "action": "Read an owned order as the owner",
+              "expectedObservation": "Collect a complete successful baseline."
+            },
+            {
+              "id": "control",
+              "action": "Read the same order as an unauthorized second user",
+              "expectedObservation": "Compare status, response hashes, and private owner markers."
+            }
+          ],
+          "evidenceIds": [
+            "example:source"
+          ]
+        }
+      ],
+      "executions": [],
+      "verification": {
+        "source": "hypothesis",
+        "diagnostics": []
+      },
+      "remediation": {
+        "status": "NOT_PROVIDED",
+        "explanation": null,
+        "patch": null,
+        "regressionTest": null
+      },
+      "retest": {
+        "status": "NOT_RUN"
+      },
+      "diagnostics": [
+        "no-runtime-proof",
+        "root-cause-unverified"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "example:source",
+      "projectId": "synthetic-example",
+      "kind": "source-location",
+      "producerId": "documentation-fixture",
+      "capturedAt": "2026-10-19T10:00:00Z",
+      "summary": "Synthetic source observation for the order handler.",
+      "facts": {
+        "operation": "order.lookup",
+        "input": "id",
+        "fixture": true
+      },
+      "source": {
+        "file": "src/routes/orders.ts",
+        "startLine": 24,
+        "endLine": 28
+      },
+      "endpointId": "orders",
+      "schemaVersion": 1,
+      "provenance": {
+        "probeId": "documentation-fixture",
+        "capabilityIds": [
+          "framework-analysis"
+        ],
+        "environment": {
+          "id": "synthetic",
+          "baseUrl": "https://example.invalid",
+          "targetUrl": "https://example.invalid"
+        }
+      },
+      "digest": "6d8a97312197f036c98c8273d037062886b9d455965afd05998ccf5116a95fa2"
+    }
+  ],
+  "limitations": [
+    "Finding states come from the supplied assessment. Reporting does not execute tests or independently verify vulnerabilities.",
+    "A hypothesis is unverified. NOT_REPRODUCED describes this assessment and does not prove that an application is secure.",
+    "Proof contains retained, redacted observations. Private input values, credentials, raw bodies, and external artifacts are not reconstructed.",
+    "Test steps describe the assessment. Private bindings must be supplied by the authorized host to reproduce it.",
+    "Remediation is included only when supplied with evidence references. Retest has not run."
+  ],
+  "digest": "2af565007bbadbf88226641d2337ba89807dfbe7d14c4ed1f091e4b7871d1b33"
+}

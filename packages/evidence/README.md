@@ -78,6 +78,11 @@ coverage diagnostics. Scanner severity and confidence remain reported claims.
 
 ## Privacy and integrity
 
+`EvidenceRedactor` is also exported for report prose and other public projections.
+Its `text`, `url`, and `json` methods use the same policy as evidence retention.
+Pass host secrets at construction. Applying redaction to an existing record would
+change its digest; reporting checks for this and refuses to rewrite stored proof.
+
 The store removes standard credential fields, authorization headers, cookie
 values, private keys, JWTs, credential assignments, and URL credentials, query values,
 and fragments. It also removes host-supplied secrets and common encoded forms

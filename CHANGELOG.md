@@ -8,6 +8,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Security reports (`packages/reporting`)**: Added JSON and Markdown reports. Show finding states, source locations, test steps, and stored proof. Link report statements to fixed evidence records. Include supplied repair suggestions and test instructions. Show when no repair test has run.
+- **Report checks**: Check evidence hashes and links. Reject missing proof and records from another project. Remove private values from report text. Keep stored facts fixed. Added tests for seven CWEs, failed tests, private data, and report output. Added setup instructions and example reports.
+
 - **Access control tests (`packages/a01`)**: Added source checks and tests for access to private objects and protected routes. Use separate browser logins and cookie stores for each user. Compare owner, second user, and anonymous responses. Require private content matches before confirmation.
 - **Access control command and proof**: Added a JSON scan command with account values from environment variables. Added stored proof, policy checks, and tests for failed logins and request limits. Added setup instructions. Keep passwords, cookie values, and private content markers out of reports.
 

@@ -63,6 +63,7 @@ AgentO/
 │   ├── evidence/      # Immutable, redacted proof with local retention and export
 │   ├── hypothesis-engine/ # Evidence-grounded hypotheses and optional structured reasoning
 │   ├── policy-engine/ # Target and tool policy, approvals, request limits and audit
+│   ├── reporting/     # Evidence-linked developer reports in JSON and Markdown
 │   ├── runtime/       # Scoped capabilities and reusable security investigations
 │   ├── security-model/ # Evidence-preserving source, browser and runtime application model
 │   ├── test-planner/  # Structured probe plans, prerequisites and verification criteria
@@ -93,6 +94,7 @@ AgentO/
 - **`packages/a05`**: Connects Semgrep input locations to targeted XSS and SQL probes, Dalfox/sqlmap adapters, browser execution proof, retained evidence, and verification. Provides an API and private JSON-report CLI. See [injection assessment setup and limits](packages/a05/README.md).
 - **`packages/evidence`**: Stores immutable, redacted observations with probe, capability, and target provenance. Supports a local append-only journal and portable finding proof bundles. See [evidence setup, retention, and integrity limits](packages/evidence/README.md).
 - **`packages/verifier`**: Checks retained runtime proof before accepting CWE verdicts. Binds completed tests to their hypothesis, target, environment, and capabilities. Validates citations for optional model explanations. See [judge setup and verification limits](packages/verifier/README.md).
+- **`packages/reporting`**: Exports developer reports in JSON and Markdown with immutable evidence links, source locations, test steps, supplied remediation, and explicit finding states. See [report setup and examples](packages/reporting/README.md).
 - **`packages/discovery`**: Reads manifests and source syntax to identify languages, frameworks, dependencies, probable databases/authentication/middleware, and repository structure. It selects black-box mode when the stack is unsupported or a compatible Express adapter is unavailable. See [discovery usage and verification](packages/discovery/README.md).
 - **`packages/workflow`**: Chooses trusted recipes or optional semantic model proposals, validates current page references and credential permissions, and enforces finite planning budgets. Model input uses redacted page models; the browser executes approved actions. See [workflow registration and boundaries](packages/workflow/README.md).
 - **`packages/runtime`**: Provides scoped HTTP/browser capabilities and reusable cookie, cross-origin, authorization, XSS and SQL probes. Probes return immutable observations for later policy interpretation. See [runtime setup, usage, and boundaries](packages/runtime/README.md).
