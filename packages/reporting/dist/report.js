@@ -71,6 +71,9 @@ function buildReport(input, options) {
     const remediation = new Map((data.remediation ?? []).map(item => [item.findingId, item]));
     if (decisions.size !== (data.decisions?.length ?? 0) || remediation.size !== (data.remediation?.length ?? 0))
         throw new ReportingError('duplicate-id');
+    const retests = new Map((data.retests ?? []).map(item => [item.findingId, item]));
+    if (retests.size !== (data.retests?.length ?? 0))
+        throw new ReportingError('duplicate-id');
     const records = new Map();
     const retain = (ids) => {
         strings(ids);
@@ -195,6 +198,30 @@ function buildReport(input, options) {
         if (!suggestion.evidenceIds.length || suggestion.evidenceIds.some(key => !finding.evidenceIds.includes(key)))
             throw new ReportingError('unrelated-reference');
     }
+    for (const [findingId, retest] of retests) {
+        const finding = findings.get(findingId);
+        id(retest.id);
+        if (!finding || finding.status !== 'CONFIRMED' || retest.projectId !== project.id || retest.cweId !== finding.cweId
+            || !['FIX_VERIFIED', 'FIX_FAILED', 'FIX_INCONCLUSIVE'].includes(retest.status)
+            || !retest.beforeEvidenceIds.length || retest.beforeEvidenceIds.some(ref => !finding.evidenceIds.includes(ref)))
+            throw new ReportingError('unrelated-reference');
+        retain([retest.comparisonEvidenceId, ...retest.beforeEvidenceIds, ...retest.afterEvidenceIds]);
+        const comparison = records.get(retest.comparisonEvidenceId), facts = comparison.facts;
+        if (comparison.producerId !== 'retest-engine' || facts.observation !== 'fix-verification'
+            || facts.retestId !== retest.id || facts.findingId !== finding.id || facts.cweId !== finding.cweId
+            || facts.status !== retest.status || !finding.testPlanIds.includes(facts.planId)
+            || comparison.endpointId !== finding.endpointId
+            || canonical(facts.beforeEvidenceIds) !== canonical(retest.beforeEvidenceIds)
+            || canonical(facts.afterEvidenceIds) !== canonical(retest.afterEvidenceIds)
+            || canonical(facts.beforeDigests) !== canonical(retest.beforeEvidenceIds.map(ref => records.get(ref).digest))
+            || retest.afterEvidenceIds.some(ref => retest.beforeEvidenceIds.includes(ref)
+                || records.get(ref).endpointId !== finding.endpointId
+                || records.get(ref).provenance.environment.id !== comparison.provenance.environment.id)
+            || retest.status === 'FIX_VERIFIED' && (!retest.afterEvidenceIds.length
+                || facts.securityRegression !== 'PASSED' || facts.normalFlow !== 'PASSED')
+            || retest.status === 'FIX_FAILED' && !retest.afterEvidenceIds.length)
+            throw new ReportingError('unrelated-reference');
+    }
     const entries = [...findings.values()].map(finding => ({ finding, hypothesisOnly: false }));
     for (const hypothesis of hypotheses.values()) {
         if (assessedHypotheses.has(hypothesis.id))
@@ -260,6 +287,12 @@ function buildReport(input, options) {
         if (!runtimeEvidenceIds.length)
             diagnostics.push('no-runtime-proof');
         const decision = decisions.get(finding.id);
+        const attempt = retests.get(finding.id);
+        const retest = attempt ? {
+            id: attempt.id, findingId: attempt.findingId, projectId: attempt.projectId, cweId: attempt.cweId,
+            status: attempt.status, comparisonEvidenceId: attempt.comparisonEvidenceId,
+            beforeEvidenceIds: [...attempt.beforeEvidenceIds], afterEvidenceIds: [...attempt.afterEvidenceIds],
+        } : { status: 'NOT_RUN' };
         return {
             id: finding.id, hypothesisId: finding.hypothesisId, title: redactor.text(finding.title), cweId: finding.cweId,
             owaspCategory: redactor.text(finding.owaspCategory), status: finding.status,
@@ -281,7 +314,7 @@ function buildReport(input, options) {
                 patch: suggestion.patch === undefined ? null : cited(suggestion.patch, suggestion.evidenceIds),
                 regressionTest: suggestion.regressionTest === undefined ? null : cited(suggestion.regressionTest, suggestion.evidenceIds) }
                 : { status: 'NOT_PROVIDED', explanation: null, patch: null, regressionTest: null },
-            retest: { status: 'NOT_RUN' }, diagnostics: diagnostics.sort(),
+            retest, diagnostics: diagnostics.sort(),
         };
     });
     const severityRank = (value) => value === null ? -1 : SEVERITIES.indexOf(value);
@@ -292,7 +325,8 @@ function buildReport(input, options) {
     const confirmedBySeverity = Object.fromEntries(SEVERITIES.map(severity => [severity,
         output.filter(item => item.status === 'CONFIRMED' && item.severity === severity).length]));
     const usedEvidenceIds = new Set(output.flatMap(finding => [...finding.evidenceIds,
-        ...finding.executions.flatMap(result => result.evidenceIds)]));
+        ...finding.executions.flatMap(result => result.evidenceIds),
+        ...(finding.retest.status === 'NOT_RUN' ? [] : [finding.retest.comparisonEvidenceId, ...finding.retest.beforeEvidenceIds, ...finding.retest.afterEvidenceIds])]));
     const content = { schemaVersion: 1, generatedAt, project: { id: project.id, name: redactor.text(project.name), baseUrl },
         summary: { total: output.length, byStatus, confirmedBySeverity }, findings: output,
         evidence: [...records.values()].filter(record => usedEvidenceIds.has(record.id)).sort((a, b) => a.id.localeCompare(b.id, 'en')),
@@ -301,7 +335,8 @@ function buildReport(input, options) {
             'A hypothesis is unverified. NOT_REPRODUCED describes this assessment and does not prove that an application is secure.',
             'Proof contains retained, redacted observations. Private input values, credentials, raw bodies, and external artifacts are not reconstructed.',
             'Test steps describe the assessment. Private bindings must be supplied by the authorized host to reproduce it.',
-            'Remediation is included only when supplied with evidence references. Retest has not run.',
+            retests.size ? 'Fix statuses describe the supplied isolated retest attempts. The original vulnerability assessments remain unchanged.'
+                : 'Remediation is included only when supplied with evidence references. Retest has not run.',
         ] };
     const report = { ...content, digest: digest(content) };
     if (Buffer.byteLength(JSON.stringify(report, null, 2)) > maxBytes)

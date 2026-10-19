@@ -80,6 +80,10 @@ export function reportToMarkdown(report: SecurityReport): string {
       }
     }
     lines.push(`Retest status: ${md(finding.retest.status)}.`, '');
+    if (finding.retest.status !== 'NOT_RUN') lines.push(
+      `Comparison: ${refs([finding.retest.comparisonEvidenceId])}`, '',
+      `Before repair: ${refs(finding.retest.beforeEvidenceIds)}`, '',
+      `After repair: ${refs(finding.retest.afterEvidenceIds)}`, '');
   }
   lines.push('## Immutable evidence', '', 'Each record retains its original digest and provenance. Evidence IDs in the report link to these records.', '');
   for (const record of value.evidence) {

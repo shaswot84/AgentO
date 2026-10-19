@@ -142,5 +142,9 @@ fix-verification verdict.
 - Supply private secrets, including values that might occur in source context.
   Unsafe patch output is refused instead of redacted, so patch bytes remain valid.
   Host source content is never emitted wholesale. Errors contain fixed codes.
-- Source reads, patch application, test execution, production changes, commits,
-  pushes, frontend integration, and original-probe retesting remain host concerns.
+- Normalized runtime probe records from the CWE bridge are accepted alongside
+  direct runtime records. The caller remains responsible for a verified finding.
+- Use [`@agento/retest`](../../packages/retest/README.md) to apply a prepared patch
+  in a temporary source copy and verify the saved original probe. Source reads,
+  execution callbacks, production changes, commits, pushes, and frontend
+  integration remain host concerns.

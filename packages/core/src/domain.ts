@@ -3,6 +3,18 @@ export type JsonValue = string | number | boolean | null | readonly JsonValue[] 
 export type CWEId = `CWE-${number}`;
 export const MVP_CWES = ['CWE-639', 'CWE-862', 'CWE-942', 'CWE-1004', 'CWE-614', 'CWE-79', 'CWE-89'] as const satisfies readonly CWEId[];
 export type FindingStatus = 'HYPOTHESIS' | 'LIKELY' | 'CONFIRMED' | 'NOT_REPRODUCED' | 'REJECTED';
+/** Fix lifecycle is separate from the immutable original vulnerability assessment. */
+export type FixVerificationStatus = 'FIX_VERIFIED' | 'FIX_FAILED' | 'FIX_INCONCLUSIVE';
+export interface RetestResult {
+  readonly id: string;
+  readonly findingId: string;
+  readonly projectId: string;
+  readonly cweId: CWEId;
+  readonly status: FixVerificationStatus;
+  readonly comparisonEvidenceId: string;
+  readonly beforeEvidenceIds: readonly string[];
+  readonly afterEvidenceIds: readonly string[];
+}
 export type Severity = 'info' | 'low' | 'medium' | 'high' | 'critical';
 
 export interface SourceLocation {

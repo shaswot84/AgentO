@@ -1,3 +1,4 @@
+import { fromCoreEvidence } from '@agento/cwe';
 import { isAbsolute, relative } from 'node:path';
 import type { AnalysisContext, Evidence, Finding, RemediationProvider } from '@agento/core';
 import { EvidenceRedactor, verifyEvidenceBundle, type StoredEvidence } from '@agento/evidence';
@@ -85,7 +86,7 @@ export class ExpressRemediationProvider implements RemediationProvider {
     for (const id of finding.evidenceIds) {
       const record = retain(id);
       if (record.endpointId && record.endpointId !== finding.endpointId) throw new RemediationError('unrelated-evidence');
-      runtime ||= ['cookie-security', 'cross-origin', 'authorization', 'browser-observation', 'http-response', 'scanner-output'].includes(record.kind);
+      runtime ||= ['cookie-security', 'cross-origin', 'authorization', 'browser-observation', 'http-response', 'scanner-output'].includes(record.kind) || fromCoreEvidence(record) !== undefined;
     }
     if (!runtime) throw new RemediationError('unrelated-evidence');
     const sourcePath = (file: string): string => {

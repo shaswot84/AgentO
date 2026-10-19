@@ -13,6 +13,6 @@
     "test": "vitest run",
     "check": "npm run typecheck && npm run build && npm test"
   },
-  "dependencies": { "@agento/core": "file:../../packages/core", "@agento/evidence": "file:../../packages/evidence" },
+  "dependencies": { "@agento/core": "file:../../packages/core", "@agento/cwe": "file:../cwe", "@agento/evidence": "file:../../packages/evidence" },
   "devDependencies": { "@agento/reporting": "file:../../packages/reporting", "@types/node": "^26.6.5", "typescript": "^7.0.2", "vitest": "^5.0.3" }
 }

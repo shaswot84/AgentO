@@ -8,6 +8,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Fix verification (`packages/retest`)**: Apply source patches in temporary copies. Run security and normal-use tests. Repeat the original probe. Record before and after proof with verified, failed, or inconclusive fix states. Keep the original finding fixed.
+- **Fix reports and checks**: Add fix states and proof links to JSON and Markdown reports. Check source hashes, patch paths, original test data, and stored evidence. Add tests for seven repairs, failed repairs, crashes, cleanup, and private data. Accept stored runtime probe records in repair generation.
+
 - **Code repair suggestions (`plugins/remediation`)**: Added repair explanations, code patches, and tests for seven CWEs in the Express demo. Check source hashes and stored evidence before patch generation. Keep findings and evidence fixed. Do not apply code changes during generation.
 - **Repair checks and instructions**: Added tests in separate local Git branches. Security tests fail before each patch and pass after it. Normal application tests pass before and after each patch. Added source limits, private data checks, setup instructions, and core and report integration tests.
 

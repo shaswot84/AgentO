@@ -58,7 +58,7 @@ See the [evidence retention guide](../evidence/README.md).
 | Test plans | Include ordered actions, expected observations, capabilities, identities, and redacted targets |
 | Execution | Show completed, failed, and skipped tests separately from finding states |
 | Remediation | Include supplied explanation, patch, and regression test with finding evidence citations |
-| Retest | Set `NOT_RUN`; the initial assessment does not test a fix |
+| Retest | Default to `NOT_RUN`; supplied fix attempts include status and linked before/after proof |
 
 Unassessed hypotheses appear as `HYPOTHESIS`, with no assigned severity,
 confidence, or established root cause. All five core finding states are supported.
@@ -70,6 +70,15 @@ They remain separate from the assessment's static and runtime proof. Markdown
 evidence links resolve to embedded records, so developers do not need debug logs.
 Source paths are displayed as recorded. The project's `repositoryPath` field is
 excluded; a source record can still contain a full file path if its producer used one.
+
+## Include a fix verification result
+
+Supply `retests: [result]` from `@agento/retest` when building the report. Select
+one attempt per finding. Reporting checks the retained comparison, original
+record digests, project/finding/plan bindings, and before/after references. It
+embeds the comparative proof in both formats. The original assessment state and
+severity counts remain unchanged; `finding.retest.status` carries the fix state.
+Without an explicit retest result, the status stays `NOT_RUN`.
 
 ## Trust, privacy, and limits
 

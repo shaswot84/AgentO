@@ -64,6 +64,7 @@ AgentO/
 │   ├── hypothesis-engine/ # Evidence-grounded hypotheses and optional structured reasoning
 │   ├── policy-engine/ # Target and tool policy, approvals, request limits and audit
 │   ├── reporting/     # Evidence-linked developer reports in JSON and Markdown
+│   ├── retest/        # Isolated patch checks and original-probe replay
 │   ├── runtime/       # Scoped capabilities and reusable security investigations
 │   ├── security-model/ # Evidence-preserving source, browser and runtime application model
 │   ├── test-planner/  # Structured probe plans, prerequisites and verification criteria
@@ -96,6 +97,7 @@ AgentO/
 - **`packages/evidence`**: Stores immutable, redacted observations with probe, capability, and target provenance. Supports a local append-only journal and portable finding proof bundles. See [evidence setup, retention, and integrity limits](packages/evidence/README.md).
 - **`packages/verifier`**: Checks retained runtime proof before accepting CWE verdicts. Binds completed tests to their hypothesis, target, environment, and capabilities. Validates citations for optional model explanations. See [judge setup and verification limits](packages/verifier/README.md).
 - **`packages/reporting`**: Exports developer reports in JSON and Markdown with immutable evidence links, source locations, test steps, supplied remediation, and explicit finding states. See [report setup and examples](packages/reporting/README.md).
+- **`packages/retest`**: Applies reviewed repairs in temporary source copies, runs security and normal-use tests, and replays the original probe. Records before/after proof with separate fix statuses. See [fix verification and host integration](packages/retest/README.md).
 - **`plugins/remediation`**: Generates root-cause explanations, unified diffs, and regression tests for confirmed findings on reviewed Express storefront source revisions. Uses the existing core provider interface and checks retained source hashes. Applying fixes and retesting findings remain separate. See [supported repairs and usage](plugins/remediation/README.md).
 - **`packages/discovery`**: Reads manifests and source syntax to identify languages, frameworks, dependencies, probable databases/authentication/middleware, and repository structure. It selects black-box mode when the stack is unsupported or a compatible Express adapter is unavailable. See [discovery usage and verification](packages/discovery/README.md).
 - **`packages/workflow`**: Chooses trusted recipes or optional semantic model proposals, validates current page references and credential permissions, and enforces finite planning budgets. Model input uses redacted page models; the browser executes approved actions. See [workflow registration and boundaries](packages/workflow/README.md).

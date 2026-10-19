@@ -1,4 +1,4 @@
-import type { AnalysisContext, CWEId, EvidenceStore, Finding, FindingStatus, RemediationSuggestion, SecurityHypothesis, SecurityTestPlan, SecurityTestResult, Severity, SourceLocation } from '@agento/core';
+import type { AnalysisContext, CWEId, EvidenceStore, Finding, FindingStatus, RemediationSuggestion, RetestResult, SecurityHypothesis, SecurityTestPlan, SecurityTestResult, Severity, SourceLocation } from '@agento/core';
 import type { StoredEvidence } from '@agento/evidence';
 export interface CitedText {
     readonly text: string;
@@ -20,6 +20,8 @@ export interface ReportInput {
     readonly results?: readonly SecurityTestResult[];
     readonly decisions?: readonly ReportDecision[];
     readonly remediation?: readonly RemediationSuggestion[];
+    /** Supply one selected fix attempt per finding; all prior evidence stays in the store. */
+    readonly retests?: readonly RetestResult[];
 }
 export interface ReportingOptions {
     readonly evidenceStore: EvidenceStore;
@@ -94,7 +96,7 @@ export interface ReportFinding {
     /** Initial assessment results never imply a fix has been tested. */
     readonly retest: {
         readonly status: 'NOT_RUN';
-    };
+    } | RetestResult;
     readonly diagnostics: readonly string[];
 }
 export interface SecurityReport {

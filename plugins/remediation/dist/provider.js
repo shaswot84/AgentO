@@ -1,3 +1,4 @@
+import { fromCoreEvidence } from '@agento/cwe';
 import { isAbsolute, relative } from 'node:path';
 import { EvidenceRedactor, verifyEvidenceBundle } from '@agento/evidence';
 import { recipes } from './catalog.js';
@@ -111,7 +112,7 @@ export class ExpressRemediationProvider {
             const record = retain(id);
             if (record.endpointId && record.endpointId !== finding.endpointId)
                 throw new RemediationError('unrelated-evidence');
-            runtime ||= ['cookie-security', 'cross-origin', 'authorization', 'browser-observation', 'http-response', 'scanner-output'].includes(record.kind);
+            runtime ||= ['cookie-security', 'cross-origin', 'authorization', 'browser-observation', 'http-response', 'scanner-output'].includes(record.kind) || fromCoreEvidence(record) !== undefined;
         }
         if (!runtime)
             throw new RemediationError('unrelated-evidence');
