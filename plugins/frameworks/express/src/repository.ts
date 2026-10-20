@@ -15,7 +15,7 @@ export interface Repository {
 }
 
 /** No target modules, scripts, tsconfig plugins, or external imports are loaded. */
-export async function readRepository(repositoryPath: string): Promise<Repository> {
+export async function readRepository(repositoryPath: string, excludePaths: readonly string[] = []): Promise<Repository> {
   const root = resolve(repositoryPath);
   const files = new Map<string, ts.SourceFile>();
   const diagnostics: ExpressDiagnostic[] = [];
@@ -38,6 +38,7 @@ export async function readRepository(repositoryPath: string): Promise<Repository
         limited = true; return;
       }
       const file = directory ? `${directory}/${entry.name}` : entry.name;
+      if (excludePaths.some(path => file === path || file.startsWith(`${path}/`))) continue;
       if (isTest(file)) continue;
       if (entry.isDirectory()) await walk(file, depth + 1);
       else if (entry.isFile() && extensions.has(extname(file))) {

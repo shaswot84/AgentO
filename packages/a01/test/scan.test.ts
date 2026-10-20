@@ -5,7 +5,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { FileEvidenceStore } from '@agento/evidence';
 import { CWE639Plugin, CWE862Plugin, fromCoreEvidence } from '@agento/cwe';
 import { VerificationJudge } from '@agento/verifier';
-import { ExpressFrameworkAdapter } from '@agento/framework-express';
+import { ExpressFrameworkAdapter, ExpressSourceAnalyzer } from '@agento/framework-express';
 import { A01Error, runA01Scan } from '../src/index.js';
 import { setup, type Mode } from './helpers.js';
 
@@ -13,6 +13,15 @@ const paths: string[] = [];
 function fixture(mode: Mode = 'vulnerable', failLogin = false) { const state = setup(mode, failLogin); paths.push(state.repositoryPath); return state; }
 afterEach(() => { for (const path of paths.splice(0)) rmSync(path, { recursive: true, force: true }); });
 describe('source-grounded authorization assessment', () => {
+  it.each(['candidate', 'unavailable'] as const)('refuses endpoint inventory before login or probes (%s)', async state => {
+    const fixtureState = fixture(), source = new ExpressSourceAnalyzer();
+    await expect(runA01Scan({ ...fixtureState.options, frameworkAdapter: { id: 'inventory-test', capabilities: [], supports: async () => true,
+      async extract(project) { const analysis = await source.extract(project); return { ...analysis,
+        endpoints: analysis.endpoints.map(endpoint => ({ ...endpoint, discovery: { providerId: 'inventory', validation: 'candidate' as const } })),
+        discovery: { providerId: 'inventory', status: state === 'candidate' ? 'completed' as const : 'unavailable' as const, diagnostics: [] } }; },
+    } })).rejects.toThrow(state === 'candidate' ? 'route-unavailable' : 'discovery-unavailable');
+    expect(fixtureState.logins).toEqual([]); expect(fixtureState.calls).toEqual([]);
+  });
   it.each(['vulnerable', 'fixed'] as const)('links source, declarations, isolated sessions and stored proof in %s mode', async mode => {
     const state = fixture(mode), report = await runA01Scan(state.options);
     expect(report.hypotheses, JSON.stringify(report.diagnostics)).toHaveLength(2);

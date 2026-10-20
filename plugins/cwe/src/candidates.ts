@@ -1,4 +1,5 @@
 import type { AnalysisContext, Endpoint, Evidence, Resource } from '@agento/core';
+import { isEndpointTestable } from '@agento/core';
 import type { ApplicationSecurityModel, ModelFact } from '@agento/security-model';
 import type { CWEMetadata, CWEHypothesis, EvaluationScope, RuleOptions } from './contracts.js';
 import { freeze, identifier, url } from './shared.js';
@@ -16,6 +17,7 @@ export function detect(metadata: CWEMetadata, context: AnalysisContext, options:
   const hypotheses: CWEHypothesis[] = [];
   const evidence = new Set(context.evidence.filter(item => item.projectId === context.project.id).map(item => item.id));
   for (const endpoint of context.endpoints) {
+    if (!isEndpointTestable(endpoint)) continue;
     const target = targetUrl(context, endpoint);
     if (!target) continue;
     const matches = (id: string | undefined) => id === endpoint.id || !!id && model.endpointAliases?.[id] === endpoint.id;

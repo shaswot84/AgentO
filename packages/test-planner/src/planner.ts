@@ -1,4 +1,5 @@
 import type { AnalysisContext, Endpoint, SecurityHypothesis, SecurityTestPlan, TestPlanner } from '@agento/core';
+import { isEndpointTestable } from '@agento/core';
 import { buildApplicationSecurityModel, fromAnalysisContext, resolveEndpoint } from '@agento/security-model';
 import type { ApplicationSecurityModel, ModelEndpoint } from '@agento/security-model';
 import type {
@@ -58,6 +59,7 @@ export class SecurityTestPlanner implements TestPlanner {
     } catch { return result([], 'invalid-hypothesis'); }
     const endpoint = validHypothesis(model, hypothesis);
     if (!endpoint) return result([], 'invalid-hypothesis');
+    if (!isEndpointTestable(endpoint)) return result([], 'endpoint-unvalidated');
     const plugin = this.plugins.get(hypothesis.cweId), probe = probes[hypothesis.cweId];
     if (!plugin || !probe) return result([], 'unsupported-cwe');
     if (!validBindings(bindings, endpoint)) return result([], 'invalid-bindings');

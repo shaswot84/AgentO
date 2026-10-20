@@ -7,6 +7,23 @@ const request = { project, identities: [{ id: 'alice', label: 'Alice', roles: ['
   authentication: 'session-cookie' as const, sessionRef: 'opaque-session' }] };
 
 describe('Phase 2 orchestration with interface-only fakes', () => {
+  it.each([true, false])('does not execute inventory through a custom planner (bound endpoint: %s)', async bound => {
+    const providers = fakeProviders(), original = providers.frameworkAdapter!.extract.bind(providers.frameworkAdapter);
+    const plugin = fakePlugin(), detect = plugin.detectCandidates.bind(plugin);
+    plugin.detectCandidates = async context => (await detect(context)).map(item => ({ ...item, ...(bound ? { endpointId: 'order' } : {}) }));
+    const generate = plugin.generateTests.bind(plugin);
+    plugin.generateTests = async (context, hypothesis) => (await generate(context, hypothesis)).map(item => ({ ...item,
+      targetUrl: new URL('/api/orders/123', context.project.baseUrl).href }));
+    const execute = vi.spyOn(providers.scanner!, 'execute');
+    const report = await new AgentOOrchestrator({ ...providers, plugins: [plugin], frameworkAdapter: {
+      ...providers.frameworkAdapter!, async extract(project) { const result = await original(project);
+        return { ...result, endpoints: result.endpoints.map(endpoint => ({ ...endpoint,
+          discovery: { providerId: 'inventory', validation: 'candidate' as const } })) }; },
+    } }).run(request);
+    expect(report.results[0]).toMatchObject({ outcome: 'SKIPPED', error: { code: 'ENDPOINT_NOT_VALIDATED' } });
+    expect(execute).not.toHaveBeenCalled();
+    expect(report.findings[0]?.status).toBe('HYPOTHESIS');
+  });
   it('uses all seven interfaces and preserves evidence provenance', async () => {
     const providers = fakeProviders();
     const review = vi.spyOn(providers.reasoning!, 'reviewHypotheses');

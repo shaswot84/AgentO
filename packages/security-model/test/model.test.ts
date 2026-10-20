@@ -23,6 +23,15 @@ const source = (endpoints: readonly Endpoint[], extra: Partial<ModelContribution
 const model = (...contributions: ModelContribution[]) => buildApplicationSecurityModel({ project, contributions });
 
 describe('neutral model identity and endpoint reconciliation', () => {
+  it('preserves unvalidated inventory after merging, aliases and JSON serialization', () => {
+    const result = model(source([endpoint('inventory', '/orders/:id', {
+      discovery: { providerId: 'inventory', validation: 'candidate' },
+    })]), { source: 'runtime', endpoints: [endpoint('observed', '/orders/102')] });
+    const serialized = JSON.parse(JSON.stringify(result));
+    expect(serialized.endpoints).toHaveLength(1);
+    expect(serialized.endpoints[0].discovery).toEqual({ providerId: 'inventory', validation: 'candidate' });
+    expect(serialized.endpointAliases.observed).toBe(serialized.endpoints[0].id);
+  });
   it('represents an empty black-box application with every collection available', () => {
     const result = buildApplicationSecurityModel({ project });
     expect(result.schemaVersion).toBe(1);

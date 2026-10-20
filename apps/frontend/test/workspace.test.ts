@@ -123,6 +123,26 @@ describe('durable local projects', () => {
 });
 
 describe('local scan lifecycle and provenance', () => {
+  it.each(['unavailable', 'candidate'] as const)('retains incomplete endpoint discovery when Semgrep completes (%s)', async state => {
+    const { service, file } = await setup({ ...execution, async analyze(project) {
+      const framework: FrameworkAnalysis = { components: [], endpoints: state === 'candidate' ? [{
+        id: 'endpoint-1', componentId: 'api', method: 'GET', path: '/search', parameters: [],
+        authentication: 'unknown', roles: [], evidenceIds: [], discovery: { providerId: 'inventory', validation: 'candidate' },
+      }] : [], resources: [], signals: [], evidence: [], discovery: { providerId: 'inventory',
+        status: state === 'candidate' ? 'completed' : 'unavailable', diagnostics: state === 'candidate' ? [] : [{
+          code: 'tool-unavailable', message: 'The endpoint tool is unavailable.',
+        }] } };
+      return { framework, analysis: analysis(project) };
+    } });
+    const project = await service.createProject(input);
+    await service.startScan(project.id); await service.idle();
+    const scan = await service.getScan(project.id);
+    expect(scan.state).toBe('failed');
+    expect(scan.summary).toContain('partial');
+    expect(scan.diagnostics?.some(item => item.code === (state === 'candidate' ? 'endpoint-unvalidated' : 'tool-unavailable'))).toBe(true);
+    const restarted = await Workspace.open(file);
+    expect(restarted.read().find(item => item.project.id === project.id)?.modelSource?.status).toBe('partial');
+  });
   it('reports pending/running, rejects conflicting work, and persists observed findings', async () => {
     let release!: () => void;
     const gate = new Promise<void>(resolve => { release = resolve; });

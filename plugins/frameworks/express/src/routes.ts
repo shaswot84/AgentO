@@ -15,6 +15,7 @@ interface Event {
 export interface Route {
   readonly method: Endpoint['method'];
   readonly path: string;
+  readonly declaredPath: string;
   readonly node: ts.CallExpression;
   readonly handlers: readonly ts.Expression[];
   readonly conditional: boolean;
@@ -148,7 +149,7 @@ export function extractRoutes(syntax: Syntax, diagnostics: ExpressDiagnostic[]):
             diagnostics.push({ code: 'limit-reached', source: syntax.source(event.node), message: 'Route expansion limit reached.' });
             return;
           }
-          routes.push({ method, path: joined, node: event.node,
+          routes.push({ method, path: joined, declaredPath: path, node: event.node,
             handlers: [...applicable.map(item => item.expression), ...event.handlers], mounts,
             conditional: isConditional || event.conditional || applicable.some(item => item.conditional) });
         }

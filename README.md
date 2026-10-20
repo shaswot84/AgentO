@@ -110,7 +110,7 @@ AgentO/
 - **`packages/capability-registry`**: Selects available adapter ports for plans and probes using protocol, CWE support and risk metadata. Supports multiple tools, stable fallback and bounded preflight checks. See [registration, selection and execution boundaries](packages/capability-registry/README.md).
 - **`packages/policy-engine`**: Checks approved targets, methods, tools, risk and request limits before execution. Binds scoped runtime capabilities with optional human approval and audit records that omit private data. See [policy setup, approval and runtime boundaries](packages/policy-engine/README.md).
 - **`plugins/models/openai`**: Optional structured-generation provider with explicit model selection, backend API-key resolution, bounded transport, and sanitized results. See [provider setup](plugins/models/openai/README.md).
-- **`plugins/frameworks/express`**: Implements the core framework adapter for read-only JS/TS route extraction, mounted middleware, request inputs, session/cookie/CORS configuration, and database observations. Recognizes all 19 declared demo routes and integrates with discovery through explicit adapter registration. See [adapter setup, verification, and boundaries](plugins/frameworks/express/README.md).
+- **`plugins/frameworks/express`**: Uses Noir as the default static endpoint provider. AgentO checks route paths and source records, adds middleware, input and security observations, and blocks tests for unvalidated inventory. See [adapter setup, verification, and boundaries](plugins/frameworks/express/README.md) and [adoption checks](docs/noir-adoption.md).
 - **`plugins/tools/semgrep`**: Implements the core static analyzer with bundled JS/TS taint rules for XSS and SQL injection candidates, normalized source/sink evidence, bounded AST context, and optional precomputed Express endpoint association. Static signals require runtime verification. See [installation, CLI, integration, and limitations](plugins/tools/semgrep/README.md).
 - **`plugins/tools/security-scanners`**: Runs Nuclei, ZAP, Dalfox, and sqlmap through scoped executor ports. Returns immutable results and redacted candidate evidence, with policy bindings, tool replacement, and isolated failures. See [native tool setup, supported modes, and limits](plugins/tools/security-scanners/README.md).
 - **`plugins/tools/e2e-browser`**: Runs portable browser workflows through TesterArmy e2e and Chromium. Target profiles configure personas, authentication, origins, and workflow hints; recipes or bounded iterative planners drive the browser. Verified against a storefront and a distinct JWT SPA, with isolated saved sessions and normalized evidence. See [setup, examples, and compatibility](plugins/tools/e2e-browser/README.md).
@@ -137,6 +137,16 @@ cp .env.example .env
 ```
 
 `AGENTO_SEMGREP_EXECUTABLE=/tmp/agento-semgrep-venv/bin/semgrep` is predefined in `.env` and `.env.example`. The frontend execution service also automatically checks `/tmp/agento-semgrep-venv/bin/semgrep` and `plugins/tools/semgrep/.venv/bin/semgrep` before falling back to `semgrep` on system `$PATH`.
+
+Install Noir 1.4.0 after installing the Express adapter's dependencies:
+
+```sh
+npm run setup:noir --prefix plugins/frameworks/express
+```
+
+The Linux x64 installer verifies the release checksum. Other hosts can install
+Noir separately and set `AGENTO_NOIR_EXECUTABLE`. Noir supplies static inventory;
+AgentO validates and enriches it before test planning.
 
 ### 2. Start the Frontend Workspace
 

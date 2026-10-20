@@ -171,7 +171,7 @@ export interface StructuredTestPlan extends SecurityTestPlan {
     readonly limitations: readonly string[];
 }
 export interface PlanningDiagnostic {
-    readonly code: 'invalid-hypothesis' | 'unsupported-cwe' | 'plugin-failed' | 'invalid-plan' | 'unsupported-method' | 'no-plans' | 'plan-limit' | 'invalid-bindings';
+    readonly code: 'endpoint-unvalidated' | 'invalid-hypothesis' | 'unsupported-cwe' | 'plugin-failed' | 'invalid-plan' | 'unsupported-method' | 'no-plans' | 'plan-limit' | 'invalid-bindings';
 }
 export interface PlanningResult {
     readonly plans: readonly StructuredTestPlan[];

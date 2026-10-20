@@ -1,9 +1,15 @@
 # AgentO Express Framework Adapter
 
-Read-only JavaScript/TypeScript source extraction implementing the core
-`FrameworkAdapter` contract. It resolves Express route topology and emits common
-`Component`, `Endpoint`, and `Evidence` records. A running application, Express
-installation in the adapter, browser, scanner, and reasoning model are unnecessary.
+Static JavaScript/TypeScript endpoint discovery through the core
+`EndpointDiscoveryProvider` and `FrameworkAdapter` contracts. **Noir 1.4.0 is the
+default inventory provider.** AgentO normalizes its output into `Component`,
+`Endpoint`, and `Evidence` records, then independently checks known Express route
+topology and adds handler, middleware, input and security observations.
+
+Noir has no probe or target-transport port. An unvalidated discovery remains a
+candidate with unknown authentication and cannot drive AgentO test plans or
+probes. Source corroboration is also a static observation; execution still needs
+the normal input, identity, scope, capability and policy checks.
 
 ## Run independently
 
@@ -18,6 +24,7 @@ npm ci
 npm run build
 cd ../../plugins/frameworks/express
 npm ci
+npm run setup:noir
 npm run check
 npm run extract -- ../../../demo-apps/demo-app-01
 ```
@@ -30,10 +37,55 @@ from the repository root:
 node plugins/frameworks/express/dist/cli.js demo-apps/demo-app-01
 ```
 
+The Linux x64 installer checks the official release SHA-256 and saves the binary
+under the adapter's ignored `node_modules/.bin/` directory. It also accepts
+`npm run setup:noir -- --from /path/to/download`. Other hosts must install
+[Noir 1.4.0](https://github.com/owasp-noir/noir/releases/tag/v1.4.0) separately.
+Set `AGENTO_NOIR_EXECUTABLE` to override the local binary; otherwise AgentO tries
+the local installation and then `noir` on `PATH`. No model credentials are needed.
+Run the installer again after a clean dependency install.
+
 The CLI returns code 1 when diagnostics indicate incomplete extraction, while
 printing the available observations. `--help` prints usage. Unsupported and empty
-repositories return an empty analysis. No target modules, package scripts,
+repositories return an empty analysis with source-selection diagnostics. Missing,
+unsupported or failed tools return explicit discovery status; there is no silent
+fallback to the old extractor. No target modules, package scripts,
 database initialization, target configuration plugins, or network requests run.
+
+Noir scans a private snapshot of selected source, using a fresh empty config,
+`--only-techs js_express`, strict mode and one worker. Ambient Noir configs, model
+keys, AI options and delivery/probe options are not passed. Default limits are
+30 seconds per process and 8 MiB combined process output. Processes and temporary
+source are removed on completion, timeout or cancellation. Inventory is bounded
+to 10,000 records, 32 source references per record and 256 parameter names per
+endpoint; truncation reports partial status. Tool errors become
+fixed diagnostic codes; raw output, parameter values and tool tags are discarded.
+
+## Inventory and validation
+
+`endpoint.discovery.validation` is `candidate` until AgentO independently checks
+the route. The adapter compares method, source declaration and declared path,
+then uses AgentO's mount chain. This can correct a Noir prefix without treating
+the tool's path as truth. Existing source routes can supplement a successful
+inventory run. Unresolved chains, configuration, patterns and conditional mounts
+remain outside automatic execution. Missing Noir never activates this supplement.
+
+Candidate parameter names are observations. On corroborated routes, executable
+input metadata comes from AgentO's source analysis. Input values, authentication,
+roles, ownership and vulnerabilities are never inferred from Noir tags.
+
+`FrameworkAnalysis.discovery` reports `completed`, `partial`, `unavailable` or
+`failed`. **Completed describes the tool invocation, not complete coverage.**
+Run evidence records source selection, status, candidate and validation counts,
+and `completeCoverage: false`. The application model preserves validation through
+merging and serialization. Planning, CWE rules, assessment commands and core
+execution block candidates. A runtime observation alone does not remove the flag.
+
+Alternative tools can implement `EndpointDiscoveryProvider` and be passed as
+`new ExpressFrameworkAdapter({ endpointDiscoveryProvider })`. Noir-specific
+options are under `noir`; `excludePaths` adds repository-relative source exclusions.
+`ExpressSourceAnalyzer` exposes the retained source analysis for enrichment and
+historical comparison. Production hosts continue to use `ExpressFrameworkAdapter`.
 
 ## Extracted observations
 
@@ -100,14 +152,14 @@ const report = await new AgentOOrchestrator({
 Discovery selects `code-aware` mode for a compatible registered adapter and
 supported application source. Its metadata-only CLI continues to use black-box
 mode without an explicit registration. Core calls `supports()` before extracting;
-this adapter requires readable JS/TS source and recognizable Express routes.
-It returns false for repositories with read, parse, or traversal diagnostics.
+this adapter recognizes Express imports in selected JS/TS source. Support does
+not depend on the old route extractor finding a route. Read, parse and traversal
+limits are retained as diagnostics rather than hiding other usable source.
 
 For direct use, call `adapter.extract(project)`. The result extends
-`FrameworkAnalysis` with `diagnostics`; callers should expose these diagnostics
-when extraction is partial. The current core contract carries endpoints/evidence
-but has no diagnostic channel, so direct adapter users retain this additional
-detail. Resources and vulnerability signals stay empty: source extraction does
+`FrameworkAnalysis` with source `diagnostics` and the common `discovery` report.
+Callers should expose both; normalized run evidence also retains tool failure and
+validation counts through model construction. Resources and vulnerability signals stay empty: source extraction does
 not create runtime resource instances, hypotheses, or verdicts.
 
 ## Evidence and limitations
@@ -137,7 +189,8 @@ apps are analyzed as declared, including application factories; their runtime
 invocation is not proven. Router-only projects retain their local route paths.
 
 Traversal skips hidden files, dependencies, common build output, test/fixture
-source, and symlinks. It is bounded to 20,000 entries, 40 directory levels, 1 MiB
+source, symlinks and the known Juice Shop training directory `data/static/codefixes`.
+It is bounded to 20,000 entries, 40 directory levels, 1 MiB
 per source, and 16 MiB of source overall; route expansion is bounded to 10,000
 endpoints and 40 mounts; helper/value resolution is bounded to 12 levels.
 The syntax parser is pinned to TypeScript 5.9.3 under an npm alias, separately
@@ -145,8 +198,19 @@ from the repository's TypeScript compilation toolchain.
 
 ## Verification
 
-`npm run check` typechecks, builds JavaScript/declarations, and runs 31 tests.
+`npm run check` typechecks, builds JavaScript/declarations, and runs unit tests.
 Tests cover all demo routes and configuration branches, imported handlers,
 request inputs, database metadata, source provenance, redaction, repeated and
 scoped mounts, route chains, CommonJS, partial extraction, limits, recursion,
 non-execution, CLI behavior, and real discovery/core integration.
+Process-boundary tests also cover invalid output, version checks, private data,
+source containment, missing tools, strict partial runs, time/output limits and
+cancellation. Run the real binary check with:
+
+```sh
+AGENTO_NOIR_INTEGRATION=1 npm run check
+```
+
+The [benchmark](../../../docs/noir-benchmark.md) records the historical tool
+comparison. The [adoption check](../../../docs/noir-adoption.md) describes the
+production default and its remaining external-project validation limits.

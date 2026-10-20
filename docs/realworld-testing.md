@@ -13,6 +13,10 @@ The tested set includes a deployed application codebase, two security training
 applications, a reference API, two application starters and a tutorial. These
 results do not measure vulnerability precision or recall on production systems.
 
+A later [Noir comparison](noir-benchmark.md) reuses these pinned projects and
+route references. It measures an external endpoint extractor against AgentO and
+records an adoption recommendation, with separate input and source-quality checks.
+
 ## Source results
 
 Each repository was cloned from GitHub and checked at the exact revision in the

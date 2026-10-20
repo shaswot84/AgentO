@@ -5,6 +5,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { FileEvidenceStore } from '@agento/evidence';
 import { CWE1004Plugin, CWE614Plugin, CWE942Plugin, fromCoreEvidence } from '@agento/cwe';
 import { VerificationJudge } from '@agento/verifier';
+import { ExpressSourceAnalyzer } from '@agento/framework-express';
 import { runA02Scan } from '../src/index.js';
 import { repository, setup } from './helpers.js';
 
@@ -12,6 +13,16 @@ describe('A02 assessment host', () => {
   let directory: string;
   beforeAll(() => { directory = repository(); });
   afterAll(() => rmSync(directory, { recursive: true, force: true }));
+
+  it.each(['candidate', 'unavailable'] as const)('refuses endpoint inventory before login or probes (%s)', async state => {
+    const { options, calls } = setup(directory), source = new ExpressSourceAnalyzer();
+    await expect(runA02Scan({ ...options, frameworkAdapter: { id: 'inventory-test', capabilities: [], supports: async () => true,
+      async extract(project) { const analysis = await source.extract(project); return { ...analysis,
+        endpoints: analysis.endpoints.map(endpoint => ({ ...endpoint, discovery: { providerId: 'inventory', validation: 'candidate' as const } })),
+        discovery: { providerId: 'inventory', status: state === 'candidate' ? 'completed' as const : 'unavailable' as const, diagnostics: [] } }; },
+    } })).rejects.toThrow(state === 'candidate' ? 'route-unavailable' : 'discovery-unavailable');
+    expect(calls).toEqual([]);
+  });
 
   it.each(['vulnerable', 'fixed'] as const)('runs the full pipeline with shared cookie collection in %s mode', async mode => {
     const { options, calls } = setup(directory, mode);

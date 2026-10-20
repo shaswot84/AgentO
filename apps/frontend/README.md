@@ -30,6 +30,7 @@ npm ci --prefix packages/discovery
 npm run build --prefix packages/discovery
 npm ci --prefix plugins/frameworks/express
 npm run build --prefix plugins/frameworks/express
+npm run setup:noir --prefix plugins/frameworks/express
 npm ci --prefix plugins/tools/semgrep
 npm run build --prefix plugins/tools/semgrep
 ```

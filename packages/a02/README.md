@@ -36,6 +36,11 @@ packages/verifier
 packages/a02
 ```
 
+Install Noir with `npm run setup:noir --prefix plugins/frameworks/express` from
+the repository root after dependency setup. The default source adapter uses Noir
+inventory and AgentO validation; unvalidated routes cannot drive assessments.
+See [endpoint discovery setup](../../plugins/frameworks/express/README.md).
+
 Then run in `packages/a02`:
 
 ```sh

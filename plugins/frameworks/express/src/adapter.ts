@@ -1,106 +1,100 @@
-import { createHash } from 'node:crypto';
-import ts from 'typescript-parser';
-import type { Component, Endpoint, Evidence, FrameworkAdapter, JsonValue, Project } from '@agento/core';
-import { observeHandler } from './observations.js';
+import type { Endpoint, Evidence, FrameworkAdapter, Project } from '@agento/core';
+import { DEFAULT_SOURCE_EXCLUSIONS, NoirEndpointDiscoveryProvider } from './noir.js';
 import { readRepository } from './repository.js';
-import { extractRoutes } from './routes.js';
-import { isFunction, Syntax } from './syntax.js';
-import type { ExpressAdapterOptions, ExpressAnalysis } from './types.js';
+import { ExpressSourceAnalyzer } from './source-analyzer.js';
+import type { ExpressAdapterOptions, ExpressAnalysis, ExpressDiagnostic } from './types.js';
 
-function identifier(...parts: string[]): string {
-  return `express:${createHash('sha256').update(JSON.stringify(parts)).digest('hex').slice(0, 24)}`;
-}
-
-/** Syntax extraction only. No HTTP, browser, security verdict, or target code execution. */
+/** Noir supplies inventory. AgentO independently corroborates routes and enriches their source evidence. */
 export class ExpressFrameworkAdapter implements FrameworkAdapter {
   readonly id = 'express-framework-adapter';
-  readonly capabilities = ['route-extraction', 'middleware-extraction', 'configuration-extraction', 'database-observations'] as const;
-  private readonly now: () => string;
-  constructor(options: ExpressAdapterOptions = {}) { this.now = options.now ?? (() => new Date().toISOString()); }
-
+  readonly capabilities = ['static-endpoint-discovery', 'route-extraction', 'middleware-extraction',
+    'configuration-extraction', 'database-observations'] as const;
+  private readonly provider;
+  private readonly source;
+  private readonly excludePaths;
+  constructor(options: ExpressAdapterOptions = {}) {
+    this.excludePaths = [...new Set([...DEFAULT_SOURCE_EXCLUSIONS, ...(options.excludePaths ?? []), ...(options.noir?.excludePaths ?? [])])];
+    this.provider = options.endpointDiscoveryProvider ?? new NoirEndpointDiscoveryProvider({ ...options.noir,
+      excludePaths: this.excludePaths, ...(options.now ? { now: options.now } : {}) });
+    this.source = new ExpressSourceAnalyzer({ ...options, excludePaths: this.excludePaths });
+  }
   async supports(project: Project): Promise<boolean> {
     if (!project.repositoryPath || !project.languages.some(language => ['javascript', 'typescript'].includes(language))) return false;
-    const repository = await readRepository(project.repositoryPath);
-    if (repository.diagnostics.length) return false;
-    const syntax = new Syntax(repository);
-    return extractRoutes(syntax, []).length > 0;
+    const repository = await readRepository(project.repositoryPath, this.excludePaths);
+    return [...repository.files.values()].some(file => /(?:from\s*|require\s*\(\s*)['"]express['"]/.test(file.text));
   }
-
   async extract(project: Project): Promise<ExpressAnalysis> {
-    if (!project.repositoryPath) return { components: [], endpoints: [], resources: [], signals: [], evidence: [],
-      diagnostics: [{ code: 'repository-unavailable', source: { file: '.', startLine: 1 }, message: 'A repository path is required.' }] };
-    const repository = await readRepository(project.repositoryPath);
-    const syntax = new Syntax(repository);
-    const diagnostics = [...repository.diagnostics];
-    const routes = extractRoutes(syntax, diagnostics);
-    const components: Component[] = [];
-    const endpoints: Endpoint[] = [];
-    const evidence: Evidence[] = [];
-    const capturedAt = this.now();
-    const componentId = identifier(project.id, 'service');
-    if (routes.length) components.push({ id: componentId, projectId: project.id, name: project.name, kind: 'service' });
-    for (const route of routes) {
-      const source = syntax.source(route.node);
-      const mountLocations = route.mounts.map(node => syntax.source(node));
-      const endpointId = identifier(project.id, route.method, route.path, JSON.stringify(source), String(route.node.getStart()),
-        JSON.stringify(route.mounts.map(node => [syntax.source(node), node.getStart()])));
-      const references = new Set<string>();
-      function add(kind: Evidence['kind'], node: import('typescript-parser').Node, facts: Record<string, JsonValue>): void {
-        const location = syntax.source(node);
-        const id = identifier(endpointId, kind, JSON.stringify(location), String(node.getStart()), JSON.stringify(facts));
-        if (references.has(id)) return;
-        references.add(id);
-        evidence.push({ id, projectId: project.id, producerId: 'express-framework-adapter', capturedAt, kind,
-          source: location, endpointId, summary: `Express source observation: ${String(facts.observation)}.`, facts });
+    const inventory = await this.provider.discover(project);
+    const source = await this.source.extract(project);
+    const evidence: Evidence[] = inventory.evidence.filter(item => !item.endpointId);
+    const endpoints = new Map<string, Endpoint>();
+    let validated = 0;
+    let sourceSupplementCount = 0;
+    const sourceEvidence = new Map(source.evidence.map(item => [item.id, item]));
+    const inventoryEvidence = new Map(inventory.evidence.map(item => [item.id, item]));
+    const routes = new Map(source.evidence.filter(item => item.endpointId && item.facts.observation === 'route').map(item => [item.endpointId!, item]));
+    const route = (endpoint: Endpoint) => routes.get(endpoint.id);
+    const safe = (endpoint: Endpoint) => route(endpoint)?.facts.conditional === false
+      && /^\/(?:[A-Za-z0-9._~-]+|:[A-Za-z_]\w*)?(?:\/(?:[A-Za-z0-9._~-]+|:[A-Za-z_]\w*))*\/?$/.test(endpoint.path);
+    const declarations = new Map<string, Endpoint[]>();
+    const key = (method: string, path: string, file: string, line: number) => JSON.stringify([method, path, file, line]);
+    for (const endpoint of source.endpoints) {
+      const declaration = route(endpoint);
+      if (!safe(endpoint) || !declaration?.source) continue;
+      for (const path of new Set([endpoint.path, declaration.facts.declaredPath])) {
+        if (typeof path !== 'string') continue;
+        const identity = key(endpoint.method, path, declaration.source.file, declaration.source.startLine);
+        declarations.set(identity, [...(declarations.get(identity) ?? []), endpoint]);
       }
-      const inputs = new Map<string, Endpoint['parameters'][number]>();
-      // Path templates are observations even when the handler does not read the parameter.
-      for (const match of route.path.matchAll(/[:*]([A-Za-z_]\w*|"[^"]+")/g)) {
-        const name = match[1]!.replace(/^"|"$/g, '');
-        const before = route.path.slice(0, match.index);
-        const insideGroup = (before.match(/\{/g) ?? []).length > (before.match(/\}/g) ?? []).length;
-        const optional = insideGroup || route.path[match.index + match[0].length] === '?';
-        inputs.set(`path:${name}`, { name, location: 'path', required: !optional });
-      }
-      let authRequired = false;
-      let bodyUsed = false;
-      const roles = new Set<string>();
-      const handlers: JsonValue[] = [];
-      for (const handler of route.handlers) {
-        const resolved = syntax.resolve(handler);
-        const binding = syntax.binding(handler) ?? (ts.isCallExpression(resolved) ? syntax.binding(resolved.expression) : undefined);
-        const symbol = isFunction(resolved) && resolved.name ? resolved.name.text
-          : /^[A-Za-z_$][\w$]*$/.test(handler.getText()) ? handler.getText() : 'anonymous';
-        handlers.push({ name: symbol, source: { ...syntax.source(resolved) },
-          ...(binding ? { package: binding.package } : {}) });
-        const observed = observeHandler(syntax, handler);
-        for (const input of observed.parameters) {
-          const key = `${input.location}:${input.name}`;
-          if (!inputs.has(key)) inputs.set(key, input);
-        }
-        authRequired ||= observed.authRequired;
-        bodyUsed ||= observed.bodyUsed;
-        observed.roles.forEach(role => roles.add(role));
-        for (const observation of observed.observations) add(observation.kind, observation.node, observation.facts);
-        const knownMiddleware = binding && (['express-session', 'cookie-parser', 'cors'].includes(binding.package)
-          || (binding.package === 'express' && ['json', 'urlencoded', 'raw', 'text', 'static'].includes(binding.name)));
-        if (!isFunction(resolved) && !knownMiddleware) {
-          diagnostics.push({ code: 'unresolved-handler', source: syntax.source(handler), message: 'Handler or middleware could not be resolved.' });
-        }
-      }
-      const lastHandler = route.handlers.at(-1);
-      const resolvedHandler = lastHandler && syntax.resolve(lastHandler);
-      const handlerSource = resolvedHandler && isFunction(resolvedHandler) ? syntax.source(resolvedHandler,
-        resolvedHandler.name?.text ?? (lastHandler && /^[\w$]+$/.test(lastHandler.getText()) ? lastHandler.getText() : 'anonymous')) : undefined;
-      add('source-location', route.node, { observation: 'route', method: route.method, path: route.path,
-        handlers, mounts: mountLocations.map(item => ({ ...item })), bodyUsed,
-        conditional: route.conditional, runtimeVerified: false });
-      endpoints.push({ id: endpointId, componentId, method: route.method, path: route.path,
-        parameters: [...inputs.values()].sort((a, b) => a.location.localeCompare(b.location) || a.name.localeCompare(b.name)),
-        authentication: authRequired && !route.conditional ? 'required' : 'unknown',
-        roles: route.conditional ? [] : [...roles].sort(), ...(handlerSource ? { handler: handlerSource } : {}),
-        evidenceIds: [...references] });
     }
-    return { components, endpoints, resources: [], signals: [], evidence, diagnostics };
+    const retainSource = (endpoint: Endpoint, providerId: string) => {
+      if (!endpoints.has(endpoint.id)) {
+        evidence.push(...endpoint.evidenceIds.flatMap(id => sourceEvidence.has(id) ? [sourceEvidence.get(id)!] : []));
+        endpoints.set(endpoint.id, { ...endpoint, discovery: { providerId, validation: 'source-corroborated' } });
+        validated++;
+      }
+    };
+    for (const candidate of inventory.endpoints) {
+      const candidateEvidence = candidate.evidenceIds.flatMap(id => inventoryEvidence.has(id) ? [inventoryEvidence.get(id)!] : []);
+      const matches = [...new Map(candidateEvidence.flatMap(item => item.source
+        ? declarations.get(key(candidate.method, candidate.path, item.source.file, item.source.startLine)) ?? [] : [])
+        .map(endpoint => [endpoint.id, endpoint])).values()];
+      // Compare the declaration, source and method. AgentO's independently resolved mounts win.
+      if (!matches.length) {
+        endpoints.set(candidate.id, { ...candidate, authentication: 'unknown', roles: [],
+          discovery: { providerId: this.provider.id, validation: 'candidate' } });
+        evidence.push(...candidateEvidence);
+        continue;
+      }
+      for (const match of matches) {
+        retainSource(match, this.provider.id);
+        const retained = candidateEvidence.map(item => ({
+          ...item, id: `${item.id}:${match.id}`, endpointId: match.id,
+        }));
+        evidence.push(...retained);
+        const previous = endpoints.get(match.id)!;
+        endpoints.set(match.id, { ...previous, evidenceIds: [...previous.evidenceIds, ...retained.map(item => item.id)] });
+      }
+    }
+    // Preserve independently known routes that a successful inventory run collapsed or omitted.
+    // Failure never silently falls back to the legacy extractor.
+    if (inventory.discovery.status === 'completed' || inventory.discovery.status === 'partial') {
+      for (const endpoint of source.endpoints) if (safe(endpoint) && !endpoints.has(endpoint.id)) {
+        retainSource(endpoint, 'express-source-validation'); sourceSupplementCount++;
+      }
+    }
+    const diagnostics: ExpressDiagnostic[] = [...source.diagnostics,
+      ...inventory.discovery.diagnostics.map(item => ({ ...item, source: { file: '.', startLine: 1 } }))];
+    if (endpoints.size > validated) diagnostics.push({ code: 'unvalidated-endpoint', source: { file: '.', startLine: 1 },
+      message: 'Some inventory routes lack independent source validation and cannot drive tests.' });
+    const uniqueDiagnostics = [...new Map(diagnostics.map(item => [JSON.stringify(item), item])).values()];
+    const run = inventory.evidence.find(item => item.facts.observation === 'endpoint-discovery-run');
+    if (run) evidence.push({ ...run, id: `${run.id}:validation`, producerId: this.id,
+      summary: 'AgentO source validation of static endpoint inventory.',
+      facts: { observation: 'endpoint-validation-run', candidateCount: endpoints.size - validated, sourceSupplementCount,
+        sourceCorroboratedCount: validated, completeCoverage: false, runtimeVerified: false } });
+    const componentIds = new Set([...endpoints.values()].map(endpoint => endpoint.componentId));
+    return { ...inventory, components: [...inventory.components, ...source.components].filter(item => componentIds.has(item.id)),
+      endpoints: [...endpoints.values()], evidence: [...new Map(evidence.map(item => [item.id, item])).values()], diagnostics: uniqueDiagnostics };
   }
 }

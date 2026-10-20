@@ -8,6 +8,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Default endpoint discovery**: Use Noir to find static endpoint candidates. Add common provider records and a checked tool installer. Keep source checks for route paths, inputs, and security data. Stop test plans and probes for routes without source checks. Record tool errors and partial results. Add tool, model, planning, and execution tests.
+
+- **Endpoint tool comparison**: Added repeatable checks for Noir and the Express source reader. Compare routes, inputs, source records, time, and memory. Added measured results, error checks, and a use recommendation.
+
 - **Compatibility work scope**: Defined source selection, route extraction, coverage checks, and external application tests. Set measurable completion rules.
 
 - **External project checks**: Added source checks for seven public projects. Record source versions, route gaps, tool results, and proof links. Keep incomplete checks visible. Added local Flask browser, access, cookie, and CORS checks. Added test results and repeat instructions.
@@ -99,6 +103,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **Documentation**: Updated the root `README.md` file with a reference and usage link for `packages/discovery`.
 
 ### Changed
+
+- **Git ignore rules (`.gitignore`)**: Added exclusion patterns for evaluation output directories. Configured exception rules to keep benchmark documentation and evaluation control records tracked.
 
 - **Demo Fixture Project Deletion (`apps/frontend`)**: Enabled deletion of the "AgentO Demo Store" fixture from the Applications list and Discovery view. Updated `LocalService`, `Workspace`, and `createFixtureClient` to persist deletion across service restarts and remove read-only restrictions.
 - **Workspace interface**: Added a light work area, dark navigation, and clear result states. Added a menu for small screens and a font that loads from the local service. Improved text contrast. Used the specified font for evidence values. Reduced repeated text. Connected hypotheses to their proposed test plans. Updated setup and scope instructions.

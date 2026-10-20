@@ -1,9 +1,12 @@
+import { isEndpointTestable } from '@agento/core';
 import { freeze, identifier, url } from './shared.js';
 export function detect(metadata, context, options, accepts) {
     const model = context;
     const hypotheses = [];
     const evidence = new Set(context.evidence.filter(item => item.projectId === context.project.id).map(item => item.id));
     for (const endpoint of context.endpoints) {
+        if (!isEndpointTestable(endpoint))
+            continue;
         const target = targetUrl(context, endpoint);
         if (!target)
             continue;

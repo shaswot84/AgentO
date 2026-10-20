@@ -1,0 +1,2655 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-20T07:24:19.275Z",
+  "scope": "static-endpoint-inventory-comparison",
+  "runtimeRequests": 0,
+  "modelCalls": 0,
+  "repetitions": 3,
+  "concurrency": 1,
+  "platform": {
+    "os": "linux",
+    "architecture": "x64",
+    "nodeVersion": "v22.23.2",
+    "cpu": "AMD Ryzen 5 4600H with Radeon Graphics"
+  },
+  "noir": {
+    "version": "1.4.0",
+    "release": "https://github.com/owasp-noir/noir/releases/tag/v1.4.0",
+    "binarySha256": "620e774f240be91b975ca0b2f04a5df568f0612ef1f74d182a43a25daf402001"
+  },
+  "agentORevision": "669ba82e713152dc511ce01a8dde6b15e6c7726e",
+  "agentOBuiltExtractorHashes": {
+    "adapter.js": "b6f84145256a48e9dd146f5522bfe56670dc2094688adce8f5b889055ec52de2",
+    "cli.js": "af350c3926ee690af4a107ccc182457a6ec9d826384862fb2a56e0de81aa52d0",
+    "index.js": "5a519f15deec88e82ef82aaefbccd7515a259fc271f03a0336627bc9150094cf",
+    "observations.js": "4b0c6ca488d92cfd04190fc3f9c0f69ceee4bf4d1fafa84058d26908654c862f",
+    "repository.js": "26848bba8aa85a4008b0bc3768f76da2545801092a3c3901bf5be8d4f41127e8",
+    "routes.js": "937a2d2f45268d8d7b7917aef0cfa55d02e1fc2c83d62f2a883c4f045d30c5e6",
+    "syntax.js": "611e59a184f35a184b995f8b3048a1a57d53157d0c28153c5ca319b5a70a5f84",
+    "types.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+  },
+  "runnerSha256": "4d315f423b8c6e649b4ef76e438bfb4ff194d0e6a10f08cfa01fff8c0857b20e",
+  "scoringSha256": "b7bba97024f829bd1466ec2c2a7460f21c55a1582a9aff1da544900956329205",
+  "caseManifestSha256": "104594c04fe76158e690a0185b87ef15714d76ce01dded3757dec4b1a0a3bd10",
+  "referenceManifestSha256": "f9101f6b110dea8c100c091509784d27c87dc6f4e30a9baaf2cfdf0facf5457c",
+  "measurement": "GNU time peak RSS and subprocess wall time; extractor only, no Semgrep/discovery/planner; warm filesystem caches; arm order rotates.",
+  "matching": "Exact method and path after placeholder spelling normalization; mount prefixes, names and trailing slashes remain significant.",
+  "cases": [
+    {
+      "id": "nodegoat",
+      "repository": "https://github.com/OWASP/NodeGoat.git",
+      "revision": "c5cb68a7084e4ae7dcc60e6a98768720a81841e8",
+      "sourceRoot": ".",
+      "arms": {
+        "agento": {
+          "runs": [
+            {
+              "repeat": 1,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 623,
+              "metrics": {
+                "peakRssKiB": 132640,
+                "elapsedSeconds": 0.61,
+                "userSeconds": 0.9,
+                "systemSeconds": 0.09,
+                "exitCode": 0
+              },
+              "inventoryDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+              "endpointCount": 0,
+              "diagnosticCount": 1
+            },
+            {
+              "repeat": 2,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 622,
+              "metrics": {
+                "peakRssKiB": 134824,
+                "elapsedSeconds": 0.61,
+                "userSeconds": 0.87,
+                "systemSeconds": 0.1,
+                "exitCode": 0
+              },
+              "inventoryDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+              "endpointCount": 0,
+              "diagnosticCount": 1
+            },
+            {
+              "repeat": 3,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 632,
+              "metrics": {
+                "peakRssKiB": 132788,
+                "elapsedSeconds": 0.62,
+                "userSeconds": 0.83,
+                "systemSeconds": 0.09,
+                "exitCode": 0
+              },
+              "inventoryDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+              "endpointCount": 0,
+              "diagnosticCount": 1
+            }
+          ],
+          "rawArtifact": {
+            "path": "artifacts/nodegoat-agento-raw.json.gz",
+            "uncompressedSha256": "78d66c7e425491be95305111b861123fef9fcfedaeb20c35953a50bcde032000",
+            "compressedSha256": "42b8ebf706e128c3dbc4613a394a732ca21302db9b9fc8477d10ffb6fa97d381"
+          },
+          "inventoryArtifact": {
+            "path": "artifacts/nodegoat-agento-inventory.json.gz",
+            "uncompressedSha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+            "compressedSha256": "68433ac2490ea1489ab0fa739057fe71c7d6843ae152225a0d6eaf3e299438b8"
+          },
+          "endpointCount": 0,
+          "uniqueMethodPathCount": 0,
+          "diagnosticCount": 1,
+          "routeReferences": [
+            {
+              "method": "GET",
+              "path": "/login",
+              "file": "app/routes/index.js",
+              "contains": "app.get(\"/login\", sessionHandler.displayLoginPage)",
+              "matched": false
+            },
+            {
+              "method": "GET",
+              "path": "/allocations/:userId",
+              "file": "app/routes/index.js",
+              "contains": "app.get(\"/allocations/:userId\"",
+              "matched": false
+            }
+          ],
+          "parameterReferences": [
+            {
+              "project": "nodegoat",
+              "method": "GET",
+              "path": "/allocations/:userId",
+              "name": "userId",
+              "location": "path",
+              "file": "app/routes/allocations.js",
+              "contains": "} = req.params;",
+              "matched": false
+            },
+            {
+              "project": "nodegoat",
+              "method": "GET",
+              "path": "/allocations/:userId",
+              "name": "threshold",
+              "location": "query",
+              "file": "app/routes/allocations.js",
+              "contains": "} = req.query;",
+              "matched": false
+            }
+          ],
+          "sourceLocations": {
+            "endpointsWithValidLocation": 0,
+            "validLocations": 0,
+            "invalidLocations": 0,
+            "note": "Existing file and line bounds only; semantic source accuracy needs manual review."
+          },
+          "technologies": [
+            "express"
+          ],
+          "medianWallMs": 623,
+          "repeatableInventory": true
+        },
+        "noir-default": {
+          "runs": [
+            {
+              "repeat": 1,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 138,
+              "metrics": {
+                "peakRssKiB": 34832,
+                "elapsedSeconds": 0.12,
+                "userSeconds": 0.07,
+                "systemSeconds": 0.05,
+                "exitCode": 0
+              },
+              "inventoryDigest": "f892b96740c4fadc879197060ab4799c625205cc890c73404323d0e7edeabfee",
+              "endpointCount": 20,
+              "diagnosticCount": 0
+            },
+            {
+              "repeat": 2,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 167,
+              "metrics": {
+                "peakRssKiB": 34832,
+                "elapsedSeconds": 0.15,
+                "userSeconds": 0.08,
+                "systemSeconds": 0.07,
+                "exitCode": 0
+              },
+              "inventoryDigest": "f892b96740c4fadc879197060ab4799c625205cc890c73404323d0e7edeabfee",
+              "endpointCount": 20,
+              "diagnosticCount": 0
+            },
+            {
+              "repeat": 3,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 143,
+              "metrics": {
+                "peakRssKiB": 34832,
+                "elapsedSeconds": 0.13,
+                "userSeconds": 0.07,
+                "systemSeconds": 0.05,
+                "exitCode": 0
+              },
+              "inventoryDigest": "f892b96740c4fadc879197060ab4799c625205cc890c73404323d0e7edeabfee",
+              "endpointCount": 20,
+              "diagnosticCount": 0
+            }
+          ],
+          "rawArtifact": {
+            "path": "artifacts/nodegoat-noir-default-raw.json.gz",
+            "uncompressedSha256": "85dca945db28f624c00b8a3398d089d492de4aa685df1e84ed1d28177354750b",
+            "compressedSha256": "ceeffeae677710d4f595a7ebed90bf6eec7b1e3963c2a72aeaed149836e0801c"
+          },
+          "inventoryArtifact": {
+            "path": "artifacts/nodegoat-noir-default-inventory.json.gz",
+            "uncompressedSha256": "c95042668e81abc64196f7d539f94888debd7a91d4dd2109199a72ed7e60143d",
+            "compressedSha256": "2178daf92806f16462339220ce5f47442654ed4d04bff45cc55064f242b263b9"
+          },
+          "endpointCount": 20,
+          "uniqueMethodPathCount": 20,
+          "diagnosticCount": 0,
+          "routeReferences": [
+            {
+              "method": "GET",
+              "path": "/login",
+              "file": "app/routes/index.js",
+              "contains": "app.get(\"/login\", sessionHandler.displayLoginPage)",
+              "matched": true
+            },
+            {
+              "method": "GET",
+              "path": "/allocations/:userId",
+              "file": "app/routes/index.js",
+              "contains": "app.get(\"/allocations/:userId\"",
+              "matched": true
+            }
+          ],
+          "parameterReferences": [
+            {
+              "project": "nodegoat",
+              "method": "GET",
+              "path": "/allocations/:userId",
+              "name": "userId",
+              "location": "path",
+              "file": "app/routes/allocations.js",
+              "contains": "} = req.params;",
+              "matched": true
+            },
+            {
+              "project": "nodegoat",
+              "method": "GET",
+              "path": "/allocations/:userId",
+              "name": "threshold",
+              "location": "query",
+              "file": "app/routes/allocations.js",
+              "contains": "} = req.query;",
+              "matched": false
+            }
+          ],
+          "sourceLocations": {
+            "endpointsWithValidLocation": 20,
+            "validLocations": 20,
+            "invalidLocations": 0,
+            "note": "Existing file and line bounds only; semantic source accuracy needs manual review."
+          },
+          "technologies": [
+            "js_express"
+          ],
+          "medianWallMs": 143,
+          "repeatableInventory": true
+        },
+        "noir-framework": {
+          "runs": [
+            {
+              "repeat": 1,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 135,
+              "metrics": {
+                "peakRssKiB": 33040,
+                "elapsedSeconds": 0.12,
+                "userSeconds": 0.06,
+                "systemSeconds": 0.06,
+                "exitCode": 0
+              },
+              "inventoryDigest": "f892b96740c4fadc879197060ab4799c625205cc890c73404323d0e7edeabfee",
+              "endpointCount": 20,
+              "diagnosticCount": 0
+            },
+            {
+              "repeat": 2,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 132,
+              "metrics": {
+                "peakRssKiB": 33040,
+                "elapsedSeconds": 0.12,
+                "userSeconds": 0.06,
+                "systemSeconds": 0.05,
+                "exitCode": 0
+              },
+              "inventoryDigest": "f892b96740c4fadc879197060ab4799c625205cc890c73404323d0e7edeabfee",
+              "endpointCount": 20,
+              "diagnosticCount": 0
+            },
+            {
+              "repeat": 3,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 146,
+              "metrics": {
+                "peakRssKiB": 33040,
+                "elapsedSeconds": 0.13,
+                "userSeconds": 0.07,
+                "systemSeconds": 0.06,
+                "exitCode": 0
+              },
+              "inventoryDigest": "f892b96740c4fadc879197060ab4799c625205cc890c73404323d0e7edeabfee",
+              "endpointCount": 20,
+              "diagnosticCount": 0
+            }
+          ],
+          "rawArtifact": {
+            "path": "artifacts/nodegoat-noir-framework-raw.json.gz",
+            "uncompressedSha256": "85dca945db28f624c00b8a3398d089d492de4aa685df1e84ed1d28177354750b",
+            "compressedSha256": "ceeffeae677710d4f595a7ebed90bf6eec7b1e3963c2a72aeaed149836e0801c"
+          },
+          "inventoryArtifact": {
+            "path": "artifacts/nodegoat-noir-framework-inventory.json.gz",
+            "uncompressedSha256": "c95042668e81abc64196f7d539f94888debd7a91d4dd2109199a72ed7e60143d",
+            "compressedSha256": "2178daf92806f16462339220ce5f47442654ed4d04bff45cc55064f242b263b9"
+          },
+          "endpointCount": 20,
+          "uniqueMethodPathCount": 20,
+          "diagnosticCount": 0,
+          "routeReferences": [
+            {
+              "method": "GET",
+              "path": "/login",
+              "file": "app/routes/index.js",
+              "contains": "app.get(\"/login\", sessionHandler.displayLoginPage)",
+              "matched": true
+            },
+            {
+              "method": "GET",
+              "path": "/allocations/:userId",
+              "file": "app/routes/index.js",
+              "contains": "app.get(\"/allocations/:userId\"",
+              "matched": true
+            }
+          ],
+          "parameterReferences": [
+            {
+              "project": "nodegoat",
+              "method": "GET",
+              "path": "/allocations/:userId",
+              "name": "userId",
+              "location": "path",
+              "file": "app/routes/allocations.js",
+              "contains": "} = req.params;",
+              "matched": true
+            },
+            {
+              "project": "nodegoat",
+              "method": "GET",
+              "path": "/allocations/:userId",
+              "name": "threshold",
+              "location": "query",
+              "file": "app/routes/allocations.js",
+              "contains": "} = req.query;",
+              "matched": false
+            }
+          ],
+          "sourceLocations": {
+            "endpointsWithValidLocation": 20,
+            "validLocations": 20,
+            "invalidLocations": 0,
+            "note": "Existing file and line bounds only; semantic source accuracy needs manual review."
+          },
+          "technologies": [
+            "js_express"
+          ],
+          "medianWallMs": 135,
+          "repeatableInventory": true
+        }
+      },
+      "sourceUnchanged": true
+    },
+    {
+      "id": "realworld-express",
+      "repository": "https://github.com/gothinkster/node-express-realworld-example-app.git",
+      "revision": "30b68e1e881462b2f4164ea09ab4c4f5699c7b0b",
+      "sourceRoot": ".",
+      "arms": {
+        "noir-default": {
+          "runs": [
+            {
+              "repeat": 1,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 142,
+              "metrics": {
+                "peakRssKiB": 32144,
+                "elapsedSeconds": 0.13,
+                "userSeconds": 0.07,
+                "systemSeconds": 0.05,
+                "exitCode": 0
+              },
+              "inventoryDigest": "b56b9cbf934e25fa55e8f332cf1a1d6895111ddf71cb577d9076768434efb17a",
+              "endpointCount": 20,
+              "diagnosticCount": 0
+            },
+            {
+              "repeat": 2,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 133,
+              "metrics": {
+                "peakRssKiB": 32144,
+                "elapsedSeconds": 0.12,
+                "userSeconds": 0.06,
+                "systemSeconds": 0.05,
+                "exitCode": 0
+              },
+              "inventoryDigest": "b56b9cbf934e25fa55e8f332cf1a1d6895111ddf71cb577d9076768434efb17a",
+              "endpointCount": 20,
+              "diagnosticCount": 0
+            },
+            {
+              "repeat": 3,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 131,
+              "metrics": {
+                "peakRssKiB": 32144,
+                "elapsedSeconds": 0.12,
+                "userSeconds": 0.06,
+                "systemSeconds": 0.05,
+                "exitCode": 0
+              },
+              "inventoryDigest": "b56b9cbf934e25fa55e8f332cf1a1d6895111ddf71cb577d9076768434efb17a",
+              "endpointCount": 20,
+              "diagnosticCount": 0
+            }
+          ],
+          "rawArtifact": {
+            "path": "artifacts/realworld-express-noir-default-raw.json.gz",
+            "uncompressedSha256": "4cac0f4aa6dc58df4a8cfbeea08187f42d57df48b4965946b1db73abc68c1705",
+            "compressedSha256": "77aae493ed6424bca1c4d5cf7987fa6a58915722631b6134a59d9bc8eeb420e7"
+          },
+          "inventoryArtifact": {
+            "path": "artifacts/realworld-express-noir-default-inventory.json.gz",
+            "uncompressedSha256": "89e5908d5ff32d4ceed95147690f1bbf1aac499075ab9e36e23185779bc9979b",
+            "compressedSha256": "b3bd6daee6d310d19add22a170fce796adaea4dc1b2d6423550a3021a808d368"
+          },
+          "endpointCount": 20,
+          "uniqueMethodPathCount": 20,
+          "diagnosticCount": 0,
+          "routeReferences": [
+            {
+              "method": "GET",
+              "path": "/",
+              "file": "src/main.ts",
+              "contains": "app.get('/'",
+              "matched": true
+            },
+            {
+              "method": "GET",
+              "path": "/api/user",
+              "file": "src/app/routes/auth/auth.controller.ts",
+              "contains": "router.get('/user'",
+              "matched": false
+            },
+            {
+              "method": "POST",
+              "path": "/api/users/login",
+              "file": "src/app/routes/auth/auth.controller.ts",
+              "contains": "router.post('/users/login'",
+              "matched": false
+            }
+          ],
+          "parameterReferences": [
+            {
+              "project": "realworld-express",
+              "method": "POST",
+              "path": "/api/users/login",
+              "name": "user",
+              "location": "body",
+              "file": "src/app/routes/auth/auth.controller.ts",
+              "contains": "login(req.body.user)",
+              "matched": false
+            },
+            {
+              "project": "realworld-express",
+              "method": "GET",
+              "path": "/api/articles/feed",
+              "name": "offset",
+              "location": "query",
+              "file": "src/app/routes/article/article.controller.ts",
+              "contains": "Number(req.query.offset)",
+              "matched": false
+            },
+            {
+              "project": "realworld-express",
+              "method": "GET",
+              "path": "/api/articles/feed",
+              "name": "limit",
+              "location": "query",
+              "file": "src/app/routes/article/article.controller.ts",
+              "contains": "Number(req.query.limit)",
+              "matched": false
+            }
+          ],
+          "sourceLocations": {
+            "endpointsWithValidLocation": 20,
+            "validLocations": 20,
+            "invalidLocations": 0,
+            "note": "Existing file and line bounds only; semantic source accuracy needs manual review."
+          },
+          "technologies": [
+            "js_express"
+          ],
+          "medianWallMs": 133,
+          "repeatableInventory": true
+        },
+        "noir-framework": {
+          "runs": [
+            {
+              "repeat": 1,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 133,
+              "metrics": {
+                "peakRssKiB": 31632,
+                "elapsedSeconds": 0.12,
+                "userSeconds": 0.07,
+                "systemSeconds": 0.04,
+                "exitCode": 0
+              },
+              "inventoryDigest": "b56b9cbf934e25fa55e8f332cf1a1d6895111ddf71cb577d9076768434efb17a",
+              "endpointCount": 20,
+              "diagnosticCount": 0
+            },
+            {
+              "repeat": 2,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 133,
+              "metrics": {
+                "peakRssKiB": 31632,
+                "elapsedSeconds": 0.12,
+                "userSeconds": 0.06,
+                "systemSeconds": 0.06,
+                "exitCode": 0
+              },
+              "inventoryDigest": "b56b9cbf934e25fa55e8f332cf1a1d6895111ddf71cb577d9076768434efb17a",
+              "endpointCount": 20,
+              "diagnosticCount": 0
+            },
+            {
+              "repeat": 3,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 133,
+              "metrics": {
+                "peakRssKiB": 31632,
+                "elapsedSeconds": 0.12,
+                "userSeconds": 0.05,
+                "systemSeconds": 0.06,
+                "exitCode": 0
+              },
+              "inventoryDigest": "b56b9cbf934e25fa55e8f332cf1a1d6895111ddf71cb577d9076768434efb17a",
+              "endpointCount": 20,
+              "diagnosticCount": 0
+            }
+          ],
+          "rawArtifact": {
+            "path": "artifacts/realworld-express-noir-framework-raw.json.gz",
+            "uncompressedSha256": "4cac0f4aa6dc58df4a8cfbeea08187f42d57df48b4965946b1db73abc68c1705",
+            "compressedSha256": "77aae493ed6424bca1c4d5cf7987fa6a58915722631b6134a59d9bc8eeb420e7"
+          },
+          "inventoryArtifact": {
+            "path": "artifacts/realworld-express-noir-framework-inventory.json.gz",
+            "uncompressedSha256": "89e5908d5ff32d4ceed95147690f1bbf1aac499075ab9e36e23185779bc9979b",
+            "compressedSha256": "b3bd6daee6d310d19add22a170fce796adaea4dc1b2d6423550a3021a808d368"
+          },
+          "endpointCount": 20,
+          "uniqueMethodPathCount": 20,
+          "diagnosticCount": 0,
+          "routeReferences": [
+            {
+              "method": "GET",
+              "path": "/",
+              "file": "src/main.ts",
+              "contains": "app.get('/'",
+              "matched": true
+            },
+            {
+              "method": "GET",
+              "path": "/api/user",
+              "file": "src/app/routes/auth/auth.controller.ts",
+              "contains": "router.get('/user'",
+              "matched": false
+            },
+            {
+              "method": "POST",
+              "path": "/api/users/login",
+              "file": "src/app/routes/auth/auth.controller.ts",
+              "contains": "router.post('/users/login'",
+              "matched": false
+            }
+          ],
+          "parameterReferences": [
+            {
+              "project": "realworld-express",
+              "method": "POST",
+              "path": "/api/users/login",
+              "name": "user",
+              "location": "body",
+              "file": "src/app/routes/auth/auth.controller.ts",
+              "contains": "login(req.body.user)",
+              "matched": false
+            },
+            {
+              "project": "realworld-express",
+              "method": "GET",
+              "path": "/api/articles/feed",
+              "name": "offset",
+              "location": "query",
+              "file": "src/app/routes/article/article.controller.ts",
+              "contains": "Number(req.query.offset)",
+              "matched": false
+            },
+            {
+              "project": "realworld-express",
+              "method": "GET",
+              "path": "/api/articles/feed",
+              "name": "limit",
+              "location": "query",
+              "file": "src/app/routes/article/article.controller.ts",
+              "contains": "Number(req.query.limit)",
+              "matched": false
+            }
+          ],
+          "sourceLocations": {
+            "endpointsWithValidLocation": 20,
+            "validLocations": 20,
+            "invalidLocations": 0,
+            "note": "Existing file and line bounds only; semantic source accuracy needs manual review."
+          },
+          "technologies": [
+            "js_express"
+          ],
+          "medianWallMs": 133,
+          "repeatableInventory": true
+        },
+        "agento": {
+          "runs": [
+            {
+              "repeat": 1,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 586,
+              "metrics": {
+                "peakRssKiB": 137624,
+                "elapsedSeconds": 0.57,
+                "userSeconds": 0.77,
+                "systemSeconds": 0.1,
+                "exitCode": 0
+              },
+              "inventoryDigest": "31c6c9495113bd31c20ce9e130828e9bbd8ecaab6348196fa16d8b80ad30b2ef",
+              "endpointCount": 1,
+              "diagnosticCount": 3
+            },
+            {
+              "repeat": 2,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 634,
+              "metrics": {
+                "peakRssKiB": 137208,
+                "elapsedSeconds": 0.62,
+                "userSeconds": 0.92,
+                "systemSeconds": 0.12,
+                "exitCode": 0
+              },
+              "inventoryDigest": "31c6c9495113bd31c20ce9e130828e9bbd8ecaab6348196fa16d8b80ad30b2ef",
+              "endpointCount": 1,
+              "diagnosticCount": 3
+            },
+            {
+              "repeat": 3,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 578,
+              "metrics": {
+                "peakRssKiB": 135308,
+                "elapsedSeconds": 0.56,
+                "userSeconds": 0.75,
+                "systemSeconds": 0.09,
+                "exitCode": 0
+              },
+              "inventoryDigest": "31c6c9495113bd31c20ce9e130828e9bbd8ecaab6348196fa16d8b80ad30b2ef",
+              "endpointCount": 1,
+              "diagnosticCount": 3
+            }
+          ],
+          "rawArtifact": {
+            "path": "artifacts/realworld-express-agento-raw.json.gz",
+            "uncompressedSha256": "8f3cf1bb491eb977a30a471217297eb7fd69ee8ef6d045ddd3bd26db3c42879f",
+            "compressedSha256": "f31ecec5fe9667ccbc76a533eedea5a2d7a48c3dbd93210b56458cb7be6e47a3"
+          },
+          "inventoryArtifact": {
+            "path": "artifacts/realworld-express-agento-inventory.json.gz",
+            "uncompressedSha256": "7ad9df7550e5461cce03188ad1e2baaab1d59726fb7cf31cd8d0a8b2f2e8c229",
+            "compressedSha256": "aab1fe53b9a6a7f6b354135ce9a13c436b589938732266021fdf146af673379c"
+          },
+          "endpointCount": 1,
+          "uniqueMethodPathCount": 1,
+          "diagnosticCount": 3,
+          "routeReferences": [
+            {
+              "method": "GET",
+              "path": "/",
+              "file": "src/main.ts",
+              "contains": "app.get('/'",
+              "matched": true
+            },
+            {
+              "method": "GET",
+              "path": "/api/user",
+              "file": "src/app/routes/auth/auth.controller.ts",
+              "contains": "router.get('/user'",
+              "matched": false
+            },
+            {
+              "method": "POST",
+              "path": "/api/users/login",
+              "file": "src/app/routes/auth/auth.controller.ts",
+              "contains": "router.post('/users/login'",
+              "matched": false
+            }
+          ],
+          "parameterReferences": [
+            {
+              "project": "realworld-express",
+              "method": "POST",
+              "path": "/api/users/login",
+              "name": "user",
+              "location": "body",
+              "file": "src/app/routes/auth/auth.controller.ts",
+              "contains": "login(req.body.user)",
+              "matched": false
+            },
+            {
+              "project": "realworld-express",
+              "method": "GET",
+              "path": "/api/articles/feed",
+              "name": "offset",
+              "location": "query",
+              "file": "src/app/routes/article/article.controller.ts",
+              "contains": "Number(req.query.offset)",
+              "matched": false
+            },
+            {
+              "project": "realworld-express",
+              "method": "GET",
+              "path": "/api/articles/feed",
+              "name": "limit",
+              "location": "query",
+              "file": "src/app/routes/article/article.controller.ts",
+              "contains": "Number(req.query.limit)",
+              "matched": false
+            }
+          ],
+          "sourceLocations": {
+            "endpointsWithValidLocation": 1,
+            "validLocations": 1,
+            "invalidLocations": 0,
+            "note": "Existing file and line bounds only; semantic source accuracy needs manual review."
+          },
+          "technologies": [
+            "express"
+          ],
+          "medianWallMs": 586,
+          "repeatableInventory": true
+        }
+      },
+      "sourceUnchanged": true
+    },
+    {
+      "id": "juice-shop",
+      "repository": "https://github.com/juice-shop/juice-shop.git",
+      "revision": "399fba76194305a312693eee44f4df64bdf0c3ce",
+      "sourceRoot": ".",
+      "arms": {
+        "noir-framework": {
+          "runs": [
+            {
+              "repeat": 1,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 287,
+              "metrics": {
+                "peakRssKiB": 58000,
+                "elapsedSeconds": 0.28,
+                "userSeconds": 0.19,
+                "systemSeconds": 0.08,
+                "exitCode": 0
+              },
+              "inventoryDigest": "45f8668c059877696cd9f501a4351125a2da642443f9bb0bf33702c28c339543",
+              "endpointCount": 124,
+              "diagnosticCount": 0
+            },
+            {
+              "repeat": 2,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 295,
+              "metrics": {
+                "peakRssKiB": 58000,
+                "elapsedSeconds": 0.29,
+                "userSeconds": 0.19,
+                "systemSeconds": 0.09,
+                "exitCode": 0
+              },
+              "inventoryDigest": "45f8668c059877696cd9f501a4351125a2da642443f9bb0bf33702c28c339543",
+              "endpointCount": 124,
+              "diagnosticCount": 0
+            },
+            {
+              "repeat": 3,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 296,
+              "metrics": {
+                "peakRssKiB": 58000,
+                "elapsedSeconds": 0.29,
+                "userSeconds": 0.21,
+                "systemSeconds": 0.07,
+                "exitCode": 0
+              },
+              "inventoryDigest": "45f8668c059877696cd9f501a4351125a2da642443f9bb0bf33702c28c339543",
+              "endpointCount": 124,
+              "diagnosticCount": 0
+            }
+          ],
+          "rawArtifact": {
+            "path": "artifacts/juice-shop-noir-framework-raw.json.gz",
+            "uncompressedSha256": "ad4013217f0c552d4fcffdc11645cc556d530ae72b7542aa0848f07d171bf0b9",
+            "compressedSha256": "6da77ff7deda02e954f47e7e2832f30e24189a8af40212fcc135de4bf2b3fddb"
+          },
+          "inventoryArtifact": {
+            "path": "artifacts/juice-shop-noir-framework-inventory.json.gz",
+            "uncompressedSha256": "31ec874bb8e7aac06b57d136ee467b47a13957ff3ef36fdef3acbb665ef4cb3c",
+            "compressedSha256": "b6353ab35eb72f95cc28645a30558f0264be7d636c4df53b58d60a683780d91f"
+          },
+          "endpointCount": 124,
+          "uniqueMethodPathCount": 124,
+          "diagnosticCount": 0,
+          "routeReferences": [
+            {
+              "method": "GET",
+              "path": "/rest/products/search",
+              "file": "server.ts",
+              "contains": "app.get('/rest/products/search'",
+              "matched": true
+            },
+            {
+              "method": "GET",
+              "path": "/rest/basket/:id",
+              "file": "server.ts",
+              "contains": "app.get('/rest/basket/:id'",
+              "matched": true
+            },
+            {
+              "method": "GET",
+              "path": "/metrics",
+              "file": "server.ts",
+              "contains": "app.get('/metrics'",
+              "matched": true
+            }
+          ],
+          "parameterReferences": [
+            {
+              "project": "juice-shop",
+              "method": "GET",
+              "path": "/rest/products/search",
+              "name": "q",
+              "location": "query",
+              "file": "routes/search.ts",
+              "contains": "req.query.q",
+              "matched": false
+            }
+          ],
+          "sourceLocations": {
+            "endpointsWithValidLocation": 112,
+            "validLocations": 273,
+            "invalidLocations": 12,
+            "note": "Existing file and line bounds only; semantic source accuracy needs manual review."
+          },
+          "technologies": [
+            "js_express"
+          ],
+          "medianWallMs": 295,
+          "repeatableInventory": true
+        },
+        "agento": {
+          "runs": [
+            {
+              "repeat": 1,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 1992,
+              "metrics": {
+                "peakRssKiB": 264788,
+                "elapsedSeconds": 1.98,
+                "userSeconds": 4.46,
+                "systemSeconds": 0.3,
+                "exitCode": 0
+              },
+              "inventoryDigest": "da0adb3b602e45e69cadd0cdf4635ae58a365c3f8869aee8f2308c0e1adf2e2e",
+              "endpointCount": 1,
+              "diagnosticCount": 40
+            },
+            {
+              "repeat": 2,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 2045,
+              "metrics": {
+                "peakRssKiB": 265540,
+                "elapsedSeconds": 2.04,
+                "userSeconds": 4.53,
+                "systemSeconds": 0.3,
+                "exitCode": 0
+              },
+              "inventoryDigest": "da0adb3b602e45e69cadd0cdf4635ae58a365c3f8869aee8f2308c0e1adf2e2e",
+              "endpointCount": 1,
+              "diagnosticCount": 40
+            },
+            {
+              "repeat": 3,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 1982,
+              "metrics": {
+                "peakRssKiB": 262412,
+                "elapsedSeconds": 1.97,
+                "userSeconds": 4.47,
+                "systemSeconds": 0.28,
+                "exitCode": 0
+              },
+              "inventoryDigest": "da0adb3b602e45e69cadd0cdf4635ae58a365c3f8869aee8f2308c0e1adf2e2e",
+              "endpointCount": 1,
+              "diagnosticCount": 40
+            }
+          ],
+          "rawArtifact": {
+            "path": "artifacts/juice-shop-agento-raw.json.gz",
+            "uncompressedSha256": "b68d1be79076aac6bc6ed7c40245a3938fc0c60e49c3779a3cb1e3e414ed30b5",
+            "compressedSha256": "17958116f444957e94afa25863ca63067c0452d66ddd59b65549c3b8e5982394"
+          },
+          "inventoryArtifact": {
+            "path": "artifacts/juice-shop-agento-inventory.json.gz",
+            "uncompressedSha256": "fe9b60cdb14e99c0fdb27bdbd95d610e8ee551e6429191472cea169f45369d36",
+            "compressedSha256": "eee56e3c6e98119b8097c4b7eb0b268920c7369ec56be6e1b01a0ed180bf9637"
+          },
+          "endpointCount": 1,
+          "uniqueMethodPathCount": 1,
+          "diagnosticCount": 40,
+          "routeReferences": [
+            {
+              "method": "GET",
+              "path": "/rest/products/search",
+              "file": "server.ts",
+              "contains": "app.get('/rest/products/search'",
+              "matched": false
+            },
+            {
+              "method": "GET",
+              "path": "/rest/basket/:id",
+              "file": "server.ts",
+              "contains": "app.get('/rest/basket/:id'",
+              "matched": false
+            },
+            {
+              "method": "GET",
+              "path": "/metrics",
+              "file": "server.ts",
+              "contains": "app.get('/metrics'",
+              "matched": true
+            }
+          ],
+          "parameterReferences": [
+            {
+              "project": "juice-shop",
+              "method": "GET",
+              "path": "/rest/products/search",
+              "name": "q",
+              "location": "query",
+              "file": "routes/search.ts",
+              "contains": "req.query.q",
+              "matched": false
+            }
+          ],
+          "sourceLocations": {
+            "endpointsWithValidLocation": 1,
+            "validLocations": 1,
+            "invalidLocations": 0,
+            "note": "Existing file and line bounds only; semantic source accuracy needs manual review."
+          },
+          "technologies": [
+            "express"
+          ],
+          "medianWallMs": 1992,
+          "repeatableInventory": true
+        },
+        "noir-default": {
+          "runs": [
+            {
+              "repeat": 1,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 466,
+              "metrics": {
+                "peakRssKiB": 72208,
+                "elapsedSeconds": 0.46,
+                "userSeconds": 0.37,
+                "systemSeconds": 0.09,
+                "exitCode": 0
+              },
+              "inventoryDigest": "735c7e9f3679804998826385bf7d5fc1289cce7b491b142c7d86331fa7a75eb0",
+              "endpointCount": 130,
+              "diagnosticCount": 0
+            },
+            {
+              "repeat": 2,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 462,
+              "metrics": {
+                "peakRssKiB": 72208,
+                "elapsedSeconds": 0.45,
+                "userSeconds": 0.36,
+                "systemSeconds": 0.09,
+                "exitCode": 0
+              },
+              "inventoryDigest": "735c7e9f3679804998826385bf7d5fc1289cce7b491b142c7d86331fa7a75eb0",
+              "endpointCount": 130,
+              "diagnosticCount": 0
+            },
+            {
+              "repeat": 3,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 478,
+              "metrics": {
+                "peakRssKiB": 72208,
+                "elapsedSeconds": 0.47,
+                "userSeconds": 0.39,
+                "systemSeconds": 0.08,
+                "exitCode": 0
+              },
+              "inventoryDigest": "735c7e9f3679804998826385bf7d5fc1289cce7b491b142c7d86331fa7a75eb0",
+              "endpointCount": 130,
+              "diagnosticCount": 0
+            }
+          ],
+          "rawArtifact": {
+            "path": "artifacts/juice-shop-noir-default-raw.json.gz",
+            "uncompressedSha256": "fca6e8674d6a0d909c72c9c433a27b4c1f1957517567a83646434e67dde46fa4",
+            "compressedSha256": "d54ee427c36245c1d8c35724eece7569272ec8f77de3a8eee980db9f95d70e11"
+          },
+          "inventoryArtifact": {
+            "path": "artifacts/juice-shop-noir-default-inventory.json.gz",
+            "uncompressedSha256": "35d8b2b497880c67561418bcc35a175cfde5652e757eace460af05be4b477238",
+            "compressedSha256": "40a56fa67a40631a787cf10b4ec9dd549df446d2ad1d7dc97da8adb510295876"
+          },
+          "endpointCount": 130,
+          "uniqueMethodPathCount": 130,
+          "diagnosticCount": 0,
+          "routeReferences": [
+            {
+              "method": "GET",
+              "path": "/rest/products/search",
+              "file": "server.ts",
+              "contains": "app.get('/rest/products/search'",
+              "matched": true
+            },
+            {
+              "method": "GET",
+              "path": "/rest/basket/:id",
+              "file": "server.ts",
+              "contains": "app.get('/rest/basket/:id'",
+              "matched": true
+            },
+            {
+              "method": "GET",
+              "path": "/metrics",
+              "file": "server.ts",
+              "contains": "app.get('/metrics'",
+              "matched": true
+            }
+          ],
+          "parameterReferences": [
+            {
+              "project": "juice-shop",
+              "method": "GET",
+              "path": "/rest/products/search",
+              "name": "q",
+              "location": "query",
+              "file": "routes/search.ts",
+              "contains": "req.query.q",
+              "matched": false
+            }
+          ],
+          "sourceLocations": {
+            "endpointsWithValidLocation": 118,
+            "validLocations": 282,
+            "invalidLocations": 12,
+            "note": "Existing file and line bounds only; semantic source accuracy needs manual review."
+          },
+          "technologies": [
+            "apache_httpd",
+            "js_cli",
+            "js_express",
+            "js_socketio"
+          ],
+          "medianWallMs": 466,
+          "repeatableInventory": true
+        }
+      },
+      "sourceUnchanged": true
+    },
+    {
+      "id": "nodebb",
+      "repository": "https://github.com/NodeBB/NodeBB.git",
+      "revision": "387099ddb7ddc55b27e7568395223f634279ab08",
+      "sourceRoot": ".",
+      "arms": {
+        "agento": {
+          "runs": [
+            {
+              "repeat": 1,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 3735,
+              "metrics": {
+                "peakRssKiB": 349960,
+                "elapsedSeconds": 3.73,
+                "userSeconds": 7.98,
+                "systemSeconds": 0.54,
+                "exitCode": 0
+              },
+              "inventoryDigest": "6cb95c50ddb89a2adf8cc7bbb35cc905aee3b4599c6a3b2143691aadfc981595",
+              "endpointCount": 5,
+              "diagnosticCount": 10
+            },
+            {
+              "repeat": 2,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 3842,
+              "metrics": {
+                "peakRssKiB": 368368,
+                "elapsedSeconds": 3.83,
+                "userSeconds": 7.77,
+                "systemSeconds": 0.51,
+                "exitCode": 0
+              },
+              "inventoryDigest": "6cb95c50ddb89a2adf8cc7bbb35cc905aee3b4599c6a3b2143691aadfc981595",
+              "endpointCount": 5,
+              "diagnosticCount": 10
+            },
+            {
+              "repeat": 3,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 3704,
+              "metrics": {
+                "peakRssKiB": 357156,
+                "elapsedSeconds": 3.7,
+                "userSeconds": 7.9,
+                "systemSeconds": 0.46,
+                "exitCode": 0
+              },
+              "inventoryDigest": "6cb95c50ddb89a2adf8cc7bbb35cc905aee3b4599c6a3b2143691aadfc981595",
+              "endpointCount": 5,
+              "diagnosticCount": 10
+            }
+          ],
+          "rawArtifact": {
+            "path": "artifacts/nodebb-agento-raw.json.gz",
+            "uncompressedSha256": "58302f5d8529adf07eae5bdbb0738c3dabe938fa7c7bde2a57d1a4ba4f25ff28",
+            "compressedSha256": "88b092acae45158428a716c6f5d6f2111863fd56c9cf950ef12f6fc60900f436"
+          },
+          "inventoryArtifact": {
+            "path": "artifacts/nodebb-agento-inventory.json.gz",
+            "uncompressedSha256": "d48ec1b8eb2788b59b9a61816b4241b4f10d0afb4d0f18addacf739dc8c9ad88",
+            "compressedSha256": "0c98ded32dd8bb230613faaa731d6b20fd4fd3af9cd01f386839977a49377761"
+          },
+          "endpointCount": 5,
+          "uniqueMethodPathCount": 5,
+          "diagnosticCount": 10,
+          "routeReferences": [
+            {
+              "method": "GET",
+              "path": "/api/config",
+              "file": "src/routes/api.js",
+              "contains": "router.get('/config'",
+              "matched": false
+            },
+            {
+              "method": "GET",
+              "path": "/login",
+              "file": "src/routes/index.js",
+              "contains": "setupPageRoute(app, '/login'",
+              "matched": false
+            }
+          ],
+          "parameterReferences": [],
+          "sourceLocations": {
+            "endpointsWithValidLocation": 5,
+            "validLocations": 5,
+            "invalidLocations": 0,
+            "note": "Existing file and line bounds only; semantic source accuracy needs manual review."
+          },
+          "technologies": [
+            "express"
+          ],
+          "medianWallMs": 3735,
+          "repeatableInventory": true
+        },
+        "noir-default": {
+          "runs": [
+            {
+              "repeat": 1,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 1040,
+              "metrics": {
+                "peakRssKiB": 79136,
+                "elapsedSeconds": 1.03,
+                "userSeconds": 0.87,
+                "systemSeconds": 0.15,
+                "exitCode": 0
+              },
+              "inventoryDigest": "f377a046e48062945846aeb1b52ffd428f2318550063b147acc3e4424968d3d7",
+              "endpointCount": 930,
+              "diagnosticCount": 0
+            },
+            {
+              "repeat": 2,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 1034,
+              "metrics": {
+                "peakRssKiB": 79372,
+                "elapsedSeconds": 1.03,
+                "userSeconds": 0.85,
+                "systemSeconds": 0.17,
+                "exitCode": 0
+              },
+              "inventoryDigest": "f377a046e48062945846aeb1b52ffd428f2318550063b147acc3e4424968d3d7",
+              "endpointCount": 930,
+              "diagnosticCount": 0
+            },
+            {
+              "repeat": 3,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 1035,
+              "metrics": {
+                "peakRssKiB": 79004,
+                "elapsedSeconds": 1.03,
+                "userSeconds": 0.89,
+                "systemSeconds": 0.14,
+                "exitCode": 0
+              },
+              "inventoryDigest": "f377a046e48062945846aeb1b52ffd428f2318550063b147acc3e4424968d3d7",
+              "endpointCount": 930,
+              "diagnosticCount": 0
+            }
+          ],
+          "rawArtifact": {
+            "path": "artifacts/nodebb-noir-default-raw.json.gz",
+            "uncompressedSha256": "cbdeed3fca7dde188fdcae2d117067ba7bde949221371f46399a6c0dc6731860",
+            "compressedSha256": "df6b18aab614615e29f658271e8c9b1606eedd5f9352a3daf057183f84852bb5"
+          },
+          "inventoryArtifact": {
+            "path": "artifacts/nodebb-noir-default-inventory.json.gz",
+            "uncompressedSha256": "eaf5e037e837a5b4717e607cbecbda5a9b8e9dff44a05497ec56cbd81d306bad",
+            "compressedSha256": "69a89ab064e8b99499a40d8e442e64cffdbd8e1b10eca1892ccca2c46ae32076"
+          },
+          "endpointCount": 930,
+          "uniqueMethodPathCount": 930,
+          "diagnosticCount": 0,
+          "routeReferences": [
+            {
+              "method": "GET",
+              "path": "/api/config",
+              "file": "src/routes/api.js",
+              "contains": "router.get('/config'",
+              "matched": true
+            },
+            {
+              "method": "GET",
+              "path": "/login",
+              "file": "src/routes/index.js",
+              "contains": "setupPageRoute(app, '/login'",
+              "matched": true
+            }
+          ],
+          "parameterReferences": [],
+          "sourceLocations": {
+            "endpointsWithValidLocation": 614,
+            "validLocations": 618,
+            "invalidLocations": 378,
+            "note": "Existing file and line bounds only; semantic source accuracy needs manual review."
+          },
+          "technologies": [
+            "js_cli",
+            "js_express",
+            "oas3"
+          ],
+          "medianWallMs": 1035,
+          "repeatableInventory": true
+        },
+        "noir-framework": {
+          "runs": [
+            {
+              "repeat": 1,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 704,
+              "metrics": {
+                "peakRssKiB": 48268,
+                "elapsedSeconds": 0.69,
+                "userSeconds": 0.6,
+                "systemSeconds": 0.09,
+                "exitCode": 0
+              },
+              "inventoryDigest": "214e8eff539679def25a0d99bea1ebb024b949f5c561640994b3ad88c5f6cd28",
+              "endpointCount": 580,
+              "diagnosticCount": 0
+            },
+            {
+              "repeat": 2,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 717,
+              "metrics": {
+                "peakRssKiB": 48068,
+                "elapsedSeconds": 0.71,
+                "userSeconds": 0.59,
+                "systemSeconds": 0.11,
+                "exitCode": 0
+              },
+              "inventoryDigest": "214e8eff539679def25a0d99bea1ebb024b949f5c561640994b3ad88c5f6cd28",
+              "endpointCount": 580,
+              "diagnosticCount": 0
+            },
+            {
+              "repeat": 3,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 715,
+              "metrics": {
+                "peakRssKiB": 44688,
+                "elapsedSeconds": 0.71,
+                "userSeconds": 0.6,
+                "systemSeconds": 0.1,
+                "exitCode": 0
+              },
+              "inventoryDigest": "214e8eff539679def25a0d99bea1ebb024b949f5c561640994b3ad88c5f6cd28",
+              "endpointCount": 580,
+              "diagnosticCount": 0
+            }
+          ],
+          "rawArtifact": {
+            "path": "artifacts/nodebb-noir-framework-raw.json.gz",
+            "uncompressedSha256": "624ec20e39fa87b64d06f2c7348dce48fa835b6706b02e2942800168747e43cc",
+            "compressedSha256": "41369c6d9a6151bbc42ba80b500521ed6121b51327d66e28c15a6608d3c619a0"
+          },
+          "inventoryArtifact": {
+            "path": "artifacts/nodebb-noir-framework-inventory.json.gz",
+            "uncompressedSha256": "abacd0b2eb90b617964f9d51ec3d2158d9653310d483ae6e860d674feae176d8",
+            "compressedSha256": "b93c0761915621883f5c3d8d9d4e66b5621e751410a28646c17c06c174e17a0d"
+          },
+          "endpointCount": 580,
+          "uniqueMethodPathCount": 580,
+          "diagnosticCount": 0,
+          "routeReferences": [
+            {
+              "method": "GET",
+              "path": "/api/config",
+              "file": "src/routes/api.js",
+              "contains": "router.get('/config'",
+              "matched": true
+            },
+            {
+              "method": "GET",
+              "path": "/login",
+              "file": "src/routes/index.js",
+              "contains": "setupPageRoute(app, '/login'",
+              "matched": true
+            }
+          ],
+          "parameterReferences": [],
+          "sourceLocations": {
+            "endpointsWithValidLocation": 580,
+            "validLocations": 583,
+            "invalidLocations": 0,
+            "note": "Existing file and line bounds only; semantic source accuracy needs manual review."
+          },
+          "technologies": [
+            "js_express"
+          ],
+          "medianWallMs": 715,
+          "repeatableInventory": true
+        }
+      },
+      "sourceUnchanged": true
+    },
+    {
+      "id": "express-boilerplate",
+      "repository": "https://github.com/hagopj13/node-express-boilerplate.git",
+      "revision": "179ae84efec61b14206d0305d941daed6c6d07f9",
+      "sourceRoot": ".",
+      "arms": {
+        "noir-default": {
+          "runs": [
+            {
+              "repeat": 1,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 124,
+              "metrics": {
+                "peakRssKiB": 32784,
+                "elapsedSeconds": 0.11,
+                "userSeconds": 0.07,
+                "systemSeconds": 0.04,
+                "exitCode": 0
+              },
+              "inventoryDigest": "8ea6c2533375ec7eec1554c11a3942893509b0956c8089f1b03f39e7d70e5926",
+              "endpointCount": 15,
+              "diagnosticCount": 0
+            },
+            {
+              "repeat": 2,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 127,
+              "metrics": {
+                "peakRssKiB": 32784,
+                "elapsedSeconds": 0.12,
+                "userSeconds": 0.05,
+                "systemSeconds": 0.06,
+                "exitCode": 0
+              },
+              "inventoryDigest": "8ea6c2533375ec7eec1554c11a3942893509b0956c8089f1b03f39e7d70e5926",
+              "endpointCount": 15,
+              "diagnosticCount": 0
+            },
+            {
+              "repeat": 3,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 124,
+              "metrics": {
+                "peakRssKiB": 32784,
+                "elapsedSeconds": 0.11,
+                "userSeconds": 0.06,
+                "systemSeconds": 0.05,
+                "exitCode": 0
+              },
+              "inventoryDigest": "8ea6c2533375ec7eec1554c11a3942893509b0956c8089f1b03f39e7d70e5926",
+              "endpointCount": 15,
+              "diagnosticCount": 0
+            }
+          ],
+          "rawArtifact": {
+            "path": "artifacts/express-boilerplate-noir-default-raw.json.gz",
+            "uncompressedSha256": "277f2046b6ada24caff5ffb260960dce926ec29c7a96b6e3ab1a9350bc64b6d6",
+            "compressedSha256": "a4f57ce252e2d1ce9321dbc9a136594a8db40730efbf3a6aabe737b1e99bfe26"
+          },
+          "inventoryArtifact": {
+            "path": "artifacts/express-boilerplate-noir-default-inventory.json.gz",
+            "uncompressedSha256": "03284cd78d1973ba7dbabf0c30e4627fd924f9e9684116748430e871acaf1c43",
+            "compressedSha256": "103c3f896fbcd3d019a18cc8f04d6f5bb07cd219dd58efb48e96fc9c8b1ae1b1"
+          },
+          "endpointCount": 15,
+          "uniqueMethodPathCount": 15,
+          "diagnosticCount": 0,
+          "routeReferences": [
+            {
+              "method": "POST",
+              "path": "/v1/auth/login",
+              "file": "src/routes/v1/auth.route.js",
+              "contains": "router.post('/login'",
+              "matched": true
+            },
+            {
+              "method": "POST",
+              "path": "/v1/auth/register",
+              "file": "src/routes/v1/auth.route.js",
+              "contains": "router.post('/register'",
+              "matched": true
+            }
+          ],
+          "parameterReferences": [
+            {
+              "project": "express-boilerplate",
+              "method": "POST",
+              "path": "/v1/auth/login",
+              "name": "email",
+              "location": "body",
+              "file": "src/controllers/auth.controller.js",
+              "contains": "const { email, password } = req.body",
+              "matched": false
+            },
+            {
+              "project": "express-boilerplate",
+              "method": "POST",
+              "path": "/v1/auth/login",
+              "name": "password",
+              "location": "body",
+              "file": "src/controllers/auth.controller.js",
+              "contains": "const { email, password } = req.body",
+              "matched": false
+            }
+          ],
+          "sourceLocations": {
+            "endpointsWithValidLocation": 15,
+            "validLocations": 15,
+            "invalidLocations": 0,
+            "note": "Existing file and line bounds only; semantic source accuracy needs manual review."
+          },
+          "technologies": [
+            "js_express"
+          ],
+          "medianWallMs": 124,
+          "repeatableInventory": true
+        },
+        "noir-framework": {
+          "runs": [
+            {
+              "repeat": 1,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 122,
+              "metrics": {
+                "peakRssKiB": 32272,
+                "elapsedSeconds": 0.11,
+                "userSeconds": 0.06,
+                "systemSeconds": 0.05,
+                "exitCode": 0
+              },
+              "inventoryDigest": "8ea6c2533375ec7eec1554c11a3942893509b0956c8089f1b03f39e7d70e5926",
+              "endpointCount": 15,
+              "diagnosticCount": 0
+            },
+            {
+              "repeat": 2,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 116,
+              "metrics": {
+                "peakRssKiB": 32272,
+                "elapsedSeconds": 0.11,
+                "userSeconds": 0.06,
+                "systemSeconds": 0.04,
+                "exitCode": 0
+              },
+              "inventoryDigest": "8ea6c2533375ec7eec1554c11a3942893509b0956c8089f1b03f39e7d70e5926",
+              "endpointCount": 15,
+              "diagnosticCount": 0
+            },
+            {
+              "repeat": 3,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 138,
+              "metrics": {
+                "peakRssKiB": 32272,
+                "elapsedSeconds": 0.13,
+                "userSeconds": 0.07,
+                "systemSeconds": 0.05,
+                "exitCode": 0
+              },
+              "inventoryDigest": "8ea6c2533375ec7eec1554c11a3942893509b0956c8089f1b03f39e7d70e5926",
+              "endpointCount": 15,
+              "diagnosticCount": 0
+            }
+          ],
+          "rawArtifact": {
+            "path": "artifacts/express-boilerplate-noir-framework-raw.json.gz",
+            "uncompressedSha256": "277f2046b6ada24caff5ffb260960dce926ec29c7a96b6e3ab1a9350bc64b6d6",
+            "compressedSha256": "a4f57ce252e2d1ce9321dbc9a136594a8db40730efbf3a6aabe737b1e99bfe26"
+          },
+          "inventoryArtifact": {
+            "path": "artifacts/express-boilerplate-noir-framework-inventory.json.gz",
+            "uncompressedSha256": "03284cd78d1973ba7dbabf0c30e4627fd924f9e9684116748430e871acaf1c43",
+            "compressedSha256": "103c3f896fbcd3d019a18cc8f04d6f5bb07cd219dd58efb48e96fc9c8b1ae1b1"
+          },
+          "endpointCount": 15,
+          "uniqueMethodPathCount": 15,
+          "diagnosticCount": 0,
+          "routeReferences": [
+            {
+              "method": "POST",
+              "path": "/v1/auth/login",
+              "file": "src/routes/v1/auth.route.js",
+              "contains": "router.post('/login'",
+              "matched": true
+            },
+            {
+              "method": "POST",
+              "path": "/v1/auth/register",
+              "file": "src/routes/v1/auth.route.js",
+              "contains": "router.post('/register'",
+              "matched": true
+            }
+          ],
+          "parameterReferences": [
+            {
+              "project": "express-boilerplate",
+              "method": "POST",
+              "path": "/v1/auth/login",
+              "name": "email",
+              "location": "body",
+              "file": "src/controllers/auth.controller.js",
+              "contains": "const { email, password } = req.body",
+              "matched": false
+            },
+            {
+              "project": "express-boilerplate",
+              "method": "POST",
+              "path": "/v1/auth/login",
+              "name": "password",
+              "location": "body",
+              "file": "src/controllers/auth.controller.js",
+              "contains": "const { email, password } = req.body",
+              "matched": false
+            }
+          ],
+          "sourceLocations": {
+            "endpointsWithValidLocation": 15,
+            "validLocations": 15,
+            "invalidLocations": 0,
+            "note": "Existing file and line bounds only; semantic source accuracy needs manual review."
+          },
+          "technologies": [
+            "js_express"
+          ],
+          "medianWallMs": 122,
+          "repeatableInventory": true
+        },
+        "agento": {
+          "runs": [
+            {
+              "repeat": 1,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 659,
+              "metrics": {
+                "peakRssKiB": 139928,
+                "elapsedSeconds": 0.65,
+                "userSeconds": 0.98,
+                "systemSeconds": 0.12,
+                "exitCode": 0
+              },
+              "inventoryDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+              "endpointCount": 0,
+              "diagnosticCount": 6
+            },
+            {
+              "repeat": 2,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 677,
+              "metrics": {
+                "peakRssKiB": 140764,
+                "elapsedSeconds": 0.67,
+                "userSeconds": 0.97,
+                "systemSeconds": 0.11,
+                "exitCode": 0
+              },
+              "inventoryDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+              "endpointCount": 0,
+              "diagnosticCount": 6
+            },
+            {
+              "repeat": 3,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 645,
+              "metrics": {
+                "peakRssKiB": 137480,
+                "elapsedSeconds": 0.64,
+                "userSeconds": 1.01,
+                "systemSeconds": 0.12,
+                "exitCode": 0
+              },
+              "inventoryDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+              "endpointCount": 0,
+              "diagnosticCount": 6
+            }
+          ],
+          "rawArtifact": {
+            "path": "artifacts/express-boilerplate-agento-raw.json.gz",
+            "uncompressedSha256": "b30a4448645e863c2e0986fb76076f6470c0375dc1d63c78a277b34cadd5c4e8",
+            "compressedSha256": "bad2b9db32018d2c19e19c5c748709ca64ef3a290b766c7b2009b71c8f262dd7"
+          },
+          "inventoryArtifact": {
+            "path": "artifacts/express-boilerplate-agento-inventory.json.gz",
+            "uncompressedSha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+            "compressedSha256": "68433ac2490ea1489ab0fa739057fe71c7d6843ae152225a0d6eaf3e299438b8"
+          },
+          "endpointCount": 0,
+          "uniqueMethodPathCount": 0,
+          "diagnosticCount": 6,
+          "routeReferences": [
+            {
+              "method": "POST",
+              "path": "/v1/auth/login",
+              "file": "src/routes/v1/auth.route.js",
+              "contains": "router.post('/login'",
+              "matched": false
+            },
+            {
+              "method": "POST",
+              "path": "/v1/auth/register",
+              "file": "src/routes/v1/auth.route.js",
+              "contains": "router.post('/register'",
+              "matched": false
+            }
+          ],
+          "parameterReferences": [
+            {
+              "project": "express-boilerplate",
+              "method": "POST",
+              "path": "/v1/auth/login",
+              "name": "email",
+              "location": "body",
+              "file": "src/controllers/auth.controller.js",
+              "contains": "const { email, password } = req.body",
+              "matched": false
+            },
+            {
+              "project": "express-boilerplate",
+              "method": "POST",
+              "path": "/v1/auth/login",
+              "name": "password",
+              "location": "body",
+              "file": "src/controllers/auth.controller.js",
+              "contains": "const { email, password } = req.body",
+              "matched": false
+            }
+          ],
+          "sourceLocations": {
+            "endpointsWithValidLocation": 0,
+            "validLocations": 0,
+            "invalidLocations": 0,
+            "note": "Existing file and line bounds only; semantic source accuracy needs manual review."
+          },
+          "technologies": [
+            "express"
+          ],
+          "medianWallMs": 659,
+          "repeatableInventory": true
+        }
+      },
+      "sourceUnchanged": true
+    },
+    {
+      "id": "hackathon-starter",
+      "repository": "https://github.com/sahat/hackathon-starter.git",
+      "revision": "d320edb22ea0c42d7cb17f3a7837f1ce5163e234",
+      "sourceRoot": ".",
+      "arms": {
+        "noir-framework": {
+          "runs": [
+            {
+              "repeat": 1,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 172,
+              "metrics": {
+                "peakRssKiB": 35604,
+                "elapsedSeconds": 0.16,
+                "userSeconds": 0.11,
+                "systemSeconds": 0.05,
+                "exitCode": 0
+              },
+              "inventoryDigest": "477be158f71bc1d128c061fc74ff75854e3db3767ae27379013c58020940d244",
+              "endpointCount": 101,
+              "diagnosticCount": 0
+            },
+            {
+              "repeat": 2,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 156,
+              "metrics": {
+                "peakRssKiB": 35600,
+                "elapsedSeconds": 0.15,
+                "userSeconds": 0.1,
+                "systemSeconds": 0.05,
+                "exitCode": 0
+              },
+              "inventoryDigest": "477be158f71bc1d128c061fc74ff75854e3db3767ae27379013c58020940d244",
+              "endpointCount": 101,
+              "diagnosticCount": 0
+            },
+            {
+              "repeat": 3,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 163,
+              "metrics": {
+                "peakRssKiB": 35348,
+                "elapsedSeconds": 0.15,
+                "userSeconds": 0.1,
+                "systemSeconds": 0.05,
+                "exitCode": 0
+              },
+              "inventoryDigest": "477be158f71bc1d128c061fc74ff75854e3db3767ae27379013c58020940d244",
+              "endpointCount": 101,
+              "diagnosticCount": 0
+            }
+          ],
+          "rawArtifact": {
+            "path": "artifacts/hackathon-starter-noir-framework-raw.json.gz",
+            "uncompressedSha256": "68cde167f5b343685c1f95a135876ab30559b7dbd8e1e96e8b603757233714c0",
+            "compressedSha256": "8c06e397511a0df318646bba803e996c9b61e7ed7187bda2ec62966dc5529dd1"
+          },
+          "inventoryArtifact": {
+            "path": "artifacts/hackathon-starter-noir-framework-inventory.json.gz",
+            "uncompressedSha256": "d97e191946808bc26f7eadf07df89b36ccd25f7fe3c8af59c20b872d51632b4c",
+            "compressedSha256": "594aa70daa2f368c8c45c58127108e0e99b7f5ec19354e70a9cefbd7ab7cd754"
+          },
+          "endpointCount": 101,
+          "uniqueMethodPathCount": 101,
+          "diagnosticCount": 0,
+          "routeReferences": [
+            {
+              "method": "GET",
+              "path": "/login",
+              "file": "app.js",
+              "contains": "app.get('/login'",
+              "matched": true
+            },
+            {
+              "method": "GET",
+              "path": "/account",
+              "file": "app.js",
+              "contains": "app.get('/account'",
+              "matched": true
+            },
+            {
+              "method": "POST",
+              "path": "/signup",
+              "file": "app.js",
+              "contains": "app.post('/signup'",
+              "matched": true
+            }
+          ],
+          "parameterReferences": [
+            {
+              "project": "hackathon-starter",
+              "method": "POST",
+              "path": "/login",
+              "name": "email",
+              "location": "body",
+              "file": "controllers/user.js",
+              "contains": "validator.isEmail(req.body.email)",
+              "matched": false
+            },
+            {
+              "project": "hackathon-starter",
+              "method": "POST",
+              "path": "/login",
+              "name": "password",
+              "location": "body",
+              "file": "controllers/user.js",
+              "contains": "validator.isEmpty(req.body.password)",
+              "matched": false
+            }
+          ],
+          "sourceLocations": {
+            "endpointsWithValidLocation": 101,
+            "validLocations": 101,
+            "invalidLocations": 0,
+            "note": "Existing file and line bounds only; semantic source accuracy needs manual review."
+          },
+          "technologies": [
+            "js_express"
+          ],
+          "medianWallMs": 163,
+          "repeatableInventory": true
+        },
+        "agento": {
+          "runs": [
+            {
+              "repeat": 1,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 1121,
+              "metrics": {
+                "peakRssKiB": 161544,
+                "elapsedSeconds": 1.11,
+                "userSeconds": 2.24,
+                "systemSeconds": 0.15,
+                "exitCode": 0
+              },
+              "inventoryDigest": "477be158f71bc1d128c061fc74ff75854e3db3767ae27379013c58020940d244",
+              "endpointCount": 101,
+              "diagnosticCount": 860
+            },
+            {
+              "repeat": 2,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 1074,
+              "metrics": {
+                "peakRssKiB": 162868,
+                "elapsedSeconds": 1.07,
+                "userSeconds": 2.25,
+                "systemSeconds": 0.15,
+                "exitCode": 0
+              },
+              "inventoryDigest": "477be158f71bc1d128c061fc74ff75854e3db3767ae27379013c58020940d244",
+              "endpointCount": 101,
+              "diagnosticCount": 860
+            },
+            {
+              "repeat": 3,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 1181,
+              "metrics": {
+                "peakRssKiB": 163976,
+                "elapsedSeconds": 1.17,
+                "userSeconds": 2.41,
+                "systemSeconds": 0.15,
+                "exitCode": 0
+              },
+              "inventoryDigest": "477be158f71bc1d128c061fc74ff75854e3db3767ae27379013c58020940d244",
+              "endpointCount": 101,
+              "diagnosticCount": 860
+            }
+          ],
+          "rawArtifact": {
+            "path": "artifacts/hackathon-starter-agento-raw.json.gz",
+            "uncompressedSha256": "a07c297b2f4fb256d0dd5fabca7c59381734014db8599b1da2ee0fb1d756f145",
+            "compressedSha256": "8e324ffad03a96cf25fbc1b6caeb4ea9ce7770d463512978dbd7bd9516c62605"
+          },
+          "inventoryArtifact": {
+            "path": "artifacts/hackathon-starter-agento-inventory.json.gz",
+            "uncompressedSha256": "e063c17a174ea552d5672671b05bc1b2ca82682abd6cd76ae820c414efeb6f0e",
+            "compressedSha256": "b4153c924c8034ad50754e8718dd1ba6b863f477a9144f3a8718a228f7109c57"
+          },
+          "endpointCount": 101,
+          "uniqueMethodPathCount": 101,
+          "diagnosticCount": 860,
+          "routeReferences": [
+            {
+              "method": "GET",
+              "path": "/login",
+              "file": "app.js",
+              "contains": "app.get('/login'",
+              "matched": true
+            },
+            {
+              "method": "GET",
+              "path": "/account",
+              "file": "app.js",
+              "contains": "app.get('/account'",
+              "matched": true
+            },
+            {
+              "method": "POST",
+              "path": "/signup",
+              "file": "app.js",
+              "contains": "app.post('/signup'",
+              "matched": true
+            }
+          ],
+          "parameterReferences": [
+            {
+              "project": "hackathon-starter",
+              "method": "POST",
+              "path": "/login",
+              "name": "email",
+              "location": "body",
+              "file": "controllers/user.js",
+              "contains": "validator.isEmail(req.body.email)",
+              "matched": false
+            },
+            {
+              "project": "hackathon-starter",
+              "method": "POST",
+              "path": "/login",
+              "name": "password",
+              "location": "body",
+              "file": "controllers/user.js",
+              "contains": "validator.isEmpty(req.body.password)",
+              "matched": false
+            }
+          ],
+          "sourceLocations": {
+            "endpointsWithValidLocation": 101,
+            "validLocations": 101,
+            "invalidLocations": 0,
+            "note": "Existing file and line bounds only; semantic source accuracy needs manual review."
+          },
+          "technologies": [
+            "express"
+          ],
+          "medianWallMs": 1121,
+          "repeatableInventory": true
+        },
+        "noir-default": {
+          "runs": [
+            {
+              "repeat": 1,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 176,
+              "metrics": {
+                "peakRssKiB": 36368,
+                "elapsedSeconds": 0.17,
+                "userSeconds": 0.12,
+                "systemSeconds": 0.04,
+                "exitCode": 0
+              },
+              "inventoryDigest": "477be158f71bc1d128c061fc74ff75854e3db3767ae27379013c58020940d244",
+              "endpointCount": 101,
+              "diagnosticCount": 0
+            },
+            {
+              "repeat": 2,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 188,
+              "metrics": {
+                "peakRssKiB": 36368,
+                "elapsedSeconds": 0.18,
+                "userSeconds": 0.12,
+                "systemSeconds": 0.06,
+                "exitCode": 0
+              },
+              "inventoryDigest": "477be158f71bc1d128c061fc74ff75854e3db3767ae27379013c58020940d244",
+              "endpointCount": 101,
+              "diagnosticCount": 0
+            },
+            {
+              "repeat": 3,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 181,
+              "metrics": {
+                "peakRssKiB": 36368,
+                "elapsedSeconds": 0.17,
+                "userSeconds": 0.11,
+                "systemSeconds": 0.06,
+                "exitCode": 0
+              },
+              "inventoryDigest": "477be158f71bc1d128c061fc74ff75854e3db3767ae27379013c58020940d244",
+              "endpointCount": 101,
+              "diagnosticCount": 0
+            }
+          ],
+          "rawArtifact": {
+            "path": "artifacts/hackathon-starter-noir-default-raw.json.gz",
+            "uncompressedSha256": "68cde167f5b343685c1f95a135876ab30559b7dbd8e1e96e8b603757233714c0",
+            "compressedSha256": "8c06e397511a0df318646bba803e996c9b61e7ed7187bda2ec62966dc5529dd1"
+          },
+          "inventoryArtifact": {
+            "path": "artifacts/hackathon-starter-noir-default-inventory.json.gz",
+            "uncompressedSha256": "d97e191946808bc26f7eadf07df89b36ccd25f7fe3c8af59c20b872d51632b4c",
+            "compressedSha256": "594aa70daa2f368c8c45c58127108e0e99b7f5ec19354e70a9cefbd7ab7cd754"
+          },
+          "endpointCount": 101,
+          "uniqueMethodPathCount": 101,
+          "diagnosticCount": 0,
+          "routeReferences": [
+            {
+              "method": "GET",
+              "path": "/login",
+              "file": "app.js",
+              "contains": "app.get('/login'",
+              "matched": true
+            },
+            {
+              "method": "GET",
+              "path": "/account",
+              "file": "app.js",
+              "contains": "app.get('/account'",
+              "matched": true
+            },
+            {
+              "method": "POST",
+              "path": "/signup",
+              "file": "app.js",
+              "contains": "app.post('/signup'",
+              "matched": true
+            }
+          ],
+          "parameterReferences": [
+            {
+              "project": "hackathon-starter",
+              "method": "POST",
+              "path": "/login",
+              "name": "email",
+              "location": "body",
+              "file": "controllers/user.js",
+              "contains": "validator.isEmail(req.body.email)",
+              "matched": false
+            },
+            {
+              "project": "hackathon-starter",
+              "method": "POST",
+              "path": "/login",
+              "name": "password",
+              "location": "body",
+              "file": "controllers/user.js",
+              "contains": "validator.isEmpty(req.body.password)",
+              "matched": false
+            }
+          ],
+          "sourceLocations": {
+            "endpointsWithValidLocation": 101,
+            "validLocations": 101,
+            "invalidLocations": 0,
+            "note": "Existing file and line bounds only; semantic source accuracy needs manual review."
+          },
+          "technologies": [
+            "js_express"
+          ],
+          "medianWallMs": 181,
+          "repeatableInventory": true
+        }
+      },
+      "sourceUnchanged": true
+    },
+    {
+      "id": "flask",
+      "repository": "https://github.com/pallets/flask.git",
+      "revision": "d086db856be187255b8ec61ef409357393020f32",
+      "sourceRoot": "examples/tutorial",
+      "arms": {
+        "agento": {
+          "runs": [
+            {
+              "repeat": 1,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 494,
+              "metrics": {
+                "peakRssKiB": 118004,
+                "elapsedSeconds": 0.48,
+                "userSeconds": 0.62,
+                "systemSeconds": 0.09,
+                "exitCode": 0
+              },
+              "inventoryDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+              "endpointCount": 0,
+              "diagnosticCount": 0
+            },
+            {
+              "repeat": 2,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 474,
+              "metrics": {
+                "peakRssKiB": 117656,
+                "elapsedSeconds": 0.47,
+                "userSeconds": 0.58,
+                "systemSeconds": 0.07,
+                "exitCode": 0
+              },
+              "inventoryDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+              "endpointCount": 0,
+              "diagnosticCount": 0
+            },
+            {
+              "repeat": 3,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 485,
+              "metrics": {
+                "peakRssKiB": 122812,
+                "elapsedSeconds": 0.48,
+                "userSeconds": 0.6,
+                "systemSeconds": 0.09,
+                "exitCode": 0
+              },
+              "inventoryDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+              "endpointCount": 0,
+              "diagnosticCount": 0
+            }
+          ],
+          "rawArtifact": {
+            "path": "artifacts/flask-agento-raw.json.gz",
+            "uncompressedSha256": "2037be843069713f4bb8fab58618cbc4a7b2386ee868a106d18fd7276c22055b",
+            "compressedSha256": "fc19c86c5faa45f8e87d5e8092dfc27ef9b40dc8bcb5a4f76157f6be82056e73"
+          },
+          "inventoryArtifact": {
+            "path": "artifacts/flask-agento-inventory.json.gz",
+            "uncompressedSha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+            "compressedSha256": "68433ac2490ea1489ab0fa739057fe71c7d6843ae152225a0d6eaf3e299438b8"
+          },
+          "endpointCount": 0,
+          "uniqueMethodPathCount": 0,
+          "diagnosticCount": 0,
+          "routeReferences": [
+            {
+              "method": "GET",
+              "path": "/hello",
+              "file": "flaskr/__init__.py",
+              "contains": "@app.route(\"/hello\")",
+              "matched": false
+            },
+            {
+              "method": "GET",
+              "path": "/auth/login",
+              "file": "flaskr/auth.py",
+              "contains": "@bp.route(\"/login\", methods=(\"GET\", \"POST\"))",
+              "matched": false
+            },
+            {
+              "method": "POST",
+              "path": "/auth/login",
+              "file": "flaskr/auth.py",
+              "contains": "@bp.route(\"/login\", methods=(\"GET\", \"POST\"))",
+              "matched": false
+            },
+            {
+              "method": "POST",
+              "path": "/create",
+              "file": "flaskr/blog.py",
+              "contains": "@bp.route(\"/create\", methods=(\"GET\", \"POST\"))",
+              "matched": false
+            },
+            {
+              "method": "GET",
+              "path": "/<int:id>/update",
+              "file": "flaskr/blog.py",
+              "contains": "@bp.route(\"/<int:id>/update\", methods=(\"GET\", \"POST\"))",
+              "matched": false
+            }
+          ],
+          "parameterReferences": [
+            {
+              "project": "flask",
+              "method": "POST",
+              "path": "/auth/login",
+              "name": "username",
+              "location": "body",
+              "file": "flaskr/auth.py",
+              "contains": "username = request.form[\"username\"]",
+              "matched": false
+            },
+            {
+              "project": "flask",
+              "method": "POST",
+              "path": "/auth/login",
+              "name": "password",
+              "location": "body",
+              "file": "flaskr/auth.py",
+              "contains": "password = request.form[\"password\"]",
+              "matched": false
+            },
+            {
+              "project": "flask",
+              "method": "GET",
+              "path": "/<int:id>/update",
+              "name": "id",
+              "location": "path",
+              "file": "flaskr/blog.py",
+              "contains": "@bp.route(\"/<int:id>/update\"",
+              "matched": false
+            },
+            {
+              "project": "flask",
+              "method": "POST",
+              "path": "/create",
+              "name": "title",
+              "location": "body",
+              "file": "flaskr/blog.py",
+              "contains": "title = request.form[\"title\"]",
+              "matched": false
+            },
+            {
+              "project": "flask",
+              "method": "POST",
+              "path": "/create",
+              "name": "body",
+              "location": "body",
+              "file": "flaskr/blog.py",
+              "contains": "body = request.form[\"body\"]",
+              "matched": false
+            }
+          ],
+          "sourceLocations": {
+            "endpointsWithValidLocation": 0,
+            "validLocations": 0,
+            "invalidLocations": 0,
+            "note": "Existing file and line bounds only; semantic source accuracy needs manual review."
+          },
+          "technologies": [
+            "express"
+          ],
+          "medianWallMs": 485,
+          "repeatableInventory": true
+        },
+        "noir-default": {
+          "runs": [
+            {
+              "repeat": 1,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 125,
+              "metrics": {
+                "peakRssKiB": 34856,
+                "elapsedSeconds": 0.12,
+                "userSeconds": 0.07,
+                "systemSeconds": 0.04,
+                "exitCode": 0
+              },
+              "inventoryDigest": "9cc8d87e8c191079377e5fcf4623e345822d68392d7d04c559127ac12b23f68e",
+              "endpointCount": 13,
+              "diagnosticCount": 0
+            },
+            {
+              "repeat": 2,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 145,
+              "metrics": {
+                "peakRssKiB": 34848,
+                "elapsedSeconds": 0.14,
+                "userSeconds": 0.07,
+                "systemSeconds": 0.06,
+                "exitCode": 0
+              },
+              "inventoryDigest": "9cc8d87e8c191079377e5fcf4623e345822d68392d7d04c559127ac12b23f68e",
+              "endpointCount": 13,
+              "diagnosticCount": 0
+            },
+            {
+              "repeat": 3,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 128,
+              "metrics": {
+                "peakRssKiB": 34868,
+                "elapsedSeconds": 0.12,
+                "userSeconds": 0.06,
+                "systemSeconds": 0.05,
+                "exitCode": 0
+              },
+              "inventoryDigest": "9cc8d87e8c191079377e5fcf4623e345822d68392d7d04c559127ac12b23f68e",
+              "endpointCount": 13,
+              "diagnosticCount": 0
+            }
+          ],
+          "rawArtifact": {
+            "path": "artifacts/flask-noir-default-raw.json.gz",
+            "uncompressedSha256": "c2837da451478bfb020522b39c57f952bbd0bd9f694b95c874d10169a64c3165",
+            "compressedSha256": "ee472e9fd979bd4daf94827a4b83430030ad0eb4fcdffa9684c352196077a2da"
+          },
+          "inventoryArtifact": {
+            "path": "artifacts/flask-noir-default-inventory.json.gz",
+            "uncompressedSha256": "338fc06a2e9c40bf5b9107a717930d25a74c432429ad2d2421435417eb3a8e3c",
+            "compressedSha256": "c58b08c4b2a2f7500908198096f0015d119deb494a58cbd501585ba26f0c3323"
+          },
+          "endpointCount": 13,
+          "uniqueMethodPathCount": 13,
+          "diagnosticCount": 0,
+          "routeReferences": [
+            {
+              "method": "GET",
+              "path": "/hello",
+              "file": "flaskr/__init__.py",
+              "contains": "@app.route(\"/hello\")",
+              "matched": true
+            },
+            {
+              "method": "GET",
+              "path": "/auth/login",
+              "file": "flaskr/auth.py",
+              "contains": "@bp.route(\"/login\", methods=(\"GET\", \"POST\"))",
+              "matched": true
+            },
+            {
+              "method": "POST",
+              "path": "/auth/login",
+              "file": "flaskr/auth.py",
+              "contains": "@bp.route(\"/login\", methods=(\"GET\", \"POST\"))",
+              "matched": true
+            },
+            {
+              "method": "POST",
+              "path": "/create",
+              "file": "flaskr/blog.py",
+              "contains": "@bp.route(\"/create\", methods=(\"GET\", \"POST\"))",
+              "matched": true
+            },
+            {
+              "method": "GET",
+              "path": "/<int:id>/update",
+              "file": "flaskr/blog.py",
+              "contains": "@bp.route(\"/<int:id>/update\", methods=(\"GET\", \"POST\"))",
+              "matched": true
+            }
+          ],
+          "parameterReferences": [
+            {
+              "project": "flask",
+              "method": "POST",
+              "path": "/auth/login",
+              "name": "username",
+              "location": "body",
+              "file": "flaskr/auth.py",
+              "contains": "username = request.form[\"username\"]",
+              "matched": true
+            },
+            {
+              "project": "flask",
+              "method": "POST",
+              "path": "/auth/login",
+              "name": "password",
+              "location": "body",
+              "file": "flaskr/auth.py",
+              "contains": "password = request.form[\"password\"]",
+              "matched": true
+            },
+            {
+              "project": "flask",
+              "method": "GET",
+              "path": "/<int:id>/update",
+              "name": "id",
+              "location": "path",
+              "file": "flaskr/blog.py",
+              "contains": "@bp.route(\"/<int:id>/update\"",
+              "matched": true
+            },
+            {
+              "project": "flask",
+              "method": "POST",
+              "path": "/create",
+              "name": "title",
+              "location": "body",
+              "file": "flaskr/blog.py",
+              "contains": "title = request.form[\"title\"]",
+              "matched": true
+            },
+            {
+              "project": "flask",
+              "method": "POST",
+              "path": "/create",
+              "name": "body",
+              "location": "body",
+              "file": "flaskr/blog.py",
+              "contains": "body = request.form[\"body\"]",
+              "matched": true
+            }
+          ],
+          "sourceLocations": {
+            "endpointsWithValidLocation": 13,
+            "validLocations": 14,
+            "invalidLocations": 0,
+            "note": "Existing file and line bounds only; semantic source accuracy needs manual review."
+          },
+          "technologies": [
+            "python_cli",
+            "python_flask"
+          ],
+          "medianWallMs": 128,
+          "repeatableInventory": true
+        },
+        "noir-framework": {
+          "runs": [
+            {
+              "repeat": 1,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 123,
+              "metrics": {
+                "peakRssKiB": 33980,
+                "elapsedSeconds": 0.11,
+                "userSeconds": 0.06,
+                "systemSeconds": 0.05,
+                "exitCode": 0
+              },
+              "inventoryDigest": "98d7d4c0de39a3acf6f4f9e197589bd7c4d920fca2b1a100a5618aecafdb0f0f",
+              "endpointCount": 12,
+              "diagnosticCount": 0
+            },
+            {
+              "repeat": 2,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 125,
+              "metrics": {
+                "peakRssKiB": 34000,
+                "elapsedSeconds": 0.11,
+                "userSeconds": 0.07,
+                "systemSeconds": 0.04,
+                "exitCode": 0
+              },
+              "inventoryDigest": "98d7d4c0de39a3acf6f4f9e197589bd7c4d920fca2b1a100a5618aecafdb0f0f",
+              "endpointCount": 12,
+              "diagnosticCount": 0
+            },
+            {
+              "repeat": 3,
+              "exitCode": 0,
+              "failure": null,
+              "wallMs": 131,
+              "metrics": {
+                "peakRssKiB": 33988,
+                "elapsedSeconds": 0.12,
+                "userSeconds": 0.06,
+                "systemSeconds": 0.06,
+                "exitCode": 0
+              },
+              "inventoryDigest": "98d7d4c0de39a3acf6f4f9e197589bd7c4d920fca2b1a100a5618aecafdb0f0f",
+              "endpointCount": 12,
+              "diagnosticCount": 0
+            }
+          ],
+          "rawArtifact": {
+            "path": "artifacts/flask-noir-framework-raw.json.gz",
+            "uncompressedSha256": "d02ec47a06d0a52515035416e532a6b33c7af00b4c68dab7018ca1b2d8f3baa8",
+            "compressedSha256": "46e77957d349eb816eab32103cb088012aa83f234b7b96f837b27c6cc60097fc"
+          },
+          "inventoryArtifact": {
+            "path": "artifacts/flask-noir-framework-inventory.json.gz",
+            "uncompressedSha256": "74c6999c201617e5450b49b0c54c76096747d548e7d5c67fa694e931128d0d33",
+            "compressedSha256": "ccfdfd56a1190be85c452587c0bb8bf7d21847c4c94c0422abe2defc23c50e02"
+          },
+          "endpointCount": 12,
+          "uniqueMethodPathCount": 12,
+          "diagnosticCount": 0,
+          "routeReferences": [
+            {
+              "method": "GET",
+              "path": "/hello",
+              "file": "flaskr/__init__.py",
+              "contains": "@app.route(\"/hello\")",
+              "matched": true
+            },
+            {
+              "method": "GET",
+              "path": "/auth/login",
+              "file": "flaskr/auth.py",
+              "contains": "@bp.route(\"/login\", methods=(\"GET\", \"POST\"))",
+              "matched": true
+            },
+            {
+              "method": "POST",
+              "path": "/auth/login",
+              "file": "flaskr/auth.py",
+              "contains": "@bp.route(\"/login\", methods=(\"GET\", \"POST\"))",
+              "matched": true
+            },
+            {
+              "method": "POST",
+              "path": "/create",
+              "file": "flaskr/blog.py",
+              "contains": "@bp.route(\"/create\", methods=(\"GET\", \"POST\"))",
+              "matched": true
+            },
+            {
+              "method": "GET",
+              "path": "/<int:id>/update",
+              "file": "flaskr/blog.py",
+              "contains": "@bp.route(\"/<int:id>/update\", methods=(\"GET\", \"POST\"))",
+              "matched": true
+            }
+          ],
+          "parameterReferences": [
+            {
+              "project": "flask",
+              "method": "POST",
+              "path": "/auth/login",
+              "name": "username",
+              "location": "body",
+              "file": "flaskr/auth.py",
+              "contains": "username = request.form[\"username\"]",
+              "matched": true
+            },
+            {
+              "project": "flask",
+              "method": "POST",
+              "path": "/auth/login",
+              "name": "password",
+              "location": "body",
+              "file": "flaskr/auth.py",
+              "contains": "password = request.form[\"password\"]",
+              "matched": true
+            },
+            {
+              "project": "flask",
+              "method": "GET",
+              "path": "/<int:id>/update",
+              "name": "id",
+              "location": "path",
+              "file": "flaskr/blog.py",
+              "contains": "@bp.route(\"/<int:id>/update\"",
+              "matched": true
+            },
+            {
+              "project": "flask",
+              "method": "POST",
+              "path": "/create",
+              "name": "title",
+              "location": "body",
+              "file": "flaskr/blog.py",
+              "contains": "title = request.form[\"title\"]",
+              "matched": true
+            },
+            {
+              "project": "flask",
+              "method": "POST",
+              "path": "/create",
+              "name": "body",
+              "location": "body",
+              "file": "flaskr/blog.py",
+              "contains": "body = request.form[\"body\"]",
+              "matched": true
+            }
+          ],
+          "sourceLocations": {
+            "endpointsWithValidLocation": 12,
+            "validLocations": 13,
+            "invalidLocations": 0,
+            "note": "Existing file and line bounds only; semantic source accuracy needs manual review."
+          },
+          "technologies": [
+            "python_flask"
+          ],
+          "medianWallMs": 125,
+          "repeatableInventory": true
+        }
+      },
+      "sourceUnchanged": true
+    }
+  ]
+}

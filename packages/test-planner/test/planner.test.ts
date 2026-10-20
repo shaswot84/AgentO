@@ -5,6 +5,16 @@ import { SecurityTestPlanner, type PlanningBindings } from '../src/index.js';
 import { bindings, candidate, evidence, flatModel, model, plugins, policy, project, ruleOptions } from './helpers.js';
 
 describe('structured security planning', () => {
+  it('blocks serialized inventory before calling a rule or using private input bindings', async () => {
+    const { planner, context, hypothesis, rule } = await candidate();
+    const inventory = JSON.parse(JSON.stringify({ ...context, endpoints: context.endpoints.map(endpoint => ({ ...endpoint,
+      discovery: { providerId: 'inventory', validation: 'candidate' } })) }));
+    const generate = vi.spyOn(rule, 'generateTests');
+    expect(await planner.plan(inventory, hypothesis, bindings)).toEqual({ plans: [], diagnostics: [{ code: 'endpoint-unvalidated' }] });
+    expect(await planner.generateTests(inventory, hypothesis)).toEqual([]);
+    expect(generate).not.toHaveBeenCalled();
+    expect(await rule.detectCandidates(inventory)).toEqual([]);
+  });
   for (const fixed of [false, true]) {
     it.each(MVP_CWES)('creates a deterministic plan for %s (fixed target: ' + fixed + ')', async cwe => {
       const { planner, context, hypothesis, rule } = await candidate(cwe, model(fixed));

@@ -6,13 +6,13 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { AgentOOrchestrator } from '@agento/core';
 import type { Project } from '@agento/core';
 import { discoverProject, toProject } from '@agento/discovery';
-import { ExpressFrameworkAdapter } from '../src/index.js';
+import { ExpressSourceAnalyzer } from '../src/index.js';
 import type { ExpressAnalysis } from '../src/index.js';
 import { runCli } from '../src/cli.js';
 
 const roots: string[] = [];
 const demoPath = fileURLToPath(new URL('../../../../demo-apps/demo-app-01/', import.meta.url));
-const adapter = new ExpressFrameworkAdapter({ now: () => '2026-10-12T00:00:00.000Z' });
+const adapter = new ExpressSourceAnalyzer({ now: () => '2026-10-12T00:00:00.000Z' });
 const project = (repositoryPath: string): Project => ({ id: 'test-shop', name: 'Shop', mode: 'code-aware',
   repositoryPath, baseUrl: 'http://localhost:3000', allowedOrigins: ['http://localhost:3000'], languages: ['javascript', 'typescript'] });
 async function repository(files: Record<string, string>): Promise<string> {
@@ -401,9 +401,6 @@ describe('read-only boundaries and incomplete source', () => {
     let output = '', error = '';
     const writeOut = (text: string) => { output = text; };
     const writeError = (text: string) => { error = text; };
-    expect(await runCli([demoPath], writeOut, writeError)).toBe(0);
-    expect(JSON.parse(output).endpoints).toHaveLength(19);
-    expect(error).toBe('');
     expect(await runCli(['--help'], writeOut, writeError)).toBe(0);
     expect(output).toContain('Usage:');
     expect(await runCli(['/does-not-exist'], writeOut, writeError)).toBe(1);

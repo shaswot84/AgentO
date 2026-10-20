@@ -115,12 +115,16 @@ export function mergeEndpoints(project: Project, contributions: readonly ModelCo
     }
     const handlers = distinct(observations.flatMap(item => item.endpoint.handler ? [item.endpoint.handler] : []));
     const componentIds = unique(observations.map(item => item.endpoint.componentId));
+    // Inventory cannot become executable by merging with an unmarked or runtime observation.
+    const discoveries = observations.flatMap(item => item.endpoint.discovery ? [item.endpoint.discovery] : []);
+    const discovery = discoveries.find(item => item.validation === 'candidate') ?? discoveries[0];
     endpoints.push({ id, componentId: componentIds[0]!, componentIds, origin: first.observation.origin,
       method: first.observation.endpoint.method, path: first.path, aliases: aliasIds, observations,
       parameters: [...parameters.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([, value]) => value),
       authentication: authentication.length === 1 ? authentication[0] as Endpoint['authentication'] : 'unknown',
       roles: unique(observations.flatMap(item => item.endpoint.roles)), ...(handlers.length === 1 ? { handler: handlers[0]! } : {}),
-      evidenceIds: unique([...observations.flatMap(item => item.endpoint.evidenceIds), ...related.map(item => item.id)]) });
+      evidenceIds: unique([...observations.flatMap(item => item.endpoint.evidenceIds), ...related.map(item => item.id)]),
+      ...(discovery ? { discovery } : {}) });
   }
   return { endpoints, aliases };
 }

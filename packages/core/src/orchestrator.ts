@@ -5,6 +5,7 @@ import type {
 import type {
   AnalysisContext, Evidence, Finding, SecurityHypothesis, SecurityTestPlan, SecurityTestResult,
 } from './domain.js';
+import { isEndpointTestable } from './domain.js';
 
 export interface CoreProviders {
   readonly plugins: readonly CWEPlugin[];
@@ -124,7 +125,7 @@ export class AgentOOrchestrator {
           throw new Error('Plan references an unknown identity');
         }
         plans.push(plan);
-        const executed = await this.execute(context, plan);
+        const executed = await this.execute(context, plan, hypothesis);
         if (executed.planId !== plan.id) throw new Error('Result does not match its plan');
         const result = snapshot({ ...executed, evidence: this.capture(executed.evidence, {
           project: context.project, capabilityIds: plan.requiredCapabilities, targetUrl: plan.targetUrl,
@@ -163,7 +164,21 @@ export class AgentOOrchestrator {
     return snapshot(this.providers.evidenceStore?.capture(evidence, context) ?? evidence);
   }
 
-  private async execute(context: AnalysisContext, plan: SecurityTestPlan): Promise<SecurityTestResult> {
+  private async execute(context: AnalysisContext, plan: SecurityTestPlan, hypothesis: SecurityHypothesis): Promise<SecurityTestResult> {
+    const endpoint = context.endpoints.find(item => item.id === hypothesis.endpointId);
+    const inventory = endpoint ? [endpoint] : context.endpoints.filter(item => {
+      try {
+        const route = new URL(item.path, context.project.baseUrl), target = new URL(plan.targetUrl);
+        const pattern = route.pathname.split('/'), actual = target.pathname.split('/');
+        return route.origin === target.origin && pattern.length === actual.length
+          && pattern.every((part, index) => /^:[A-Za-z_]\w*$/.test(part) ? !!actual[index] : part === actual[index]);
+      } catch { return false; }
+    });
+    if (inventory.some(item => !isEndpointTestable(item))) return {
+      id: `core:skipped:${plan.id}`, planId: plan.id, producerId: 'agento-core', outcome: 'SKIPPED',
+      summary: 'Static endpoint inventory requires independent validation before execution.', evidence: [],
+      error: { code: 'ENDPOINT_NOT_VALIDATED', message: 'The endpoint has not been independently validated.' },
+    };
     const provider = plan.executor === 'browser' ? this.providers.browser : this.providers.scanner;
     if (!provider || plan.requiredCapabilities.some(capability => !provider.capabilities.includes(capability))) {
       return {

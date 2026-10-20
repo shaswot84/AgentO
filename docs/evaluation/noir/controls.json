@@ -1,0 +1,276 @@
+{
+  "schemaVersion": 1,
+  "description": "Source-only parser controls; no target dependencies installed and no target module executed.",
+  "cases": [
+    {
+      "id": "mixed-client",
+      "expected": [
+        {
+          "method": "GET",
+          "path": "/server"
+        }
+      ],
+      "forbidden": [
+        {
+          "method": "GET",
+          "path": "/outbound"
+        },
+        {
+          "method": "GET",
+          "path": "/client-only"
+        },
+        {
+          "method": "GET",
+          "path": "/fake-only"
+        }
+      ],
+      "arms": {
+        "agento": {
+          "endpoints": [
+            {
+              "method": "GET",
+              "path": "/server"
+            }
+          ],
+          "expected": [
+            {
+              "method": "GET",
+              "path": "/server",
+              "matched": true
+            }
+          ],
+          "forbidden": [
+            {
+              "method": "GET",
+              "path": "/outbound",
+              "matched": false
+            },
+            {
+              "method": "GET",
+              "path": "/client-only",
+              "matched": false
+            },
+            {
+              "method": "GET",
+              "path": "/fake-only",
+              "matched": false
+            }
+          ],
+          "allExpectedFound": true,
+          "noForbiddenFound": true
+        },
+        "noir": {
+          "endpoints": [
+            {
+              "method": "GET",
+              "path": "/server"
+            }
+          ],
+          "expected": [
+            {
+              "method": "GET",
+              "path": "/server",
+              "matched": true
+            }
+          ],
+          "forbidden": [
+            {
+              "method": "GET",
+              "path": "/outbound",
+              "matched": false
+            },
+            {
+              "method": "GET",
+              "path": "/client-only",
+              "matched": false
+            },
+            {
+              "method": "GET",
+              "path": "/fake-only",
+              "matched": false
+            }
+          ],
+          "allExpectedFound": true,
+          "noForbiddenFound": true
+        }
+      }
+    },
+    {
+      "id": "router-chain",
+      "expected": [
+        {
+          "method": "GET",
+          "path": "/api/users"
+        }
+      ],
+      "forbidden": [
+        {
+          "method": "GET",
+          "path": "/users"
+        }
+      ],
+      "arms": {
+        "agento": {
+          "endpoints": [],
+          "expected": [
+            {
+              "method": "GET",
+              "path": "/api/users",
+              "matched": false
+            }
+          ],
+          "forbidden": [
+            {
+              "method": "GET",
+              "path": "/users",
+              "matched": false
+            }
+          ],
+          "allExpectedFound": false,
+          "noForbiddenFound": true
+        },
+        "noir": {
+          "endpoints": [
+            {
+              "method": "GET",
+              "path": "/users"
+            }
+          ],
+          "expected": [
+            {
+              "method": "GET",
+              "path": "/api/users",
+              "matched": false
+            }
+          ],
+          "forbidden": [
+            {
+              "method": "GET",
+              "path": "/users",
+              "matched": true
+            }
+          ],
+          "allExpectedFound": false,
+          "noForbiddenFound": false
+        }
+      }
+    },
+    {
+      "id": "registration-helper",
+      "expected": [
+        {
+          "method": "GET",
+          "path": "/registered"
+        }
+      ],
+      "forbidden": [],
+      "arms": {
+        "agento": {
+          "endpoints": [],
+          "expected": [
+            {
+              "method": "GET",
+              "path": "/registered",
+              "matched": false
+            }
+          ],
+          "forbidden": [],
+          "allExpectedFound": false,
+          "noForbiddenFound": true
+        },
+        "noir": {
+          "endpoints": [
+            {
+              "method": "GET",
+              "path": "/registered"
+            }
+          ],
+          "expected": [
+            {
+              "method": "GET",
+              "path": "/registered",
+              "matched": true
+            }
+          ],
+          "forbidden": [],
+          "allExpectedFound": true,
+          "noForbiddenFound": true
+        }
+      }
+    },
+    {
+      "id": "route-table",
+      "expected": [
+        {
+          "method": "POST",
+          "path": "/v1/auth/login"
+        }
+      ],
+      "forbidden": [
+        {
+          "method": "POST",
+          "path": "/login"
+        },
+        {
+          "method": "POST",
+          "path": "/auth/login"
+        }
+      ],
+      "arms": {
+        "agento": {
+          "endpoints": [],
+          "expected": [
+            {
+              "method": "POST",
+              "path": "/v1/auth/login",
+              "matched": false
+            }
+          ],
+          "forbidden": [
+            {
+              "method": "POST",
+              "path": "/login",
+              "matched": false
+            },
+            {
+              "method": "POST",
+              "path": "/auth/login",
+              "matched": false
+            }
+          ],
+          "allExpectedFound": false,
+          "noForbiddenFound": true
+        },
+        "noir": {
+          "endpoints": [
+            {
+              "method": "POST",
+              "path": "/login"
+            }
+          ],
+          "expected": [
+            {
+              "method": "POST",
+              "path": "/v1/auth/login",
+              "matched": false
+            }
+          ],
+          "forbidden": [
+            {
+              "method": "POST",
+              "path": "/login",
+              "matched": true
+            },
+            {
+              "method": "POST",
+              "path": "/auth/login",
+              "matched": false
+            }
+          ],
+          "allExpectedFound": false,
+          "noForbiddenFound": false
+        }
+      }
+    }
+  ]
+}

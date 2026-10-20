@@ -1,4 +1,5 @@
 import { randomUUID } from 'node:crypto';
+import { isEndpointTestable } from '../../../packages/core/src/domain.ts';
 import type { DiscoveryResult } from '@agento/discovery';
 import { createFixtureClient } from '../src/client/fixture-client.ts';
 import { AgentOClientError } from '../src/client/types.ts';
@@ -261,21 +262,30 @@ export class LocalService implements AgentOClient {
       const current = this.record(id).project;
       const { analysis, framework } = await this.execution.analyze(current);
       const findings = candidateFindings(current, analysis, framework);
-      const completed = analysis.status === 'completed';
-      const hasResults = completed || analysis.status === 'partial';
+      const frameworkDiagnostics = [...((framework as typeof framework & {
+        readonly diagnostics?: readonly { readonly code: string; readonly message: string }[];
+      })?.diagnostics ?? []), ...(framework?.discovery?.diagnostics ?? [])];
+      const unvalidated = framework?.endpoints.some(endpoint => !isEndpointTestable(endpoint));
+      if (unvalidated) frameworkDiagnostics.push({ code: 'endpoint-unvalidated',
+        message: 'Some discovered routes need independent validation before test planning.' });
+      const incompleteDiscovery = unvalidated || framework?.discovery && framework.discovery.status !== 'completed';
+      const status = analysis.status === 'completed' && incompleteDiscovery ? 'partial' : analysis.status;
+      const completed = status === 'completed';
+      const hasResults = analysis.status === 'completed' || analysis.status === 'partial';
+      const diagnostics = [...new Map([...discovery.diagnostics, ...analysis.diagnostics, ...frameworkDiagnostics]
+        .map(({ code, message }) => [`${code}:${message}`, { code, message }])).values()];
       await this.workspace.update(records => {
         const record = this.record(id, records);
         record.findings = findings;
-        const frameworkDiagnostics = (framework as typeof framework & { readonly diagnostics?: readonly { readonly code: string; readonly message: string }[] })?.diagnostics ?? [];
-        record.modelSource = { version: 1, scanId, capturedAt: new Date().toISOString(), status: analysis.status,
+        record.modelSource = { version: 1, scanId, capturedAt: new Date().toISOString(), status,
           targetUrl: current.baseUrl, repositoryPath: current.repositoryPath!, allowedOrigins: current.allowedOrigins,
-          diagnostics: [...discovery.diagnostics, ...analysis.diagnostics, ...frameworkDiagnostics],
+          diagnostics,
           contributions: [...(framework ? [fromFrameworkAnalysis(framework)] : []), fromStaticAnalysis(analysis)] };
         record.scan = { ...record.scan!, state: 'running',
-          summary: `${completed ? 'Static analysis completed' : `Static analysis ${analysis.status}`}. ${findings.length} candidate finding(s). Runtime verification was not run; no vulnerability is confirmed.`,
-          diagnostics: [...discovery.diagnostics, ...analysis.diagnostics].map(({ code, message }) => ({ code, message })),
+          summary: `${completed ? 'Static analysis completed' : `Static analysis ${status}`}. ${findings.length} candidate finding(s). Runtime verification was not run; no vulnerability is confirmed.`,
+          diagnostics,
           stages: record.scan!.stages.map(stage => stage.id === 'static'
-            ? { ...stage, status: completed ? 'complete' : analysis.status === 'skipped' ? 'unavailable' : 'failed', details: `Semgrep analysis ${analysis.status}. Review diagnostics for incomplete coverage.` }
+            ? { ...stage, status: completed ? 'complete' : status === 'skipped' ? 'unavailable' : 'failed', details: `Static analysis ${status}. Review diagnostics for incomplete coverage.` }
             : stage.id === 'findings' ? { ...stage, status: hasResults ? 'complete' : 'unavailable', details: hasResults ? `${findings.length} hypotheses saved with recorded evidence and review guidance.` : 'No complete analysis is available. An empty result does not establish safety.' } : stage) };
       });
       let planningAvailable = false;

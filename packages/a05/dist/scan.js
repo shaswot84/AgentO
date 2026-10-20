@@ -1,3 +1,4 @@
+import { isEndpointTestable } from '@agento/core';
 import { discoverProject } from '@agento/discovery';
 import { ExpressFrameworkAdapter } from '@agento/framework-express';
 import { SemgrepAdapter } from '@agento/tool-semgrep';
@@ -29,7 +30,9 @@ export async function runA05Scan(options) {
     const project = { ...config.project, mode: 'code-aware', languages: [...discovery.languages] };
     const extracted = await adapter.extract(project);
     active();
-    const endpoints = extracted.endpoints.filter(endpoint => endpoint.method === 'GET' && config.targets.some(target => target.path === endpoint.path));
+    if (extracted.discovery?.status === 'failed' || extracted.discovery?.status === 'unavailable')
+        throw new A05Error('discovery-unavailable');
+    const endpoints = extracted.endpoints.filter(endpoint => isEndpointTestable(endpoint) && endpoint.method === 'GET' && config.targets.some(target => target.path === endpoint.path));
     if (config.targets.some(target => !endpoints.some(endpoint => endpoint.path === target.path)))
         throw new A05Error('route-unavailable');
     const analyzer = options.staticAnalyzer ?? new SemgrepAdapter({ frameworkAnalysis: extracted,

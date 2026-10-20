@@ -57,6 +57,16 @@ export interface Endpoint {
   readonly roles: readonly string[];
   readonly handler?: SourceLocation;
   readonly evidenceIds: readonly string[];
+  /** Static inventory is not permission to execute a test. Omitted for existing host declarations. */
+  readonly discovery?: {
+    readonly providerId: string;
+    readonly validation: 'candidate' | 'source-corroborated';
+  };
+}
+
+/** Keep unvalidated inventory out of execution, including after model serialization. */
+export function isEndpointTestable(endpoint: Endpoint): boolean {
+  return endpoint.discovery === undefined || endpoint.discovery.validation === 'source-corroborated';
 }
 
 export interface Identity {

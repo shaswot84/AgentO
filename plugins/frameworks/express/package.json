@@ -12,7 +12,8 @@
     "typecheck": "node node_modules/typescript/bin/tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
     "check": "npm run typecheck && npm run build && npm test",
-    "extract": "node dist/cli.js"
+    "extract": "node dist/cli.js",
+    "setup:noir": "node scripts/install-noir.mjs"
   },
   "dependencies": {
     "@agento/core": "file:../../../packages/core",

@@ -36,6 +36,27 @@ export interface FrameworkAnalysis extends StaticAnalysis {
   readonly components: readonly Component[];
   readonly endpoints: readonly Endpoint[];
   readonly resources: readonly Resource[];
+  readonly discovery?: EndpointDiscoveryReport;
+}
+
+export interface EndpointDiscoveryDiagnostic {
+  readonly code: 'tool-unavailable' | 'tool-version' | 'tool-failed' | 'tool-timeout' | 'tool-output-limit'
+    | 'cancelled' | 'invalid-output' | 'invalid-endpoint' | 'invalid-source' | 'source-selection';
+  readonly message: string;
+}
+
+/** A completed invocation does not assert complete application coverage. */
+export interface EndpointDiscoveryReport {
+  readonly providerId: string;
+  readonly status: 'completed' | 'partial' | 'unavailable' | 'failed';
+  readonly diagnostics: readonly EndpointDiscoveryDiagnostic[];
+}
+
+/** Providers return AgentO records only. Vendor output and execution capabilities stay outside this port. */
+export interface EndpointDiscoveryProvider extends ProviderMetadata {
+  discover(project: Project, options?: { readonly signal?: AbortSignal }): Promise<FrameworkAnalysis & {
+    readonly discovery: EndpointDiscoveryReport;
+  }>;
 }
 
 export interface FrameworkAdapter extends ProviderMetadata {

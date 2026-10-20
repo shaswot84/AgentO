@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { FileEvidenceStore } from '@agento/evidence';
 import { VerificationJudge } from '@agento/verifier';
+import { ExpressSourceAnalyzer } from '@agento/framework-express';
 import { CWE79Plugin, CWE89Plugin, fromCoreEvidence } from '@agento/cwe';
 import { A05Error, runA05Scan } from '../src/index.js';
 import { repository, setup } from './helpers.js';
@@ -13,6 +14,15 @@ afterEach(() => { for (const path of paths.splice(0)) rmSync(path, { recursive: 
 async function fixture(mode: 'vulnerable' | 'fixed' = 'vulnerable') { const path = repository(); paths.push(path); return setup(path, mode); }
 
 describe('source-grounded injection assessment', () => {
+  it.each(['candidate', 'unavailable'] as const)('refuses endpoint inventory before scanner or target access (%s)', async state => {
+    const fixtureState = await fixture(), source = new ExpressSourceAnalyzer();
+    await expect(runA05Scan({ ...fixtureState.options, frameworkAdapter: { id: 'inventory-test', capabilities: [], supports: async () => true,
+      async extract(project) { const analysis = await source.extract(project); return { ...analysis,
+        endpoints: analysis.endpoints.map(endpoint => ({ ...endpoint, discovery: { providerId: 'inventory', validation: 'candidate' as const } })),
+        discovery: { providerId: 'inventory', status: state === 'candidate' ? 'completed' as const : 'unavailable' as const, diagnostics: [] } }; },
+    } })).rejects.toThrow(state === 'candidate' ? 'route-unavailable' : 'discovery-unavailable');
+    expect(fixtureState.scans).toEqual([]); expect(fixtureState.calls).toEqual([]);
+  });
   it.each(['vulnerable', 'fixed'] as const)('binds source, model, plan, proof and verdict in %s mode', async mode => {
     const state = await fixture(mode), report = await runA05Scan(state.options);
     expect(report.hypotheses, JSON.stringify(report.diagnostics)).toHaveLength(2);

@@ -1,3 +1,4 @@
+import { isEndpointTestable } from '@agento/core';
 import { buildApplicationSecurityModel, fromAnalysisContext, resolveEndpoint } from '@agento/security-model';
 import { steps, verification } from './templates.js';
 const probes = {
@@ -53,6 +54,8 @@ export class SecurityTestPlanner {
         const endpoint = validHypothesis(model, hypothesis);
         if (!endpoint)
             return result([], 'invalid-hypothesis');
+        if (!isEndpointTestable(endpoint))
+            return result([], 'endpoint-unvalidated');
         const plugin = this.plugins.get(hypothesis.cweId), probe = probes[hypothesis.cweId];
         if (!plugin || !probe)
             return result([], 'unsupported-cwe');

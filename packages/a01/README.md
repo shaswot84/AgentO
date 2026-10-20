@@ -34,6 +34,11 @@ packages/verifier
 packages/a01
 ```
 
+Install Noir with `npm run setup:noir --prefix plugins/frameworks/express` from
+the repository root after dependency setup. The default source adapter uses Noir
+inventory and AgentO validation; unvalidated routes cannot drive assessments.
+See [endpoint discovery setup](../../plugins/frameworks/express/README.md).
+
 Install the [Chromium runtime](../../plugins/tools/e2e-browser/README.md) and
 the demo application's dependencies for live tests. No scanner or model service
 is required.

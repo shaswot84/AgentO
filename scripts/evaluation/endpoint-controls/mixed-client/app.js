@@ -1,0 +1,10 @@
+import express from 'express';
+import axios from 'axios';
+const app = express();
+app.get('/server', (req, res) => res.json({ q: req.query.q }));
+axios.get('/outbound');
+const api = axios.create();
+api.get('/client-only');
+const fake = { get(value) { return value; } };
+fake.get('/fake-only');
+export default app;

@@ -31,6 +31,7 @@ const diagnostics: Record<string, string> = {
   'planning-packages-unavailable': 'Planning packages are unavailable. Build the CWE rules, hypothesis engine, and test planner, then retry.',
   'no-plans': 'Some hypotheses have no test draft because the rule has insufficient planning context.',
   'unsupported-method': 'Some request methods are outside the available probe support.',
+  'endpoint-unvalidated': 'This discovered route needs independent validation before tests can be planned.',
   'plan-limit': 'The plan limit was reached. This result shows partial coverage.',
 };
 

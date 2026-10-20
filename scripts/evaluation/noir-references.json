@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "selection": "Original 15 Express route references are unchanged. Additional input references and Flask controls were source-reviewed for this comparison; they are smoke checks, not a complete inventory.",
+  "parameterReferences": [
+    { "project": "nodegoat", "method": "GET", "path": "/allocations/:userId", "name": "userId", "location": "path", "file": "app/routes/allocations.js", "contains": "} = req.params;" },
+    { "project": "nodegoat", "method": "GET", "path": "/allocations/:userId", "name": "threshold", "location": "query", "file": "app/routes/allocations.js", "contains": "} = req.query;" },
+    { "project": "realworld-express", "method": "POST", "path": "/api/users/login", "name": "user", "location": "body", "file": "src/app/routes/auth/auth.controller.ts", "contains": "login(req.body.user)" },
+    { "project": "realworld-express", "method": "GET", "path": "/api/articles/feed", "name": "offset", "location": "query", "file": "src/app/routes/article/article.controller.ts", "contains": "Number(req.query.offset)" },
+    { "project": "realworld-express", "method": "GET", "path": "/api/articles/feed", "name": "limit", "location": "query", "file": "src/app/routes/article/article.controller.ts", "contains": "Number(req.query.limit)" },
+    { "project": "juice-shop", "method": "GET", "path": "/rest/products/search", "name": "q", "location": "query", "file": "routes/search.ts", "contains": "req.query.q" },
+    { "project": "express-boilerplate", "method": "POST", "path": "/v1/auth/login", "name": "email", "location": "body", "file": "src/controllers/auth.controller.js", "contains": "const { email, password } = req.body" },
+    { "project": "express-boilerplate", "method": "POST", "path": "/v1/auth/login", "name": "password", "location": "body", "file": "src/controllers/auth.controller.js", "contains": "const { email, password } = req.body" },
+    { "project": "hackathon-starter", "method": "POST", "path": "/login", "name": "email", "location": "body", "file": "controllers/user.js", "contains": "validator.isEmail(req.body.email)" },
+    { "project": "hackathon-starter", "method": "POST", "path": "/login", "name": "password", "location": "body", "file": "controllers/user.js", "contains": "validator.isEmpty(req.body.password)" },
+    { "project": "flask", "method": "POST", "path": "/auth/login", "name": "username", "location": "body", "file": "flaskr/auth.py", "contains": "username = request.form[\"username\"]" },
+    { "project": "flask", "method": "POST", "path": "/auth/login", "name": "password", "location": "body", "file": "flaskr/auth.py", "contains": "password = request.form[\"password\"]" },
+    { "project": "flask", "method": "GET", "path": "/<int:id>/update", "name": "id", "location": "path", "file": "flaskr/blog.py", "contains": "@bp.route(\"/<int:id>/update\"" },
+    { "project": "flask", "method": "POST", "path": "/create", "name": "title", "location": "body", "file": "flaskr/blog.py", "contains": "title = request.form[\"title\"]" },
+    { "project": "flask", "method": "POST", "path": "/create", "name": "body", "location": "body", "file": "flaskr/blog.py", "contains": "body = request.form[\"body\"]" }
+  ],
+  "flaskRoutes": [
+    { "method": "GET", "path": "/hello", "file": "flaskr/__init__.py", "contains": "@app.route(\"/hello\")" },
+    { "method": "GET", "path": "/auth/login", "file": "flaskr/auth.py", "contains": "@bp.route(\"/login\", methods=(\"GET\", \"POST\"))" },
+    { "method": "POST", "path": "/auth/login", "file": "flaskr/auth.py", "contains": "@bp.route(\"/login\", methods=(\"GET\", \"POST\"))" },
+    { "method": "POST", "path": "/create", "file": "flaskr/blog.py", "contains": "@bp.route(\"/create\", methods=(\"GET\", \"POST\"))" },
+    { "method": "GET", "path": "/<int:id>/update", "file": "flaskr/blog.py", "contains": "@bp.route(\"/<int:id>/update\", methods=(\"GET\", \"POST\"))" }
+  ]
+}

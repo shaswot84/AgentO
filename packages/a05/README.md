@@ -35,6 +35,11 @@ plugins/tools/security-scanners
 packages/a05
 ```
 
+Install Noir with `npm run setup:noir --prefix plugins/frameworks/express` from
+the repository root after dependency setup. The default source adapter uses Noir
+inventory and AgentO validation; unvalidated routes cannot drive assessments.
+See [endpoint discovery setup](../../plugins/frameworks/express/README.md).
+
 Install [Semgrep](../../plugins/tools/semgrep/README.md),
 [Dalfox and sqlmap](../../plugins/tools/security-scanners/README.md), and the
 [Chromium runtime](../../plugins/tools/e2e-browser/README.md) separately. Native

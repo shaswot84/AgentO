@@ -1,4 +1,5 @@
 import { randomUUID } from 'node:crypto';
+import { isEndpointTestable } from '@agento/core';
 import type { AnalysisContext, Evidence, Resource, SecurityTestResult } from '@agento/core';
 import { discoverProject } from '@agento/discovery';
 import { ExpressFrameworkAdapter } from '@agento/framework-express';
@@ -28,7 +29,8 @@ export async function runA01Scan(options: A01ScanOptions): Promise<A01ScanReport
   if (discovery.mode !== 'code-aware' || !await adapter.supports(config.project)) throw new A01Error('discovery-unavailable');
   const project = { ...config.project, mode: 'code-aware' as const, languages: [...discovery.languages] };
   const extracted = await adapter.extract(project); active();
-  const endpoints = extracted.endpoints.filter(endpoint => endpoint.method === 'GET' && config.targets.some(target => target.path === endpoint.path));
+  if (extracted.discovery?.status === 'failed' || extracted.discovery?.status === 'unavailable') throw new A01Error('discovery-unavailable');
+  const endpoints = extracted.endpoints.filter(endpoint => isEndpointTestable(endpoint) && endpoint.method === 'GET' && config.targets.some(target => target.path === endpoint.path));
   if (config.targets.some(target => !endpoints.some(endpoint => endpoint.path === target.path))) throw new A01Error('route-unavailable');
   const ownStore = options.evidenceStore ? null : new MemoryEvidenceStore();
   const store = options.evidenceStore ?? ownStore!;
